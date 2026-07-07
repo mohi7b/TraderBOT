@@ -1,0 +1,27 @@
+{
+    "early_expansion": {
+        "risk": "low",
+        "bias": "bullish",
+        "allocation": "growth"
+    },
+    "mid_expansion": {
+        "risk": "low",
+        "bias": "bullish",
+        "allocation": "growth_quality"
+    },
+    "late_expansion": {
+        "risk": "medium",
+        "bias": "neutral_bullish",
+        "allocation": "quality_defensive_mix"
+    },
+    "slowdown": {
+        "risk": "medium",
+        "bias": "neutral_bearish",
+        "allocation": "balanced_defensive"
+    },
+    "contraction": {
+        "risk": "high",
+        "bias": "bearish",
+        "allocation": "defensive"
+    }
+}

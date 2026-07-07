@@ -1,0 +1,22 @@
+{
+    "early_expansion": {
+        "min_score": 0.75,
+        "max_score": 1.00
+    },
+    "mid_expansion": {
+        "min_score": 0.55,
+        "max_score": 0.75
+    },
+    "late_expansion": {
+        "min_score": 0.40,
+        "max_score": 0.55
+    },
+    "slowdown": {
+        "min_score": 0.20,
+        "max_score": 0.40
+    },
+    "contraction": {
+        "min_score": -1.00,
+        "max_score": 0.20
+    }
+}

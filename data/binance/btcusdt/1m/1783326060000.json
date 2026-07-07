@@ -1,0 +1,484 @@
+{
+  "symbol": "btcusdt",
+  "timeframe": "1m",
+  "candle": {
+    "startTime": 1783326060000,
+    "open": 63083.15,
+    "high": 63092,
+    "low": 63083.15,
+    "close": 63092,
+    "volume": 930,
+    "direction": "up",
+    "volatility": 8.849999999998545,
+    "totalVolume": 930
+  },
+  "trades": {
+    "count": 21026,
+    "buyVolume": 41.14995000000089,
+    "sellVolume": 59.47166999999631,
+    "bigTrades": [
+      {
+        "price": 63218.01,
+        "qty": 2.39716,
+        "side": "sell",
+        "value": 151543.6848516,
+        "time": 1783325199335
+      },
+      {
+        "price": 63209.18,
+        "qty": 0.8198,
+        "side": "sell",
+        "value": 51818.885764,
+        "time": 1783325236874
+      },
+      {
+        "price": 63209.18,
+        "qty": 1,
+        "side": "sell",
+        "value": 63209.18,
+        "time": 1783325236874
+      },
+      {
+        "price": 63209.18,
+        "qty": 1.186,
+        "side": "sell",
+        "value": 74966.08748,
+        "time": 1783325236875
+      },
+      {
+        "price": 63176.02,
+        "qty": 1.5873,
+        "side": "sell",
+        "value": 100279.296546,
+        "time": 1783325307472
+      },
+      {
+        "price": 63176.02,
+        "qty": 1.5873,
+        "side": "sell",
+        "value": 100279.296546,
+        "time": 1783325308455
+      },
+      {
+        "price": 63176.02,
+        "qty": 1.01947,
+        "side": "sell",
+        "value": 64406.057109400004,
+        "time": 1783325309335
+      },
+      {
+        "price": 63164.56,
+        "qty": 0.88465,
+        "side": "buy",
+        "value": 55878.528004,
+        "time": 1783325366659
+      },
+      {
+        "price": 63113.95,
+        "qty": 1.05792,
+        "side": "sell",
+        "value": 66769.50998399999,
+        "time": 1783325470083
+      },
+      {
+        "price": 63113.95,
+        "qty": 1.29636,
+        "side": "sell",
+        "value": 81818.400222,
+        "time": 1783325470083
+      },
+      {
+        "price": 63011.78,
+        "qty": 1.8925,
+        "side": "buy",
+        "value": 119249.79365,
+        "time": 1783325624425
+      },
+      {
+        "price": 63060,
+        "qty": 0.80761,
+        "side": "sell",
+        "value": 50927.886600000005,
+        "time": 1783325725260
+      },
+      {
+        "price": 63050,
+        "qty": 0.98356,
+        "side": "buy",
+        "value": 62013.458,
+        "time": 1783325973938
+      },
+      {
+        "price": 63086,
+        "qty": 0.9013,
+        "side": "buy",
+        "value": 56859.4118,
+        "time": 1783326066843
+      },
+      {
+        "price": 63087.18,
+        "qty": 0.89736,
+        "side": "buy",
+        "value": 56611.9118448,
+        "time": 1783326085196
+      }
+    ]
+  },
+  "depthImportant": {
+    "buys": [
+      {
+        "side": "buy",
+        "layer": 1,
+        "price": 63091.99,
+        "qty": 2.0229,
+        "cumulative": 2.0229
+      },
+      {
+        "side": "buy",
+        "layer": 28,
+        "price": 63087.18,
+        "qty": 0.13877,
+        "cumulative": 3.36234
+      },
+      {
+        "side": "buy",
+        "layer": 39,
+        "price": 63085.68,
+        "qty": 0.225,
+        "cumulative": 3.22357
+      },
+      {
+        "side": "buy",
+        "layer": 45,
+        "price": 63084.73,
+        "qty": 0.10294,
+        "cumulative": 3.46528
+      },
+      {
+        "side": "buy",
+        "layer": 50,
+        "price": 63084.19,
+        "qty": 0.97567,
+        "cumulative": 2.99857
+      },
+      {
+        "side": "buy",
+        "layer": 62,
+        "price": 63082.49,
+        "qty": 0.57012,
+        "cumulative": 11.45699
+      },
+      {
+        "side": "buy",
+        "layer": 63,
+        "price": 63082.48,
+        "qty": 3.16733,
+        "cumulative": 6.63261
+      },
+      {
+        "side": "buy",
+        "layer": 91,
+        "price": 63078.65,
+        "qty": 0.57012,
+        "cumulative": 12.027109999999999
+      },
+      {
+        "side": "buy",
+        "layer": 92,
+        "price": 63078.62,
+        "qty": 1.08693,
+        "cumulative": 10.88687
+      },
+      {
+        "side": "buy",
+        "layer": 93,
+        "price": 63078.6,
+        "qty": 3.16733,
+        "cumulative": 9.79994
+      },
+      {
+        "side": "buy",
+        "layer": 122,
+        "price": 63074.71,
+        "qty": 1.01206,
+        "cumulative": 23.617919999999998
+      },
+      {
+        "side": "buy",
+        "layer": 131,
+        "price": 63073.08,
+        "qty": 3.16733,
+        "cumulative": 15.194439999999998
+      },
+      {
+        "side": "buy",
+        "layer": 158,
+        "price": 63069.27,
+        "qty": 3.16733,
+        "cumulative": 18.36177
+      },
+      {
+        "side": "buy",
+        "layer": 184,
+        "price": 63065.42,
+        "qty": 1.07676,
+        "cumulative": 22.60586
+      },
+      {
+        "side": "buy",
+        "layer": 185,
+        "price": 63065.41,
+        "qty": 3.16733,
+        "cumulative": 21.5291
+      },
+      {
+        "side": "buy",
+        "layer": 207,
+        "price": 63061.56,
+        "qty": 3.16733,
+        "cumulative": 35.309
+      },
+      {
+        "side": "buy",
+        "layer": 233,
+        "price": 63057.72,
+        "qty": 3.16733,
+        "cumulative": 38.47633
+      },
+      {
+        "side": "buy",
+        "layer": 259,
+        "price": 63053.84,
+        "qty": 3.16733,
+        "cumulative": 41.64366
+      },
+      {
+        "side": "buy",
+        "layer": 417,
+        "price": 63026.8,
+        "qty": 3.75841,
+        "cumulative": 32.14167
+      },
+      {
+        "side": "buy",
+        "layer": 450,
+        "price": 63019.12,
+        "qty": 4.76534,
+        "cumulative": 28.38326
+      },
+      {
+        "side": "buy",
+        "layer": 724,
+        "price": 62959.6,
+        "qty": 4.76985,
+        "cumulative": 67.25368
+      },
+      {
+        "side": "buy",
+        "layer": 835,
+        "price": 62931.11,
+        "qty": 4.772,
+        "cumulative": 62.48383
+      },
+      {
+        "side": "buy",
+        "layer": 851,
+        "price": 62926.58,
+        "qty": 6.51964,
+        "cumulative": 48.1633
+      },
+      {
+        "side": "buy",
+        "layer": 857,
+        "price": 62924.33,
+        "qty": 4.77252,
+        "cumulative": 57.71183
+      },
+      {
+        "side": "buy",
+        "layer": 962,
+        "price": 62878.42,
+        "qty": 4.77601,
+        "cumulative": 52.93931
+      }
+    ],
+    "sells": [
+      {
+        "side": "sell",
+        "layer": 1,
+        "price": 63092,
+        "qty": 5.02732,
+        "cumulative": 5.02732
+      },
+      {
+        "side": "sell",
+        "layer": 27,
+        "price": 63096.83,
+        "qty": 0.08,
+        "cumulative": 6.28209
+      },
+      {
+        "side": "sell",
+        "layer": 39,
+        "price": 63098.3,
+        "qty": 0.37957,
+        "cumulative": 5.97701
+      },
+      {
+        "side": "sell",
+        "layer": 40,
+        "price": 63098.31,
+        "qty": 0.22508,
+        "cumulative": 6.20209
+      },
+      {
+        "side": "sell",
+        "layer": 44,
+        "price": 63098.67,
+        "qty": 0.57012,
+        "cumulative": 5.59744
+      },
+      {
+        "side": "sell",
+        "layer": 68,
+        "price": 63100.96,
+        "qty": 0.40183,
+        "cumulative": 9.093630000000001
+      },
+      {
+        "side": "sell",
+        "layer": 69,
+        "price": 63101.02,
+        "qty": 0.4762,
+        "cumulative": 8.6918
+      },
+      {
+        "side": "sell",
+        "layer": 75,
+        "price": 63101.28,
+        "qty": 0.57012,
+        "cumulative": 7.645580000000001
+      },
+      {
+        "side": "sell",
+        "layer": 95,
+        "price": 63104.02,
+        "qty": 0.57002,
+        "cumulative": 8.2156
+      },
+      {
+        "side": "sell",
+        "layer": 96,
+        "price": 63104.03,
+        "qty": 0.79337,
+        "cumulative": 7.0754600000000005
+      },
+      {
+        "side": "sell",
+        "layer": 121,
+        "price": 63107.84,
+        "qty": 3.16733,
+        "cumulative": 12.26096
+      },
+      {
+        "side": "sell",
+        "layer": 157,
+        "price": 63113.38,
+        "qty": 3.16733,
+        "cumulative": 15.42829
+      },
+      {
+        "side": "sell",
+        "layer": 185,
+        "price": 63117.54,
+        "qty": 1.74363,
+        "cumulative": 20.33925
+      },
+      {
+        "side": "sell",
+        "layer": 193,
+        "price": 63119.34,
+        "qty": 1.57006,
+        "cumulative": 21.90931
+      },
+      {
+        "side": "sell",
+        "layer": 194,
+        "price": 63119.55,
+        "qty": 3.16733,
+        "cumulative": 18.59562
+      },
+      {
+        "side": "sell",
+        "layer": 230,
+        "price": 63125.06,
+        "qty": 3.16733,
+        "cumulative": 42.22588
+      },
+      {
+        "side": "sell",
+        "layer": 332,
+        "price": 63142.99,
+        "qty": 3.89131,
+        "cumulative": 35.30855
+      },
+      {
+        "side": "sell",
+        "layer": 452,
+        "price": 63168.1,
+        "qty": 3.75,
+        "cumulative": 39.05855
+      },
+      {
+        "side": "sell",
+        "layer": 454,
+        "price": 63168.52,
+        "qty": 4.75407,
+        "cumulative": 26.66338
+      },
+      {
+        "side": "sell",
+        "layer": 464,
+        "price": 63171.26,
+        "qty": 4.75386,
+        "cumulative": 31.41724
+      },
+      {
+        "side": "sell",
+        "layer": 554,
+        "price": 63195.55,
+        "qty": 4.76077,
+        "cumulative": 72.06473
+      },
+      {
+        "side": "sell",
+        "layer": 595,
+        "price": 63208.06,
+        "qty": 4.75109,
+        "cumulative": 76.81582
+      },
+      {
+        "side": "sell",
+        "layer": 624,
+        "price": 63214.45,
+        "qty": 4.75094,
+        "cumulative": 81.56676
+      },
+      {
+        "side": "sell",
+        "layer": 963,
+        "price": 63450,
+        "qty": 6.81122,
+        "cumulative": 67.30396
+      },
+      {
+        "side": "sell",
+        "layer": 978,
+        "price": 63500,
+        "qty": 18.26686,
+        "cumulative": 60.49274
+      }
+    ]
+  },
+  "updatedAt": 1783326121940
+}

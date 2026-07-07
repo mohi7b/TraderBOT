@@ -1,0 +1,239 @@
+Command 'config' not found, did you mean:
+  command 'confid' from snap confid (1.2.1)
+  command 'cconfig' from deb xrootd-server (5.6.4-1)
+  command 'fconfig' from deb redboot-tools (0.7build4)
+  command 'iconfig' from deb ipmiutil (3.1.9-3)
+  command 'kconfig' from deb kconfig-frontends (4.11.0.1+dfsg-6)
+  command 'kconfig' from deb kconfig-frontends-nox (4.11.0.1+dfsg-6)
+  command 'vconfig' from deb vlan (2.0.5ubuntu5)
+  command 'mconfig' from deb mono-devel (6.8.0.105+dfsg-3.5ubuntu1)
+See 'snap info <snapname>' for additional versions.
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+Traceback (most recent call last):
+  File "/root/TraderBOT/data/Data_initializer.py", line 4, in <module>
+    from data.Global_Macro_Layer.CPI_Fetcher import CPI_Fetcher
+ModuleNotFoundError: No module named 'data'
+[96m🔄 Fetching US macro data...[0m
+Started at: 2026-06-27 19:02:01.255121
+
+[96m⏳ Updating CPI...[0m
+[93m• No new data: CPI[0m
+   Last Date: 2026-05-01
+   Last Value: 333.979
+   Time: 0.37s
+
+[96m⏳ Updating PCE...[0m
+[93m• No new data: PCE[0m
+   Last Date: 2026-05-01
+   Last Value: 131.527
+   Time: 0.47s
+
+[96m⏳ Updating GDP...[0m
+[93m• No new data: GDP[0m
+   Last Date: 2026-01-01
+   Last Value: 31865.721
+   Time: 0.29s
+
+[96m⏳ Updating PMI...[0m
+[93m• No new data: PMI[0m
+   Last Date: 2025-12
+   Last Value: 10.3
+   Time: 0.29s
+
+[96m⏳ Updating Unemployment...[0m
+[93m• No new data: Unemployment[0m
+   Last Date: 2026-05-01
+   Last Value: 4.3
+   Time: 0.27s
+
+[96m⏳ Updating DXY...[0m
+[93m• No new data: DXY[0m
+   Last Date: 2026-06-18
+   Last Value: 120.3958
+   Time: 0.31s
+
+[92m✅ All US macro data updated successfully.[0m
+Finished at: 2026-06-27 19:02:03.250135
+[96m🔄 Fetching US macro data...[0m
+Started at: 2026-06-27 19:03:01.406402
+
+[96m⏳ Updating CPI...[0m
+[93m• No new data: CPI[0m
+   Last Date: 2026-05-01
+   Last Value: 333.979
+   Time: 0.29s
+
+[96m⏳ Updating PCE...[0m
+[93m• No new data: PCE[0m
+   Last Date: 2026-05-01
+   Last Value: 131.527
+   Time: 0.34s
+
+[96m⏳ Updating GDP...[0m
+[93m• No new data: GDP[0m
+   Last Date: 2026-01-01
+   Last Value: 31865.721
+   Time: 0.33s
+
+[96m⏳ Updating PMI...[0m
+[93m• No new data: PMI[0m
+   Last Date: 2025-12
+   Last Value: 10.3
+   Time: 0.07s
+
+[96m⏳ Updating Unemployment...[0m
+[93m• No new data: Unemployment[0m
+   Last Date: 2026-05-01
+   Last Value: 4.3
+   Time: 0.27s
+
+[96m⏳ Updating DXY...[0m
+[93m• No new data: DXY[0m
+   Last Date: 2026-06-18
+   Last Value: 120.3958
+   Time: 0.3s
+
+[92m✅ All US macro data updated successfully.[0m
+Finished at: 2026-06-27 19:03:03.018140
+[96m🔄 Fetching US macro data...[0m
+Started at: 2026-06-27 19:04:01.187354
+
+[96m⏳ Updating CPI...[0m
+[93m• No new data: CPI[0m
+   Last Date: 2026-05-01
+   Last Value: 333.979
+   Time: 0.3s
+
+[96m⏳ Updating PCE...[0m
+[93m• No new data: PCE[0m
+   Last Date: 2026-05-01
+   Last Value: 131.527
+   Time: 0.28s
+
+[96m⏳ Updating GDP...[0m
+[93m• No new data: GDP[0m
+   Last Date: 2026-01-01
+   Last Value: 31865.721
+   Time: 0.36s
+
+[96m⏳ Updating PMI...[0m
+[93m• No new data: PMI[0m
+   Last Date: 2025-12
+   Last Value: 10.3
+   Time: 0.19s
+
+[96m⏳ Updating Unemployment...[0m
+[93m• No new data: Unemployment[0m
+   Last Date: 2026-05-01
+   Last Value: 4.3
+   Time: 0.3s
+
+[96m⏳ Updating DXY...[0m
+[93m• No new data: DXY[0m
+   Last Date: 2026-06-18
+   Last Value: 120.3958
+   Time: 0.35s
+
+[92m✅ All US macro data updated successfully.[0m
+Finished at: 2026-06-27 19:04:02.968558
+[96m🔄 Fetching US macro data...[0m
+Started at: 2026-06-28 03:00:01.477551
+
+[96m⏳ Updating CPI...[0m
+[93m• No new data: CPI[0m
+   Last Date: 2026-05-01
+   Last Value: 333.979
+   Time: 2.93s
+
+[96m⏳ Updating PCE...[0m
+[93m• No new data: PCE[0m
+   Last Date: 2026-05-01
+   Last Value: 131.527
+   Time: 0.52s
+
+[96m⏳ Updating GDP...[0m
+[93m• No new data: GDP[0m
+   Last Date: 2026-01-01
+   Last Value: 31865.721
+   Time: 3.81s
+
+[96m⏳ Updating PMI...[0m
+[93m• No new data: PMI[0m
+   Last Date: 2025-12
+   Last Value: 10.3
+   Time: 0.27s
+
+[96m⏳ Updating Unemployment...[0m
+[93m• No new data: Unemployment[0m
+   Last Date: 2026-05-01
+   Last Value: 4.3
+   Time: 2.15s
+
+[96m⏳ Updating DXY...[0m
+[93m• No new data: DXY[0m
+   Last Date: 2026-06-18
+   Last Value: 120.3958
+   Time: 0.9s
+
+[92m✅ All US macro data updated successfully.[0m
+Finished at: 2026-06-28 03:00:12.061882
+[96m🔄 Fetching US macro data...[0m
+Started at: 2026-06-29 03:00:02.074829
+
+[96m⏳ Updating CPI...[0m
+[93m• No new data: CPI[0m
+   Last Date: 2026-05-01
+   Last Value: 333.979
+   Time: 2.91s
+
+[96m⏳ Updating PCE...[0m
+[93m• No new data: PCE[0m
+   Last Date: 2026-05-01
+   Last Value: 131.527
+   Time: 0.91s
+
+[96m⏳ Updating GDP...[0m
+[93m• No new data: GDP[0m
+   Last Date: 2026-01-01
+   Last Value: 31865.721
+   Time: 1.98s
+
+[96m⏳ Updating PMI...[0m
+[93m• No new data: PMI[0m
+   Last Date: 2025-12
+   Last Value: 10.3
+   Time: 0.36s
+
+[96m⏳ Updating Unemployment...[0m
+[93m• No new data: Unemployment[0m
+   Last Date: 2026-05-01
+   Last Value: 4.3
+   Time: 1.73s
+
+[96m⏳ Updating DXY...[0m
+[93m• No new data: DXY[0m
+   Last Date: 2026-06-18
+   Last Value: 120.3958
+   Time: 1.36s
+
+[92m✅ All US macro data updated successfully.[0m
+Finished at: 2026-06-29 03:00:11.331714

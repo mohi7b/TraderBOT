@@ -1,0 +1,12 @@
+{
+    "interest_rate": "norm_interest_rate",
+    "cpi": "norm_cpi",
+    "pce": "norm_pce",
+    "dgs2": "norm_dgs2",
+    "dgs10": "norm_dgs10",
+    "dxy": "norm_dxy",
+    "unemployment": "norm_unemployment",
+    "gdp": "norm_gdp",
+    "pmi_manu": "norm_pmi_manu",
+    "pmi_services": "norm_pmi_services"
+}

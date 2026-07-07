@@ -1,0 +1,7 @@
+✔ buffer.js → تجمیع داده‌ها
+✔ ws-kline.js → ساخت کندل‌های ۱s و ۱m
+✔ ws-trades.js → تجمیع معاملات
+✔ ws-orderbook.js → تجمیع orderbook
+✔ writer.js → snapshot + ساخت کندل‌های بزرگ‌تر
+✔ cleaner.js → پاک‌سازی
+✔ index.js → اجرای سیستم

@@ -1,0 +1,12 @@
+{
+    "norm_interest_rate": 0.10,
+    "norm_cpi": 0.15,
+    "norm_pce": 0.10,
+    "norm_dgs2": 0.10,
+    "norm_dgs10": 0.10,
+    "norm_dxy": 0.05,
+    "norm_unemployment": 0.15,
+    "norm_gdp": 0.15,
+    "norm_pmi_manu": 0.05,
+    "norm_pmi_services": 0.05
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>US Macro Dashboard</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 داشبورد اقتصاد کلان آمریکا</h1>
+
+    <div class="card">
+        <h2>امتیاز کلان</h2>
+        <p><strong>تاریخ:</strong> {{ result.date }}</p>
+        <p><strong>امتیاز:</strong> {{ result.score }}</p>
+    </div>
+
+    <div class="card">
+        <h2>📌 رژیم اقتصادی</h2>
+        <p>{{ result.regime }}</p>
+    </div>
+
+    <div class="card">
+        <h2>🧠 تفسیر اقتصاد کلان</h2>
+        <p>{{ result.interpretation }}</p>
+    </div>
+
+    <div class="card">
+        <h2>📈 سیگنال معاملاتی</h2>
+        <p><strong>ریسک:</strong> {{ result.signal.risk }}</p>
+        <p><strong>بایاس:</strong> {{ result.signal.bias }}</p>
+        <p><strong>تخصیص:</strong> {{ result.signal.allocation }}</p>
+    </div>
+</div>
+
+</body>
+</html>
