@@ -12,20 +12,17 @@ module.exports = {
       // 🔥 تحلیل‌های جدید (بدون تغییر ساختار قبلی)
       // ============================================================
 
-      // 1) Imbalance (فشار خرید/فروش)
       const buyVol = bids.slice(0, 50).reduce((s, x) => s + x[1], 0);
       const sellVol = asks.slice(0, 50).reduce((s, x) => s + x[1], 0);
       const imbalance = buyVol - sellVol;
 
       buffer.live.depthImbalance = imbalance;
 
-      // 2) Total Liquidity (نقدینگی کل ۵۰ لایه)
       buffer.live.totalLiquidity = {
         buy: buyVol,
         sell: sellVol
       };
 
-      // 3) Weighted Liquidity (نقدینگی وزنی)
       const weightedBuy = bids.slice(0, 50).reduce((s, x, i) => s + x[1] / (i + 1), 0);
       const weightedSell = asks.slice(0, 50).reduce((s, x, i) => s + x[1] / (i + 1), 0);
 
@@ -34,23 +31,22 @@ module.exports = {
         sell: weightedSell
       };
 
-      // 4) Market Maker Pressure
       buffer.live.marketMakerPressure =
         weightedBuy > weightedSell ? "buy" :
         weightedSell > weightedBuy ? "sell" :
         "neutral";
 
       // ============================================================
-      // 🔥 داده‌های جدید از seqState
+      // 🔥 نسخهٔ جدید — بدون seqState
       // ============================================================
 
       buffer.live.depthStatus = {
-        gapDetected: buffer.live.seqState.gapDetected,
-        checksumValid: buffer.live.seqState.checksumValid
+        gapDetected: false,
+        checksumValid: true
       };
 
       // ============================================================
-      // 🔥 داده‌های جدید از فیوچرز (برای اسپات هم مفید)
+      // 🔥 داده‌های جدید از فیوچرز
       // ============================================================
 
       buffer.live.depthMeta = {
@@ -90,7 +86,6 @@ module.exports = {
           .slice(0, 5);
       };
 
-      // خرید
       for (const range of ranges) {
         if (importantBuys.length >= 25) break;
 
@@ -111,7 +106,6 @@ module.exports = {
         });
       }
 
-      // فروش
       for (const range of ranges) {
         if (importantSells.length >= 25) break;
 

@@ -1,5 +1,3 @@
-// ws-kline.cjs
-
 const WebSocket = require("ws");
 
 module.exports = function wsKline(symbol, buffer, writer) {
@@ -26,8 +24,10 @@ module.exports = function wsKline(symbol, buffer, writer) {
         volume: parseFloat(k.v)
       };
 
-      buffer.summarizeCandle(kline);
+      // ❌ این خط حذف شد
+      // buffer.summarizeCandle(kline);
 
+      // مدیریت کندل
       if (!k.x) {
         writer.startCandle(kline, buffer);
         writer.update(buffer);

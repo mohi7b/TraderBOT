@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apexcharts": "^5.15.2",
+    "framer-motion": "^12.42.2",
     "lightweight-charts": "^4.2.3",
     "next": "16.2.9",
     "react": "19.2.4",

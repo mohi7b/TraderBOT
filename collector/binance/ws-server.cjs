@@ -1,7 +1,6 @@
 /**
  * File: ws-server.cjs
- * Path: collector/binance/ws-server.cjs
- * Description: سرور WebSocket برای ارسال داده‌های زنده به UI
+ * Description: Optimized WebSocket Server for 5000-Level OrderBook
  */
 
 const WebSocket = require("ws");
@@ -13,6 +12,9 @@ const wss = new WebSocket.Server({
 
 let clients = [];
 
+// ============================================================
+// 🔥 مدیریت اتصال کلاینت‌ها
+// ============================================================
 wss.on("connection", (ws) => {
   clients.push(ws);
   console.log("🔥 Client connected. Total:", clients.length);
@@ -27,22 +29,28 @@ wss.on("connection", (ws) => {
   });
 });
 
-/**
- * ارسال امن پیام به کلاینت‌ها
- */
+// ============================================================
+// 🔥 ارسال امن پیام (با جلوگیری از Backpressure)
+// ============================================================
 function safeSend(ws, msg) {
   try {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(msg);
+    if (ws.readyState !== WebSocket.OPEN) return;
+
+    // اگر بافر WS پر باشد → پیام را ارسال نکن
+    if (ws.bufferedAmount > 5_000_000) {
+      console.log("⚠️ WS buffer full → skipping message");
+      return;
     }
+
+    ws.send(msg);
   } catch (err) {
     console.error("⚠️ WS Send Error:", err);
   }
 }
 
-/**
- * ارسال داده‌های اولیه (init)
- */
+// ============================================================
+// 🔥 ارسال داده‌های اولیه (init)
+// ============================================================
 function sendInit(candles) {
   const msg = JSON.stringify({
     type: "init",
@@ -52,10 +60,11 @@ function sendInit(candles) {
   clients.forEach((ws) => safeSend(ws, msg));
 }
 
-/**
- * ارسال داده‌های لحظه‌ای (delta)
- */
+// ============================================================
+// 🔥 ارسال داده‌های لحظه‌ای (delta)
+// ============================================================
 function sendDelta(path, data) {
+  // ساخت JSON فقط یک بار
   const msg = JSON.stringify({
     type: "delta",
     path,
