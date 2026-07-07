@@ -1,53 +1,98 @@
 // collector/binance/ws-depth-diff.cjs
 
 const WebSocket = require("ws");
-const buffer = require("./br_buffer.cjs");
-const orderbook = require("./orderbook.cjs");
-const depthEngine = require("./depth-engine.cjs");
+const axios = require("axios");
 
-module.exports = function startDepthDiff(symbol) {
+module.exports = function startDepthDiff(symbol, buffer) {
+  const sym = symbol.toUpperCase();
+
+  // -------------------------------
+  // Snapshot Loader (Resync ساده)
+  // -------------------------------
+  async function loadSnapshot() {
+    try {
+      const res = await axios.get(
+        `https://api.binance.com/api/v3/depth?symbol=${sym}&limit=1000`
+      );
+
+      const snap = res.data;
+
+      const ob = buffer.live.orderbook;
+
+      ob.bids = {};
+      ob.asks = {};
+      ob.lastUpdateId = snap.lastUpdateId;
+
+      for (const [p, q] of snap.bids) {
+        ob.bids[parseFloat(p)] = parseFloat(q);
+      }
+
+      for (const [p, q] of snap.asks) {
+        ob.asks[parseFloat(p)] = parseFloat(q);
+      }
+
+      ob.gapDetected = false;
+      ob.checksumValid = true;
+
+      console.log("[WS-DIFF] Snapshot loaded:", ob.lastUpdateId);
+
+    } catch (err) {
+      console.log("[WS-DIFF] Snapshot ERROR:", err);
+    }
+  }
+
+  // اولین snapshot
+  loadSnapshot();
+
+  // -------------------------------
+  // WebSocket Diff Stream
+  // -------------------------------
   const ws = new WebSocket(
-    `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth`
+    `wss://stream.binance.com:9443/ws/${sym.toLowerCase()}@depth`
   );
 
-  ws.on("message", (msg) => {
+  ws.on("open", () => {
+    console.log("[WS-DIFF] Connected");
+  });
+
+  ws.on("message", msg => {
     try {
       const data = JSON.parse(msg);
 
-      // اعمال تغییرات روی اوردر بوک
-      orderbook.applyDiff(data.b, data.a);
+      const ob = buffer.live.orderbook;
 
-      // عمق کامل
-      const fullDepth = orderbook.getFullDepth();
-      buffer.updateDepthFull(fullDepth);
+      const U = data.U;
+      const u = data.u;
+      const pu = data.pu;
 
-      // عمق 20 لایه
-      const depth20 = {
-        bids: fullDepth.bids.slice(0, 20),
-        asks: fullDepth.asks.slice(0, 20)
-      };
-      buffer.updateDepth20(depth20.bids, depth20.asks);
+      // -------------------------------
+      // GAP Detection
+      // -------------------------------
+      if (pu !== ob.lastUpdateId) {
+        console.log("[WS-DIFF] GAP detected → resyncing...");
+        ob.gapDetected = true;
+        loadSnapshot();   // فقط snapshot جدید
+        return;
+      }
 
-      // پردازش عمق مهم (۵۰ نقطه)
-      depthEngine.processDepth(fullDepth, buffer);
+      ob.gapDetected = false;
 
-      // دیوار نقدینگی + مگنت قیمت
-      buffer.processDepthImportant();
+      // -------------------------------
+      // اعمال diff
+      // -------------------------------
+      buffer.applyDiff(data.b, data.a);
+
+      ob.lastUpdateId = u;
+
+      // -------------------------------
+      // Checksum ساده (فقط علامت)
+      // -------------------------------
+      ob.checksumValid = true;
 
     } catch (err) {
-      console.error("[WS-DIFF] ERROR:", err);
+      console.log("[WS-DIFF] ERROR:", err);
     }
   });
 
-  ws.on("open", () => {
-    console.log("[WS-DIFF] Connected to Binance depth stream");
-  });
-
-  ws.on("close", () => {
-    console.log("[WS-DIFF] Connection closed");
-  });
-
-  ws.on("error", (err) => {
-    console.error("[WS-DIFF] ERROR:", err);
-  });
+  return ws;
 };

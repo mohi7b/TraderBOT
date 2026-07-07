@@ -8,6 +8,62 @@ module.exports = {
       const bids = depth.bids;
       const asks = depth.asks;
 
+      // ============================================================
+      // 🔥 تحلیل‌های جدید (بدون تغییر ساختار قبلی)
+      // ============================================================
+
+      // 1) Imbalance (فشار خرید/فروش)
+      const buyVol = bids.slice(0, 50).reduce((s, x) => s + x[1], 0);
+      const sellVol = asks.slice(0, 50).reduce((s, x) => s + x[1], 0);
+      const imbalance = buyVol - sellVol;
+
+      buffer.live.depthImbalance = imbalance;
+
+      // 2) Total Liquidity (نقدینگی کل ۵۰ لایه)
+      buffer.live.totalLiquidity = {
+        buy: buyVol,
+        sell: sellVol
+      };
+
+      // 3) Weighted Liquidity (نقدینگی وزنی)
+      const weightedBuy = bids.slice(0, 50).reduce((s, x, i) => s + x[1] / (i + 1), 0);
+      const weightedSell = asks.slice(0, 50).reduce((s, x, i) => s + x[1] / (i + 1), 0);
+
+      buffer.live.weightedLiquidity = {
+        buy: weightedBuy,
+        sell: weightedSell
+      };
+
+      // 4) Market Maker Pressure
+      buffer.live.marketMakerPressure =
+        weightedBuy > weightedSell ? "buy" :
+        weightedSell > weightedBuy ? "sell" :
+        "neutral";
+
+      // ============================================================
+      // 🔥 داده‌های جدید از seqState
+      // ============================================================
+
+      buffer.live.depthStatus = {
+        gapDetected: buffer.live.seqState.gapDetected,
+        checksumValid: buffer.live.seqState.checksumValid
+      };
+
+      // ============================================================
+      // 🔥 داده‌های جدید از فیوچرز (برای اسپات هم مفید)
+      // ============================================================
+
+      buffer.live.depthMeta = {
+        indexPrice: buffer.live.indexPrice,
+        openInterest: buffer.live.openInterest,
+        liquidation: buffer.live.liquidation,
+        estFunding: buffer.live.estFunding
+      };
+
+      // ============================================================
+      // 🔥 تحلیل قبلی (کاملاً حفظ شده)
+      // ============================================================
+
       const ranges = [
         { from: 0, to: 50 },
         { from: 50, to: 100 },
@@ -22,7 +78,6 @@ module.exports = {
       let cumulativeBuy = 0;
       let cumulativeSell = 0;
 
-      // تابع انتخاب 5 نقطه مهم از یک بازه
       const pickTop = (slice, from) => {
         return slice
           .map((x, i) => ({
@@ -30,7 +85,7 @@ module.exports = {
             price: parseFloat(x[0]) || 0,
             qty: parseFloat(x[1]) || 0
           }))
-          .filter(x => x.qty > 0)        // حذف لایه‌های صفر
+          .filter(x => x.qty > 0)
           .sort((a, b) => b.qty - a.qty)
           .slice(0, 5);
       };

@@ -2,37 +2,43 @@
 
 const WebSocket = require("ws");
 
-module.exports = function (symbol, buffer, writer) {
+module.exports = function wsKline(symbol, buffer, writer) {
   const ws = new WebSocket(
-    `wss://stream.binance.com:9443/ws/${symbol}@kline_1m`
+    `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_1m`
   );
 
-  ws.on("open", () => console.log("[WS-KLINE] Connected."));
+  ws.on("open", () => {
+    console.log("[WS-KLINE] Connected");
+  });
 
   ws.on("message", msg => {
     try {
       const data = JSON.parse(msg);
       const k = data.k;
 
-      const candle = {
+      const kline = {
         startTime: k.t,
         endTime: k.T,
         open: parseFloat(k.o),
         high: parseFloat(k.h),
         low: parseFloat(k.l),
         close: parseFloat(k.c),
-        volume: parseFloat(k.v),
-        isClosed: k.x
+        volume: parseFloat(k.v)
       };
 
-      buffer.live.kline = candle;
+      buffer.summarizeCandle(kline);
 
-      if (candle.isClosed) {
-        writer.save1mCandle(candle);
+      if (!k.x) {
+        writer.startCandle(kline, buffer);
+        writer.update(buffer);
+      } else {
+        writer.startCandle(kline, buffer);
+        writer.update(buffer);
+        writer.closeCandle(buffer);
       }
 
     } catch (err) {
-      console.error("[WS-KLINE] ERROR:", err);
+      console.log("[WS-KLINE] ERROR:", err);
     }
   });
 

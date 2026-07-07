@@ -1,0 +1,119 @@
+📁 PROJECT_STRUCTURE.txt
+ساختار کامل پروژه Binance Collector
+(نسخهٔ نهایی)
+🟦 WebSocket Streams
+ws-depth-diff.cjs
+مسیر: collector/binance/ws-depth-diff.cjs  
+وظیفه: دریافت عمق لحظه‌ای (Depth Diff)، اعمال diff روی OrderBook، بررسی sequenceNumber، gapDetection، checksum، و ساخت عمق کامل ۵۰۰۰ لایه.
+
+ws-trades.cjs
+مسیر: collector/binance/ws-trades.cjs  
+وظیفه: دریافت تریدهای لحظه‌ای (Trade)، تشخیص خرید/فروش، ارسال به buffer.pushTrade.
+
+ws-aggtrade.cjs
+مسیر: collector/binance/ws-aggtrade.cjs  
+وظیفه: دریافت معاملات تجمیعی (AggTrade)، محاسبه ارزش دلاری، latency، ذخیره در buffer.live.aggTrade.
+
+ws-orderbook.cjs
+مسیر: collector/binance/ws-orderbook.cjs  
+وظیفه: دریافت عمق ۵ لایه (depth5@100ms)، ذخیره در buffer.updateOrderbook.
+
+ws-depth20.cjs
+مسیر: collector/binance/ws-depth20.cjs  
+وظیفه: دریافت عمق ۲۰ لایه، ذخیره در buffer.live.depth20.
+
+ws-miniticker.cjs
+مسیر: collector/binance/ws-miniticker.cjs  
+وظیفه: دریافت MiniTicker، ذخیره close/open/high/low/volume، محاسبه microTrend.
+
+ws-bookticker.cjs
+مسیر: collector/binance/ws-bookticker.cjs  
+وظیفه: دریافت بهترین قیمت خرید/فروش، محاسبه spread و midPrice، ذخیره در buffer.live.ticker.
+
+ws-markprice.cjs
+مسیر: collector/binance/ws-markprice.cjs  
+وظیفه: دریافت Mark Price، نرخ فاندینگ، زمان فاندینگ بعدی، ذخیره در buffer.live.markPrice.
+
+ws-kline.cjs
+مسیر: collector/binance/ws-kline.cjs  
+وظیفه: دریافت کندل ۱ دقیقه، ذخیره در buffer.live.kline، ذخیره کندل بسته‌شده با writer.save1mCandle.
+
+🟦 REST API Modules
+rest-depth.cjs
+مسیر: collector/binance/rest-depth.cjs  
+وظیفه: دریافت snapshot عمق (۵۰۰ لایه) برای ریست OrderBook.
+
+rest_klines.cjs
+مسیر: collector/binance/rest_klines.cjs  
+وظیفه: دریافت کندل‌های REST برای UI (۱ دقیقه، ۵۰۰ کندل).
+
+🟦 Core Processing Modules
+orderbook.cjs
+مسیر: collector/binance/orderbook.cjs  
+وظیفه: نگه‌داری bids/asks، اعمال diff، مرتب‌سازی، reset snapshot، خروجی عمق کامل ۵۰۰۰ لایه.
+
+depth-engine.cjs
+مسیر: collector/binance/depth-engine.cjs  
+وظیفه: تحلیل عمق بازار، ساخت depthImportant، محاسبه depthImbalance، totalLiquidity، weightedLiquidity، marketMakerPressure، depthStatus، depthMeta.
+
+br_buffer.cjs
+مسیر: collector/binance/br_buffer.cjs  
+وظیفه: نگه‌داری تمام داده‌های لحظه‌ای در RAM (قلب سیستم)، شامل قیمت، تریدها، عمق‌ها، دیوارها، مگنت، کندل، ولتیلیتی، رفتار، داده‌های فیوچرز، وضعیت عمق، متادیتا.
+
+br_depth.cjs
+مسیر: collector/binance/br_depth.cjs  
+وظیفه: مدیریت depth20 و depthFull، محاسبه liquidityGap.
+
+br_trades.cjs
+مسیر: collector/binance/br_trades.cjs  
+وظیفه: پردازش تریدها، شمارش، buyVolume/sellVolume، bigTrades.
+
+br_walls.cjs
+مسیر: collector/binance/br_walls.cjs  
+وظیفه: تشخیص دیوارهای نقدینگی (buyWalls/sellWalls)، محاسبه strength و distanceFromPrice.
+
+br_magnet.cjs
+مسیر: collector/binance/br_magnet.cjs  
+وظیفه: محاسبه مگنت قیمت، strongestBuy/strongestSell، جهت مگنت.
+
+br_fakewalls.cjs
+مسیر: collector/binance/br_fakewalls.cjs  
+وظیفه: تشخیص دیوارهای فیک، تغییرات حجم سریع، دیوارهای چسبنده، دیوارهای بزرگ نزدیک قیمت، دیوارهای ناپدیدشده.
+
+br_volatility.cjs
+مسیر: collector/binance/br_volatility.cjs  
+وظیفه: محاسبه ولتیلیتی و جهت بازار بر اساس تریدها.
+
+🟦 System & Utility Modules
+ws-server.cjs
+مسیر: collector/binance/ws-server.cjs  
+وظیفه: WebSocket Server برای UI، ارسال init و delta، مدیریت کلاینت‌ها، safeSend.
+
+ws-reconnect.cjs
+مسیر: collector/binance/ws-reconnect.cjs  
+وظیفه: AutoReconnect برای تمام WebSocketها.
+
+writer.cjs
+مسیر: collector/binance/writer.cjs  
+وظیفه: ذخیره کندل ۱ دقیقه + داده‌های مهم عمق و ترید.
+
+cleaner.cjs
+مسیر: collector/binance/cleaner.cjs  
+وظیفه: پاک‌سازی کندل‌های قدیمی بر اساس retention.
+
+🟦 Main Runner
+index.cjs
+مسیر: collector/binance/index.cjs  
+وظیفه:
+
+دریافت REST کندل‌ها
+
+استارت تمام WebSocketها
+
+autoReconnect
+
+پردازش buffer
+
+ارسال داده‌های لحظه‌ای به UI
+
+ذخیره کندل ۱ دقیقه

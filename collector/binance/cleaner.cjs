@@ -6,12 +6,12 @@ const path = require("path");
 class Cleaner {
   constructor() {
     this.retention = {
-      "1m": 7 * 24 * 60 * 60 * 1000,       // 7 روز
+      "1m": 7 * 24 * 60 * 60 * 1000,       // 7 days
       "5m": 7 * 24 * 60 * 60 * 1000,
       "15m": 7 * 24 * 60 * 60 * 1000,
       "1h": 7 * 24 * 60 * 60 * 1000,
-      "4h": 180 * 24 * 60 * 60 * 1000,     // 6 ماه
-      "1d": 3 * 365 * 24 * 60 * 60 * 1000  // 3 سال
+      "4h": 180 * 24 * 60 * 60 * 1000,     // 6 months
+      "1d": 3 * 365 * 24 * 60 * 60 * 1000  // 3 years
     };
   }
 
@@ -20,10 +20,9 @@ class Cleaner {
       __dirname,
       "..",
       "..",
-      "ui",
-      "public",
-      "market",
-      symbol
+      "data",
+      "binance",
+      symbol.toUpperCase()
     );
 
     Object.keys(this.retention).forEach(tf => {
@@ -37,7 +36,6 @@ class Cleaner {
       files.forEach(file => {
         const fullPath = path.join(dir, file);
 
-        // binance_1720000000000.json
         const timestamp = parseInt(file.split("_")[1].replace(".json", ""));
 
         if (now - timestamp > limit) {

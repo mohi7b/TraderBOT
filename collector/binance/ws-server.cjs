@@ -21,23 +21,48 @@ wss.on("connection", (ws) => {
     clients = clients.filter((c) => c !== ws);
     console.log("❌ Client disconnected. Total:", clients.length);
   });
+
+  ws.on("error", (err) => {
+    console.error("⚠️ WS Client Error:", err);
+  });
 });
 
+/**
+ * ارسال امن پیام به کلاینت‌ها
+ */
+function safeSend(ws, msg) {
+  try {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(msg);
+    }
+  } catch (err) {
+    console.error("⚠️ WS Send Error:", err);
+  }
+}
+
+/**
+ * ارسال داده‌های اولیه (init)
+ */
 function sendInit(candles) {
   const msg = JSON.stringify({
     type: "init",
     data: candles,
   });
-  clients.forEach((ws) => ws.send(msg));
+
+  clients.forEach((ws) => safeSend(ws, msg));
 }
 
+/**
+ * ارسال داده‌های لحظه‌ای (delta)
+ */
 function sendDelta(path, data) {
   const msg = JSON.stringify({
     type: "delta",
     path,
     data,
   });
-  clients.forEach((ws) => ws.send(msg));
+
+  clients.forEach((ws) => safeSend(ws, msg));
 }
 
 module.exports = {

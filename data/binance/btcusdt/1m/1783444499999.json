@@ -1,0 +1,857 @@
+{
+  "symbol": "btcusdt",
+  "timeframe": "1m",
+  "candle": {
+    "startTime": 1783444440000,
+    "endTime": 1783444499999,
+    "open": 64064,
+    "high": 64064.01,
+    "low": 64011.79,
+    "close": 64014.96,
+    "volume": 7.9871,
+    "isClosed": true,
+    "direction": "down",
+    "volatility": 52.220000000001164,
+    "totalVolume": 7.9871
+  },
+  "trades": {
+    "count": 2914,
+    "buyVolume": 9.826200000000059,
+    "sellVolume": 6.147999999999927,
+    "bigTrades": [
+      {
+        "price": 64018.01,
+        "qty": 2.2,
+        "usd": 140839.622,
+        "time": 1783444468742,
+        "side": "buy"
+      },
+      {
+        "side": "buy",
+        "price": 64018.01,
+        "qty": 0.99385,
+        "value": 63624.2992385
+      },
+      {
+        "price": 64011.8,
+        "qty": 2.38351,
+        "usd": 152572.765418,
+        "time": 1783444483085,
+        "side": "buy"
+      },
+      {
+        "side": "buy",
+        "price": 64011.8,
+        "qty": 1.02732,
+        "value": 65760.60237600001
+      }
+    ]
+  },
+  "depthImportant": {
+    "buys": [
+      {
+        "side": "buy",
+        "layer": 1,
+        "price": 64014.96,
+        "qty": 3.36568,
+        "cumulative": 3.36568,
+        "reachPrice": 215453.8705728,
+        "mirrorLayer": 42,
+        "mirrorPrice": 64022.6,
+        "mirrorReachPrice": 223757.89815739993
+      },
+      {
+        "side": "buy",
+        "layer": 12,
+        "price": 64012.76,
+        "qty": 0.76077,
+        "cumulative": 4.30574,
+        "reachPrice": 275629.8381534,
+        "mirrorLayer": 57,
+        "mirrorPrice": 64025.76,
+        "mirrorReachPrice": 259878.0038411
+      },
+      {
+        "side": "buy",
+        "layer": 13,
+        "price": 64012.75,
+        "qty": 0.09192,
+        "cumulative": 4.39766,
+        "reachPrice": 281513.8901334,
+        "mirrorLayer": 57,
+        "mirrorPrice": 64025.76,
+        "mirrorReachPrice": 259878.0038411
+      },
+      {
+        "side": "buy",
+        "layer": 16,
+        "price": 64012.26,
+        "qty": 0.1561,
+        "cumulative": 4.55407,
+        "reachPrice": 291526.0477607,
+        "mirrorLayer": 57,
+        "mirrorPrice": 64025.76,
+        "mirrorReachPrice": 259878.0038411
+      },
+      {
+        "side": "buy",
+        "layer": 19,
+        "price": 64012,
+        "qty": 0.56319,
+        "cumulative": 5.1779399999999995,
+        "reachPrice": 331461.2190543,
+        "mirrorLayer": 58,
+        "mirrorPrice": 64025.85,
+        "mirrorReachPrice": 361542.0900221
+      },
+      {
+        "side": "buy",
+        "layer": 22,
+        "price": 64011.8,
+        "qty": 1.58786,
+        "cumulative": 6.765959999999999,
+        "reachPrice": 433113.23771990003,
+        "mirrorLayer": 64,
+        "mirrorPrice": 64026.52,
+        "mirrorReachPrice": 470397.33777300006
+      },
+      {
+        "side": "buy",
+        "layer": 23,
+        "price": 64011.79,
+        "qty": 0.1075,
+        "cumulative": 6.873459999999999,
+        "reachPrice": 439994.50514490006,
+        "mirrorLayer": 64,
+        "mirrorPrice": 64026.52,
+        "mirrorReachPrice": 470397.33777300006
+      },
+      {
+        "side": "buy",
+        "layer": 32,
+        "price": 64010,
+        "qty": 0.038,
+        "cumulative": 6.926919999999999,
+        "reachPrice": 443416.5007063,
+        "mirrorLayer": 64,
+        "mirrorPrice": 64026.52,
+        "mirrorReachPrice": 470397.33777300006
+      },
+      {
+        "side": "buy",
+        "layer": 35,
+        "price": 64009.39,
+        "qty": 0.39146,
+        "cumulative": 7.32079,
+        "reachPrice": 468627.8803844,
+        "mirrorLayer": 64,
+        "mirrorPrice": 64026.52,
+        "mirrorReachPrice": 470397.33777300006
+      },
+      {
+        "side": "buy",
+        "layer": 36,
+        "price": 64009.38,
+        "qty": 0.5629,
+        "cumulative": 7.88369,
+        "reachPrice": 504658.76038640004,
+        "mirrorLayer": 79,
+        "mirrorPrice": 64028,
+        "mirrorReachPrice": 483132.4005631
+      },
+      {
+        "side": "buy",
+        "layer": 80,
+        "price": 64004.55,
+        "qty": 1.69601,
+        "cumulative": 10.735659999999998,
+        "reachPrice": 687199.7668679999,
+        "mirrorLayer": 84,
+        "mirrorPrice": 64028.47,
+        "mirrorReachPrice": 683586.4541584
+      },
+      {
+        "side": "buy",
+        "layer": 81,
+        "price": 64004.54,
+        "qty": 1.58786,
+        "cumulative": 12.323519999999998,
+        "reachPrice": 788830.0157523999,
+        "mirrorLayer": 87,
+        "mirrorPrice": 64029.36,
+        "mirrorReachPrice": 785286.7627611001
+      },
+      {
+        "side": "buy",
+        "layer": 82,
+        "price": 64004.52,
+        "qty": 3.18624,
+        "cumulative": 15.509759999999998,
+        "reachPrice": 992763.7775571999,
+        "mirrorLayer": 103,
+        "mirrorPrice": 64031.38,
+        "mirrorReachPrice": 979828.7377957001
+      },
+      {
+        "side": "buy",
+        "layer": 89,
+        "price": 64003.98,
+        "qty": 0.56295,
+        "cumulative": 16.10378,
+        "reachPrice": 1030783.4224917999,
+        "mirrorLayer": 104,
+        "mirrorPrice": 64031.4,
+        "mirrorReachPrice": 1081501.6365997002
+      },
+      {
+        "side": "buy",
+        "layer": 92,
+        "price": 64003.76,
+        "qty": 0.77,
+        "cumulative": 16.892370000000003,
+        "reachPrice": 1081256.1489914998,
+        "mirrorLayer": 104,
+        "mirrorPrice": 64031.4,
+        "mirrorReachPrice": 1081501.6365997002
+      },
+      {
+        "side": "buy",
+        "layer": 117,
+        "price": 64000.06,
+        "qty": 3.12442,
+        "cumulative": 22.32982000000001,
+        "reachPrice": 1429254.5460193998,
+        "mirrorLayer": 127,
+        "mirrorPrice": 64034,
+        "mirrorReachPrice": 1466466.6721229001
+      },
+      {
+        "side": "buy",
+        "layer": 118,
+        "price": 64000.02,
+        "qty": 1.58786,
+        "cumulative": 23.917680000000008,
+        "reachPrice": 1530877.6177765997,
+        "mirrorLayer": 142,
+        "mirrorPrice": 64035.96,
+        "mirrorReachPrice": 1547149.2866249997
+      },
+      {
+        "side": "buy",
+        "layer": 140,
+        "price": 63997.12,
+        "qty": 1.58786,
+        "cumulative": 27.565360000000013,
+        "reachPrice": 1764323.1336924997,
+        "mirrorLayer": 143,
+        "mirrorPrice": 64035.97,
+        "mirrorReachPrice": 1691509.4159541996
+      },
+      {
+        "side": "buy",
+        "layer": 171,
+        "price": 63992.03,
+        "qty": 2.11349,
+        "cumulative": 33.04432000000001,
+        "reachPrice": 2114941.7975208997,
+        "mirrorLayer": 170,
+        "mirrorPrice": 64038.47,
+        "mirrorReachPrice": 2115519.9309529997
+      },
+      {
+        "side": "buy",
+        "layer": 172,
+        "price": 63992.02,
+        "qty": 3.12442,
+        "cumulative": 36.168740000000014,
+        "reachPrice": 2314879.7446493,
+        "mirrorLayer": 195,
+        "mirrorPrice": 64041.66,
+        "mirrorReachPrice": 2272497.7860494987
+      },
+      {
+        "side": "buy",
+        "layer": 206,
+        "price": 63987.09,
+        "qty": 2.39771,
+        "cumulative": 43.881789999999995,
+        "reachPrice": 2808435.6223530984,
+        "mirrorLayer": 215,
+        "mirrorPrice": 64044.83,
+        "mirrorReachPrice": 2811977.8503619987
+      },
+      {
+        "side": "buy",
+        "layer": 213,
+        "price": 63986.12,
+        "qty": 4.71228,
+        "cumulative": 48.60991999999999,
+        "reachPrice": 3110970.3194822986,
+        "mirrorLayer": 227,
+        "mirrorPrice": 64046.42,
+        "mirrorReachPrice": 3100592.904340499
+      },
+      {
+        "side": "buy",
+        "layer": 262,
+        "price": 63980.26,
+        "qty": 5.17002,
+        "cumulative": 64.03081999999998,
+        "reachPrice": 4097630.3105747993,
+        "mirrorLayer": 280,
+        "mirrorPrice": 64053.93,
+        "mirrorReachPrice": 4109434.868381499
+      },
+      {
+        "side": "buy",
+        "layer": 309,
+        "price": 63973.21,
+        "qty": 3.12273,
+        "cumulative": 74.21709,
+        "reachPrice": 4749294.239704199,
+        "mirrorLayer": 313,
+        "mirrorPrice": 64058,
+        "mirrorReachPrice": 4757207.399241899
+      },
+      {
+        "side": "buy",
+        "layer": 380,
+        "price": 63963.87,
+        "qty": 3.12273,
+        "cumulative": 87.63857000000002,
+        "reachPrice": 5607822.266063197,
+        "mirrorLayer": 373,
+        "mirrorPrice": 64066.75,
+        "mirrorReachPrice": 5579432.103094299
+      },
+      {
+        "side": "buy",
+        "layer": 440,
+        "price": 63954.53,
+        "qty": 3.12273,
+        "cumulative": 99.66533000000003,
+        "reachPrice": 6377014.979764097,
+        "mirrorLayer": 400,
+        "mirrorPrice": 64071.91,
+        "mirrorReachPrice": 6377331.966553897
+      },
+      {
+        "side": "buy",
+        "layer": 532,
+        "price": 63939.47,
+        "qty": 3.48304,
+        "cumulative": 115.27793000000003,
+        "reachPrice": 7375343.630044997,
+        "mirrorLayer": 450,
+        "mirrorPrice": 64079.23,
+        "mirrorReachPrice": 7403041.0337499995
+      },
+      {
+        "side": "buy",
+        "layer": 539,
+        "price": 63938.44,
+        "qty": 3.12458,
+        "cumulative": 118.41885000000002,
+        "reachPrice": 7576169.169200197,
+        "mirrorLayer": 462,
+        "mirrorPrice": 64083.99,
+        "mirrorReachPrice": 7489555.122544799
+      },
+      {
+        "side": "buy",
+        "layer": 540,
+        "price": 63938.43,
+        "qty": 3.40745,
+        "cumulative": 121.82630000000002,
+        "reachPrice": 7794036.172503697,
+        "mirrorLayer": 476,
+        "mirrorPrice": 64086.75,
+        "mirrorReachPrice": 7798802.002090899
+      },
+      {
+        "side": "buy",
+        "layer": 553,
+        "price": 63936.29,
+        "qty": 4.69622,
+        "cumulative": 128.85691000000003,
+        "reachPrice": 8243547.847509696,
+        "mirrorLayer": 491,
+        "mirrorPrice": 64090.42,
+        "mirrorReachPrice": 8286978.2600438
+      },
+      {
+        "side": "buy",
+        "layer": 690,
+        "price": 63911.07,
+        "qty": 4.69808,
+        "cumulative": 143.2494000000001,
+        "reachPrice": 9163509.545397198,
+        "mirrorLayer": 539,
+        "mirrorPrice": 64103.09,
+        "mirrorReachPrice": 9269969.795656499
+      },
+      {
+        "side": "buy",
+        "layer": 711,
+        "price": 63908.65,
+        "qty": 4.6983,
+        "cumulative": 149.4403100000001,
+        "reachPrice": 9559162.365957497,
+        "mirrorLayer": 593,
+        "mirrorPrice": 64118.98,
+        "mirrorReachPrice": 9551387.0243773
+      },
+      {
+        "side": "buy",
+        "layer": 874,
+        "price": 63872.36,
+        "qty": 4.70092,
+        "cumulative": 158.71217000000013,
+        "reachPrice": 10151447.859050803,
+        "mirrorLayer": 632,
+        "mirrorPrice": 64129.01,
+        "mirrorReachPrice": 10157165.904891893
+      },
+      {
+        "side": "buy",
+        "layer": 959,
+        "price": 63854.75,
+        "qty": 6.52023,
+        "cumulative": 166.51364000000004,
+        "reachPrice": 10649619.072006708,
+        "mirrorLayer": 697,
+        "mirrorPrice": 64145.65,
+        "mirrorReachPrice": 10624558.15001849
+      },
+      {
+        "side": "buy",
+        "layer": 970,
+        "price": 63852.57,
+        "qty": 4.70243,
+        "cumulative": 171.21851000000004,
+        "reachPrice": 10950037.117355607,
+        "mirrorLayer": 721,
+        "mirrorPrice": 64150.69,
+        "mirrorReachPrice": 10943630.779805891
+      }
+    ],
+    "sells": [
+      {
+        "side": "sell",
+        "layer": 1,
+        "price": 64014.97,
+        "qty": 1.19541,
+        "cumulative": 1.19541,
+        "reachPrice": 76524.1352877,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 2,
+        "price": 64014.98,
+        "qty": 0.0005,
+        "cumulative": 1.19591,
+        "reachPrice": 76556.1427777,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 3,
+        "price": 64014.99,
+        "qty": 0.00016,
+        "cumulative": 1.19607,
+        "reachPrice": 76566.38517610001,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 14,
+        "price": 64018,
+        "qty": 0.02827,
+        "cumulative": 1.2252699999999999,
+        "reachPrice": 78435.70942259999,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 20,
+        "price": 64019.99,
+        "qty": 0.01801,
+        "cumulative": 1.2437199999999997,
+        "reachPrice": 79616.87775749998,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 40,
+        "price": 64022.58,
+        "qty": 0.04891,
+        "cumulative": 1.3522299999999996,
+        "reachPrice": 86563.87416599995,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 41,
+        "price": 64022.59,
+        "qty": 0.55486,
+        "cumulative": 1.9070899999999997,
+        "reachPrice": 122087.44845339995,
+        "mirrorLayer": 1,
+        "mirrorPrice": 64014.96,
+        "mirrorReachPrice": 215453.8705728
+      },
+      {
+        "side": "sell",
+        "layer": 42,
+        "price": 64022.6,
+        "qty": 1.58804,
+        "cumulative": 3.4951299999999996,
+        "reachPrice": 223757.89815739993,
+        "mirrorLayer": 9,
+        "mirrorPrice": 64013.4,
+        "mirrorReachPrice": 223800.6262632
+      },
+      {
+        "side": "sell",
+        "layer": 48,
+        "price": 64024,
+        "qty": 0.02835,
+        "cumulative": 3.52413,
+        "reachPrice": 225614.59348829996,
+        "mirrorLayer": 11,
+        "mirrorPrice": 64012.77,
+        "mirrorReachPrice": 226930.85072820002
+      },
+      {
+        "side": "sell",
+        "layer": 50,
+        "price": 64024.35,
+        "qty": 0.07504,
+        "cumulative": 3.59925,
+        "reachPrice": 230424.10264429997,
+        "mirrorLayer": 11,
+        "mirrorPrice": 64012.77,
+        "mirrorReachPrice": 226930.85072820002
+      },
+      {
+        "side": "sell",
+        "layer": 58,
+        "price": 64025.85,
+        "qty": 1.58786,
+        "cumulative": 5.64715,
+        "reachPrice": 361542.0900221,
+        "mirrorLayer": 21,
+        "mirrorPrice": 64011.98,
+        "mirrorReachPrice": 331471.46097190003
+      },
+      {
+        "side": "sell",
+        "layer": 64,
+        "price": 64026.52,
+        "qty": 1.42699,
+        "cumulative": 7.3473099999999985,
+        "reachPrice": 470397.33777300006,
+        "mirrorLayer": 35,
+        "mirrorPrice": 64009.39,
+        "mirrorReachPrice": 468627.8803844
+      },
+      {
+        "side": "sell",
+        "layer": 80,
+        "price": 64028.1,
+        "qty": 3.12842,
+        "cumulative": 10.674629999999999,
+        "reachPrice": 683439.1891651,
+        "mirrorLayer": 80,
+        "mirrorPrice": 64004.55,
+        "mirrorReachPrice": 687199.7668679999
+      },
+      {
+        "side": "sell",
+        "layer": 85,
+        "price": 64028.5,
+        "qty": 1.58795,
+        "cumulative": 12.26488,
+        "reachPrice": 785260.5107334,
+        "mirrorLayer": 81,
+        "mirrorPrice": 64004.54,
+        "mirrorReachPrice": 788830.0157523999
+      },
+      {
+        "side": "sell",
+        "layer": 88,
+        "price": 64029.4,
+        "qty": 1.84526,
+        "cumulative": 14.11055,
+        "reachPrice": 903437.6534051001,
+        "mirrorLayer": 82,
+        "mirrorPrice": 64004.52,
+        "mirrorReachPrice": 992763.7775571999
+      },
+      {
+        "side": "sell",
+        "layer": 108,
+        "price": 64031.96,
+        "qty": 3.1237,
+        "cumulative": 20.01688,
+        "reachPrice": 1281629.6850552,
+        "mirrorLayer": 116,
+        "mirrorPrice": 64000.07,
+        "mirrorReachPrice": 1229291.4785541997
+      },
+      {
+        "side": "sell",
+        "layer": 143,
+        "price": 64035.97,
+        "qty": 2.25436,
+        "cumulative": 26.417780000000008,
+        "reachPrice": 1691509.4159541996,
+        "mirrorLayer": 139,
+        "mirrorPrice": 63997.32,
+        "mirrorReachPrice": 1662704.6667292998
+      },
+      {
+        "side": "sell",
+        "layer": 144,
+        "price": 64035.98,
+        "qty": 3.12334,
+        "cumulative": 29.541120000000006,
+        "reachPrice": 1891515.5537273996,
+        "mirrorLayer": 159,
+        "mirrorPrice": 63994.26,
+        "mirrorReachPrice": 1927035.8154840996
+      },
+      {
+        "side": "sell",
+        "layer": 196,
+        "price": 64041.69,
+        "qty": 2.19707,
+        "cumulative": 37.68745000000003,
+        "reachPrice": 2413201.8618977987,
+        "mirrorLayer": 180,
+        "mirrorPrice": 63991,
+        "mirrorReachPrice": 2400940.4714515996
+      },
+      {
+        "side": "sell",
+        "layer": 197,
+        "price": 64041.7,
+        "qty": 3.12334,
+        "cumulative": 40.810790000000026,
+        "reachPrice": 2613225.8651757985,
+        "mirrorLayer": 184,
+        "mirrorPrice": 63990.29,
+        "mirrorReachPrice": 2613997.4333240995
+      },
+      {
+        "side": "sell",
+        "layer": 382,
+        "price": 64068.62,
+        "qty": 3.12442,
+        "cumulative": 92.73654000000009,
+        "reachPrice": 5939358.470380799,
+        "mirrorLayer": 426,
+        "mirrorPrice": 63956.59,
+        "mirrorReachPrice": 5940165.364910797
+      },
+      {
+        "side": "sell",
+        "layer": 425,
+        "price": 64076.31,
+        "qty": 3.12442,
+        "cumulative": 104.88563000000012,
+        "reachPrice": 6717780.235809997,
+        "mirrorLayer": 490,
+        "mirrorPrice": 63945.23,
+        "mirrorReachPrice": 6711607.296994899
+      },
+      {
+        "side": "sell",
+        "layer": 450,
+        "price": 64079.23,
+        "qty": 4.68574,
+        "cumulative": 115.57980000000013,
+        "reachPrice": 7403041.0337499995,
+        "mirrorLayer": 538,
+        "mirrorPrice": 63938.65,
+        "mirrorReachPrice": 7376388.398344996
+      },
+      {
+        "side": "sell",
+        "layer": 463,
+        "price": 64084,
+        "qty": 3.15242,
+        "cumulative": 120.08224000000013,
+        "reachPrice": 7691574.805824799,
+        "mirrorLayer": 540,
+        "mirrorPrice": 63938.43,
+        "mirrorReachPrice": 7794036.172503697
+      },
+      {
+        "side": "sell",
+        "layer": 484,
+        "price": 64088.76,
+        "qty": 3.47493,
+        "cumulative": 126.24354000000015,
+        "reachPrice": 8086439.375347899,
+        "mirrorLayer": 552,
+        "mirrorPrice": 63936.31,
+        "mirrorReachPrice": 7943288.963685896
+      },
+      {
+        "side": "sell",
+        "layer": 495,
+        "price": 64091.69,
+        "qty": 3.12442,
+        "cumulative": 132.49728000000016,
+        "reachPrice": 8487247.486363601,
+        "mirrorLayer": 599,
+        "mirrorPrice": 63928,
+        "mirrorReachPrice": 8463946.831829894
+      },
+      {
+        "side": "sell",
+        "layer": 539,
+        "price": 64103.09,
+        "qty": 3.75605,
+        "cumulative": 144.70802000000003,
+        "reachPrice": 9269969.795656499,
+        "mirrorLayer": 710,
+        "mirrorPrice": 63908.66,
+        "mirrorReachPrice": 9258900.355662497
+      },
+      {
+        "side": "sell",
+        "layer": 632,
+        "price": 64129.01,
+        "qty": 4.68212,
+        "cumulative": 158.54429000000005,
+        "reachPrice": 10157165.904891893,
+        "mirrorLayer": 899,
+        "mirrorPrice": 63867.62,
+        "mirrorReachPrice": 10153747.804941606
+      },
+      {
+        "side": "sell",
+        "layer": 674,
+        "price": 64139.1,
+        "qty": 4.68136,
+        "cumulative": 164.84498000000008,
+        "reachPrice": 10561279.944732295,
+        "mirrorLayer": 959,
+        "mirrorPrice": 63854.75,
+        "mirrorReachPrice": 10649619.072006708
+      },
+      {
+        "side": "sell",
+        "layer": 698,
+        "price": 64145.68,
+        "qty": 4.68089,
+        "cumulative": 170.51239000000007,
+        "reachPrice": 10924817.022073692,
+        "mirrorLayer": 970,
+        "mirrorPrice": 63852.57,
+        "mirrorReachPrice": 10950037.117355607
+      },
+      {
+        "side": "sell",
+        "layer": 726,
+        "price": 64152.22,
+        "qty": 4.68041,
+        "cumulative": 176.0114600000001,
+        "reachPrice": 11277593.294931589,
+        "mirrorLayer": 1000,
+        "mirrorPrice": 63846.45,
+        "mirrorReachPrice": 10953387.912102506
+      },
+      {
+        "side": "sell",
+        "layer": 800,
+        "price": 64170.35,
+        "qty": 6.52935,
+        "cumulative": 185.95019000000005,
+        "reachPrice": 11915330.011000188,
+        "mirrorLayer": 1000,
+        "mirrorPrice": 63846.45,
+        "mirrorReachPrice": 10953387.912102506
+      },
+      {
+        "side": "sell",
+        "layer": 808,
+        "price": 64172.71,
+        "qty": 4.67892,
+        "cumulative": 190.65795000000006,
+        "reachPrice": 12217439.707246289,
+        "mirrorLayer": 1000,
+        "mirrorPrice": 63846.45,
+        "mirrorReachPrice": 10953387.912102506
+      },
+      {
+        "side": "sell",
+        "layer": 823,
+        "price": 64176.33,
+        "qty": 3.63147,
+        "cumulative": 195.5959500000001,
+        "reachPrice": 12534342.28814879,
+        "mirrorLayer": 1000,
+        "mirrorPrice": 63846.45,
+        "mirrorReachPrice": 10953387.912102506
+      },
+      {
+        "side": "sell",
+        "layer": 861,
+        "price": 64187.87,
+        "qty": 4.67782,
+        "cumulative": 202.64476000000008,
+        "reachPrice": 12986783.144829793,
+        "mirrorLayer": 1000,
+        "mirrorPrice": 63846.45,
+        "mirrorReachPrice": 10953387.912102506
+      }
+    ],
+    "pressureScore": -34906922.61292401,
+    "dominantSide": "sell",
+    "balancePoint": {
+      "layerBuy": 35,
+      "priceBuy": 64009.39,
+      "reachPriceBuy": 468627.8803844,
+      "layerSell": 64,
+      "priceSell": 64026.52,
+      "reachPriceSell": 470397.33777300006
+    }
+  },
+  "depthImbalance": 0,
+  "totalLiquidity": {
+    "buy": 0,
+    "sell": 0
+  },
+  "weightedLiquidity": {
+    "buy": 0,
+    "sell": 0
+  },
+  "marketMakerPressure": null,
+  "depthStatus": {
+    "gapDetected": true,
+    "checksumValid": true
+  },
+  "depthMeta": {
+    "indexPrice": null,
+    "openInterest": null,
+    "liquidation": null,
+    "estFunding": null
+  },
+  "updatedAt": 1783444500264
+}

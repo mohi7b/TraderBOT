@@ -1,137 +1,207 @@
 // collector/binance/br_buffer.cjs
 
-const trades = require("./br_trades.cjs");
-const depth = require("./br_depth.cjs");
-const walls = require("./br_walls.cjs");
-const magnet = require("./br_magnet.cjs");
-const volatility = require("./br_volatility.cjs");
-const behavior = require("./br_behavior.cjs");
-const fakewalls = require("./br_fakewalls.cjs");
-const alerts = require("./br_alerts.cjs");
+module.exports = {
+  live: {
+    lastPrice: null,
+    lastVolume: null,
 
-class Buffer {
-  constructor() {
-    this.reset();
-  }
+    kline: null,
 
-  reset() {
-    console.log("[Buffer] Resetting live buffer...");
+    trades: {
+      count: 0,
+      buyVolume: 0,
+      sellVolume: 0,
+      bigTrades: [],
+    },
 
-    this.live = {
-      lastPrice: null,
+    tradeClusters: [],
 
-      // تریدها
-      trades: trades.init(),
+    liquidationBuy: 0,
+    liquidationSell: 0,
+    bigLiquidations: [],
+    liquidationClusters: [],
 
-      // عمق‌ها
-      depth20: null,
-      depthFull: { bids: [], asks: [] },
-      depthImportant: { buys: [], sells: [] },
+    orderbook: {
+      bids: {},
+      asks: {},
+      lastUpdateId: null,
+      gapDetected: false,
+      checksumValid: true
+    },
 
-      // دیوارها
-      liquidityWalls: { buyWalls: [], sellWalls: [] },
+    depthImportant: { buys: [], sells: [] },
 
-      // مگنت
-      priceMagnet: null,
+    depthImbalance: 0,
+    totalLiquidity: { buy: 0, sell: 0 },
+    weightedLiquidity: { buy: 0, sell: 0 },
+    marketMakerPressure: null,
 
-      // کندل
-      currentCandle: null,
+    depthMeta: {
+      indexPrice: null,
+      openInterest: null,
+      liquidation: null,
+      estFunding: null
+    },
 
-      // ولتیلیتی
-      volatility: { micro: 0 },
-
-      // جهت بازار
-      marketDirection: "neutral",
-
-      // فاصله نقدینگی
-      liquidityGap: 0,
-
-      // هشدارها
-      alerts: []
-    };
-  }
-
-  // -----------------------------
-  //  تریدها
-  // -----------------------------
-  pushTrade(price, qty, isBuy) {
-    this.live.lastPrice = price;
-
-    // ساخت کندل
-    this.updateCandle(price);
-
-    // پردازش ترید
-    trades.pushTrade(this.live, price, qty, isBuy);
-  }
-
-  // -----------------------------
-  //  کندل‌سازی
-  // -----------------------------
-updateCandle(price) {
-  const now = Date.now();
-  const minute = Math.floor(now / 60000) * 60000;
-
-  if (!this.live.currentCandle || this.live.currentCandle.startTime !== minute) {
-    // کندل قبلی را ذخیره کن
-    if (this.live.currentCandle) {
-      this.live.previousCandle = { ...this.live.currentCandle };
-    }
-
-    // کندل جدید
-    this.live.currentCandle = {
-      startTime: minute,
-      open: price,
-      high: price,
-      low: price,
-      close: price,
-      volume: 0
-    };
-  } else {
-    const c = this.live.currentCandle;
-    c.high = Math.max(c.high, price);
-    c.low = Math.min(c.low, price);
-    c.close = price;
-    c.volume += 1;
-  }
-}
+    fakeWalls: [],
+    priceMagnet: null,
+    marketMakerBehavior: null
+  },
 
   summarizeCandle(candle) {
-    if (!candle) return;
+    candle.totalVolume = candle.volume;
 
     candle.direction =
       candle.close > candle.open ? "up" :
       candle.close < candle.open ? "down" : "neutral";
 
     candle.volatility = candle.high - candle.low;
-    candle.totalVolume = candle.volume;
+  },
 
-    volatility.summarize(this.live, candle);
+  applyDiff(bids, asks) {
+    const ob = this.live.orderbook;
+
+    for (const [price, qty] of bids) {
+      const p = parseFloat(price);
+      const q = parseFloat(qty);
+      if (q === 0) delete ob.bids[p];
+      else ob.bids[p] = q;
+    }
+
+    for (const [price, qty] of asks) {
+      const p = parseFloat(price);
+      const q = parseFloat(qty);
+      if (q === 0) delete ob.asks[p];
+      else ob.asks[p] = q;
+    }
+  },
+
+processDepthImportant() {
+  const ob = this.live.orderbook;
+
+  // تبدیل orderbook به آرایهٔ لایه‌ای
+  const bids = Object.entries(ob.bids)
+    .map(([price, qty]) => ({ side: "buy", price: parseFloat(price), qty }))
+    .sort((a, b) => b.price - a.price);
+
+  const asks = Object.entries(ob.asks)
+    .map(([price, qty]) => ({ side: "sell", price: parseFloat(price), qty }))
+    .sort((a, b) => a.price - b.price);
+
+  // محاسبه cumulative و reachPrice
+  const addMetrics = (arr) => {
+    let cumQty = 0;
+    let cumValue = 0;
+
+    return arr.map((d, i) => {
+      cumQty += d.qty;
+      cumValue += d.qty * d.price;
+
+      return {
+        side: d.side,
+        layer: i + 1,
+        price: d.price,
+        qty: d.qty,
+        cumulative: cumQty,
+        reachPrice: cumValue
+      };
+    });
+  };
+
+  const bidsFull = addMetrics(bids);
+  const asksFull = addMetrics(asks);
+
+  // انتخاب نقاط مهم از بازه‌ها
+  const pickImportant = (arr) => {
+    const ranges = [
+      { from: 1, to: 20, count: 5 },
+      { from: 20, to: 50, count: 5 },
+      { from: 50, to: 100, count: 5 },
+      { from: 100, to: 200, count: 5 },
+      { from: 200, to: arr.length, count: 15 }
+    ];
+
+    let result = [];
+
+    for (const r of ranges) {
+      const slice = arr.slice(r.from - 1, r.to);
+      const sorted = slice.sort((a, b) => b.qty - a.qty);
+      result.push(...sorted.slice(0, r.count));
+    }
+
+    return result.sort((a, b) => a.layer - b.layer);
+  };
+
+  const importantBuys = pickImportant(bidsFull);
+  const importantSells = pickImportant(asksFull);
+
+  // پیدا کردن نقطهٔ معادل در سمت مخالف
+  const findMirror = (point, oppositeArr) => {
+    let best = oppositeArr[0];
+
+    for (const o of oppositeArr) {
+      if (Math.abs(o.reachPrice - point.reachPrice) <
+          Math.abs(best.reachPrice - point.reachPrice)) {
+        best = o;
+      }
+    }
+
+    return {
+      mirrorLayer: best.layer,
+      mirrorPrice: best.price,
+      mirrorReachPrice: best.reachPrice
+    };
+  };
+
+  const addMirror = (arr, oppositeArr) => {
+    return arr.map((d) => ({
+      ...d,
+      ...findMirror(d, oppositeArr)
+    }));
+  };
+
+  const buysFinal = addMirror(importantBuys, asksFull);
+  const sellsFinal = addMirror(importantSells, bidsFull);
+
+  // محاسبه فشار بازار
+  const totalBuyReach = buysFinal.reduce((sum, x) => sum + x.reachPrice, 0);
+  const totalSellReach = sellsFinal.reduce((sum, x) => sum + x.reachPrice, 0);
+
+  const pressureScore = totalBuyReach - totalSellReach;
+  const dominantSide = pressureScore > 0 ? "buy" : "sell";
+
+  // پیدا کردن نقطهٔ تعادل بازار
+  let bestBuy = buysFinal[0];
+  let bestSell = sellsFinal[0];
+  let bestDiff = Math.abs(bestBuy.reachPrice - bestSell.reachPrice);
+
+  for (const b of buysFinal) {
+    for (const s of sellsFinal) {
+      const diff = Math.abs(b.reachPrice - s.reachPrice);
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestBuy = b;
+        bestSell = s;
+      }
+    }
   }
 
-  // -----------------------------
-  //  عمق 20
-  // -----------------------------
-  updateDepth20(bids, asks) {
-    depth.updateDepth20(this.live, bids, asks);
-  }
+  const balancePoint = {
+    layerBuy: bestBuy.layer,
+    priceBuy: bestBuy.price,
+    reachPriceBuy: bestBuy.reachPrice,
 
-  // -----------------------------
-  //  عمق کامل (برای WS-DIFF)
-  // -----------------------------
-  updateDepthFull(bids, asks) {
-    depth.updateDepthFull(this.live, bids, asks);
-  }
+    layerSell: bestSell.layer,
+    priceSell: bestSell.price,
+    reachPriceSell: bestSell.reachPrice
+  };
 
-  // -----------------------------
-  //  پردازش عمق مهم
-  // -----------------------------
-  processDepthImportant() {
-    walls.detectLiquidityWalls(this.live);
-    magnet.computePriceMagnet(this.live);
-    behavior.computeBehavior(this.live);
-    fakewalls.detectFakeWalls(this.live);
-    alerts.run(this.live);
-  }
+  this.live.depthImportant = {
+    buys: buysFinal,
+    sells: sellsFinal,
+    pressureScore,
+    dominantSide,
+    balancePoint
+  };
 }
-
-module.exports = new Buffer();
+};
