@@ -12,7 +12,7 @@ module.exports = function startDepthDiff(symbol, buffer) {
   async function loadSnapshotOnce() {
     try {
       const res = await axios.get(
-        `https://fapi.binance.com/fapi/v1/depth?symbol=${sym}&limit=2000`
+        `https://fapi.binance.com/fapi/v1/depth?symbol=${sym}&limit=1000`
       );
 
       const snap = res.data;

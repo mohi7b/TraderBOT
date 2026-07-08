@@ -1,25 +1,49 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { initStore, useStore } from "../lib/store";
-import DepthRestChart from "../components/DepthRestChart";
+import DepthChart from "@/components/DepthChart";
 
-export default function Page() {
-  const [state, setState] = useState({});
+export default function DepthPage() {
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    initStore();
-    return useStore((s) => setState({ ...s }));
+    const ws = new WebSocket("ws://5.255.121.157:9000");
+
+    ws.onopen = () => {
+      console.log("WS Connected");
+      setSocket(ws);
+    };
+
+    ws.onerror = (err) => {
+      console.log("WS Error:", err);
+    };
+
+    ws.onclose = () => {
+      console.log("WS Closed");
+    };
+
+    return () => ws.close();
   }, []);
 
-  if (!state.depthRest) {
-    return <div style={{ padding: 20 }}>Loading REST Depth...</div>;
+  if (!socket) {
+    return (
+      <div className="text-center text-gray-300 p-10">
+        اتصال به سرور…
+      </div>
+    );
   }
 
   return (
-    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <h1>🔥 REST Depth Chart</h1>
-      <DepthRestChart rest={state.depthRest} />
+    <div className="p-4">
+      <h1 className="text-xl font-bold text-green-400 mb-4">
+        چارت عمق حرفه‌ای (Depth Chart)
+      </h1>
+
+      <DepthChart socket={socket} />
+
+      <div className="mt-4 text-gray-400 text-sm">
+        چارت عمق کاملاً زنده است و با هر آپدیت از کالکتور، به‌صورت خودکار رفرش می‌شود.
+      </div>
     </div>
   );
 }

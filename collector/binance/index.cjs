@@ -61,12 +61,22 @@ function startAllWS() {
 startAllWS();
 
 // ============================================================
-// 🔥 3) Send FULL OrderBook snapshot every 500ms
+// 🔥 3) Throttle snapshot sending (حل مشکل WS buffer full)
 // ============================================================
+
+let lastSnapshot = 0;
+
 setInterval(() => {
+  const now = Date.now();
+
+  // فقط هر 100ms یک بار snapshot بفرست
+  if (now - lastSnapshot < 100) return;
+  lastSnapshot = now;
+
   const snapshot = buffer.getOrderBookSnapshot();
   sendDelta("depthRest", snapshot);
-}, 500);
+
+}, 50); // سرعت چک کردن بالا، ولی ارسال Throttle شده
 
 // ============================================================
 // 🔥 4) Every second: process buffer + send live data
@@ -88,9 +98,7 @@ setInterval(() => {
   sendDelta("dominantSide", buffer.live.depthImportant.dominantSide);
   sendDelta("balancePoint", buffer.live.depthImportant.balancePoint);
 
-  // 🔥 نسخهٔ جدید: فقط depthStatus واقعی
   sendDelta("depthStatus", buffer.live.depthStatus);
-
   sendDelta("depthTop20", buffer.live.depthTop20);
 
 }, 1000);
