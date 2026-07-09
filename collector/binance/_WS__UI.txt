@@ -1,0 +1,84 @@
+/collector/bainance
+    ws-server.cjs
+        - sendInit(candles)
+        - sendDelta(path, data)
+        - WS port 9000
+        - مدیریت کلاینت‌ها
+        - جلوگیری از Backpressure
+
+    ws-depth-diff.cjs
+        - ساخت لایه 0 (depthLayer0)
+        - ساخت لایه 2 (depthLayer2) هر 15 ثانیه
+        - ساخت لایه 3 (depthLayer3) هر 20 ثانیه
+        - پاسکاری داده‌ها به ws-server
+
+    ws-depth20-safe.cjs
+        - ساخت لایه 1 (depthLayer1)
+        - عمق 20 سطح
+
+    br_buffer.cjs
+        - حافظه زنده سیستم
+        - buffer.live.depthLayer0
+        - buffer.live.depthLayer1
+        - buffer.live.depthLayer2
+        - buffer.live.depthLayer3
+        - buffer.live.lastPrice
+        - buffer.live.lastVolume
+
+    index.cjs
+        - مدیریت همه WS ها
+        - ارسال دوره‌ای داده‌ها به UI:
+            sendDelta("price", lastPrice)
+            sendDelta("volume", lastVolume)
+            sendDelta("depthLayer0", depthLayer0)
+            sendDelta("depthLayer1", depthLayer1)
+            sendDelta("depthLongTerm", depthLayer2)
+            sendDelta("depthLongTerm", depthLayer3)
+
+
+
+
+
+
+            ---------------------------------------------------
+
+
+            depthLayer0
+    - bids[]: قیمت + حجم خام
+    - asks[]: قیمت + حجم خام
+    - mid: میانگین بهترین bid/ask
+    - فقط داده خام، بدون محاسبه سنگین
+
+depthLayer1
+    - عمق 20 سطح
+    - برای نمایش سریع در UI
+    - سبک‌ترین لایه
+
+depthLayer2
+    - 100 نقطه مهم در هر جهت
+    - cumulative
+    - delta
+    - reachPrice
+    - mirrorPrice
+    - mirrorLayer
+    - mirrorReachPrice
+    - levelTag
+    - هر 15 ثانیه آپدیت
+    - برای چارت عمق میان‌مدت
+
+depthLayer3
+    - 50 دیوار نقدینگی در هر جهت
+    - تحلیل سنگین
+    - cumulative + delta + mirror
+    - هر 20 ثانیه آپدیت
+    - برای تحلیل بلندمدت
+
+price
+    - آخرین قیمت معامله
+
+volume
+    - حجم لحظه‌ای
+
+updatedAt
+    - timestamp برای UI و چارت
+

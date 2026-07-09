@@ -18,24 +18,22 @@ module.exports = function wsTrades(symbol, buffer) {
       const price = parseFloat(data.p);
       const qty = parseFloat(data.q);
       const value = price * qty;
-      const isBuyer = data.m === false; // m=false → خریدار
+      const isBuyer = data.m === false;
 
       const trades = buffer.live.trades;
 
-      // تعداد کل تریدها
       trades.count++;
 
-      // حجم خرید/فروش
       if (isBuyer) trades.buyVolume += qty;
       else trades.sellVolume += qty;
 
-      // bigTrades بالای ۵۰ هزار دلار
       if (value >= 50000) {
         trades.bigTrades.push({
           side: isBuyer ? "buy" : "sell",
           price,
           qty,
-          value
+          value,
+          time: Date.now()
         });
       }
 

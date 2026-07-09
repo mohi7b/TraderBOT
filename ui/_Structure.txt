@@ -1,0 +1,27 @@
+ui/
+ ├── lib/
+ │    ├── ws-client-realtime.js     ← اتصال WS آنی (قیمت، حجم، depthLayer0/1)
+ │    ├── ws-client-medium.js       ← اتصال WS میان‌مدت (depthLayer2/3)
+ │    ├── ws-client-slow.js         ← دریافت REST داده‌های ساعتی
+ │    ├── ws-router-realtime.js     ← مسیریابی پیام‌های آنی
+ │    ├── ws-router-medium.js       ← مسیریابی پیام‌های میان‌مدت
+ │    └── ws-init.js                ← راه‌اندازی همه کانال‌ها
+ │
+ ├── store/
+ │    ├── priceStore.js             ← قیمت لحظه‌ای
+ │    ├── volumeStore.js            ← حجم لحظه‌ای
+ │    ├── depthLayer0Store.js       ← لایه ۰
+ │    ├── depthLayer1Store.js       ← لایه ۱
+ │    ├── depthLayer2Store.js       ← لایه ۲ (چارت اصلی)
+ │    └── depthLayer3Store.js       ← لایه ۳
+ │
+ ├── adapters/
+ │    └── depthAggAdapter.js        ← اگر نیاز داری، نگه دار. اگر نه، حذف کن.
+ │
+ ├── components/
+ │    ├── DepthLayer2Chart.jsx      ← چارت اصلی (Recharts)
+ │    ├── DepthChartTest.jsx        ← چارت تست (Lightweight‑Charts)
+ │    └── Dashboard.jsx             ← داشبورد داده‌های میان‌مدت
+ │
+ └── app/
+      └── page.jsx                  ← صفحه اصلی

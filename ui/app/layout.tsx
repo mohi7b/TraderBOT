@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 
+
 export const metadata = {
   title: "TraderBOT Dashboard",
   description: "Live market dashboard",

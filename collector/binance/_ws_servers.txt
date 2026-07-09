@@ -1,0 +1,3 @@
+ws-server-realtime.cjs   → داده‌های آنی
+ws-server-medium.cjs     → داده‌های 15–30 ثانیه‌ای
+ws-server-slow.cjs       → داده‌های ساعتی (REST)

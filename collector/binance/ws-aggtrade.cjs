@@ -7,7 +7,7 @@ module.exports = function wsAggTrade(symbol, buffer) {
     `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@aggTrade`
   );
 
-  ws.on("open", () => console.log("✔ ws-aggtrade connected"));
+  ws.on("open", () => console.log("[WS-AGGTRADE] Connected"));
 
   ws.on("message", msg => {
     const t = JSON.parse(msg);
@@ -17,6 +17,7 @@ module.exports = function wsAggTrade(symbol, buffer) {
     const usd = price * qty;
 
     buffer.live.trades.count++;
+
     if (t.m) buffer.live.trades.sellVolume += qty;
     else buffer.live.trades.buyVolume += qty;
 
@@ -30,7 +31,6 @@ module.exports = function wsAggTrade(symbol, buffer) {
       });
     }
 
-    // اسپایک‌های خوشه‌ای
     if (!buffer.live.tradeClusters) buffer.live.tradeClusters = [];
 
     const last = buffer.live.tradeClusters.at(-1);

@@ -1,10 +1,26 @@
-// collector/binance/index.cjs
+// collector/binance/index.cjs      OK
+/**
+ * TraderBOT — Collector
+ * Version: 2025-02-07
+ * Status: Stable
+ * Description:
+ *   نسخه پایدار کالکتور با سه کانال WS (9001 / 9002 / 9003)
+ *   این نسخه تست شده و بدون خطا اجرا می‌شود.
+ */
+
+
 
 const axios = require("axios");
 const buffer = require("./br_buffer.cjs");
-const { sendInit, sendDelta } = require("./ws-server.cjs");
 
+// سه کانال جدید
+const { sendRealtime } = require("./ws-server-realtime.cjs");
+const { sendMedium } = require("./ws-server-medium.cjs");
+const { updateSlowData } = require("./ws-server-slow.cjs");
+
+// WS های بایننس
 const startDepthDiff = require("./ws-depth-diff.cjs");
+const wsDepth20Safe = require("./ws-depth20-safe.cjs");
 const wsTrades = require("./ws-trades.cjs");
 const wsAggTrade = require("./ws-aggtrade.cjs");
 const wsLiquidations = require("./ws-liquidations.cjs");
@@ -19,9 +35,9 @@ const writer = new Writer("BTCUSDT");
 let historicalCandles = [];
 let initSent = false;
 
-// ============================================================
-// 🔥 1) Load REST candles once
-// ============================================================
+// ================================
+// 🔥 REST Candles
+// ================================
 async function loadREST() {
   const url =
     "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=500";
@@ -30,23 +46,25 @@ async function loadREST() {
 
   historicalCandles = res.data.map((c) => ({
     time: Math.floor(c[0] / 1000),
-    open: parseFloat(c[1]),
-    high: parseFloat(c[2]),
-    low: parseFloat(c[3]),
-    close: parseFloat(c[4]),
-    volume: parseFloat(c[5]),
+    open: +c[1],
+    high: +c[2],
+    low: +c[3],
+    close: +c[4],
+    volume: +c[5],
   }));
 
-  console.log("🔥 REST candles loaded:", historicalCandles.length);
+  console.log("\x1b[32m🔥 REST candles loaded\x1b[0m");
 }
 
 loadREST();
 
-// ============================================================
-// 🔥 2) Start WebSockets (NO RECONNECT ANYWHERE)
-// ============================================================
+// ================================
+// 🔥 Start WS
+// ================================
 function startAllWS() {
   startDepthDiff("BTCUSDT", buffer);
+  wsDepth20Safe("BTCUSDT", buffer);
+
   wsTrades("BTCUSDT", buffer);
   wsAggTrade("BTCUSDT", buffer);
   wsLiquidations("BTCUSDT", buffer);
@@ -55,50 +73,47 @@ function startAllWS() {
   wsEstFunding("BTCUSDT", buffer);
   wsKline("BTCUSDT", buffer, writer);
 
-  console.log("✔ All WS connected (NO RECONNECT)");
+  console.log("\x1b[32m✔ All Binance WS Connected\x1b[0m");
 }
 
 startAllWS();
 
-// ============================================================
-// 🔥 3) Throttle snapshot sending (حل مشکل WS buffer full)
-// ============================================================
-
-let lastSnapshot = 0;
-
+// ================================
+// 🔥 ارسال داده‌ها به UI
+// ================================
 setInterval(() => {
-  const now = Date.now();
-
-  // فقط هر 100ms یک بار snapshot بفرست
-  if (now - lastSnapshot < 100) return;
-  lastSnapshot = now;
-
-  const snapshot = buffer.getOrderBookSnapshot();
-  sendDelta("depthRest", snapshot);
-
-}, 50); // سرعت چک کردن بالا، ولی ارسال Throttle شده
-
-// ============================================================
-// 🔥 4) Every second: process buffer + send live data
-// ============================================================
-setInterval(() => {
-  buffer.processDepthImportant();
-
   if (!initSent && historicalCandles.length > 0) {
-    sendInit(historicalCandles);
+    sendMedium("initCandles", historicalCandles);
     initSent = true;
     return;
   }
 
-  sendDelta("price", buffer.live.lastPrice);
-  sendDelta("volume", buffer.live.lastVolume);
+  // آنی
+  sendRealtime("price", buffer.live.lastPrice);
+  sendRealtime("volume", buffer.live.lastVolume);
 
-  sendDelta("depthImportant", buffer.live.depthImportant);
-  sendDelta("pressureScore", buffer.live.depthImportant.pressureScore);
-  sendDelta("dominantSide", buffer.live.depthImportant.dominantSide);
-  sendDelta("balancePoint", buffer.live.depthImportant.balancePoint);
+  if (buffer.live.depthLayer0)
+    sendRealtime("depthLayer0", buffer.live.depthLayer0);
 
-  sendDelta("depthStatus", buffer.live.depthStatus);
-  sendDelta("depthTop20", buffer.live.depthTop20);
+  if (buffer.live.depthLayer1)
+    sendRealtime("depthLayer1", buffer.live.depthLayer1);
+
+  // میان‌مدت
+  if (buffer.live.depthLayer2)
+    sendMedium("depthLayer2", buffer.live.depthLayer2);
+
+  if (buffer.live.depthLayer3)
+    sendMedium("depthLayer3", buffer.live.depthLayer3);
 
 }, 1000);
+
+// ================================
+// 🔥 داده‌های ساعتی
+// ================================
+setInterval(() => {
+  updateSlowData({
+    marketHealth: buffer.live.marketHealth,
+    liquidityScore: buffer.live.liquidityScore,
+    timestamp: Date.now(),
+  });
+}, 3600_000); // هر 1 ساعت

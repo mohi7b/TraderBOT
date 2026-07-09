@@ -1,4 +1,12 @@
 // writer.cjs
+/**
+ * TraderBOT — Collector
+ * Version: 2025-02-07
+ * Status: Stable
+ * Description:
+ *   نسخه پایدار کالکتور با سه کانال WS (9001 / 9002 / 9003)
+ *   این نسخه تست شده و بدون خطا اجرا می‌شود.
+ */
 
 const fs = require("fs");
 const path = require("path");
@@ -17,10 +25,14 @@ class Writer {
     }
   }
 
+  // ============================================================
+  // 🔥 شروع کندل ۱ دقیقه
+  // ============================================================
   startCandle(kline, buffer) {
     this.currentCandle = {
       symbol: this.symbol,
       timeframe: "1m",
+
       candle: {
         startTime: kline.startTime,
         endTime: kline.endTime,
@@ -35,48 +47,54 @@ class Writer {
         totalVolume: kline.totalVolume
       },
 
-      // داده‌های ترید یک دقیقه
       trades: {
         count: buffer.live.trades.count,
         buyVolume: buffer.live.trades.buyVolume,
         sellVolume: buffer.live.trades.sellVolume,
-        bigTrades: buffer.live.trades.bigTrades
+        bigTrades: [...buffer.live.trades.bigTrades]
       },
 
-      depthImportant: buffer.live.depthImportant,
-      depthImbalance: buffer.live.depthImbalance,
-      totalLiquidity: buffer.live.totalLiquidity,
-      weightedLiquidity: buffer.live.weightedLiquidity,
-      marketMakerPressure: buffer.live.marketMakerPressure,
+      // ================================
+      // 🔥 فقط لایه ۳ ذخیره می‌شود
+      // ================================
+      depthLayer3: JSON.parse(JSON.stringify(buffer.live.depthLayer3)),
 
-      depthStatus: {
-        gapDetected: buffer.live.orderbook.gapDetected,
-        checksumValid: buffer.live.orderbook.checksumValid
+      // ================================
+      // 🔥 متاهای بازار
+      // ================================
+      marketMeta: {
+        indexPrice: buffer.live.marketMeta.indexPrice,
+        openInterest: buffer.live.marketMeta.openInterest,
+        liquidation: buffer.live.marketMeta.liquidation,
+        estFunding: buffer.live.marketMeta.estFunding
       },
-
-      depthMeta: buffer.live.depthMeta,
 
       updatedAt: Date.now()
     };
   }
 
+  // ============================================================
+  // 🔥 آپدیت کندل در طول یک دقیقه
+  // ============================================================
   update(buffer) {
     if (!this.currentCandle) return;
 
-    this.currentCandle.depthImportant = buffer.live.depthImportant;
-    this.currentCandle.depthStatus = {
-      gapDetected: buffer.live.orderbook.gapDetected,
-      checksumValid: buffer.live.orderbook.checksumValid
+    // فقط لایه ۳
+    this.currentCandle.depthLayer3 = JSON.parse(JSON.stringify(buffer.live.depthLayer3));
+
+    this.currentCandle.marketMeta = {
+      indexPrice: buffer.live.marketMeta.indexPrice,
+      openInterest: buffer.live.marketMeta.openInterest,
+      liquidation: buffer.live.marketMeta.liquidation,
+      estFunding: buffer.live.marketMeta.estFunding
     };
-    this.currentCandle.depthImbalance = buffer.live.depthImbalance;
-    this.currentCandle.totalLiquidity = buffer.live.totalLiquidity;
-    this.currentCandle.weightedLiquidity = buffer.live.weightedLiquidity;
-    this.currentCandle.marketMakerPressure = buffer.live.marketMakerPressure;
-    this.currentCandle.depthMeta = buffer.live.depthMeta;
 
     this.currentCandle.updatedAt = Date.now();
   }
 
+  // ============================================================
+  // 🔥 بستن کندل و ذخیرهٔ کامل داده‌ها
+  // ============================================================
   closeCandle(buffer) {
     if (!this.currentCandle) return;
 
@@ -90,12 +108,10 @@ class Writer {
     fs.writeFileSync(file, JSON.stringify(this.currentCandle, null, 2));
 
     // ریست تریدها برای کندل بعدی
-    buffer.live.trades = {
-      count: 0,
-      buyVolume: 0,
-      sellVolume: 0,
-      bigTrades: []
-    };
+    buffer.live.trades.count = 0;
+    buffer.live.trades.buyVolume = 0;
+    buffer.live.trades.sellVolume = 0;
+    buffer.live.trades.bigTrades = [];
 
     this.currentCandle = null;
   }

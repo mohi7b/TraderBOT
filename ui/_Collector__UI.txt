@@ -1,0 +1,56 @@
+/ui
+    lib/
+        ws-client.js
+            - اتصال به ws://server:9000
+            - دریافت پیام‌ها
+            - ارسال به ws-router
+
+        ws-router.js
+            - routeWSMessage(msg)
+            - مسیرهای پشتیبانی‌شده:
+                depth20 → useDepth20
+                depthAggregated → useDepthAgg
+                depthLongTerm → useDepthLong
+                klineInit → useKline
+
+    store/
+        depth20.js
+            - داده عمق 20 سطح (لایه 1)
+
+        depthAgg.js
+            - داده تجمیعی (در آینده)
+
+        depthLong.js
+            - داده لایه 2 و لایه 3
+            - { bids, asks, mid, updatedAt }
+
+    adapters/
+        - تبدیل داده خام به داده قابل مصرف UI
+        - (در آینده برای نرمال‌سازی)
+
+    components/
+        DepthLayer2Chart.jsx
+            - نمایش لایه 2 (100 نقطه)
+            - استفاده از useDepthLong
+
+        DepthLayer3Chart.jsx
+            - نمایش لایه 3 (50 دیوار نقدینگی)
+            - استفاده از useDepthLong
+
+        Depth20Table.jsx
+            - نمایش لایه 1
+
+        OrderBookFull.jsx
+            - نمایش لایه 0
+
+
+
+
+---------------------------------------------------
+
+Collector → ws-server.sendDelta(path, data)
+WS → ws-client.js
+ws-client → ws-router.js
+ws-router → zustand store
+store → React components
+components → نمایش در چارت / جدول
