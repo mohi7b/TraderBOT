@@ -1,0 +1,46 @@
+TraderBOT
+└── orchestrator
+    ├── cluster
+    │   ├── cluster-engine.cjs          ← موتور اصلی کلکستر؛ مدیریت Workerها، نقش‌ها، پیام‌ها
+    │   ├── message-router.cjs          ← مسیریابی پیام بین Workerها (IPC داخلی کلکستر)
+    │   │
+    │   ├── roles
+    │   │   ├── collector-cluster.cjs   ← کلکستر جمع‌آوری داده (WS/REST collectors)
+    │   │   ├── market-cluster.cjs      ← پردازش قیمت/ترید/کندل (Market Processing)
+    │   │   └── processor-cluster.cjs   ← پردازش Orderbook (depth-levels/liquidity/agg/...)
+    │   │
+    │   ├── tests
+    │   │   ├── test-config-path.cjs    ← تست مسیر کانفیگ‌ها
+    │   │   ├── test-cwd.cjs            ← تست مسیر کاری (cwd)
+    │   │   ├── test-role-map.cjs       ← تست نقش‌های کلکستر
+    │   │   ├── test-worker-health.cjs  ← تست سلامت Workerها
+    │   │   └── test-worker-id.cjs      ← تست شناسه Worker
+    │   │
+    │   ├── worker-loader.cjs           ← بارگذاری نقش Worker بر اساس config
+    │   ├── worker-context.cjs          ← کانتکست Worker (router/state/log)
+    │   ├── worker.cjs                  ← فایل اصلی Worker (event-loop + IPC)
+    │   └── ws-failover.cjs             ← مدیریت WS + Failover + Multi-Stream
+    │
+    ├── config
+    │   ├── index.cjs                   ← تجمیع تمام کانفیگ‌ها در یک خروجی واحد
+    │   ├── system.cjs                  ← تنظیمات سیستم (mode/version/timezone)
+    │   ├── logging.cjs                 ← تنظیمات لاگ (console/file/level)
+    │   ├── pipeline.cjs                ← کنترل ۱۳ Stage اصلی Pipeline
+    │   ├── symbols.cjs                 ← لیست سیمبول‌های فعال (spot/futures)
+    │   ├── exchanges.cjs               ← فعال/غیرفعال کردن صرافی‌ها
+    │   ├── clusters.cjs                ← تنظیمات Workerها و نقش‌های کلکستر
+    │   └── modules.cjs                 ← روشن/خاموش کردن بخش‌های سیستم (برای تست)
+    │
+    ├── core
+    │   ├── event-router.cjs            ← مسیریابی رویدادها بین بخش‌های مختلف سیستم
+    │   ├── module-tree.cjs             ← ساختار درختی ماژول‌ها (dependency graph)
+    │   ├── orchestrator.cjs            ← نقطهٔ اصلی اجرای سیستم (bootstrap)
+    │   └── state-tree.cjs              ← ساختار درختی State (global state map)
+    │
+    ├── engines
+    │   ├── backoff-engine.cjs          ← مدیریت Backoff برای WS/HTTP
+    │   ├── killswitch-engine.cjs       ← سیستم امنیتی KillSwitch (risk control)
+    │   └── symbol-engine.cjs           ← موتور مدیریت سیمبول‌ها (activation/deactivation)
+    │
+    ├── ipc
+    │   ├── eventbus

@@ -9,17 +9,32 @@
     "echarts-for-react": "^3.0.6",
     "express": "^5.2.1",
     "lightweight-charts": "^5.2.0",
+    "module-alias": "^2.3.4",
     "node-fetch": "^2.7.0",
     "recharts": "^3.9.2",
-    "ws": "^8.21.0",
+    "ws": "^8.21.1",
     "zustand": "^5.0.14"
   },
   "scripts": {
     "dev": "concurrently \"npm run collector\" \"npm run ui\"",
-    "collector": "node collector/binance/index.cjs",
+    "collector": "node main.cjs",
     "ui": "npm --prefix ui run dev"
   },
-  "devDependencies": {
-    "concurrently": "^9.2.3"
+  "_moduleAliases": {
+    "@collector": "collector",
+    "@realtime": "collector/realtime",
+    "@realtime/ex": "collector/realtime/exchanges",
+    "@realtime/norm": "collector/realtime/normalizer",
+    "@realtime/store": "collector/realtime/storage",
+    "@historical": "collector/historical",
+    "@historical/ex": "collector/historical/exchanges",
+    "@historical/agg": "collector/historical/aggregator",
+    "@historical/store": "collector/historical/storage",
+    "@engine": "engine",
+    "@trend": "engine/trend",
+    "@strategy": "strategy",
+    "@risk": "risk",
+    "@exec": "execution",
+    "@utils": "utils"
   }
 }

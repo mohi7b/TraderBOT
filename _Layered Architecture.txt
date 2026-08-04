@@ -1,0 +1,36 @@
+TraderBOT/
+│
+├── LAYER 1: Collector Layer
+│      • اتصال WebSocket به صرافی‌ها
+│      • دریافت Raw WS Data
+│      • ارسال داده خام به Normalizer
+│
+├── LAYER 2: Normalizer Layer
+│      • تبدیل داده خام به فرمت استاندارد
+│      • خروجی یکپارچه برای Engine Layer
+│
+├── LAYER 3: Engine Layer
+│      • پردازش عمق، ترید، تیکر، کندل، مارک، ایندکس، فاندینگ، OI
+│      • ساخت خروجی GlobalEngine
+│
+├── LAYER 4: Trend Engine (5-Level)
+│      • تحلیل روند در 5 بازه زمانی
+│      • اجرای ماژول‌های تحلیلی
+│      • سیستم ارزش‌گذاری (Scoring Engine)
+│      • خروجی trend_score + trend_confidence
+│
+├── LAYER 5: Strategy Layer
+│      • اجرای استراتژی‌ها (Scalping, Arbitrage, Martingale, Trend)
+│      • خروجی: BUY / SELL / HOLD
+│
+├── LAYER 6: Risk Layer
+│      • بررسی ریسک معامله
+│      • خروجی: ALLOW / DENY / REDUCE
+│
+├── LAYER 7: Execution Layer
+│      • ارسال سفارش به صرافی
+│      • مدیریت اجرای معامله
+│
+└── LAYER 8: Position Manager
+       • مدیریت پوزیشن‌ها
+       • میانگین خرید، حجم، سود/ضرر

@@ -1,0 +1,19 @@
+Raw WS Data
+    ↓
+CollectorMain
+    ↓
+NormalizerCore
+    ↓
+EngineCore
+    ↓
+GlobalEngine
+    ↓
+TrendEngine (5-Level)
+    ↓
+StrategyCore
+    ↓
+RiskCore
+    ↓
+ExecutionCore
+    ↓
+PositionManager

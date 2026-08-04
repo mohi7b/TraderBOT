@@ -1,0 +1,297 @@
+TraderBOT/
+│
+├── orchestrator/                                   ← مرکز فرماندهی کل سیستم
+│   ├── orchestrator.cjs                            ← هماهنگ‌کنندهٔ اصلی ماژول‌ها و چرخهٔ اجرا
+│   ├── config.cjs                                  ← تنظیمات مرکزی (API Keys، نرخ‌ها، ماژول‌ها، مسیرها)
+│   ├── module-manager.cjs                          ← مدیریت روشن/خاموش بودن ماژول‌ها
+│   ├── hot-reload.cjs                              ← بارگذاری مجدد بدون توقف سیستم
+│   ├── cluster-manager.cjs                         ← اجرای چندپردازشی برای سرعت بالا
+│   ├── error-manager.cjs                           ← مدیریت خطاهای سطح بالا
+│   ├── log-manager.cjs                             ← مدیریت لاگ‌ها و گزارش‌ها
+│   ├── state-manager.cjs                           ← وضعیت لحظه‌ای سیستم (health, status)
+│   └── kill-switch-controller.cjs                  ← قطع اضطراری کل سیستم
+│
+├── collector/                                      ← جمع‌آوری داده‌های بازار (Realtime + Historical + Macro + Sentiment)
+│
+│   ├── realtime/                                   ← داده‌های لحظه‌ای (WS)
+│   │   ├── market/                                  ← داده‌های بازار
+│   │   │   ├── price.cjs                            ← قیمت لحظه‌ای
+│   │   │   ├── trades.cjs                           ← تریدهای لحظه‌ای
+│   │   │   ├── candles.cjs                          ← کندل‌های لحظه‌ای
+│   │   │   ├── funding.cjs                          ← نرخ فاندینگ لحظه‌ای
+│   │   │   └── oi.cjs                               ← Open Interest لحظه‌ای
+│   │   │
+│   │   ├── orderbook/                               ← عمق کامل بازار
+│   │   │   ├── depth.cjs                            ← دریافت عمق کامل از صرافی
+│   │   │   ├── depth-normalizer.cjs                 ← نرمال‌سازی عمق
+│   │   │   ├── depth-levels.cjs                     ← استخراج سطوح مختلف (5/10/20/50/100/500/1000)
+│   │   │   ├── depth-speed.cjs                      ← مدیریت سرعت (throttle / debounce)
+│   │   │   ├── depth-agg.cjs                        ← تجمیع عمق چند صرافی
+│   │   │   ├── depth-heatmap.cjs                    ← ساخت Heatmap عمق
+│   │   │   └── depth-liquidity.cjs                  ← تحلیل نقدینگی عمق
+│   │   │
+│   │   └── exchanges/                               ← پلاگین‌های صرافی‌ها (Realtime)
+│   │       ├── binance.cjs                          ← Binance WS + REST + نرمال‌سازی
+│   │       ├── okx.cjs                              ← OKX WS + REST
+│   │       ├── kucoin.cjs                           ← Kucoin WS + REST
+│   │       ├── bybit.cjs                            ← Bybit WS + REST
+│   │       ├── bitget.cjs                           ← Bitget WS + REST
+│   │       ├── gateio.cjs                           ← Gate.io WS + REST
+│   │       └── kraken.cjs                           ← Kraken WS + REST
+│
+│   ├── historical/                                  ← داده‌های تاریخی (REST)
+│   │   ├── market/
+│   │   │   ├── candles.cjs                          ← کندل‌های تاریخی
+│   │   │   └── volume.cjs                           ← حجم تاریخی
+│   │   ├── orderbook/
+│   │   │   ├── depth.cjs                            ← عمق تاریخی
+│   │   │   └── liquidity.cjs                        ← نقدینگی تاریخی
+│   │   ├── trades/
+│   │   │   └── trades.cjs                           ← تریدهای تاریخی
+│   │   └── exchanges/
+│   │       ├── binance-history.cjs
+│   │       ├── okx-history.cjs
+│   │       ├── kucoin-history.cjs
+│   │       ├── bybit-history.cjs
+│   │       ├── bitget-history.cjs
+│   │       ├── gateio-history.cjs
+│   │       └── kraken-history.cjs
+│
+│   ├── macro/                                       ← داده‌های کلان اقتصادی
+│   │   ├── interest-rates/
+│   │   │   ├── fed.cjs                              ← نرخ بهره آمریکا
+│   │   │   ├── ecb.cjs                              ← نرخ بهره اروپا
+│   │   │   ├── boj.cjs                              ← نرخ بهره ژاپن
+│   │   │   ├── boe.cjs                              ← نرخ بهره انگلستان
+│   │   │   ├── pbo.cjs                              ← نرخ بهره چین
+│   │   │   └── global-rates.cjs                     ← تجمیع نرخ‌های جهانی
+│   │   ├── inflation/
+│   │   │   ├── cpi-us.cjs                           ← CPI آمریکا
+│   │   │   ├── cpi-eu.cjs                           ← CPI اروپا
+│   │   │   ├── cpi-asia.cjs                         ← CPI آسیا
+│   │   │   ├── ppi-us.cjs                           ← Producer Price Index
+│   │   │   └── global-inflation.cjs                 ← تجمیع تورم جهانی
+│   │   ├── dxy/
+│   │   │   ├── dxy-index.cjs                        ← DXY لحظه‌ای
+│   │   │   └── dxy-historical.cjs                   ← تاریخچه DXY
+│   │   ├── commodities/
+│   │   │   ├── gold.cjs                             ← طلا
+│   │   │   ├── silver.cjs                           ← نقره
+│   │   │   ├── oil.cjs                              ← نفت
+│   │   │   ├── natural-gas.cjs                      ← گاز طبیعی
+│   │   │   ├── copper.cjs                           ← مس
+│   │   │   └── commodity-index.cjs                  ← شاخص کالاها
+│   │   ├── global-indexes/
+│   │   │   ├── sp500.cjs                            ← S&P500
+│   │   │   ├── nasdaq.cjs                           ← Nasdaq
+│   │   │   ├── dow.cjs                              ← Dow Jones
+│   │   │   ├── dax.cjs                              ← DAX
+│   │   │   ├── ftse.cjs                             ← FTSE100
+│   │   │   ├── nikkei.cjs                           ← Nikkei
+│   │   │   ├── hang-seng.cjs                        ← Hang Seng
+│   │   │   └── global-index-agg.cjs                 ← تجمیع شاخص‌های جهانی
+│   │   ├── derivatives/
+│   │   │   ├── vix.cjs                              ← شاخص ترس VIX
+│   │   │   ├── bond-yields.cjs                      ← بازده اوراق قرضه
+│   │   │   ├── treasury.cjs                         ← اوراق خزانه‌داری آمریکا
+│   │   │   ├── credit-spread.cjs                    ← اسپرد اعتباری
+│   │   │   └── macro-derivatives-agg.cjs            ← تجمیع مشتقات کلان
+│   │   └── onchain-macro/
+│   │       ├── stablecoin-flows.cjs                 ← جریان استیبل‌کوین‌ها
+│   │       ├── exchange-flows.cjs                   ← ورودی/خروجی صرافی‌ها
+│   │       ├── whale-tracking.cjs                   ← رفتار نهنگ‌ها
+│   │       ├── miner-stats.cjs                      ← وضعیت ماینرها
+│   │       └── onchain-macro-agg.cjs                ← تجمیع آن‌چین کلان
+│
+│   └── sentiment/                                   ← داده‌های احساسات بازار
+│       ├── social/
+│       │   ├── twitter.cjs                          ← تحلیل احساسات توییتر/X
+│       │   ├── reddit.cjs                           ← تحلیل احساسات Reddit
+│       │   ├── telegram.cjs                         ← تحلیل احساسات تلگرام
+│       │   ├── discord.cjs                          ← تحلیل احساسات Discord
+│       │   ├── youtube.cjs                          ← تحلیل احساسات YouTube
+│       │   ├── tiktok.cjs                           ← تحلیل احساسات TikTok
+│       │   ├── instagram.cjs                        ← تحلیل احساسات اینستاگرام
+│       │   ├── lunarcrush.cjs                       ← API احساسات LunarCrush
+│       │   ├── santiment.cjs                        ← API احساسات Santiment
+│       │   └── social-agg.cjs                       ← تجمیع احساسات شبکه‌های اجتماعی
+│       ├── news/
+│       │   ├── coindesk.cjs                         ← اخبار CoinDesk
+│       │   ├── cointelegraph.cjs                    ← اخبار CoinTelegraph
+│       │   ├── decrypt.cjs                          ← اخبار Decrypt
+│       │   ├── bloomberg.cjs                        ← اخبار Bloomberg
+│       │   ├── reuters.cjs                          ← اخبار Reuters
+│       │   ├── yahoo-finance.cjs                    ← اخبار Yahoo Finance
+│       │   └── news-agg.cjs                         ← تجمیع اخبار
+│       ├── trends/
+│       │   ├── google-trends.cjs                    ← Google Trends
+│       │   ├── fear-greed.cjs                       ← Fear & Greed Index
+│       │   ├── search-volume.cjs                    ← حجم جستجوها
+│       │   └── trend-agg.cjs                        ← تجمیع ترندها
+│       └── sentiment-agg.cjs                        ← تجمیع کل احساسات
+│
+├── account/                                         ← داده‌های کاربران سایت + API Keys چندصرافی
+│   ├── users.cjs                                    ← اطلاعات کاربران سایت
+│   ├── user-settings.cjs                            ← تنظیمات کاربر
+│   │
+│   ├── exchanges/                                   ← API Keyهای کاربران برای هر صرافی
+│   │   ├── binance.cjs                              ← API Keyهای کاربر برای Binance
+│   │   ├── okx.cjs                                  ← API Keyهای کاربر برای OKX
+│   │   ├── kucoin.cjs                               ← API Keyهای کاربر برای Kucoin
+│   │   ├── bybit.cjs                                ← API Keyهای کاربر برای Bybit
+│   │   ├── bitget.cjs                               ← API Keyهای کاربر برای Bitget
+│   │   ├── gateio.cjs                               ← API Keyهای کاربر برای Gate.io
+│   │   └── kraken.cjs                               ← API Keyهای کاربر برای Kraken
+│   │
+│   ├── user-balances.cjs                            ← دارایی‌های کلی کاربر (برای داشبورد)
+│   ├── user-positions.cjs                           ← پوزیشن‌های کلی کاربر (برای داشبورد)
+│   └── user-orders.cjs                              ← سفارشات کلی کاربر (برای داشبورد)
+│
+├── execution/                                       ← حساب ترید واقعی + عملیات واقعی چندصرافی
+│   ├── exchanges/                                   ← پلاگین‌های اجرای سفارش برای هر صرافی
+│   │   ├── binance.cjs                              ← اجرای سفارش در Binance
+│   │   ├── okx.cjs                                  ← اجرای سفارش در OKX
+│   │   ├── kucoin.cjs                               ← اجرای سفارش در Kucoin
+│   │   ├── bybit.cjs                                ← اجرای سفارش در Bybit
+│   │   ├── bitget.cjs                               ← اجرای سفارش در Bitget
+│   │   ├── gateio.cjs                               ← اجرای سفارش در Gate.io
+│   │   └── kraken.cjs                               ← اجرای سفارش در Kraken
+│   │
+│   ├── exchange-state.cjs                           ← وضعیت لحظه‌ای حساب ترید (Multi-exchange)
+│   ├── balance-manager.cjs                          ← مدیریت موجودی واقعی (Multi-exchange)
+│   ├── position-manager.cjs                         ← مدیریت پوزیشن‌های واقعی (Multi-exchange)
+│   ├── order-manager.cjs                            ← مدیریت سفارشات واقعی (Multi-exchange)
+│   ├── risk-manager.cjs                             ← مدیریت ریسک واقعی (Multi-exchange)
+│   └── execution-bus.cjs                            ← اتوبان اجرای سفارش‌ها (Router)
+│
+├── data/                                            ← داده‌های استاندارد شده
+│   ├── realtime/
+│   │   ├── market.cjs                               ← دادهٔ استاندارد بازار
+│   │   ├── orderbook.cjs                            ← دادهٔ استاندارد عمق کامل
+│   │   ├── exchange.cjs                             ← دادهٔ استاندارد حساب ترید
+│   │   └── aggregator.cjs                           ← تجمیع اسپات + فیوچرز + عمق
+│   ├── historical/
+│   │   ├── market.cjs                               ← دادهٔ تاریخی بازار
+│   │   ├── orderbook.cjs                            ← دادهٔ تاریخی عمق
+│   │   └── trades.cjs                               ← دادهٔ تاریخی تریدها
+│   ├── macro/
+│   │   ├── interest-rates.cjs                       ← نرخ بهره استاندارد
+│   │   ├── inflation.cjs                            ← تورم استاندارد
+│   │   ├── dxy.cjs                                  ← شاخص دلار استاندارد
+│   │   ├── commodities.cjs                          ← دادهٔ کالاها
+│   │   └── global-indexes.cjs                       ← شاخص‌های جهانی
+│   └── sentiment/
+│       ├── social.cjs                               ← احساسات شبکه‌های اجتماعی
+│       ├── news.cjs                                 ← احساسات اخبار
+│       └── trends.cjs                               ← احساسات جستجوها
+│
+├── analysis/                                        ← تحلیل‌ها
+│
+│   ├── depth/                                       ← تحلیل عمق بازار
+│   │   ├── depth-profile.cjs                        ← پروفایل عمق کامل (نمایش توزیع سفارشات)
+│   │   ├── liquidity-walls.cjs                      ← تحلیل دیوارهای نقدینگی (تشخیص سطوح مقاومتی/حمایتی)
+│   │   ├── imbalance.cjs                            ← تحلیل عدم تعادل سفارشات (Bid/Ask Imbalance)
+│   │   ├── liquidity-pressure.cjs                   ← فشار نقدینگی (خریداران/فروشندگان)
+│   │   ├── spoofing.cjs                             ← تشخیص سفارشات جعلی (Spoofing Detection)
+│   │   ├── orderbook-velocity.cjs                   ← سرعت تغییر عمق (Orderbook Velocity)
+│   │   ├── liquidity-map.cjs                        ← نقشه نقدینگی (Liquidity Map)
+│   │   └── liquidation-zones.cjs                    ← نواحی لیکوییدیشن (Liquidation Zones)
+│
+│   ├── behavior/                                    ← تحلیل رفتار بازار
+│   │   ├── trend-behavior.cjs                       ← رفتار روند (Trend Behavior)
+│   │   ├── momentum-behavior.cjs                    ← رفتار مومنتوم (Momentum Behavior)
+│   │   ├── volatility-behavior.cjs                  ← رفتار نوسان (Volatility Behavior)
+│   │   ├── funding-behavior.cjs                     ← رفتار فاندینگ (Funding Behavior)
+│   │   └── trade-behavior.cjs                       ← رفتار تریدهای لحظه‌ای (Trade Flow Behavior)
+│
+│   ├── candles/                                     ← تحلیل کندل‌ها
+│   │   ├── candle-structure.cjs                     ← ساختار کندل (Body/Wick Analysis)
+│   │   ├── candle-patterns.cjs                      ← الگوهای کندلی (Patterns Detection)
+│   │   └── volume-candles.cjs                       ← کندل‌های حجمی (Volume-Based Candles)
+│
+│   ├── indicators/                                  ← اندیکاتورها
+│   │   ├── rsi.cjs                                  ← RSI Indicator
+│   │   ├── macd.cjs                                 ← MACD Indicator
+│   │   ├── ema.cjs                                  ← EMA Indicator
+│   │   ├── vwap.cjs                                 ← VWAP Indicator
+│   │   └── atr.cjs                                  ← ATR Indicator
+│
+│   ├── prediction/                                  ← پیش‌بینی‌ها
+│   │   ├── predict-range.cjs                        ← پیش‌بینی محدوده قیمت (Range Prediction)
+│   │   ├── predict-direction.cjs                    ← پیش‌بینی جهت (Direction Prediction)
+│   │   ├── predict-volatility.cjs                   ← پیش‌بینی نوسان (Volatility Prediction)
+│   │   ├── predict-risk.cjs                         ← پیش‌بینی ریسک (Risk Forecasting)
+│   │   └── depth-predictor.cjs                      ← پیش‌بینی رفتار عمق کامل (Orderbook AI Predictor)
+│
+│   ├── macro/                                       ← تحلیل داده‌های کلان اقتصادی
+│   │   ├── interest-rate-impact.cjs                 ← تاثیر نرخ بهره بر بازار
+│   │   ├── inflation-impact.cjs                     ← تاثیر تورم بر بازار
+│   │   ├── dxy-impact.cjs                           ← تاثیر شاخص دلار بر کریپتو
+│   │   └── global-correlation.cjs                   ← همبستگی بازارهای جهانی با کریپتو
+│
+│   └── sentiment/                                   ← تحلیل احساسات بازار
+│       ├── social-sentiment.cjs                     ← تحلیل احساسات شبکه‌های اجتماعی
+│       ├── news-sentiment.cjs                       ← تحلیل احساسات اخبار
+│       └── trend-sentiment.cjs                      ← تحلیل احساسات ترندها
+├── logic/                                           ← مغز تصمیم‌گیری
+│
+│   ├── base-strategies/                             ← استراتژی‌های پایه
+│   │   ├── scalping.cjs                             ← استراتژی اسکالپ
+│   │   ├── swing.cjs                                ← استراتژی سوئینگ
+│   │   ├── trend-follow.cjs                         ← دنبال‌کننده روند
+│   │   └── mean-reversion.cjs                       ← بازگشت به میانگین
+│
+│   ├── bot-strategies/                              ← استراتژی‌های بات‌ها
+│   │   ├── grid-v10.cjs                             ← گرید تریدینگ
+│   │   ├── martingale-v10.cjs                       ← مارتینگل
+│   │   └── hybrid-alpha.cjs                         ← استراتژی ترکیبی هوشمند
+│
+│   ├── decision-dashboard.cjs                       ← تصمیم‌گیری نهایی (Final Decision Engine)
+│   ├── kill-switch.cjs                              ← قطع اضطراری (Emergency Stop)
+│   ├── feedback-engine.cjs                          ← موتور بازخورد (Feedback Engine)
+│   └── learning-engine.cjs                          ← یادگیری رفتار بازار (AI Learning Engine)
+├── dashboard/                                       ← UI + API + WebSocket
+│
+│   ├── server/                                      ← سرور داشبورد
+│   │   ├── api/
+│   │   │   ├── bots/                                ← API مدیریت بات‌ها
+│   │   │   ├── analysis/                            ← API تحلیل‌ها
+│   │   │   ├── market/                              ← API داده بازار
+│   │   │   ├── exchanges/                           ← API حساب کاربر + API Keys
+│   │   │   └── system/                              ← API وضعیت سیستم
+│   │   ├── websocket/                               ← WebSocket داشبورد
+│   │   └── server.cjs                               ← سرور اصلی داشبورد
+│
+│   ├── ui/                                          ← رابط کاربری
+│   │   ├── charts/                                  ← نمودارها (Market + Depth + Analysis)
+│   │   ├── bots/                                    ← مدیریت بات‌ها
+│   │   ├── exchanges/                               ← نمایش حساب کاربر + API Keys
+│   │   ├── analysis/                                ← نمایش تحلیل‌ها
+│   │   ├── system/                                  ← وضعیت سیستم
+│   │   └── dashboard.js                             ← صفحه اصلی داشبورد
+│
+│   └── config/
+│       ├── dashboard.json                           ← تنظیمات داشبورد
+│       └── routes.json                              ← مسیرهای API
+├── database/                                        ← پایگاه داده
+│   ├── models/
+│   │   ├── trades.cjs                               ← مدل تریدها
+│   │   ├── positions.cjs                            ← مدل پوزیشن‌ها
+│   │   ├── scores.cjs                               ← مدل امتیاز تحلیل‌ها
+│   │   ├── predictions.cjs                          ← مدل پیش‌بینی‌ها
+│   │   ├── strategies.cjs                           ← مدل استراتژی‌ها
+│   │   ├── feedback.cjs                             ← مدل بازخوردها
+│   │   └── user-exchanges.cjs                       ← مدل ذخیره API Keys کاربران
+│   └── db.cjs                                       ← اتصال به دیتابیس
+├── shared/                                          ← ابزارهای مشترک
+│   ├── logger.cjs                                   ← لاگر مرکزی
+│   ├── events.cjs                                   ← مدیریت رویدادها
+│   ├── cache.cjs                                    ← کش مرکزی
+│   ├── storage.cjs                                  ← ذخیره‌سازی فایل‌ها
+│   ├── math.cjs                                     ← توابع ریاضی
+│   └── helpers.cjs                                  ← ابزارهای کمکی
+└── docs/                                            ← مستندات
+    ├── architecture.md                              ← معماری کل سیستم
+    ├── pipeline.md                                  ← مسیر داده‌ها
+    ├── modules.md                                   ← توضیح ماژول‌ها
+    └── api.md                                       ← مستندات API
