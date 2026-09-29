@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "scanned_rows": 405077,
+    "distinct_codes": 1589
+  },
+  "summary": {
+    "by_issue": {
+      "missing": 1545,
+      "numeric": 4,
+      "inconsistent": 1
+    },
+    "by_dataset": {
+      "BIS": {
+        "missing": 14,
+        "numeric": 4
+      },
+      "IMF": {
+        "missing": 33
+      },
+      "WB": {
+        "missing": 1498
+      },
+      "OECD": {
+        "inconsistent": 1
+      }
+    },
+    "distinct_codes_flagged": 1550
+  },
+  "oecd_sample_count": 1
+}

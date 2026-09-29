@@ -1,0 +1,346 @@
+{
+  "title": "Macro",
+  "groups": {
+    "1A_inflation": "Inflation",
+    "1B_growth": "Growth",
+    "1C_labor": "Labor Market"
+  },
+  "metrics": {
+    "CPI": "Consumer Price Index",
+    "CORE_CPI": "Core Inflation",
+    "PPI": "Producer Price Index",
+    "GDP_DEFL": "GDP Deflator",
+    "GDP": "Gross Domestic Product",
+    "GDP_GROWTH": "GDP Growth",
+    "UNEMP": "Unemployment Rate",
+    "EMP": "Employment"
+  },
+  "cards": {
+    "inflation": "Inflation Card",
+    "gdp": "Growth Card",
+    "labor": "Labor Card",
+    "country": "Country"
+  },
+  "charts": {
+    "cpi_yoy_title": "CPI YoY — Headline vs Core",
+    "countries_available": "{count} countries",
+    "as_of": "As of",
+    "yoy_axis": "YoY %",
+    "source": "Source",
+    "frequency": "Freq",
+    "empty": "No CPI data for this country",
+    "legend": {
+      "headline": "Headline",
+      "core": "Core",
+      "annualized3m": "3M Annualized"
+    },
+    "mode": {
+      "raw": "precomputed (raw)",
+      "computed": "computed"
+    },
+    "cadence_padded": "quarterly source (aggregated)",
+    "empty_cpi": "No CPI (inflation) data for this country",
+    "empty_policy": "No policy-rate data for this country",
+    "empty_growth": "No GDP growth data for this country",
+    "empty_financial": "No financial-conditions data for this country",
+    "empty_hist": "No candle data for this asset/venue/timeframe",
+    "hist_service_title": "Historical service is unreachable (:4000)",
+    "hist_service_hint": "Start collector/crypto/historical/api/server.cjs (port {port}); the chart will render as soon as the service answers.",
+    "hist_clamped_note": "Requested window was clamped to the service caps (shorter range shown).",
+    "policy_title": "Policy Rate vs Headline CPI",
+    "policy_unit": "% (rate & CPI)",
+    "policy_legend": {
+      "rate": "Policy Rate",
+      "ecb": "ECB Policy Rate (euro area)",
+      "inflation": "Headline CPI"
+    },
+    "growth_title": "GDP Growth",
+    "growth_unit": "% (YoY & QoQ SAAR)",
+    "growth_legend": {
+      "yoy": "GDP YoY",
+      "qoq": "GDP QoQ (SAAR)",
+      "trend": "Trend (4-quarter average)"
+    },
+    "financial_title": "Financial Conditions",
+    "financial_unit": "FCI index · % (10Y)",
+    "financial_legend": {
+      "fci": "FCI (financial conditions index)",
+      "y10": "10Y Yield (country)"
+    }
+  },
+  "signals": {
+    "_doc": "v3: signal tooltips — no literal UI text lives in domain code (Chart Engine v3)",
+    "pas": {
+      "hint": "PAS · EFT={eft}% (current={current} · future={future}) · direction={direction} · strength={count} · RMI={rmi} · IM={im} · GAP={gap} · PRF={prf}"
+    },
+    "rmi": {
+      "hint": "RMI = ΔRate(1m)+ΔRate(3m) = {value} — positive = tightening"
+    },
+    "im": {
+      "hint": "IM = ΔCPI(1m)+ΔCPI(3m) = {value} — positive = accelerating inflation"
+    },
+    "gap": {
+      "hint": "GAP = policy rate − inflation = {value}% — positive = positive real rate"
+    },
+    "prf": {
+      "hint": "PRF = policy reliability = {value}% (target fit 60% + rate stability 40%)"
+    },
+    "real": {
+      "hint": "Real = policy rate − headline CPI = {policy} − {cpi} = {real}pp · bands: below {strongNeg} ultra-accommodative · below {mildNeg} accommodative · within ±{neutral} neutral · above {neutral} real tightening",
+      "noData": "Real — policy rate or headline CPI is not available for this country ⇒ no value is shown.",
+      "invalid": "Real — invalid value in the source data."
+    },
+    "yld": {
+      "hint": "Yld = 10-year yield = {value}% ({date}) · bands: below {low} easy · below {neutralHigh} neutral · below {tightHigh} tight · {tightHigh}+ = financial stress",
+      "noDataStale": "Yld — latest available point is {date} (older than {maxAge} months ⇒ not drawn).",
+      "noDataSource": "Yld — no 10-year yield series exists for this country (FRED/OECD do not publish it)."
+    },
+    "gas": {
+      "hint": "GAS · GFT={gft} (level {level}) · current={current} · future={future} · direction={direction} · strength={count} · pressure={pressure} · GMI={gmi} · OGI={ogi}% · σ={sigma} · stability={stability}% · GAPg={gapg}pp · source: YoY={yoySrc} · QoQ={qoqSrc} · {sources}",
+      "noData": "GAS — not enough growth data for this country. Source: YoY={yoySrc} · QoQ={qoqSrc} · {sources}"
+    },
+    "gmi": {
+      "hint": "GMI = Δ1+Δ3 GDP YoY plus Δ1+Δ3 GDP QoQ = {value} · source: YoY={yoySrc} · QoQ={qoqSrc} · {sources}"
+    },
+    "ogi": {
+      "hint": "OGI = deviation of the GDP level from its 4-quarter trend = {value}% (documented proxy for potential GDP)"
+    },
+    "gsi": {
+      "hint": "GSI = σ of YoY growth steps = {sigma} · normalised stability = {stability}% (reference σ {sigmaRef})"
+    },
+    "pmi": {
+      "noData": "PMI — no provider publishes PMI in the pipeline (IND_PROD is the only industry proxy)."
+    },
+    "now": {
+      "noData": "NOW — no nowcast source in the pipeline; no approximation is fabricated."
+    },
+    "gapg": {
+      "hint": "GAPg = GDP YoY − average of the previous 4 quarters = {value}pp · positive = growth above trend"
+    },
+    "fas": {
+      "hint": "FAS · FCI={fci} (level {level}) · Hardness={hardness}% · direction={direction} · strength={count} · ΔY10+ΔCredit={deltaSum} · components: y10={y10} · credit={credit} · vol={vol} · equity={equity} · dxy={dxy} · liquidity={liquidity} · available: {used}",
+      "noData": "FAS — no financial-conditions input was available/fresh ⇒ neutral badge."
+    },
+    "financial": {
+      "sourceNote": "Country 10Y: {country} ({y10Date}) · available={y10Available} · Credit/DXY/Equity/Liquidity/Vol are global benchmarks (FRED/US)"
+    },
+    "y10": {
+      "hint": "Y10 = 10-year yield of {country} = {value} · Δ1={delta} pp ⇒ rising = tighter",
+      "noData": "Y10 — the 10-year yield is not available for this country."
+    },
+    "credit": {
+      "hint": "Credit = IG credit spread (OAS) = {value} · Δ1={delta} ⇒ widening = tighter · global (US)",
+      "noData": "Credit — the credit spread is not available."
+    },
+    "dxy": {
+      "hint": "DXY = broad effective dollar index = {value} · Δ1={delta}% ⇒ stronger dollar = tighter · global",
+      "noData": "DXY — the dollar index is not available."
+    },
+    "equity": {
+      "hint": "Equity = equity index (S&P 500) = {value} · Δ1={delta}% ⇒ rising = easier · global",
+      "noData": "Equity — the equity index is not available."
+    },
+    "liquidity": {
+      "hint": "Liquidity = M2 YoY growth = {yoy} · Δ3M={delta3} · level={level} · global proxy (US M2)",
+      "noData": "Liquidity — the M2 series is not available."
+    },
+    "vol": {
+      "hint": "Vol = implied volatility (VIX) = {value} · Δ1={delta}% ⇒ rising = tighter · global",
+      "noData": "Vol — market volatility (VIX) is not available."
+    }
+  },
+  "meta": {
+    "inflation_target": "Inflation Target",
+    "country": "Country"
+  },
+  "summary": {
+    "title": "Group Summary",
+    "global_trend": "Global Trend",
+    "trend": {
+      "heating": "Heating",
+      "cooling": "Cooling",
+      "stable": "Stable",
+      "mixed": "Mixed"
+    },
+    "rising": "Rising",
+    "falling": "Falling",
+    "flat": "Flat",
+    "avg_yoy": "Avg YoY",
+    "avg_mom": "Avg MoM",
+    "as_of": "As of",
+    "series_count": "Series",
+    "coverage": "Coverage"
+  },
+  "risk": {
+    "title": "Risk",
+    "high_volatility": "High Volatility",
+    "sharp_reversal": "Sharp Reversal",
+    "abnormal_momentum": "Abnormal Momentum",
+    "vol_spike": "Vol Spike",
+    "near_peak": "Near Peak",
+    "near_trough": "Near Trough",
+    "none": "No risk"
+  },
+  "cc": {
+    "title": "Control Center",
+    "open": "Open control center",
+    "close": "Close control center",
+    "on": "ON",
+    "off": "OFF",
+    "active": "Active",
+    "library": "Library",
+    "add": "Add",
+    "remove": "Remove",
+    "empty": "Nothing active",
+    "settings": "Settings",
+    "params": "Parameters",
+    "noParams": "This item has no numeric parameters",
+    "range": "Range",
+    "removeItem": "Remove item",
+    "instance": "Instance",
+    "clickAway": "Click the chart to close",
+    "module": {
+      "multichart": "Multi-Chart & Panes",
+      "microflow": "Microstructure & Order Flow",
+      "indicators": "Technical Indicators",
+      "priceaction": "Price Action & Market Structure",
+      "signals": "Trading Signals",
+      "moneyflow": "Money Flow & Derivatives",
+      "pulse": "Market Pulse & Events",
+      "ai": "AI Analysis",
+      "bots": "Trading Bots",
+      "advanced": "Advanced Settings"
+    },
+    "item": {
+      "multichart.panes": "Panes",
+      "multichart.sync": "Sync",
+      "microflow.delta": "Delta",
+      "microflow.imbalance": "Imbalance",
+      "indicators.ema": "EMA",
+      "indicators.sma": "SMA",
+      "indicators.rsi": "RSI",
+      "indicators.macd": "MACD",
+      "indicators.atr": "ATR",
+      "indicators.bb": "Bollinger Bands",
+      "indicators.vwap": "VWAP",
+      "priceaction.swing": "Swing",
+      "priceaction.bos": "Break of Structure",
+      "priceaction.fvg": "Fair Value Gap",
+      "signals.cross": "Cross",
+      "signals.volumeSpike": "Volume Spike",
+      "signals.atrBreakout": "ATR Breakout",
+      "moneyflow.cvd": "CVD",
+      "moneyflow.funding": "Funding",
+      "moneyflow.openInterest": "Open Interest",
+      "pulse.events": "Events",
+      "pulse.sentiment": "Sentiment",
+      "ai.summary": "Summary",
+      "bots.paper": "Paper Trading",
+      "bots.alerts": "Alerts",
+      "advanced.frame": "Frame",
+      "advanced.payload": "Payload",
+      "advanced.cache": "Cache"
+    },
+    "desc": {
+      "multichart": "Pane layout and view synchronisation",
+      "microflow": "Per-candle order delta and imbalance",
+      "indicators": "Averages, volatility and momentum on closed candles",
+      "priceaction": "Swings, structure breaks and fair-value gaps",
+      "signals": "Cross, volume and range-break events",
+      "moneyflow": "Cumulative delta, funding and open interest",
+      "pulse": "Market events and sentiment direction",
+      "ai": "Analytical summary of this chart's data",
+      "bots": "Paper execution and alerts",
+      "advanced": "Frame, payload and cache state"
+    }
+  },
+  "al": {
+    "signals": {
+      "volume": {
+        "label": "VS",
+        "hint": "Volume spike: the candle volume deviates from the previous {window}-candle average by |z| ≥ {z} standard deviations."
+      },
+      "atr": {
+        "label": "AB",
+        "hint": "ATR breakout: the range exceeds {k}× ATR of the previous candle (volatility-based break, not a market-structure BOS)."
+      },
+      "patterns": {
+        "label": "PAT",
+        "hint": "Candle patterns: doji (body ≤ {dojiRatio}×range), hammer / shooting star (shadow ≥ {shadowRatio}×body) and bullish/bearish engulfing. A pattern hint only — not an entry signal."
+      },
+      "divergence": {
+        "label": "DIV",
+        "hint": "Divergence between price pivots and the oscillator (pivot width {pivot}, max {lookback} bars apart), confirmed only after {pivot} bars — never used before confirmation."
+      },
+      "structure": {
+        "label": "STR",
+        "hint": "Market structure: a close beyond the last CONFIRMED swing (width {pivot}, clusters < {minBars} bars merged). Same-direction break = BOS (continuation), opposite = CHoCH (character change). Confirmed on the breaking candle's close."
+      },
+      "fvg": {
+        "label": "FVG",
+        "hint": "Fair value gap: a three-candle imbalance (low[i] > high[i−2] or high[i] < low[i−2]) with the untraded zone marked. Filled zones are flagged, not deleted."
+      }
+    }
+  },
+  "hist": {
+    "title": "Historical candles — BTC/USDT",
+    "asset": "Asset",
+    "venue": "Venue",
+    "timeframe": "Timeframe",
+    "apply": "Apply",
+    "legend_candle": "OHLC",
+    "legend_ema": "EMA",
+    "legend_sma": "SMA",
+    "legend_volume": "Volume",
+    "cross_golden": "GOLDEN",
+    "cross_death": "DEATH",
+    "cross_none": "N/A",
+    "warn_ok": "OK",
+    "pane": "Panel",
+    "signals": {
+      "btc": {
+        "label": "BTC",
+        "hint": "Latest close and the change against the previous candle (last price on the New-York-closed axis)."
+      },
+      "tf": {
+        "label": "TF",
+        "hint": "Timeframe requested from the historical service (lowercase engine key)."
+      },
+      "venue": {
+        "label": "VENUE",
+        "hint": "Exchange filter; \"All venues\" sends no exchange parameter and aggregates every venue."
+      },
+      "cross": {
+        "label": "CX",
+        "hint": "Last crossing of EMA{fast} over/under SMA{slow}; the number is how many candles ago it happened."
+      },
+      "gap": {
+        "label": "GAP",
+        "hint": "Missing-candle gaps in the returned window: {coverage}% coverage, largest gap {max} bars. Gaps are only reported — no synthetic candles are created."
+      },
+      "vol": {
+        "label": "VOL",
+        "hint": "Last candle volume as a z-score against the 20-candle average; |z| ≥ 2 is highlighted."
+      },
+      "spread": {
+        "label": "SPRD",
+        "hint": "Distance between EMA{fast} and SMA{slow} in percent of the slow average."
+      },
+      "warn": {
+        "label": "WARN",
+        "hint": "Data-health warning badge (double width): stale feed, gaps, low coverage or a service error."
+      }
+    }
+  },
+  "series": {
+    "latest": "Latest",
+    "yoy": "YoY",
+    "mom": "MoM",
+    "unit": "Unit",
+    "trend": "Trend",
+    "source": "Source",
+    "no_data": "No data to display"
+  },
+  "crypto_soon_title": "This chart type is not enabled yet",
+  "crypto_soon_body": "Coming soon — for now only the candles chart is available."
+}

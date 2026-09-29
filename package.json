@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "csv-parse": "^7.0.2",
+    "parquetjs-lite": "^0.8.7",
+    "puppeteer": "^24.43.1",
+    "tulind": "^0.8.20",
+    "unzipper": "^0.12.5",
+    "ws": "^8.21.3"
+  }
+}

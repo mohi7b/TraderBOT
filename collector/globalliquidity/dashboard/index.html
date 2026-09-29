@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Liquidity - Realtime Dashboard</title>
+
+    <!-- سبک CSS مینیمال -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Global Liquidity — Realtime Dashboard</h1>
+
+<div id="dashboard">
+
+    <div class="box">
+        <h2>Liquidity Score</h2>
+        <div id="score">در حال بارگذاری...</div>
+    </div>
+
+    <div class="box">
+        <h2>Equity Market</h2>
+        <div id="equity">در حال بارگذاری...</div>
+    </div>
+
+    <div class="box">
+        <h2>Macro Signals</h2>
+        <div id="macro">در حال بارگذاری...</div>
+    </div>
+
+    <div class="box">
+        <h2>Latest Alert</h2>
+        <div id="alert">در حال بارگذاری...</div>
+    </div>
+
+</div>
+
+<script>
+async function loadDashboard() {
+    try {
+        const res = await fetch('/api/snapshots/dashboard/realtime');
+        const data = await res.json();
+
+        if (!data.dashboard) {
+            return;
+        }
+
+        const d = data.dashboard;
+
+        // Liquidity Score
+        document.getElementById('score').innerHTML = `
+            <div><span class="label">Score:</span> <span class="value">${d.overview.liquidityScore}</span></div>
+            <div><span class="label">Alert Level:</span> 
+                <span class="value ${alertColor(d.overview.alertLevel)}">${d.overview.alertLevel}</span>
+            </div>
+        `;
+
+        // Equity
+        document.getElementById('equity').innerHTML = `
+            <div><span class="label">Symbol:</span> <span class="value">${d.equity.symbol}</span></div>
+            <div><span class="label">Price:</span> <span class="value">${d.equity.price}</span></div>
+            <div><span class="label">Volume:</span> <span class="value">${d.equity.volume}</span></div>
+            <div><span class="label">Flow:</span> <span class="value">${d.equity.flow}</span></div>
+        `;
+
+        // Macro
+        document.getElementById('macro').innerHTML = `
+            <div><span class="label">Rate:</span> <span class="value">${d.macro.rate}</span></div>
+            <div><span class="label">VIX:</span> <span class="value">${d.macro.vix}</span></div>
+            <div><span class="label">Liquidity Index:</span> <span class="value">${d.macro.liquidityIndex}</span></div>
+        `;
+
+        // Alerts
+        document.getElementById('alert').innerHTML = `
+            <div><span class="label">Severity:</span> 
+                <span class="value ${alertColor(d.alerts.severity)}">${d.alerts.severity}</span>
+            </div>
+            <div><span class="label">Score:</span> <span class="value">${d.alerts.score}</span></div>
+        `;
+
+    } catch (err) {
+        console.log("Dashboard error:", err);
+    }
+}
+
+// رنگ هشدار
+function alertColor(level) {
+    if (level === "high") return "status-danger";
+    if (level === "moderate") return "status-warning";
+    if (level === "low") return "status-good";
+    return "";
+}
+
+// آپدیت هر ۵ ثانیه
+setInterval(loadDashboard, 5000);
+loadDashboard();
+</script>
+
+</body>
+</html>

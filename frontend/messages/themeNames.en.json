@@ -1,0 +1,53 @@
+{
+  "title": "Chart theme",
+  "auto": "Auto (follow site light/dark)",
+  "light": "Light",
+  "dark": "Dark",
+  "terminal": "Terminal",
+  "print": "Print",
+  "inflation_modern_dark": "Inflation Modern — Dark",
+  "inflation_modern_light": "Inflation Modern — Light",
+  "shahrivar": "Shahrivar (official inflation template)",
+  "shahrivar_policy": "Shahrivar — Monetary policy (policy rate vs CPI)",
+  "shahrivar_growth": "Shahrivar — Growth (GDP Growth + GAS)",
+  "shahrivar_financial": "Shahrivar — Financial conditions (FAS)",
+  "shahrivar_hist": "Shahrivar — Historical candles (H1: BTCUSDT)",
+  "default_chart": "Default Chart (archived)",
+  "inflation_modern": {
+    "description": "Modern inflation palette: semantic headline/core colors, transparent uniformly-sized signal badges, tighter scale margins."
+  },
+  "shahrivar": {
+    "description": "Official inflation template: transparent green target band, six categorised signals (trend/momentum/deviation/volatility/pressure/stability) with transparent uniform badges, 5Y view and tight scale margins."
+  },
+  "shahrivar_policy": {
+    "description": "Monetary-policy chart template: official policy rate against headline CPI, same transparent Shahrivar badges and layout, PAS (Economic Future Trend + direction/strength) as the leading badge."
+  },
+  "shahrivar_growth": {
+    "description": "Growth chart template: GDP YoY (phosphor green) and annualised QoQ (blue) with small data-point markers, one-row signal strip led by GAS (Growth Action Signal) plus GMI/OGI/GSI/PMI/NOW/GAPg, identical layout and transparency to the other Shahrivar charts."
+  },
+  "shahrivar_hist": {
+    "description": "Historical candlestick template: OHLC candles with EMA21 (phosphor green) and SMA50 (blue) overlays, Golden/Death Cross markers, a volume pane underneath, and an eight-badge signal strip in one row — one leading badge, six secondary badges and a double-width warning badge — with the same layout and transparency as the other Shahrivar charts. The time axis uses a fixed 21:00 UTC origin (no DST, no bucket merging) while the source data stays raw UTC."
+  },
+  "shahrivar_financial": {
+    "description": "Financial-conditions chart template: composite FCI (bright blue) and the country 10Y yield (standard blue) as line-only series, 3.5-year zoom with one year of future space, and a single-row signal strip led by FAS (Financial Action Signal) plus Y10/Credit/DXY/Equity/Liquidity/Vol — missing inputs are shown as a white N/A badge instead of being dropped."
+  },
+  "default_chart": {
+    "description": "Archived look of the inflation chart before the Shahrivar template (dark base, 12% scale margins, 8-signal library capped at 6)."
+  },
+  "shahrivar_mobile": {
+    "description": "Shahrivar mobile variant: 6-month window, future margin of 12 bars, four signal badges, 10px font, 1.5px series thickness, compact header and a full-width drawer with 44px touch targets."
+  },
+  "shahrivar_tablet": {
+    "description": "Shahrivar tablet variant: 1-year window, six signal badges, 11px font, a 70%-width drawer and 44px touch targets."
+  },
+  "shahrivar_desktop": {
+    "description": "Shahrivar desktop variant (default): 3.5-year window, future margin of 24 bars, eight signal badges, 11px font, 2px series thickness and a one-third-width drawer."
+  },
+  "shahrivar_ultrawide": {
+    "description": "Shahrivar ultrawide variant: 5-year window, bar spacing of 8, future margin of 32 bars, 12px font and a fixed 22rem drawer for 1920-2559px displays."
+  },
+  "shahrivar_tv": {
+    "description": "Shahrivar TV variant (10-foot UI): 1-year window, 16px font and 14px badges, 3px series thickness, future margin of 48 bars, 56px touch targets and reduced motion."
+  }
+}
+

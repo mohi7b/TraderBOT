@@ -1,0 +1,85 @@
+حالا تصویر کامل و دقیق دارم. شرح کلی ساختار را مینویسم.
+
+---
+
+# شرح کلی ساختار برنامه (TraderBOT)
+
+یک سیستم جمعآوری و تحلیل دادهٔ بازار ارز دیجیتال (و تا حدی ماکرو) است که روی **Node.js (CommonJS)** نوشته شده و عمداً **بدون فریمورکهای خارجی** (Express/Fastify) کار میکند — سرورها بر پایهٔ `node:http` و ذخیرهسازی مبتنی بر `better-sqlite3` هستند. فقط چند dependency سبک دارد (`better-sqlite3`, `ws`, `csv-parse`, `parquetjs-lite`, `puppeteer`, `unzipper`).
+
+## ۱) لایهٔ بالایی (ریشهٔ پروژه)
+
+| مسیر | نقش |
+|---|---|
+| `collector/` | هستهٔ جمعآوری داده (بزرگترین بخش) |
+| `orchestrator/` | ارکستراسیون/مدیریت ماژولها، داشبورد وب و API مدیریت |
+| `macro/` (زیر `collector/`) | دادهٔ ماکرو/اکونومیک + Assistant + حافظه |
+| `ZDoc/` | مستندات طراحی و مفاهیم تحلیلی (txt) |
+| `_legacy/` | کد بازنشسته (شامل `historical` قدیمی و `DESIGN.md`) |
+| `test/` | ۲۹ تست |
+| `dbg-kc.cjs`, `traderbot.log`, `server.pid` | ابزار اشکالزدایی/لاگ/pid سرویس |
+
+## ۲) `collector/` — لایهٔ جمعآوری (هستهٔ کار)
+
+زیرپوشههای اصلی:
+
+- **`realtime/`** — جمعآوری لحظهای (WebSocket). شامل:
+  - `spot/` و `futures/` (کندل، عمق، قیمت، orderflow، funding، OI، liquidations، spread، ...)
+  - `aggregator/` — تجمیع لحظهای (chart-data، indicator، aggregation services)
+  - `state/` — حالت رو به جلو (rolling-window، venue/symbol state)
+  - `aanode/` — bootstrap و handlerهای اتصال
+
+- **`historical/`** — بخش تاریخی (همین که اخیراً بازطراحی شد):
+  - `_engine/fetch/` — آداپتورهای دانلود از صرافیها (binance/bybit/okx/kucoin/bitget)
+  - `_engine/timeframe/` — **جدید**: ساخت تایمفریمِ لحظهای از کندل خام
+  - `_engine/summary-dynamic/` — **جدید**: خلاصهٔ لحظهای
+  - `_engine/root.cjs` — ریشهٔ کانونی (RootDir)
+  - `full/` — Full Downloader (دانلود کامل/بهروزرسانی ۱ دقیقهای → `candles_1m.db`)
+  - `api/` — **جدید**: سرور داینامیک (`GET /tf/:symbol/:tf`، `GET /summary/:symbol/:tf`)
+  - `crypto/BTCUSDT/` — محل ذخیرهٔ `candles_1m.db`
+  - `_legacy/smart_engine/` — موتور قدیمی بازنشسته (main/summary/db/updater/...)
+
+- **`exchange/`** — کلاینتهای عمومی هر صرافی (`binance`, `common/ws-*` برای مدیریت WebSocket/handshake/heartbeat/orderbook)
+
+- **`common/`** — ابزارهای مشترک: canonical packets، دستهبندی depth، نرمالسازی OI، price/range utils، liquidation observer و ...
+
+- **`analysis/indicators/base/`** — پایهٔ اندیکاتورها (price/volume/orderbook)
+
+- **`macro/`** — اکونومیک: `api/server.cjs`، `assistant/`، `core_db/`، `db/`، `memory/`، `query/`، `offline/`
+
+- **`sentiment/`** — (فعلاً خالی)
+
+## ۳) `orchestrator/` — مدیریت/اجرا
+
+- `core/` — orchestrator، event-router، state-tree، module-tree، system-handler
+- `api/server.cjs` — API مدیریت
+- `public/` — داشبورد تحت وب (html/js/css)
+- `utils/` — hot-reload، health-monitor، module-manager، log-manager، error-manager
+- `workers/Worker.cjs` — اجرای کارگرها
+
+---
+
+## جریان اصلی داده (معماری فعلی)
+
+```
+صرافی‌ها (Binance/Bybit/OKX/KuCoin/Bitget)
+        │
+        ├── realtime/  ──(WebSocket)──► spot/futures ──► aggregator ──► state
+        │
+        └── historical/ ──(HTTP klines)──► full/run-full.cjs ──► candles_1m.db (فقط خام ۱ دقیقه)
+                                                    │
+                              ┌─────────────────────┴──────────────┐
+                              ▼                                    ▼
+                    _engine/timeframe/build-tf.cjs      _engine/summary-dynamic/build-summary.cjs
+                    (ساخت لحظه‌ای OHLCV تایم‌فریم بالاتر)   (خلاصهٔ لحظه‌ای)
+                              │                                    │
+                              └──────────►  api/  ◄─────────────────┘
+                                    GET /tf/:symbol/:tf
+                                    GET /summary/:symbol/:tf
+```
+
+### فلسفهٔ کلیدی پس از بازطراحی اخیر
+- **فقط کندل خام ۱ دقیقهای ذخیره میشود** (`candles_1m.db` با کلید `(symbol, exchange, timestamp_raw)` — اسپات و فیوچرز جدا).
+- **هیچ تایمفریم، اندیکاتور یا زونی persist نمیشود**؛ همهچیز در لحظه از روی دادهٔ خام محاسبه میشود.
+- موتور قدیمی (Smart Engine با دیتابیسهای `tf_small`/`tf_large` و `summary`/`indicator`/`zone`) به `_legacy/smart_engine/` منتقل و API قبلی (`/summary`, `/indicators`, `/zones`, `qna`) حذف شد.
+
+اگر بخواهی، میتوانم روی هر یک از این بخشها (مثلاً جریان کامل `full/` از دانلود تا merge، یا نقش دقیق `orchestrator`) نقشهٔ عمیقتر و گامبهگام هم بدهم.

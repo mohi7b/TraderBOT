@@ -1,0 +1,9 @@
+{
+  "name": "template_theme",
+  "family": "template_theme",
+  "modes": ["dark", "light"],
+  "version": "0.1.0",
+  "author": "your-name",
+  "created": "2026-01-01",
+  "description_key": "themeNames.template_theme.description"
+}

@@ -1,0 +1,176 @@
+TraderBOT/
+├── orchestrator/
+│   ├── aanode/
+│   │   ├── bootstrap.cjs
+│   │   └── config/
+│   │       ├── exchanges.cjs
+│   │       ├── symbols.cjs
+│   │       ├── indicators.cjs
+│   │       ├── analysis.cjs
+│   │       └── system.cjs
+│   │
+│   ├── core/
+│   │   ├── event-router.cjs
+│   │   ├── orchestrator.cjs
+│   │   ├── state-tree.cjs
+│   │   └── system-handler.cjs
+│   │
+│   └── utils/
+│       ├── health-monitor.cjs
+│       ├── runtime-status.cjs
+│       ├── debug-dashboard.cjs
+│       ├── error-manager.cjs
+│       └── log-manager.cjs
+│
+├── collector/
+│   ├── common/
+│   │   ├── canonical-market-packet.cjs
+│   │   ├── canonical-futures-packet.cjs
+│   │   ├── market-packet.cjs
+│   │   ├── market-data-quality.cjs
+│   │   ├── open-interest-normalizer.cjs
+│   │   ├── liquidation-observer.cjs
+│   │   ├── depth-book-sync.cjs
+│   │   ├── source-health.cjs
+│   │   └── symbol-normalizer.cjs
+│   │
+│   ├── exchange/
+│   │   ├── binance/
+│   │   │   ├── realtime/
+│   │   │   │   ├── spot/
+│   │   │   │   │   ├── ws.cjs
+│   │   │   │   │   └── rest.cjs
+│   │   │   │   └── futures/
+│   │   │   │       ├── ws.cjs
+│   │   │   │       ├── market-poller.cjs
+│   │   │   │       ├── open-interest.cjs
+│   │   │   │       └── liquidation.cjs
+│   │   │   └── adapter.cjs
+│   │   │
+│   │   ├── bybit/
+│   │   ├── bitget/
+│   │   ├── kucoin/
+│   │   └── okx/
+│   │
+│   ├── realtime/
+│   │   ├── aanode/
+│   │   │   ├── spot-handler.cjs
+│   │   │   ├── futures-handler.cjs
+│   │   │   └── bootstrap.cjs
+│   │   │
+│   │   ├── state/
+│   │   │   ├── venue-state-store.cjs
+│   │   │   ├── symbol-state-store.cjs
+│   │   │   └── rolling-window-store.cjs
+│   │   │
+│   │   ├── aggregator/
+│   │   │   ├── realtime-exchange-aggregator.cjs
+│   │   │   ├── realtime-symbol-aggregator.cjs
+│   │   │   ├── market-aggregation-service.cjs
+│   │   │   ├── market-indicator-service.cjs
+│   │   │   └── chart-data-service.cjs
+│   │   │   ├── spot-aggregator.cjs
+│   │   │   ├── futures-aggregator.cjs
+│   │   │   ├── cross-market-aggregator.cjs
+│   │   │   ├── trade-aggregator.cjs
+│   │   │   ├── depth-aggregator.cjs
+│   │   │   └── candle-aggregator.cjs
+│   │   │
+│   │   └── quality/
+│   │       ├── freshness-engine.cjs
+│   │       ├── stale-venue-filter.cjs
+│   │       ├── sequence-validator.cjs
+│   │       ├── source-weighting.cjs
+│   │       └── data-completeness.cjs
+│   │
+│   └── analysis/
+│       ├── indicators/
+│       │   ├── base/
+│       │   │   ├── price/
+│       │   │   │   └── price-indicators.cjs
+│       │   │   │
+│       │   │   ├── volume/
+│       │   │   │   └── volume-indicators.cjs
+│       │   │   │
+│       │   │   └── orderbook/
+│       │   │       └── orderbook-indicators.cjs
+│       │   │
+│       │   ├── futures/
+│       │   │   ├── funding-rate.cjs
+│       │   │   ├── funding-dispersion.cjs
+│       │   │   ├── mark-premium.cjs
+│       │   │   ├── oi-delta.cjs
+│       │   │   └── liquidation-pressure.cjs
+│       │   │
+│       │   ├── orderflow/
+│       │   │   ├── cvd.cjs
+│       │   │   ├── cvd-slope.cjs
+│       │   │   ├── price-cvd-divergence.cjs
+│       │   │   ├── absorption.cjs
+│       │   │   ├── exhaustion.cjs
+│       │   │   └── sweep-detection.cjs
+│       │   │
+│       │   ├── cross-market/
+│       │   │   ├── basis.cjs
+│       │   │   ├── basis-trend.cjs
+│       │   │   ├── spot-futures-ratio.cjs
+│       │   │   ├── cross-market-divergence.cjs
+│       │   │   └── lead-lag.cjs
+│       │   │
+│       │   └── volatility/
+│       │       ├── realized-volatility.cjs
+│       │       ├── volatility-regime.cjs
+│       │       ├── volatility-expansion.cjs
+│       │       └── volatility-compression.cjs
+│       │
+│       ├── composite/
+│       │   ├── trend-confirmation.cjs
+│       │   ├── breakout-quality.cjs
+│       │   ├── reversal-score.cjs
+│       │   ├── squeeze-score.cjs
+│       │   ├── market-pressure.cjs
+│       │   └── execution-risk.cjs
+│       │
+│       ├── signal/
+│       │   ├── signal-builder.cjs
+│       │   ├── signal-confidence.cjs
+│       │   ├── signal-filter.cjs
+│       │   ├── signal-cooldown.cjs
+│       │   └── signal-contract.cjs
+│       │
+│       └── replay/
+│           ├── event-recorder.cjs
+│           ├── replay-engine.cjs
+│           └── deterministic-runner.cjs
+│
+├── strategy/
+│   ├── strategy-engine.cjs
+│   ├── strategy-context.cjs
+│   └── rules/
+│       ├── trend-following.cjs
+│       ├── mean-reversion.cjs
+│       ├── breakout.cjs
+│       └── squeeze.cjs
+│
+├── risk/
+│   ├── risk-engine.cjs
+│   ├── position-sizing.cjs
+│   ├── stop-loss.cjs
+│   ├── exposure-limit.cjs
+│   └── execution-risk.cjs
+│
+├── execution/
+│   ├── execution-engine.cjs
+│   ├── order-router.cjs
+│   ├── exchange-execution/
+│   └── order-state.cjs
+│
+└── test/
+    ├── adapters/
+    ├── normalization/
+    ├── aggregation/
+    ├── indicators/
+    ├── signals/
+    ├── replay/
+    ├── live/
+    └── fixtures/

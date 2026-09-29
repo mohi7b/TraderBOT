@@ -1,0 +1,67 @@
+{
+  "FRED": {
+    "aliases": ["fred", "federal reserve", "stl fed", "us fred"],
+    "type": "official",
+    "region": "USA"
+  },
+
+  "IMF": {
+    "aliases": ["imf", "international monetary fund"],
+    "type": "official",
+    "region": "global"
+  },
+
+  "OECD": {
+    "aliases": ["oecd", "organisation for economic co-operation and development"],
+    "type": "official",
+    "region": "global"
+  },
+
+  "EUROSTAT": {
+    "aliases": ["eurostat", "european commission statistics", "ec statistics"],
+    "type": "official",
+    "region": "EU"
+  },
+
+  "BIS": {
+    "aliases": ["bis", "bank for international settlements"],
+    "type": "official",
+    "region": "global"
+  },
+
+  "GMD": {
+    "aliases": ["gmd", "global macro database"],
+    "type": "official",
+    "region": "global"
+  },
+
+  "ECB": {
+    "aliases": ["ecb", "european central bank"],
+    "type": "official",
+    "region": "EU"
+  },
+
+  "BOE": {
+    "aliases": ["boe", "bank of england"],
+    "type": "official",
+    "region": "UK"
+  },
+
+  "BOJ": {
+    "aliases": ["boj", "bank of japan"],
+    "type": "official",
+    "region": "JP"
+  },
+
+  "API": {
+    "aliases": ["api", "live api", "macro api"],
+    "type": "live",
+    "region": "global"
+  },
+
+  "Custom": {
+    "aliases": ["custom", "manual", "user"],
+    "type": "manual",
+    "region": "global"
+  }
+}

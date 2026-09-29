@@ -1,0 +1,145 @@
+{
+  "CPI": {
+    "aliases": ["cpi", "consumer price index", "inflation yoy", "cpi yoy", "cpi index", "cpi_idx", "cpi_yoy", "hicp_anr", "hicp_midx", "cpiaucsl"],
+    "category": "Inflation",
+    "sub_category": "Prices",
+    "unit": "%",
+    "frequency": "Monthly"
+  },
+
+  "CoreCPI": {
+    "aliases": ["core cpi", "core inflation", "core consumer price index", "cpilfesl"],
+    "category": "Inflation",
+    "sub_category": "Core Prices",
+    "unit": "%",
+    "frequency": "Monthly"
+  },
+
+  "PPI": {
+    "aliases": ["ppi", "producer price index", "ppiaco", "ppifis"],
+    "category": "Inflation",
+    "sub_category": "Producer Prices",
+    "unit": "%",
+    "frequency": "Monthly"
+  },
+
+  "GDP": {
+    "aliases": ["gdp", "gross domestic product", "gdp_clv10_meur", "gdp_vpv", "gdp_nom", "gdp_c1", "gdpc1"],
+    "category": "Growth",
+    "sub_category": "Output",
+    "unit": "index",
+    "frequency": "Quarterly"
+  },
+
+  "GDP_YoY": {
+    "aliases": ["gdp yoy", "gdp growth", "gdp annual growth", "gdp_yoy", "gdp_vpv_yoy", "gdp_vpv_qoq", "gdp_clv_pch_sm", "gdp_yoy_qoq"],
+    "category": "Growth",
+    "sub_category": "Output",
+    "unit": "%",
+    "frequency": "Quarterly"
+  },
+
+  "Unemployment": {
+    "aliases": ["unemployment", "jobless rate", "unemployment rate", "unemp_rate", "une_rt_m", "unrate"],
+    "category": "Labor",
+    "sub_category": "Employment",
+    "unit": "%",
+    "frequency": "Monthly"
+  },
+
+  "Employment": {
+    "aliases": ["employment", "persons employed", "lfsi_emp_q", "emp_lfs", "thousand persons"],
+    "category": "Labor",
+    "sub_category": "Employment",
+    "unit": "thousand persons",
+    "frequency": "Quarterly"
+  },
+
+  "CLI": {
+    "aliases": ["cli", "composite leading indicator", "leading indicator", "leading index"],
+    "category": "Activity",
+    "sub_category": "Business",
+    "unit": "index",
+    "frequency": "Monthly"
+  },
+
+  "Trade": {
+    "aliases": ["trade", "exports", "imports", "export", "import", "trade balance", "ext_lt_intratrd"],
+    "category": "Trade",
+    "sub_category": "External",
+    "unit": "USD",
+    "frequency": "Monthly"
+  },
+
+  "IndustrialProduction": {
+    "aliases": ["industrial production", "indpro", "prvm", "production", "ip index"],
+    "category": "Activity",
+    "sub_category": "Production",
+    "unit": "index",
+    "frequency": "Monthly"
+  },
+
+  "UnitLabourCost": {
+    "aliases": ["unit labour cost", "unit labor cost", "ulc"],
+    "category": "Labor",
+    "sub_category": "Costs",
+    "unit": "index",
+    "frequency": "Quarterly"
+  },
+
+  "PMI": {
+    "aliases": ["pmi", "purchasing managers index"],
+    "category": "Activity",
+    "sub_category": "Manufacturing",
+    "unit": "index",
+    "frequency": "Monthly"
+  },
+
+  "PMI_Services": {
+    "aliases": ["services pmi", "pmi services"],
+    "category": "Activity",
+    "sub_category": "Services",
+    "unit": "index",
+    "frequency": "Monthly"
+  },
+
+  "InterestRate": {
+    "aliases": ["interest rate", "policy rate", "cb rate", "central bank rate", "fedfunds", "dgs10", "dgs2", "dff"],
+    "category": "Monetary",
+    "sub_category": "Rates",
+    "unit": "%",
+    "frequency": "Daily"
+  },
+
+  "M2": {
+    "aliases": ["m2", "money supply m2", "m2sl", "m1sl", "money supply"],
+    "category": "Liquidity",
+    "sub_category": "Money Supply",
+    "unit": "index",
+    "frequency": "Monthly"
+  },
+
+  "FX": {
+    "aliases": ["fx", "exchange rate", "currency rate"],
+    "category": "Markets",
+    "sub_category": "FX",
+    "unit": "index",
+    "frequency": "Daily"
+  },
+
+  "CreditGrowth": {
+    "aliases": ["credit growth", "loan growth"],
+    "category": "Credit",
+    "sub_category": "Banking",
+    "unit": "%",
+    "frequency": "Monthly"
+  },
+
+  "EnergyPrice": {
+    "aliases": ["energy price", "oil price", "gas price"],
+    "category": "Energy",
+    "sub_category": "Commodities",
+    "unit": "index",
+    "frequency": "Daily"
+  }
+}

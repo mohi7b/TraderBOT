@@ -1,0 +1,44 @@
+[2026-09-20T17:34:41.781Z] [INFO] [EUROSTAT] smart download started...
+[2026-09-20T17:34:41.852Z] [INFO] [EUROSTAT] cpi_yoy.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:34:42.996Z] [INFO] [EUROSTAT] cpi_index.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:34:44.746Z] [INFO] [EUROSTAT] cpi_index_sub.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:34:46.625Z] [INFO] [EUROSTAT] cpi_yoy_sub.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:34:47.952Z] [INFO] [EUROSTAT] cpi_weights.csv: incremental lastTimePeriod=2 (watermark=2026)
+[2026-09-20T17:34:53.835Z] [INFO] [EUROSTAT]   cpi_yoy.csv  downloaded (5627 bytes)
+[2026-09-20T17:34:53.835Z] [INFO] [EUROSTAT]   cpi_index.csv  downloaded (6906 bytes)
+[2026-09-20T17:34:53.835Z] [INFO] [EUROSTAT]   cpi_index_sub.csv  downloaded (171558 bytes)
+[2026-09-20T17:34:53.835Z] [INFO] [EUROSTAT]   cpi_yoy_sub.csv  downloaded (144632 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   cpi_weights.csv  downloaded (17273 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   gdp.csv  downloaded (115839 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   gdp_yoy.csv  downloaded (83957 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   unemployment.csv  downloaded (244305 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   employment.csv  downloaded (59884 bytes)
+[2026-09-20T17:34:53.836Z] [INFO] [EUROSTAT]   trade.csv  downloaded (13586 bytes)
+[2026-09-20T17:36:40.872Z] [======] Macro Live Update started at 2026-09-20T17:36:40.872Z
+[2026-09-20T17:36:40.875Z] [INFO] Database: /home/mohsen/TraderBOT/collector/macro/db/macro.db
+[2026-09-20T17:36:40.875Z] [INFO] Log file: /home/mohsen/TraderBOT/collector/macro/update/logs/update_log_20260920.txt
+[2026-09-20T17:36:40.875Z] [INFO] Scheduled (release_events, nearest-first): EUROSTAT
+[2026-09-20T17:36:40.876Z] [======] === EUROSTAT (schedule: explicit) ===
+[2026-09-20T17:36:41.068Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-09-20T17:36:41.068Z] [INFO] [EUROSTAT] new data confirmed → downloading...
+[2026-09-20T17:36:41.073Z] [INFO] [EUROSTAT] smart download started...
+[2026-09-20T17:36:41.242Z] [INFO] [EUROSTAT] cpi_yoy.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:36:41.376Z] [INFO] [EUROSTAT] cpi_index.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:36:41.974Z] [INFO] [EUROSTAT] cpi_index_sub.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:36:42.571Z] [INFO] [EUROSTAT] cpi_yoy_sub.csv: incremental lastTimePeriod=11 (watermark=2025-12)
+[2026-09-20T17:36:42.716Z] [INFO] [EUROSTAT] cpi_weights.csv: incremental lastTimePeriod=2 (watermark=2026)
+[2026-09-20T17:36:43.191Z] [INFO] [EUROSTAT]   cpi_yoy.csv  downloaded (5627 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   cpi_index.csv  downloaded (6906 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   cpi_index_sub.csv  downloaded (171558 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   cpi_yoy_sub.csv  downloaded (144632 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   cpi_weights.csv  downloaded (17273 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   gdp.csv  downloaded (115839 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   gdp_yoy.csv  downloaded (83957 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   unemployment.csv  downloaded (244305 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   employment.csv  downloaded (59884 bytes)
+[2026-09-20T17:36:43.192Z] [INFO] [EUROSTAT]   trade.csv  downloaded (13586 bytes)
+[2026-09-20T17:36:43.469Z] [INFO] [EUROSTAT] normalized: 959 series, 20,624 observations (0.3s)
+[2026-09-20T17:36:45.471Z] [SUCCESS] [EUROSTAT] merged into DB in 2s (onlyExisting=true)
+[2026-09-20T17:36:45.471Z] [======] === Update summary ===
+[2026-09-20T17:36:45.471Z] [INFO] [EUROSTAT] updated
+[2026-09-20T17:36:45.472Z] [SUCCESS] Macro Live Update finished (4.6s)

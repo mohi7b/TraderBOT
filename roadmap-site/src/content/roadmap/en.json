@@ -1,0 +1,1163 @@
+{
+  "locale": "en",
+  "languageName": "English",
+  "nativeName": "English",
+  "dir": "ltr",
+  "meta": {
+    "documentTitle": "RADI — Technical Roadmap",
+    "tagline": "6 architecture pillars · 17 phases · Q4 2026 → Q4 2029",
+    "intro": "This document is the phase-by-phase roadmap for the Financial Data Intelligence Platform. It follows the approved architecture exactly as specified: six pillars — Data Lake, Chart Engine (WASM + WebGL), Bot Builder (Node-Based), AI Engine, Token Economy and Marketplace. Every deliverable below belongs to one of the named components; no additional architecture component is introduced and no component is simplified or omitted.",
+    "principles": [
+      "No new architecture components: only the components of the approved architecture appear in this roadmap.",
+      "Bottom-up build order: each pillar consumes the verified output of the pillar before it.",
+      "Every phase ends with measurable acceptance gates instead of demos.",
+      "All six pillars share one data contract: raw 1-minute canonical series plus canonical events.",
+      "Every phase ships in all five whitepaper languages: English, Persian, Arabic, Turkish and German."
+    ],
+    "programExitCriteria": [
+      "All six pillars run together end-to-end on one canonical data contract, from ingestion to marketplace settlement.",
+      "Every component of the architecture is live, monitored, audited where it touches funds, and reproducible from a registry or a versioned artefact.",
+      "The full roadmap document exists in five languages with identical structure and identical numbers."
+    ]
+  },
+  "labels": {
+    "language": "Language",
+    "pillars": "Architecture pillars",
+    "phases": "Phases",
+    "phase": "Phase {n}",
+    "description": "Description",
+    "deliverables": "Deliverables",
+    "milestones": "Technical milestones",
+    "timeline": "Estimated timeline",
+    "components": "Components",
+    "dependencies": "Dependencies & critical path",
+    "criticalPath": "Critical path",
+    "exitCriteria": "Pillar exit criteria",
+    "programExit": "Program exit criteria",
+    "principles": "Program principles",
+    "timelineOverview": "Timeline overview",
+    "summary": "Summary"
+  },
+  "hero": {
+    "brand": "RADI",
+    "tagline": "Real-time Autonomous Data Intelligence",
+    "pageName": "The Future Architecture of Trading",
+    "subtitle": "An intelligent financial data aggregation platform, a purpose-built chart engine, a node-based trading system, and a token ecosystem for the future of financial markets.",
+    "ctaRoadmap": "View Roadmap",
+    "ctaArchitecture": "System Architecture"
+  },
+  "tokenSummary": {
+    "badge": "RADI Ecosystem",
+    "title": "Tokenomics",
+    "intro": "Distribution structure, release models and the economic role of every token. Figures describe the planned model.",
+    "groups": [
+      {
+        "id": "identity",
+        "label": "Row 1 — Token Structure"
+      },
+      {
+        "id": "economy",
+        "label": "Row 2 — Platform Economy"
+      }
+    ],
+    "cards": [
+      {
+        "id": "pre-token",
+        "group": "identity",
+        "icon": "seed",
+        "title": "Pre-Supply Token",
+        "subtitle": [
+          "1% of total supply",
+          "100 million tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Progress-based unlock (development milestones)"
+          },
+          {
+            "label": "Value Multiplier",
+            "value": "×10 compared to the main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Reward early contributors and bootstrap ecosystem growth"
+          },
+          {
+            "label": "Economic Role",
+            "value": "High-value, scarce token powering the startup's initial momentum"
+          }
+        ]
+      },
+      {
+        "id": "total-supply",
+        "group": "identity",
+        "icon": "split",
+        "title": "Total Supply",
+        "subtitle": [
+          "1% pre-supply + 99% main token",
+          "100 billion total tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Locked until economic activation"
+          },
+          {
+            "label": "Value Ratio",
+            "value": "×10 pre-supply token + ×1 main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Full transparency in distribution structure"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Foundation of the entire ecosystem and source of long-term circulation"
+          }
+        ]
+      },
+      {
+        "id": "main-token",
+        "group": "identity",
+        "icon": "coins",
+        "title": "Main Token",
+        "subtitle": [
+          "99% of total supply",
+          "99 billion tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Utility-driven and revenue-based unlock"
+          },
+          {
+            "label": "Value Multiplier",
+            "value": "×1 main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Balanced growth between token value and platform utility"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Primary asset for payments, tools, automation, and user interactions"
+          }
+        ]
+      },
+      {
+        "id": "economic-engine",
+        "group": "economy",
+        "icon": "engine",
+        "title": "Economic Engine",
+        "subtitle": [
+          "Consumption-driven + revenue-driven model",
+          "Gradual increase of circulating tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Scales with platform revenue and user expansion"
+          },
+          {
+            "label": "Consumption Flow",
+            "value": "AI Engine, Bot Builder, Marketplace"
+          },
+          {
+            "label": "Purpose",
+            "value": "Build a sustainable revenue ecosystem"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Convert user activity into real token value"
+          }
+        ]
+      },
+      {
+        "id": "utility",
+        "group": "economy",
+        "icon": "wallet",
+        "title": "Utility",
+        "subtitle": [
+          "Payments for intelligent trading and AI-powered services",
+          "User-to-service transaction layer"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Direct token purchase for service access"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Model execution, bot creation, tool purchases, data APIs"
+          },
+          {
+            "label": "Purpose",
+            "value": "Establish real and continuous token consumption"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Activate all platform modules through token usage"
+          }
+        ]
+      },
+      {
+        "id": "staking",
+        "group": "economy",
+        "icon": "lock",
+        "title": "Staking",
+        "subtitle": [
+          "Dynamic APR + token freeze for premium services",
+          "Value-driven policy mechanism"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Allocation of a portion of unlocked tokens into staking pools"
+          },
+          {
+            "label": "Reward Model",
+            "value": "Access to platform services and exclusive features"
+          },
+          {
+            "label": "Purpose",
+            "value": "Increase network stability and reduce circulating supply"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Long-term incentive mechanism strengthening token value"
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "columnLabels": {
+        "label": "Token",
+        "total": "Total supply",
+        "released": "Released to date",
+        "percent": "Released",
+        "multiplier": "Value multiplier"
+      },
+      "rows": [
+        {
+          "id": "pre",
+          "label": "Pre-supply token",
+          "total": "100,000,000",
+          "released": "1,000,000",
+          "percent": "1%",
+          "multiplier": "×10",
+          "highlight": true
+        },
+        {
+          "id": "main",
+          "label": "Main token",
+          "total": "99,000,000,000",
+          "released": "0",
+          "percent": "0%",
+          "multiplier": "×1",
+          "highlight": false
+        }
+      ],
+      "conversion": {
+        "fromValue": "1",
+        "fromLabel": "pre-supply token",
+        "toValue": "10",
+        "toLabel": "main tokens",
+        "caption": "1 pre-supply token = 10 main tokens"
+      },
+      "stage": {
+        "title": "Current stage",
+        "value": "Development-based pre-supply",
+        "items": [
+          {
+            "label": "Tokens in this stage",
+            "value": "1,000,000"
+          },
+          {
+            "label": "Released to date",
+            "value": "100,000"
+          },
+          {
+            "label": "Value per unit",
+            "value": "×10 versus the main token"
+          }
+        ]
+      },
+      "cta": {
+        "label": "Buy Samara token",
+        "note": "Purchase through the official RADI wallet or partner exchanges."
+      }
+    }
+  },
+  "ui": {
+    "snapLabel": "Scroll snap",
+    "snapOn": "On",
+    "snapOff": "Off",
+    "openLabel": "Show phase details",
+    "closeLabel": "Hide phase details",
+    "collapseAll": "Collapse all",
+    "moreComponents": "+{n} more",
+    "showAll": "Show all",
+    "showLess": "Show less",
+    "expandAll": "Expand all",
+    "railLabel": "Page sections",
+    "planned": "Planned artefacts"
+  },
+  "pillars": [
+    {
+      "id": "data-lake",
+      "order": 1,
+      "title": "Pillar 1 — Data Lake",
+      "summary": "The Data Lake produces one canonical, replayable stream of market and macro data: multi-source collection, normalization, weighting, noise removal, time-series storage and continuous quality monitoring.",
+      "components": [
+        {
+          "id": "fetcher-engine",
+          "name": "Fetcher Engine (multi-source)"
+        },
+        {
+          "id": "normalizer-engine",
+          "name": "Normalizer Engine"
+        },
+        {
+          "id": "weighting-engine",
+          "name": "Weighting Engine"
+        },
+        {
+          "id": "noise-filter-engine",
+          "name": "Noise Filter Engine"
+        },
+        {
+          "id": "tsdb",
+          "name": "TSDB (Time-Series Database)"
+        },
+        {
+          "id": "data-quality-monitor",
+          "name": "Data Quality Monitor"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p1",
+          "order": 1,
+          "title": "Phase 1 — Multi-Source Ingestion & Canonical Normalization",
+          "description": "Bring the Fetcher Engine live across every venue and macro feed, and force every raw payload through the Normalizer Engine so downstream pillars consume one canonical, provenance-tagged event stream instead of raw exchange payloads.",
+          "components": [
+            "fetcher-engine",
+            "normalizer-engine"
+          ],
+          "deliverables": [
+            "Fetcher Engine (multi-source) connectors for spot, futures, order book, trades, funding, open interest, liquidations, macro and on-chain feeds.",
+            "Per-source scheduler with rate-limit governor, adaptive retry, gap detection and historical backfill.",
+            "Normalizer Engine canonical envelope: source, venue, symbol, timestamp, sequence, payload and quality flags.",
+            "Canonical symbol/venue registry with precision and scale rules, UTC alignment and 1-minute bucketing of raw candles.",
+            "Immutable raw archive of every fetched payload with checksums, so any canonical stream can be re-derived from scratch."
+          ],
+          "milestones": [
+            "At least 25 live source connectors, each covered by a contract test against a recorded fixture.",
+            "Ingest latency p95 below 500 ms from venue timestamp to published canonical event.",
+            "Zero-loss replay: re-fetching any 24-hour window reproduces a byte-identical canonical stream.",
+            "100% of canonical events carry source provenance and quality flags.",
+            "Sustained ingest of at least 50,000 events/s in staging with p95 CPU utilisation below 70%."
+          ],
+          "timeline": {
+            "start": "Q4 2026",
+            "end": "Q4 2026",
+            "label": "Q4 2026"
+          }
+        },
+        {
+          "id": "p2",
+          "order": 2,
+          "title": "Phase 2 — Weighting & Noise Filtering",
+          "description": "Turn parallel sources into one trustable price of truth: the Weighting Engine scores every source and observation, while the Noise Filter Engine removes structural noise — spikes, stale quotes, wash trades and bad ticks — before anything is persisted.",
+          "components": [
+            "weighting-engine",
+            "noise-filter-engine"
+          ],
+          "deliverables": [
+            "Weighting Engine: source trust tiers, dynamic weights, recency decay, cross-source dispersion penalty and a confidence score per observation.",
+            "Noise Filter Engine: outlier and spike detection, stale-quote suppression, wash-trade detection, bad-tick quarantine and an explicit gap-handling policy.",
+            "Per-asset-class denoise profiles (crypto spot and futures, macro releases, on-chain metrics) with versioned configuration.",
+            "Replayable weight and filter configuration, so any historical window can be reprocessed under a new profile.",
+            "Weight and confidence introspection output attached to every published canonical event."
+          ],
+          "milestones": [
+            "Confidence score present on 100% of canonical events, with weight provenance traceable to source, tier and rule version.",
+            "Noise recall of at least 95% with precision of at least 98% on a labelled anomaly corpus, plus a published confusion matrix.",
+            "Reprocessing 90 days of history under a changed profile completes in under 30 minutes.",
+            "Deterministic output: identical inputs and profile version always produce identical weights.",
+            "Filter false-positive rate on clean market data at most 0.1% measured on a held-out week."
+          ],
+          "timeline": {
+            "start": "Q1 2027",
+            "end": "Q1 2027",
+            "label": "Q1 2027"
+          }
+        },
+        {
+          "id": "p3",
+          "order": 3,
+          "title": "Phase 3 — Time-Series Storage & Data Quality Monitoring",
+          "description": "Persist the canonical stream in the TSDB with explicit retention and downsampling policies, and keep it honest with the Data Quality Monitor, which scores every source and symbol and quarantines bad data automatically.",
+          "components": [
+            "tsdb",
+            "data-quality-monitor"
+          ],
+          "deliverables": [
+            "TSDB: columnar time-series storage for the raw 1-minute canonical series and canonical events, partitioned by symbol, venue and time.",
+            "Compression, retention tiers, downsampling and materialised views for multi-year query workloads.",
+            "High-cardinality indexing and a query API consumed by the Chart Engine, the Bot Builder and the AI Engine.",
+            "Data Quality Monitor: completeness, freshness, accuracy and consistency scores per source, symbol and timeframe.",
+            "Quality alerting, lineage tracing, automatic quarantine, self-healing re-fetch and a public quality dashboard."
+          ],
+          "milestones": [
+            "At least 10x on-disk compression versus raw JSON payloads.",
+            "Query latency p95 below 150 ms for a 30-day 1-minute range on a single symbol.",
+            "Freshness SLA: p95 below 2 s from canonical event to queryable series, verified continuously.",
+            "Hourly quality score published for 100% of tracked symbols with data-incident MTTR under 30 minutes.",
+            "Automatic quarantine isolates at most 0.01% of records, each with a fully auditable decision trail."
+          ],
+          "timeline": {
+            "start": "Q1 2027",
+            "end": "Q2 2027",
+            "label": "Q1 – Q2 2027"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chart-engine",
+      "order": 2,
+      "title": "Pillar 2 — Chart Engine (WASM + WebGL)",
+      "summary": "GPU accelerated rendering, multi-layer charting, custom shaders, an indicator engine, event overlays and a high-frequency rendering pipeline — all running on one shared WASM + WebGL core.",
+      "components": [
+        {
+          "id": "gpu-accelerated-rendering",
+          "name": "GPU accelerated rendering"
+        },
+        {
+          "id": "multi-layer-charting",
+          "name": "Multi-layer charting"
+        },
+        {
+          "id": "custom-shaders",
+          "name": "Custom shaders"
+        },
+        {
+          "id": "indicator-engine",
+          "name": "Indicator engine"
+        },
+        {
+          "id": "event-overlays",
+          "name": "Event overlays"
+        },
+        {
+          "id": "high-frequency-rendering-pipeline",
+          "name": "High-frequency rendering pipeline"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p4",
+          "order": 4,
+          "title": "Phase 4 — Rendering Core: WASM, GPU Acceleration & High-Frequency Pipeline",
+          "description": "Build the performance foundation of the Chart Engine: a WASM compute core for parsing, aggregation and layout, a GPU accelerated rendering layer on WebGL, and a high-frequency rendering pipeline able to absorb tens of thousands of ticks per second.",
+          "components": [
+            "gpu-accelerated-rendering",
+            "high-frequency-rendering-pipeline"
+          ],
+          "deliverables": [
+            "WASM compute core (compiled from Rust) for parsing, aggregation, index building and viewport layout.",
+            "GPU accelerated rendering layer on WebGL with instanced draw calls, texture atlasing and buffer pooling.",
+            "High-frequency rendering pipeline: ring buffers, dirty-region updates, worker offloading and frame pacing.",
+            "Level-of-detail and culling system that keeps the frame budget stable at any zoom level.",
+            "Benchmark harness with reproducible scenes, a memory ceiling and frame-time regression tracking."
+          ],
+          "milestones": [
+            "60 fps sustained with at least 1,000,000 visible points on a mid-tier GPU.",
+            "Ingest of at least 10,000 ticks/s with zero dropped frames.",
+            "p99 frame time at most 8 ms, WASM compute step at most 2 ms, WASM-to-JS boundary under 0.2 ms per frame.",
+            "Cold start (WASM load plus first paint) under 500 ms on the benchmark scene.",
+            "Peak memory at most 300 MB for a 30-day 1-minute session."
+          ],
+          "timeline": {
+            "start": "Q2 2027",
+            "end": "Q3 2027",
+            "label": "Q2 – Q3 2027"
+          }
+        },
+        {
+          "id": "p5",
+          "order": 5,
+          "title": "Phase 5 — Multi-Layer Charting & Custom Shaders",
+          "description": "Compose the visual language of the platform: independent, individually toggleable layers composited by the engine, and a custom shader system that renders every visual primitive on the GPU.",
+          "components": [
+            "multi-layer-charting",
+            "custom-shaders"
+          ],
+          "deliverables": [
+            "Multi-layer charting: price, volume, order-book depth, liquidation heatmap, funding and open-interest layers, plus macro overlays.",
+            "Layer manager with z-order, compositing, lazy initialisation, off-screen layers and per-layer state persistence.",
+            "Custom shaders in GLSL for candlesticks, gradient volume, heatmaps, glow lines and crosshair primitives.",
+            "Shader registry with hot reload, versioning and a graceful fallback path when a shader fails to compile.",
+            "Layer and shader presets that can be saved, shared and restored inside the Bot Builder viewer."
+          ],
+          "milestones": [
+            "At least 12 independent layers composited simultaneously at 60 fps.",
+            "Shader compile under 50 ms; hot reload without reloading the chart or losing viewport state.",
+            "Combined cost of all enabled layers at most 2 ms per frame at reference zoom.",
+            "Fallback renderer produces the same layout geometry within 1 px tolerance.",
+            "Visual regression suite of at least 50 golden frames passing on CI GPUs."
+          ],
+          "timeline": {
+            "start": "Q3 2027",
+            "end": "Q4 2027",
+            "label": "Q3 – Q4 2027"
+          }
+        },
+        {
+          "id": "p6",
+          "order": 6,
+          "title": "Phase 6 — Indicator Engine & Event Overlays",
+          "description": "Compute indicators incrementally in WASM so charts and strategies share one implementation, and overlay events coming from the Data Lake so market context is visible on the same canvas.",
+          "components": [
+            "indicator-engine",
+            "event-overlays"
+          ],
+          "deliverables": [
+            "Indicator engine: incremental and streaming computation in WASM with O(1) update per tick.",
+            "Indicator registry with parameter schemas, warm-up handling and a public API for custom indicators.",
+            "Numeric parity layer guaranteeing identical indicator output between the Chart Engine and the Bot Builder.",
+            "Event overlays fed by Data Lake events: macro releases, funding flips, liquidations, listings and de-listings.",
+            "Annotation layer with timeline markers, clustering at low zoom, filters and persisted user annotations."
+          ],
+          "milestones": [
+            "At least 60 built-in indicators, each updating within 0.1 ms per tick.",
+            "100% parity between chart and backtest indicator values with relative error at most 1e-9.",
+            "At least 100,000 overlaid events rendered with clustering at 60 fps.",
+            "Deterministic warm-up: indicator values independent of how much history is loaded.",
+            "Annotation create, update and delete round-trips with zero loss across sessions."
+          ],
+          "timeline": {
+            "start": "Q4 2027",
+            "end": "Q1 2028",
+            "label": "Q4 2027 – Q1 2028"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bot-builder",
+      "order": 3,
+      "title": "Pillar 3 — Bot Builder (Node-Based)",
+      "summary": "A typed node graph editor, a deterministic node interpreter, a strategy compiler, a backtesting engine, a live trading executor and a risk management module — one artefact from idea to live orders.",
+      "components": [
+        {
+          "id": "node-graph-editor",
+          "name": "Node graph editor"
+        },
+        {
+          "id": "node-interpreter",
+          "name": "Node interpreter"
+        },
+        {
+          "id": "strategy-compiler",
+          "name": "Strategy compiler"
+        },
+        {
+          "id": "backtesting-engine",
+          "name": "Backtesting engine"
+        },
+        {
+          "id": "live-trading-executor",
+          "name": "Live trading executor"
+        },
+        {
+          "id": "risk-management-module",
+          "name": "Risk management module"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p7",
+          "order": 7,
+          "title": "Phase 7 — Node Graph Editor & Node Interpreter",
+          "description": "Deliver the authoring surface of the Bot Builder: a typed node graph editor and a deterministic interpreter that executes any graph safely inside a sandbox.",
+          "components": [
+            "node-graph-editor",
+            "node-interpreter"
+          ],
+          "deliverables": [
+            "Node graph editor: canvas with node palette, typed ports, live validation, undo/redo, groups, comments and a minimap.",
+            "Graph serialisation to a versioned AST/JSON document with copy/paste, subgraph extraction and diffable saves.",
+            "Node interpreter: topological scheduler, streaming and event-driven nodes, stateful nodes and backpressure control.",
+            "Bounded-memory ring buffers, deterministic seeding and sandboxed execution with no network and no filesystem access.",
+            "Hot reload of edited subgraphs against a running interpretation session."
+          ],
+          "milestones": [
+            "At least 150 core nodes shipped with typed signatures and documentation.",
+            "Open and edit a 2,000-node graph at 60 fps with a validation pass under 100 ms.",
+            "Bit-identical outputs when replaying the same graph over the same input stream.",
+            "Sandbox escape test suite passes with zero findings.",
+            "Steady-state interpreter memory under 512 MB for a 2,000-node graph."
+          ],
+          "timeline": {
+            "start": "Q1 2028",
+            "end": "Q2 2028",
+            "label": "Q1 – Q2 2028"
+          }
+        },
+        {
+          "id": "p8",
+          "order": 8,
+          "title": "Phase 8 — Strategy Compiler & Backtesting Engine",
+          "description": "Compile graphs into an optimised execution plan and prove them against history: the Strategy compiler produces signed artefacts, and the Backtesting engine replays them with realistic microstructure, fees and latency.",
+          "components": [
+            "strategy-compiler",
+            "backtesting-engine"
+          ],
+          "deliverables": [
+            "Strategy compiler: graph to IR to optimised execution plan, with constant folding, dead-node elimination and branch parallelisation.",
+            "Strategy versioning, artefact signing and a diffable strategy history.",
+            "Backtesting engine: event-driven replay at tick and bar resolution with multi-asset portfolio accounting.",
+            "Realistic cost model: fees, slippage, funding, borrow, latency and partial-fill simulation.",
+            "Walk-forward analysis, parameter sweeps, Monte Carlo resampling and the full metrics suite (Sharpe, Sortino, Calmar, profit factor, max drawdown, win rate)."
+          ],
+          "milestones": [
+            "Compiled artefact at least 5x faster than the interpreted graph on the reference workload.",
+            "Look-ahead leakage test suite passes 100% and every result records its data-boundary proof.",
+            "One year of 1-minute data across 50 symbols backtested in under 5 minutes on the parallel runner.",
+            "1,000 parameter combinations evaluated in under 30 minutes with reproducible ordering.",
+            "Two runs of the same configuration and seed are byte-identical."
+          ],
+          "timeline": {
+            "start": "Q2 2028",
+            "end": "Q3 2028",
+            "label": "Q2 – Q3 2028"
+          }
+        },
+        {
+          "id": "p9",
+          "order": 9,
+          "title": "Phase 9 — Live Trading Executor & Risk Management Module",
+          "description": "Promote compiled strategies to live trading through a reconciliation-safe executor, and gate every order through the Risk management module before it reaches a venue.",
+          "components": [
+            "live-trading-executor",
+            "risk-management-module"
+          ],
+          "deliverables": [
+            "Live trading executor: order router, OMS state machine, idempotent client order IDs and venue reconciliation.",
+            "Paper to live promotion using the same compiled artefact that was backtested and verified.",
+            "Connection resilience: reconnect, failover, replay-safe resubmission and a global kill switch.",
+            "Risk management module: pre-trade checks, position, exposure and leverage limits, per-strategy risk budget and drawdown circuit breakers.",
+            "Margin and liquidation monitoring plus a complete audit trail of every risk decision."
+          ],
+          "milestones": [
+            "Order-intent parity of at least 99.9% between paper and live over 30 consecutive days.",
+            "Order acknowledgement p95 under 100 ms including the venue round-trip.",
+            "Zero duplicate orders across 100 forced reconnect scenarios.",
+            "Kill switch actuation under 1 s and end-of-day reconciliation drift of zero for 60 consecutive days.",
+            "Risk checks p99 under 5 ms and 100% of orders carrying a stored risk decision record."
+          ],
+          "timeline": {
+            "start": "Q3 2028",
+            "end": "Q4 2028",
+            "label": "Q3 – Q4 2028"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ai-engine",
+      "order": 4,
+      "title": "Pillar 4 — AI Engine",
+      "summary": "Signal generation, pattern detection, a market regime classifier, a reinforcement learning module and a model training pipeline — from raw series to reproducible, risk-bounded decisions.",
+      "components": [
+        {
+          "id": "signal-generation",
+          "name": "Signal generation"
+        },
+        {
+          "id": "pattern-detection",
+          "name": "Pattern detection"
+        },
+        {
+          "id": "market-regime-classifier",
+          "name": "Market regime classifier"
+        },
+        {
+          "id": "reinforcement-learning-module",
+          "name": "Reinforcement learning module"
+        },
+        {
+          "id": "model-training-pipeline",
+          "name": "Model training pipeline"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p10",
+          "order": 10,
+          "title": "Phase 10 — Signal Generation & Pattern Detection",
+          "description": "Turn the Data Lake into decisions: produce calibrated, versioned signals and detect the patterns — chart, candlestick and microstructure — that explain them.",
+          "components": [
+            "signal-generation",
+            "pattern-detection"
+          ],
+          "deliverables": [
+            "Signal generation: feature layer over the TSDB with calibrated probabilities and confidence intervals.",
+            "Signal bus with versioned metadata, TTL, ownership and direct wiring into Bot Builder graphs.",
+            "Drift monitoring per signal covering feature drift, label drift and calibration decay, with alerting.",
+            "Pattern detection: geometric chart patterns, candlestick patterns and microstructure patterns (iceberg, spoofing, absorption).",
+            "Labelled pattern corpus with published precision and recall reporting per pattern family."
+          ],
+          "milestones": [
+            "At least 20 production signals, each beating its own random-shuffle control on held-out data.",
+            "Pattern precision of at least 0.75 and recall of at least 0.70 on the labelled corpus.",
+            "Signal latency p95 under 50 ms after the triggering bar or event becomes available.",
+            "Drift alarm raised within 1 hour of a detected distribution shift.",
+            "100% of signals reproducible from the model registry by version."
+          ],
+          "timeline": {
+            "start": "Q4 2028",
+            "end": "Q1 2029",
+            "label": "Q4 2028 – Q1 2029"
+          }
+        },
+        {
+          "id": "p11",
+          "order": 11,
+          "title": "Phase 11 — Market Regime Classifier",
+          "description": "Label the market state in real time so signals, strategies and risk limits can adapt: per-asset and cross-asset regimes with confidence, hysteresis and full history.",
+          "components": [
+            "market-regime-classifier"
+          ],
+          "deliverables": [
+            "Regime taxonomy: trend up and down, range, high and low volatility, thin and deep liquidity, risk-on and risk-off, per asset and cross-asset.",
+            "Online change-point detection with a confidence score per state.",
+            "Hysteresis and minimum dwell-time rules that prevent regime flapping.",
+            "Regime history store with full replay and point-in-time reconstruction, free of revision bias.",
+            "Regime-aware routing consumed by the AI Engine and by Bot Builder risk budgeting."
+          ],
+          "milestones": [
+            "Regime accuracy of at least 0.80 on held-out periods with expected calibration error at most 0.05.",
+            "Median detection delay under 15 bars with a false-switch rate below 5%.",
+            "Per-asset regime updated every bar at p95 under 20 ms.",
+            "Five-year regime history classified and reproducible from the TSDB.",
+            "Measured regime-conditional improvement documented for every production signal."
+          ],
+          "timeline": {
+            "start": "Q1 2029",
+            "end": "Q2 2029",
+            "label": "Q1 – Q2 2029"
+          }
+        },
+        {
+          "id": "p12",
+          "order": 12,
+          "title": "Phase 12 — Reinforcement Learning Module & Model Training Pipeline",
+          "description": "Close the loop: train policies inside a simulator built on the Backtesting engine, respect Risk management constraints by construction, and ship models through a governed training pipeline.",
+          "components": [
+            "reinforcement-learning-module",
+            "model-training-pipeline"
+          ],
+          "deliverables": [
+            "Reinforcement learning module: environment derived from the Backtesting engine with a gym-style API.",
+            "Reward shaping aligned to the limits enforced by the Risk management module.",
+            "Offline and imitation pre-training plus online fine-tuning, with the policy exported as an artefact usable inside Bot Builder graphs.",
+            "Model training pipeline: dataset versioning and lineage, feature-store snapshots, orchestration and GPU scheduling.",
+            "Experiment tracking, hyper-parameter search, model registry, evaluation gates, canary release and rollback."
+          ],
+          "milestones": [
+            "RL policies beat the strongest tuned manual strategy on at least 3 of 5 held-out markets under identical risk limits.",
+            "Simulator throughput of at least 1,000,000 environment steps per minute.",
+            "Any training run reproducible from a single manifest file.",
+            "Zero model releases without an approved evaluation-gate record, and rollback under 5 minutes.",
+            "Training to registry to deployable artefact in under 1 hour for a small model."
+          ],
+          "timeline": {
+            "start": "Q2 2029",
+            "end": "Q3 2029",
+            "label": "Q2 – Q3 2029"
+          }
+        }
+      ]
+    },
+    {
+      "id": "token-economy",
+      "order": 5,
+      "title": "Pillar 5 — Token Economy",
+      "summary": "A utility model with sink and source accounting, a staking system with lock tiers, epoch-based reward distribution, an on-chain verifiable burn mechanism and a governance model that controls the parameters of all of them.",
+      "components": [
+        {
+          "id": "utility-model",
+          "name": "Utility model"
+        },
+        {
+          "id": "staking-system",
+          "name": "Staking system"
+        },
+        {
+          "id": "reward-distribution",
+          "name": "Reward distribution"
+        },
+        {
+          "id": "burn-mechanism",
+          "name": "Burn mechanism"
+        },
+        {
+          "id": "governance-model",
+          "name": "Governance model"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p13",
+          "order": 13,
+          "title": "Phase 13 — Utility Model & Staking System",
+          "description": "Define what the token is for and how commitment is priced: a complete utility map with sink and source accounting, and a staking system with lock tiers, weighting and slashing hooks.",
+          "components": [
+            "utility-model",
+            "staking-system"
+          ],
+          "deliverables": [
+            "Utility model: token utility map covering trading fees, subscriptions, marketplace payments, compute and inference credits, API quota and tier access.",
+            "Sink and source accounting, a tier table, the pricing model and an anti-abuse rulebook.",
+            "Treasury policy and vesting schedule with published unlock transparency.",
+            "Staking system: stake and unstake with lock tiers, time- and amount-weighted voting power and reward accrual.",
+            "Slashing hooks for marketplace violations, emergency pause and externally audited contracts."
+          ],
+          "milestones": [
+            "Full utility flows exercised end-to-end on testnet: fees, subscriptions, credits and quota.",
+            "At least 3 contracts audited with zero open critical or high findings.",
+            "Stake and unstake gas at most 120,000, with reward-accrual and slashing invariant tests passing 100%.",
+            "Invariant and fuzz suite executes at least 10,000 runs with no violated invariant.",
+            "Economic parameter table peer-reviewed and published in all five whitepaper languages."
+          ],
+          "timeline": {
+            "start": "Q1 2029",
+            "end": "Q2 2029",
+            "label": "Q1 – Q2 2029"
+          }
+        },
+        {
+          "id": "p14",
+          "order": 14,
+          "title": "Phase 14 — Reward Distribution & Burn Mechanism",
+          "description": "Pay for contribution and make supply policy explicit: epoch-based, contribution-weighted rewards with verifiable claims, and an on-chain verifiable burn mechanism tied to platform fees.",
+          "components": [
+            "reward-distribution",
+            "burn-mechanism"
+          ],
+          "deliverables": [
+            "Reward distribution: epoch accrual, snapshot accounting and Merkle-based claims.",
+            "Contribution weighting across data quality, strategies, indicators, models and compute contribution.",
+            "Anti-farming and sybil resistance, reward vesting and gas-efficient batch claiming.",
+            "Public reward dashboards with per-epoch reproducibility from snapshots.",
+            "Burn mechanism: fee-burn schedule, verifiable burn address, treasury buyback and burn policy, burn cap and emergency halt."
+          ],
+          "milestones": [
+            "Zero missed reward epochs over 3 consecutive months of operation.",
+            "Reward computation independently reproducible from snapshots and published weights.",
+            "100% of burns verifiable on-chain against a public ledger.",
+            "At least 95% of simulated farming clusters detected by the anti-sybil rules.",
+            "Burn rate and reward weights changeable only through the governance-controlled parameter registry."
+          ],
+          "timeline": {
+            "start": "Q3 2029",
+            "end": "Q3 2029",
+            "label": "Q3 2029"
+          }
+        },
+        {
+          "id": "p15",
+          "order": 15,
+          "title": "Phase 15 — Governance Model",
+          "description": "Hand the parameters of the economy to the people who use it: a full proposal lifecycle, stake-weighted and time-locked voting, delegation and timelocked on-chain execution.",
+          "components": [
+            "governance-model"
+          ],
+          "deliverables": [
+            "Governance model with a complete proposal lifecycle: forum draft, on-chain proposal, vote, timelock and execution.",
+            "Stake-weighted, time-locked voting power with delegation support.",
+            "Quorum and approval thresholds plus the governance-controlled parameter registry for fees, burn rate, reward weights and listings.",
+            "Timelock and multi-signature emergency procedures with published playbooks.",
+            "Governance documentation, proposal templates and public voting history."
+          ],
+          "milestones": [
+            "Full lifecycle executed at least 20 times on testnet, including 2 parameter changes and 1 emergency-pause drill.",
+            "Timelock of at least 48 hours enforced on-chain and not bypassable by any single key.",
+            "100% of governance actions produce an auditable on-chain record.",
+            "Delegate and voting-power accounting verified by an external audit with zero high findings.",
+            "Governance documentation published in all five whitepaper languages."
+          ],
+          "timeline": {
+            "start": "Q4 2029",
+            "end": "Q4 2029",
+            "label": "Q4 2029"
+          }
+        }
+      ]
+    },
+    {
+      "id": "marketplace",
+      "order": 6,
+      "title": "Pillar 6 — Marketplace",
+      "summary": "Strategy marketplace, indicator marketplace, AI model marketplace and a creator economy — where the output of the previous five pillars becomes a licensed, paid, verifiable product.",
+      "components": [
+        {
+          "id": "strategy-marketplace",
+          "name": "Strategy marketplace"
+        },
+        {
+          "id": "indicator-marketplace",
+          "name": "Indicator marketplace"
+        },
+        {
+          "id": "ai-model-marketplace",
+          "name": "AI model marketplace"
+        },
+        {
+          "id": "creator-economy",
+          "name": "Creator economy"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p16",
+          "order": 16,
+          "title": "Phase 16 — Strategy Marketplace & Indicator Marketplace",
+          "description": "Open the platform output to third parties: strategies listed with machine-verified performance, and indicators distributed as sandboxed WASM packages for the Indicator engine.",
+          "components": [
+            "strategy-marketplace",
+            "indicator-marketplace"
+          ],
+          "deliverables": [
+            "Strategy marketplace: listings, metadata, licensing and subscription or copy models.",
+            "Machine-verified performance for every listing, produced by the Backtesting engine with a no-lookahead attestation.",
+            "Sandboxed execution of purchased strategies on live data, with ratings, reviews and a dispute and refund flow.",
+            "Indicator marketplace: WASM indicator packages for the Indicator engine with schema and version constraints.",
+            "Sandbox resource limits (CPU, memory, no network), license terms and automated revenue splits."
+          ],
+          "milestones": [
+            "Publish to verify to list pipeline fully automated in under 24 hours per listing.",
+            "At least 90% of live listings carry machine-verified metrics; unverified listings are visibly flagged.",
+            "Sandbox escape and resource-abuse test suites pass with zero findings.",
+            "License issuance and creator payout reconciliation complete with zero mismatches over 3 months.",
+            "Marketplace load-tested to 1,000 concurrent listings with p95 page response under 300 ms."
+          ],
+          "timeline": {
+            "start": "Q2 2029",
+            "end": "Q3 2029",
+            "label": "Q2 – Q3 2029"
+          }
+        },
+        {
+          "id": "p17",
+          "order": 17,
+          "title": "Phase 17 — AI Model Marketplace & Creator Economy",
+          "description": "Complete the ecosystem: models published with evaluation evidence and metered inference, and a creator economy that pays contributors for durable performance.",
+          "components": [
+            "ai-model-marketplace",
+            "creator-economy"
+          ],
+          "deliverables": [
+            "AI model marketplace: model cards, evaluation scorecards and held-out benchmark results.",
+            "Hosted, metered inference with latency tiers and transparent per-call accounting.",
+            "Drift- and decay-driven delisting policy with automatic review triggers.",
+            "Creator economy: creator profiles, verification, reputation from live performance and usage, royalties and tiered revenue share.",
+            "Creator analytics, a creator SDK and token payout rails with tax and reporting exports."
+          ],
+          "milestones": [
+            "Hosted inference p95 under 200 ms with 100% metering accuracy against the ledger.",
+            "Every model card carries a signed evaluation-gate record before it can be listed.",
+            "Automatic drift review fires within 24 hours of a decay threshold breach.",
+            "Unified creator reputation computed for 100% of listings from live and review data.",
+            "Creator SDK published with documentation in all five whitepaper languages."
+          ],
+          "timeline": {
+            "start": "Q4 2029",
+            "end": "Q4 2029",
+            "label": "Q4 2029"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "p1",
+      "to": "p2",
+      "note": "The Weighting Engine needs canonical, normalized events before it can score anything."
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "note": "The TSDB stores weighted and denoised observations, not raw payloads."
+    },
+    {
+      "from": "p3",
+      "to": "p4",
+      "note": "The rendering core reads canonical series from the TSDB."
+    },
+    {
+      "from": "p3",
+      "to": "p6",
+      "note": "Event overlay layers are fed by canonical events published by the Data Lake."
+    },
+    {
+      "from": "p3",
+      "to": "p9",
+      "note": "Risk checks are calibrated against Data Lake quality and confidence scores."
+    },
+    {
+      "from": "p4",
+      "to": "p5",
+      "note": "Every layer and shader sits on top of the GPU rendering core."
+    },
+    {
+      "from": "p5",
+      "to": "p6",
+      "note": "Indicators and event overlays plug into the layer manager."
+    },
+    {
+      "from": "p6",
+      "to": "p7",
+      "note": "Graph nodes consume the same indicator implementation the chart renders."
+    },
+    {
+      "from": "p7",
+      "to": "p8",
+      "note": "The compiler and backtester consume serialized node graphs."
+    },
+    {
+      "from": "p8",
+      "to": "p9",
+      "note": "The live executor replays the same compiled artefact that was backtested."
+    },
+    {
+      "from": "p8",
+      "to": "p10",
+      "note": "Signals are validated on the backtesting engine before release."
+    },
+    {
+      "from": "p9",
+      "to": "p12",
+      "note": "RL policies respect the same risk limits as live trading."
+    },
+    {
+      "from": "p9",
+      "to": "p13",
+      "note": "Token utility is priced against real trading fees and measured usage."
+    },
+    {
+      "from": "p10",
+      "to": "p11",
+      "note": "Regime features are derived from the signal feature layer."
+    },
+    {
+      "from": "p11",
+      "to": "p12",
+      "note": "Regime state is an input to reward shaping in the RL module."
+    },
+    {
+      "from": "p12",
+      "to": "p17",
+      "note": "AI model listings are gated by the evaluation gates of the model training pipeline."
+    },
+    {
+      "from": "p13",
+      "to": "p14",
+      "note": "Rewards and burns settle on the utility and staking accounting."
+    },
+    {
+      "from": "p13",
+      "to": "p16",
+      "note": "Marketplace payments and license fees settle in the token economy."
+    },
+    {
+      "from": "p14",
+      "to": "p15",
+      "note": "Governance controls the parameters owned by reward distribution and burn."
+    },
+    {
+      "from": "p14",
+      "to": "p17",
+      "note": "Creator payouts settle through reward distribution and burn policy accounting."
+    },
+    {
+      "from": "p6",
+      "to": "p16",
+      "note": "Indicator marketplace packages target the indicator engine."
+    },
+    {
+      "from": "p8",
+      "to": "p16",
+      "note": "Strategy listings are verified end to end by the backtesting engine."
+    },
+    {
+      "from": "p16",
+      "to": "p17",
+      "note": "The creator economy extends the marketplace that already lists strategies and indicators."
+    }
+  ],
+  "criticalPath": [
+    "p1",
+    "p2",
+    "p3",
+    "p4",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p11",
+    "p12",
+    "p17"
+  ],
+  "exitCriteria": [
+    {
+      "pillarId": "data-lake",
+      "criteria": [
+        "Any historical window can be re-derived byte-identically from the raw archive under the active weight and filter profile.",
+        "A quality score is published for every tracked symbol and every quarantined record is traceable end to end."
+      ]
+    },
+    {
+      "pillarId": "chart-engine",
+      "criteria": [
+        "The full layer stack renders at 60 fps while the indicator engine stays in numeric parity with the Bot Builder.",
+        "Every event published by the Data Lake is renderable as an overlay on the same canvas."
+      ]
+    },
+    {
+      "pillarId": "bot-builder",
+      "criteria": [
+        "The same compiled strategy artefact is used for backtest, paper and live, with no re-authoring.",
+        "No order reaches a venue without a stored risk decision record from the Risk management module."
+      ]
+    },
+    {
+      "pillarId": "ai-engine",
+      "criteria": [
+        "Every shipped signal, model and policy is reproducible from the registry and passes its evaluation gate under live risk limits.",
+        "Every signal and model is monitored for drift with an automatic review path."
+      ]
+    },
+    {
+      "pillarId": "token-economy",
+      "criteria": [
+        "Utility, staking, rewards, burn and governance are all live on-chain with audited contracts and no privileged bypass.",
+        "Every economic parameter is changeable only through the governance-controlled parameter registry."
+      ]
+    },
+    {
+      "pillarId": "marketplace",
+      "criteria": [
+        "Third parties publish strategies, indicators and models that are verified, sandboxed, licensed and paid automatically.",
+        "Every listing carries machine-verified evidence before it can be sold."
+      ]
+    }
+  ]
+}

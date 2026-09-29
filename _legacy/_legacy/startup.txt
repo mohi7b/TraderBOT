@@ -1,0 +1,15 @@
+Start Server
+     ↓
+API Online
+     ↓
+User Request
+     ↓
+MacroService.runMacroPipeline()
+     ↓
+All Engines Execute
+     ↓
+Memory Updates
+     ↓
+Assistant Generates Response
+     ↓
+Return to User

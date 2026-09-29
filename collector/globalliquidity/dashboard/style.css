@@ -1,0 +1,80 @@
+/* --- Global Styles --- */
+body {
+    background: #0d0d0d;
+    color: #e6e6e6;
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #4db8ff;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+/* --- Dashboard Container --- */
+#dashboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+/* --- Box Style --- */
+.box {
+    background: #1a1a1a;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid #262626;
+    transition: 0.2s ease;
+}
+
+.box:hover {
+    border-color: #4db8ff;
+}
+
+/* --- Titles --- */
+.box h2 {
+    margin: 0 0 10px 0;
+    font-weight: 400;
+    color: #4db8ff;
+}
+
+/* --- Labels --- */
+.label {
+    color: #999;
+    font-size: 14px;
+}
+
+/* --- Values --- */
+.value {
+    color: #e6e6e6;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* --- Status Colors --- */
+.status-good {
+    color: #4dff88;
+}
+
+.status-warning {
+    color: #ffd24d;
+}
+
+.status-danger {
+    color: #ff4d4d;
+}
+
+/* --- Responsive --- */
+@media (min-width: 700px) {
+    #dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    #dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

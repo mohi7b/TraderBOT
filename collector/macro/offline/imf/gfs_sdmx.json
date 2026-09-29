@@ -1,0 +1,7 @@
+{
+  "dataset": "GFS",
+  "status": "dataservices_imf_org_unreachable_from_this_host",
+  "fallback_csv": "gfs_sdmx_datamapper.csv",
+  "sdmx_url": "https://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/GFS/",
+  "generated_at": "2026-08-27T14:40:33.335Z"
+}

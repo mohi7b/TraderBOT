@@ -1,0 +1,103 @@
+{
+    // ============================================================
+    // Why this file exists (2026-09-29)
+    //
+    // The VS Code extension host kept dying with
+    //   "FATAL ERROR: Reached heap limit Allocation failed -
+    //    JavaScript heap out of memory"  (ExtensionHostConnection)
+    // — which closes the Cline chat webview and stops the session.
+    //
+    // Two causes, both addressed below:
+    //   1. Default language-server budgets are too big for this box
+    //      (~3.9 GB RAM): TypeScript server caps itself at 3072 MB
+    //      and Pylance indexes the whole tree.
+    //   2. The workspace is ~17 GB of data (collector/ 14 GB,
+    //      collector/macro 8.8 GB, data/ 1.3 GB), and the file
+    //      watcher + search index run *inside* the extension host.
+    //
+    // Nothing here changes how the code runs; it only stops editors
+    // from loading 17 GB of data logs into the same heap as the chat.
+    // ============================================================
+
+    // ---------- 1. language servers: small, bounded budgets ----------
+    "typescript.tsserver.maxTsServerMemory": 512,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "typescript.tsserver.log": "off",
+    "python.analysis.indexing": false,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.userFileIndexingLimit": 500,
+    "python.analysis.exclude": [
+        "**/node_modules/**",
+        "**/.next/**",
+        "**/data/**",
+        "**/collector/macro/offline/**",
+        "**/collector/**/*.db",
+        "**/*.csv",
+        "**/logs/**"
+    ],
+
+    // ---------- 2. never watch / search / index the data lake ----------
+    "files.maxMemoryForLargeFilesMB": 512,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/.vscode-server/**": true,
+        "**/node_modules/**": true,
+        "**/.next/**": true,
+        "**/.turbo/**": true,
+        "**/.cache/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/out/**": true,
+        "**/coverage/**": true,
+        "**/__pycache__/**": true,
+        "**/.venv/**": true,
+        "**/venv/**": true,
+        "**/logs/**": true,
+        "**/*.log": true,
+        "**/*.db": true,
+        "**/*.sqlite": true,
+        "**/*.sst": true,
+        "**/*.csv": true,
+        "**/data/**": true,
+        "**/collector/macro/offline/**": true,
+        "**/collector/macro/raw/**": true,
+        "**/collector/crypto/data/**": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/.turbo": true,
+        "**/.cache": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/coverage": true,
+        "**/__pycache__": true,
+        "**/*.log": true,
+        "**/*.db": true,
+        "**/*.sqlite": true,
+        "**/*.csv": true,
+        "**/*.sst": true,
+        "**/data": true,
+        "**/collector/macro/offline": true,
+        "**/collector/macro/raw": true
+    },
+    "search.followSymlinks": false,
+    "search.useIgnoreFiles": true,
+
+    // ---------- 3. caches only: hidden from the explorer ----------
+    // Source and data folders stay visible; only build output is hidden.
+    "files.exclude": {
+        "**/.next": true,
+        "**/.turbo": true,
+        "**/__pycache__": true
+    },
+
+    // ---------- 4. fewer live editors = less heap ----------
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.value": 10,
+    "workbench.editor.limit.perEditorGroup": false,
+    "workbench.editor.limit.excludeDirty": true,
+    "editor.largeFileOptimizations": true
+}

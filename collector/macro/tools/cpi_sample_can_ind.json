@@ -1,0 +1,570 @@
+{
+  "generated_at": "2026-09-19T16:53:18.481Z",
+  "engine": "frontend/lib/macro/cpi.ts (compiled) + frontend/lib/time/TimeShift.ts",
+  "guard": {
+    "raw_rate_kinds": [
+      "rate",
+      "percent"
+    ],
+    "cpi_rate_guard": {
+      "maxRateMedian": 60,
+      "maxPositiveStepShare": 0.85,
+      "minPoints": 24
+    }
+  },
+  "note": "همهٔ اعداد از payload زندهٔ port 4001 هستند؛ گردکردن فقط برای نمایش است.",
+  "samples": [
+    {
+      "country": "CAN",
+      "payload": "default (همان payloadی که صفحهٔ فعلی می‌گیرد)",
+      "available_in_this_payload": true,
+      "series": {
+        "id": "BIS_CAN_CPI_M",
+        "series_id": "BIS.CA.CPI.M",
+        "dataset": "BIS",
+        "indicator": "CPI",
+        "indicator_label": "Consumer Price Index",
+        "country": {
+          "code": "CAN",
+          "name": "Canada"
+        },
+        "frequency": "M",
+        "declared_series_kind": "index",
+        "declared_unit": "Index (CPI)",
+        "dataset_meta": {
+          "code": "BIS",
+          "name_en": "Bank for International Settlements",
+          "name_fa": "بانک تسویه‌های بین‌المللی"
+        },
+        "history_full_points": 358,
+        "history_display_points": 36,
+        "first_date": "1996-10",
+        "last_date": "2026-07",
+        "latest_block_from_backend": {
+          "date": "2026-07",
+          "value": 3.032141,
+          "mom": 8.36606441476827,
+          "yoy": 75.53928637798592
+        }
+      },
+      "guard": {
+        "layer1_declared_rate": false,
+        "layer2_detectRateLike": {
+          "isRate": true,
+          "reason": "rate-magnitude",
+          "points": 358,
+          "last12_median": 2.358052,
+          "positive_step_share": 0.521739
+        },
+        "resolved_source": "raw"
+      },
+      "raw_input_tail_SeriesPoint": [
+        {
+          "date": "2026-03",
+          "value": 2.385321
+        },
+        {
+          "date": "2026-04",
+          "value": 2.815177
+        },
+        {
+          "date": "2026-05",
+          "value": 3.225806
+        },
+        {
+          "date": "2026-06",
+          "value": 2.798054
+        },
+        {
+          "date": "2026-07",
+          "value": 3.032141
+        }
+      ],
+      "processed_rows_YoyPoint_count": 358,
+      "processed_rows_head": [
+        {
+          "date": "1996-10",
+          "yoy": 1.824401
+        },
+        {
+          "date": "1996-11",
+          "yoy": 1.931818
+        }
+      ],
+      "processed_rows_tail": [
+        {
+          "date": "2025-08",
+          "yoy": 1.854141
+        },
+        {
+          "date": "2025-09",
+          "yoy": 2.358783
+        },
+        {
+          "date": "2025-10",
+          "yoy": 2.163164
+        },
+        {
+          "date": "2025-11",
+          "yoy": 2.224969
+        },
+        {
+          "date": "2025-12",
+          "yoy": 2.35732
+        },
+        {
+          "date": "2026-01",
+          "yoy": 2.293862
+        },
+        {
+          "date": "2026-02",
+          "yoy": 1.779141
+        },
+        {
+          "date": "2026-03",
+          "yoy": 2.385321
+        },
+        {
+          "date": "2026-04",
+          "yoy": 2.815177
+        },
+        {
+          "date": "2026-05",
+          "yoy": 3.225806
+        },
+        {
+          "date": "2026-06",
+          "yoy": 2.798054
+        },
+        {
+          "date": "2026-07",
+          "yoy": 3.032141
+        }
+      ],
+      "lwc_chart_data_tail": [
+        {
+          "time": 1764536400,
+          "value": 2.35732
+        },
+        {
+          "time": 1767214800,
+          "value": 2.293862
+        },
+        {
+          "time": 1769893200,
+          "value": 1.779141
+        },
+        {
+          "time": 1772312400,
+          "value": 2.385321
+        },
+        {
+          "time": 1774987200,
+          "value": 2.815177
+        },
+        {
+          "time": 1777579200,
+          "value": 3.225806
+        },
+        {
+          "time": 1780257600,
+          "value": 2.798054
+        },
+        {
+          "time": 1782849600,
+          "value": 3.032141
+        }
+      ],
+      "final_point": {
+        "date": "2026-07",
+        "value": 3.032141
+      },
+      "annualized3m_rows": 0,
+      "sanity": {
+        "all_finite": true,
+        "dates_ascending": true,
+        "min_over_series": -0.95,
+        "max_over_series": 8.13,
+        "min_last12": 1.78,
+        "max_last12": 3.23
+      },
+      "verification": {
+        "raw_last_value_exact": 3.032141,
+        "processed_last_value_exact": 3.032141,
+        "equals_raw_bitwise": true,
+        "previously_buggy_value": 75.539286,
+        "note": "مقدار خام بک‌اند عیناً به‌عنوان YoY استفاده شده (هیچ محاسبه‌ای انجام نشده)."
+      }
+    },
+    {
+      "country": "IND",
+      "payload": "default (همان payloadی که صفحهٔ فعلی می‌گیرد)",
+      "available_in_this_payload": false,
+      "note": "این کشور در این payload نیست (به منوی کشورها/ with mode=countries رجوع شود)."
+    },
+    {
+      "country": "CAN",
+      "payload": "mode=countries",
+      "available_in_this_payload": true,
+      "series": {
+        "id": "BIS_CAN_CPI_M",
+        "series_id": "BIS.CA.CPI.M",
+        "dataset": "BIS",
+        "indicator": "CPI",
+        "indicator_label": "Consumer Price Index",
+        "country": {
+          "code": "CAN",
+          "name": "Canada"
+        },
+        "frequency": "M",
+        "declared_series_kind": "index",
+        "declared_unit": "Index (CPI)",
+        "dataset_meta": {
+          "code": "BIS",
+          "name_en": "Bank for International Settlements",
+          "name_fa": "بانک تسویه‌های بین‌المللی"
+        },
+        "history_full_points": 358,
+        "history_display_points": 36,
+        "first_date": "1996-10",
+        "last_date": "2026-07",
+        "latest_block_from_backend": {
+          "date": "2026-07",
+          "value": 3.032141,
+          "mom": 8.36606441476827,
+          "yoy": 75.53928637798592
+        }
+      },
+      "guard": {
+        "layer1_declared_rate": false,
+        "layer2_detectRateLike": {
+          "isRate": true,
+          "reason": "rate-magnitude",
+          "points": 358,
+          "last12_median": 2.358052,
+          "positive_step_share": 0.521739
+        },
+        "resolved_source": "raw"
+      },
+      "raw_input_tail_SeriesPoint": [
+        {
+          "date": "2026-03",
+          "value": 2.385321
+        },
+        {
+          "date": "2026-04",
+          "value": 2.815177
+        },
+        {
+          "date": "2026-05",
+          "value": 3.225806
+        },
+        {
+          "date": "2026-06",
+          "value": 2.798054
+        },
+        {
+          "date": "2026-07",
+          "value": 3.032141
+        }
+      ],
+      "processed_rows_YoyPoint_count": 358,
+      "processed_rows_head": [
+        {
+          "date": "1996-10",
+          "yoy": 1.824401
+        },
+        {
+          "date": "1996-11",
+          "yoy": 1.931818
+        }
+      ],
+      "processed_rows_tail": [
+        {
+          "date": "2025-08",
+          "yoy": 1.854141
+        },
+        {
+          "date": "2025-09",
+          "yoy": 2.358783
+        },
+        {
+          "date": "2025-10",
+          "yoy": 2.163164
+        },
+        {
+          "date": "2025-11",
+          "yoy": 2.224969
+        },
+        {
+          "date": "2025-12",
+          "yoy": 2.35732
+        },
+        {
+          "date": "2026-01",
+          "yoy": 2.293862
+        },
+        {
+          "date": "2026-02",
+          "yoy": 1.779141
+        },
+        {
+          "date": "2026-03",
+          "yoy": 2.385321
+        },
+        {
+          "date": "2026-04",
+          "yoy": 2.815177
+        },
+        {
+          "date": "2026-05",
+          "yoy": 3.225806
+        },
+        {
+          "date": "2026-06",
+          "yoy": 2.798054
+        },
+        {
+          "date": "2026-07",
+          "yoy": 3.032141
+        }
+      ],
+      "lwc_chart_data_tail": [
+        {
+          "time": 1764536400,
+          "value": 2.35732
+        },
+        {
+          "time": 1767214800,
+          "value": 2.293862
+        },
+        {
+          "time": 1769893200,
+          "value": 1.779141
+        },
+        {
+          "time": 1772312400,
+          "value": 2.385321
+        },
+        {
+          "time": 1774987200,
+          "value": 2.815177
+        },
+        {
+          "time": 1777579200,
+          "value": 3.225806
+        },
+        {
+          "time": 1780257600,
+          "value": 2.798054
+        },
+        {
+          "time": 1782849600,
+          "value": 3.032141
+        }
+      ],
+      "final_point": {
+        "date": "2026-07",
+        "value": 3.032141
+      },
+      "annualized3m_rows": 0,
+      "sanity": {
+        "all_finite": true,
+        "dates_ascending": true,
+        "min_over_series": -0.95,
+        "max_over_series": 8.13,
+        "min_last12": 1.78,
+        "max_last12": 3.23
+      },
+      "verification": {
+        "raw_last_value_exact": 3.032141,
+        "processed_last_value_exact": 3.032141,
+        "equals_raw_bitwise": true,
+        "previously_buggy_value": 75.539286,
+        "note": "مقدار خام بک‌اند عیناً به‌عنوان YoY استفاده شده (هیچ محاسبه‌ای انجام نشده)."
+      }
+    },
+    {
+      "country": "IND",
+      "payload": "mode=countries",
+      "available_in_this_payload": true,
+      "series": {
+        "id": "BIS_IND_CPI_M",
+        "series_id": "BIS.IN.CPI.M",
+        "dataset": "BIS",
+        "indicator": "CPI",
+        "indicator_label": "Consumer Price Index",
+        "country": {
+          "code": "IND",
+          "name": "India"
+        },
+        "frequency": "M",
+        "declared_series_kind": "index",
+        "declared_unit": "Index (CPI)",
+        "dataset_meta": {
+          "code": "BIS",
+          "name_en": "Bank for International Settlements",
+          "name_fa": "بانک تسویه‌های بین‌المللی"
+        },
+        "history_full_points": 357,
+        "history_display_points": 36,
+        "first_date": "1996-10",
+        "last_date": "2026-06",
+        "latest_block_from_backend": {
+          "date": "2026-06",
+          "value": 4.38006,
+          "mom": 11.303758280009493,
+          "yoy": 89.99223124600665
+        }
+      },
+      "guard": {
+        "layer1_declared_rate": false,
+        "layer2_detectRateLike": {
+          "isRate": true,
+          "reason": "rate-magnitude",
+          "points": 357,
+          "last12_median": 2.370119,
+          "positive_step_share": 0.521739
+        },
+        "resolved_source": "raw"
+      },
+      "raw_input_tail_SeriesPoint": [
+        {
+          "date": "2026-02",
+          "value": 3.207659
+        },
+        {
+          "date": "2026-03",
+          "value": 3.402702
+        },
+        {
+          "date": "2026-04",
+          "value": 3.484938
+        },
+        {
+          "date": "2026-05",
+          "value": 3.935231
+        },
+        {
+          "date": "2026-06",
+          "value": 4.38006
+        }
+      ],
+      "processed_rows_YoyPoint_count": 357,
+      "processed_rows_head": [
+        {
+          "date": "1996-10",
+          "yoy": 4.582752
+        },
+        {
+          "date": "1996-11",
+          "yoy": 4.488
+        }
+      ],
+      "processed_rows_tail": [
+        {
+          "date": "2025-07",
+          "yoy": 1.622419
+        },
+        {
+          "date": "2025-08",
+          "yoy": 2.0059
+        },
+        {
+          "date": "2025-09",
+          "yoy": 1.407625
+        },
+        {
+          "date": "2025-10",
+          "yoy": 0.038573
+        },
+        {
+          "date": "2025-11",
+          "yoy": 0.492754
+        },
+        {
+          "date": "2025-12",
+          "yoy": 1.166181
+        },
+        {
+          "date": "2026-01",
+          "yoy": 2.734337
+        },
+        {
+          "date": "2026-02",
+          "yoy": 3.207659
+        },
+        {
+          "date": "2026-03",
+          "yoy": 3.402702
+        },
+        {
+          "date": "2026-04",
+          "yoy": 3.484938
+        },
+        {
+          "date": "2026-05",
+          "yoy": 3.935231
+        },
+        {
+          "date": "2026-06",
+          "yoy": 4.38006
+        }
+      ],
+      "lwc_chart_data_tail": [
+        {
+          "time": 1761940800,
+          "value": 0.492754
+        },
+        {
+          "time": 1764536400,
+          "value": 1.166181
+        },
+        {
+          "time": 1767214800,
+          "value": 2.734337
+        },
+        {
+          "time": 1769893200,
+          "value": 3.207659
+        },
+        {
+          "time": 1772312400,
+          "value": 3.402702
+        },
+        {
+          "time": 1774987200,
+          "value": 3.484938
+        },
+        {
+          "time": 1777579200,
+          "value": 3.935231
+        },
+        {
+          "time": 1780257600,
+          "value": 4.38006
+        }
+      ],
+      "final_point": {
+        "date": "2026-06",
+        "value": 4.38006
+      },
+      "annualized3m_rows": 0,
+      "sanity": {
+        "all_finite": true,
+        "dates_ascending": true,
+        "min_over_series": -0.71,
+        "max_over_series": 11.25,
+        "min_last12": 0.04,
+        "max_last12": 4.38
+      },
+      "verification": {
+        "raw_last_value_exact": 4.38006,
+        "processed_last_value_exact": 4.38006,
+        "equals_raw_bitwise": true,
+        "previously_buggy_value": 89.992231,
+        "note": "مقدار خام بک‌اند عیناً به‌عنوان YoY استفاده شده (هیچ محاسبه‌ای انجام نشده)."
+      }
+    }
+  ]
+}

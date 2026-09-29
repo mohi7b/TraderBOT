@@ -1,0 +1,11 @@
+{
+  "_comment": "روی cadence/preferences قرارداد تقویم ماکرو. مقادیر override روی مقادیر پیش‌فرض از config.cjs. هم‌چنین به‌عنوان ورودی برنامه is-due/update استفاده می‌شود.",
+  "sources": {
+    "FRED":      { "cadence": "daily",   "anchor": "daily" },
+    "OECD":      { "cadence": "daily",   "anchor": "daily" },
+    "EUROSTAT":  { "cadence": "daily",   "anchor": "daily" },
+    "IMF":       { "cadence": "weekly",  "anchor": "weekly-monday" },
+    "BIS":       { "cadence": "weekly",  "anchor": "weekly-monday" },
+    "WORLD_BANK":{ "cadence": "monthly", "anchor": "monthly-day1" }
+  }
+}

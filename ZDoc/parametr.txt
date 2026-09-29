@@ -1,0 +1,12 @@
+
+جدول اصلی تجمیع پارامترها
+افق زمانی	بازه	منبع اصلی	پارامترهایی که باید تجمیع شوند	خروجی تحلیلی
+Micro	100ms تا 5s	Realtime trade/depth	last price، trade price، trade qty، trade side، best bid/ask، spread، microprice، depth imbalance، wallهای لحظه‌ای، trade intensity	فشار لحظه‌ای، timing ورود، sweep، spoof، حرکت ناگهانی
+Very Short	5s تا 1m	Realtime + baseline تاریخی	price velocity، return، buy/sell volume، delta، VWAP، CVD delta، depth imbalance در 5/25 bps، spread، wall persistence کوتاه	شروع چرخش، fakeout، شکست اولیه
+Short	1m تا 15m	Candle + realtime flow	OHLCV، EMA9/21، RSI، ROC، ATR، VWAP، volume delta، CVD، CVD slope، relative volume، spread، microprice، support/resistance کوتاه	روند کوتاه، breakout، reversal
+Intraday	15m تا 4h	Historical candles + aggregate realtime	OHLCV، EMA21/50، SMA20/50، RSI، ATR، realized volatility، volume profile، CVD، basis، funding، OI delta، depth zones، wall clusters	روند داخل‌روزی، ناحیهٔ رنج، مقاومت و حمایت
+Medium	4h تا 1D	Historical candles + Futures history	EMA50/200، RSI، MACD، ATR، volatility regime، volume profile، funding average، funding dispersion، OI USD، OI delta، basis trend، liquidation zones، historical walls	روند میان‌مدت، range، شکست معتبر
+Daily	1D	Historical candles	OHLCV روزانه، returns، EMA/SMA، RSI، MACD، ATR، realized volatility، daily volume، daily CVD، OI، funding، basis، swing highs/lows	روند روزانه و bias اصلی
+Weekly	1W	Daily candles resampled	weekly OHLCV، EMA20/50، SMA20، RSI، MACD، ATR، weekly return، weekly volume، volume profile، OI trend، funding trend، support/resistance تاریخی، wall zones	رژیم هفتگی و جهت غالب
+Monthly	1M	Daily/weekly candles	monthly OHLCV، EMA12/20، SMA12/24، RSI، MACD، monthly return، volatility، volume profile، OI trend، funding regime، major support/resistance	چرخهٔ ماهانه و روند ساختاری
+Yearly	1Y	Monthly candles resampled	yearly OHLCV، yearly return، EMA/SMA بلندمدت، annual volatility، volume profile، macro regime، yearly funding/OI trend، major liquidity zones	رژیم کلان و روند بسیار طولانی

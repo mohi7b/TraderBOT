@@ -1,0 +1,417 @@
+/**
+ * ============================================================
+ * Macro Live Update System — Module 3: Normalizer
+ * File: collector/macro/update/lib/normalizer.cjs
+ *
+ * Converts the raw files in downloaded/<source>/ (+ extracted/ for
+ * ZIP sources) into the DB-ready structure used by the Comparator +
+ * Writer (module 4):
+ *
+ *   normalized/<source>/series.csv   series_id,dataset,country,indicator,frequency,unit,source
+ *   normalized/<source>/data.csv     series_id,date,value,loaded_on
+ *
+ * The same normalization helpers as the initial DB build are reused
+ * (collector/macro/db_build/normalize.cjs) so series_id generation,
+ * frequency codes and date canonicalization are 100% identical:
+ *     series_id = <DATASET>.<COUNTRY>.<INDICATOR>.<FREQ>
+ *
+ * Bad records (non-numeric value, missing date/country/indicator)
+ * are silently dropped.
+ * ============================================================
+ */
+const fs = require("fs");
+const path = require("path");
+const { parse } = require("csv-parse");
+
+const {
+  EXTRACT_DIR,
+  DOWNLOAD_DIR,
+  NORMALIZED_DIR,
+  SOURCE_TO_DATASET,
+  ensureDir,
+} = require("./paths.cjs");
+const logger = require("./update_logger.cjs");
+
+const {
+  BIS_INDICATORS,
+  COUNTRY_COLS,
+  isDateToken,
+  toNumber,
+  frequencyCode,
+  normalizeDate,
+  makeSeriesId,
+  countryToISO3,
+} = require(path.join(__dirname, "..", "..", "db_build", "normalize.cjs"));
+
+const TODAY = new Date().toISOString().slice(0, 10); // valid_from / loaded_on
+
+// ------------------------------------------------------------
+// Out — bounded-memory writer for series.csv + data.csv
+// ------------------------------------------------------------
+class Out {
+  constructor(sourceKey) {
+    const dir = NORMALIZED_DIR[sourceKey];
+    ensureDir(dir);
+    this.seriesPath = path.join(dir, "series.csv");
+    this.dataPath = path.join(dir, "data.csv");
+    fs.writeFileSync(this.seriesPath, "");
+    fs.writeFileSync(this.dataPath, "");
+    this.seriesSeen = new Set();
+    this.seriesBuf = [];
+    this.dataBuf = [];
+    this.seriesRows = 0;
+    this.dataRows = 0;
+  }
+
+  addSeries(s) {
+    if (this.seriesSeen.has(s.series_id)) return; // de-dup identity
+    this.seriesSeen.add(s.series_id);
+    this.seriesBuf.push(
+      [s.series_id, s.dataset, s.country, s.indicator, s.frequency, s.unit, s.source]
+        .map(csvEscape)
+        .join(",")
+    );
+    this.seriesRows++;
+    if (this.seriesBuf.length >= 2000) this.flushSeries();
+  }
+
+  addData(d) {
+    this.dataBuf.push([d.series_id, d.date, d.value, TODAY].map(csvEscape).join(","));
+    this.dataRows++;
+    if (this.dataBuf.length >= 10000) this.flushData();
+  }
+
+  flushSeries() {
+    if (!this.seriesBuf.length) return;
+    fs.appendFileSync(this.seriesPath, this.seriesBuf.join("\n") + "\n");
+    this.seriesBuf = [];
+  }
+
+  flushData() {
+    if (!this.dataBuf.length) return;
+    fs.appendFileSync(this.dataPath, this.dataBuf.join("\n") + "\n");
+    this.dataBuf = [];
+  }
+
+  close() {
+    this.flushSeries();
+    this.flushData();
+  }
+
+  stats() {
+    return { series: this.seriesRows, obs: this.dataRows };
+  }
+}
+
+/** CSV field escaping for the bulk files. */
+function csvEscape(v) {
+  if (v === null || v === undefined) return "";
+  const s = String(v);
+  return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+/** Stream rows of a CSV file through a callback (bounded memory). */
+function eachCsvRow(filePath, onRow) {
+  return new Promise((resolve, reject) => {
+    const parser = fs
+      .createReadStream(filePath)
+      .pipe(
+        parse({
+          bom: true,
+          columns: true,
+          relax_column_count: true,
+          skip_empty_lines: true,
+          trim: true,
+        })
+      );
+    parser.on("data", (row) => {
+      try {
+        onRow(row);
+      } catch (e) {
+        parser.destroy(e);
+      }
+    });
+    parser.on("error", reject);
+    parser.on("end", resolve);
+  });
+}
+
+// ------------------------------------------------------------
+// Loaders (mirror the initial DB build exactly)
+// ------------------------------------------------------------
+
+/** OECD / FRED / Eurostat tidy: REF_AREA,INDICATOR,TIME_PERIOD,OBS_VALUE,UNIT,FREQUENCY */
+async function loadTidyFile(dataset, filePath, out) {
+  let rows = 0;
+  await eachCsvRow(filePath, (row) => {
+    const value = toNumber(row.OBS_VALUE);
+    if (value === null) return;
+    const freq = frequencyCode(row.FREQUENCY);
+    if (!freq) return;
+    const date = normalizeDate(row.TIME_PERIOD, freq);
+    if (!date) return;
+    let country = String(row.REF_AREA || "").trim().toUpperCase();
+    if (!country) return;
+    if (dataset === "EUROSTAT") country = countryToISO3(country);
+    const indicator = String(row.INDICATOR || "").trim().toUpperCase();
+    if (!indicator) return;
+    const unit = String(row.UNIT || "").trim();
+    const sid = makeSeriesId(dataset, country, indicator, freq);
+    out.addSeries({ series_id: sid, dataset, country, indicator, frequency: freq, unit, source: dataset });
+    out.addData({ series_id: sid, date, value });
+    rows++;
+  });
+  return rows;
+}
+
+/** IMF long: ISO3,Country,IndicatorCode,Units,Scale,Year,Value (annual) */
+async function loadImfFile(filePath, out) {
+  let rows = 0;
+  await eachCsvRow(filePath, (row) => {
+    const value = toNumber(row.Value);
+    if (value === null) return;
+    const country = String(row.ISO3 || "").trim().toUpperCase();
+    const indicator = String(row.IndicatorCode || "").trim().toUpperCase();
+    const year = String(row.Year || "").trim();
+    if (!country || !indicator || !/^\d{4}$/.test(year)) return;
+    const unit = String(row.Units || row.Scale || "").trim();
+    const sid = makeSeriesId("IMF", country, indicator, "A");
+    out.addSeries({ series_id: sid, dataset: "IMF", country, indicator, frequency: "A", unit, source: "IMF" });
+    out.addData({ series_id: sid, date: year, value });
+    rows++;
+  });
+  return rows;
+}
+
+/** World Bank WDI wide: Country Code, Indicator Code, 1960..2026 (annual) */
+const WB_YEAR_RE = /^(\d{4})$/;
+async function loadWorldbankFile(filePath, out) {
+  let rows = 0;
+  await eachCsvRow(filePath, (row) => {
+    const country = String(row["Country Code"] || "").trim().toUpperCase();
+    const indicator = String(row["Indicator Code"] || "").trim().toUpperCase();
+    if (!country || !indicator) return;
+    const sid = makeSeriesId("WB", country, indicator, "A");
+    out.addSeries({ series_id: sid, dataset: "WB", country, indicator, frequency: "A", unit: "", source: "WB" });
+    for (const k of Object.keys(row)) {
+      if (!WB_YEAR_RE.test(k.trim())) continue;
+      const value = toNumber(row[k]);
+      if (value === null) continue;
+      out.addData({ series_id: sid, date: k.trim(), value });
+      rows++;
+    }
+  });
+  return rows;
+}
+
+/** BIS wide: dimension columns then date columns (melt) */
+async function loadBisFile(datasetCode, filePath, out) {
+  const indicator = BIS_INDICATORS[datasetCode] || datasetCode.replace(/^WS_/, "");
+  let rows = 0;
+  await eachCsvRow(filePath, (row) => {
+    let country = "";
+    let freq = "";
+    let unit = "";
+    for (const k of Object.keys(row)) {
+      if (isDateToken(k)) continue;
+      const v = String(row[k] ?? "").trim();
+      if (!v) continue;
+      if (!country && COUNTRY_COLS.includes(k)) country = v;
+      if (!freq && k === "FREQ") freq = v;
+      if (!unit && k === "UNIT_MEASURE") unit = v;
+    }
+    if (!country) return;
+    for (const k of Object.keys(row)) {
+      if (!isDateToken(k)) continue;
+      const value = toNumber(row[k]);
+      if (value === null) continue;
+      const date = normalizeDate(k, f);
+      if (!date) continue;
+      out.addData({ series_id: sid, date, value });
+      rows++;
+    }
+  });
+  return rows;
+}
+
+/** BIS dataset code from an extracted CSV file name (WS_*.csv). */
+function bisDatasetCodeFromFile(csvPath) {
+  const base = path.basename(csvPath).replace(/\.csv$/i, "");
+  return base.replace(/_(csv_col|csv_flat)$/i, "");
+}
+
+// ------------------------------------------------------------
+// OECD SDMX-JSON 2.0 decoding + metric extraction
+// (same METRICS + decoder as offline/oecd/download_oecd_offline.cjs)
+// ------------------------------------------------------------
+const OECD_METRICS = [
+  { flow: "KEI", output: "cpi.csv", indicator: "CPI_IDX", unit: "index",
+    match: (s) => s.MEASURE === "CP" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "_Z" },
+  { flow: "KEI", output: "cpi_yoy.csv", indicator: "CPI_YOY", unit: "%",
+    match: (s) => s.MEASURE === "CP" && s.UNIT_MEASURE === "GR" && s.TRANSFORMATION === "GY" },
+  { flow: "KEI", output: "ppi.csv", indicator: "PPI", unit: "index",
+    match: (s) => s.MEASURE === "PP" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "_Z" },
+  { flow: "KEI", output: "unemployment.csv", indicator: "UNEMP_RATE", unit: "%",
+    match: (s) => s.MEASURE === "UNEMP" && s.UNIT_MEASURE === "PT_LF" },
+  { flow: "KEI", output: "gdp_yoy.csv", indicator: "GDP_YOY", unit: "%",
+    match: (s) => s.MEASURE === "B1GQ_Q" && s.UNIT_MEASURE === "GR" && s.TRANSFORMATION === "GY" },
+  { flow: "KEI", output: "trade.csv", unit: "USD",
+    indicator: (s) => (s.MEASURE === "EX" ? "EXPORT" : "IMPORT"),
+    match: (s) => (s.MEASURE === "EX" || s.MEASURE === "IM") && s.UNIT_MEASURE === "USD" && s.TRANSFORMATION === "_Z" },
+  { flow: "KEI", output: "cli.csv", indicator: "CLI", unit: "index",
+    match: (s) => s.MEASURE === "LI" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "_Z" },
+  { flow: "KEI", output: "unit_labour_cost.csv", indicator: "ULC", unit: "index",
+    match: (s) => s.MEASURE === "ULC" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "_Z" },
+  { flow: "KEI", output: "industrial_production.csv", indicator: "INDPRO", unit: "index",
+    match: (s) => s.MEASURE === "PRVM" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "_Z" },
+  { flow: "QNA", output: "gdp_qna_yoy.csv", indicator: "GDP_VPV_YOY", unit: "%",
+    match: (s) => s.TRANSACTION === "B1GQ" && s.UNIT_MEASURE === "PC" && s.PRICE_BASE === "L" && s.TRANSFORMATION === "GY" },
+  { flow: "QNA", output: "gdp_qna_qoq.csv", indicator: "GDP_VPV_QOQ", unit: "%",
+    match: (s) => s.TRANSACTION === "B1GQ" && s.UNIT_MEASURE === "PC" && s.PRICE_BASE === "L" && s.TRANSFORMATION === "G1" },
+  { flow: "MEI_CLI", output: "cli_mei.csv", indicator: "CLI", unit: "index",
+    match: (s) => s.MEASURE === "LI" && s.UNIT_MEASURE === "IX" && s.TRANSFORMATION === "IX" },
+];
+
+/** Decode an OECD SDMX-JSON 2.0 payload into series dims + observations. */
+function decodeOecdJson2(j) {
+  const data = j.data || {};
+  const struct = (data.structures && data.structures.length) ? data.structures[0] : (data.structure || {});
+  const dimensions = struct.dimensions || {};
+  const seriesDims = dimensions.series || [];
+  const obsDims = dimensions.observation || [];
+  const obsDim = obsDims[0] || null;
+
+  const cat = (dim) => ({
+    id: dim.id,
+    values: (dim.values || []).map((v) => (typeof v === "string" ? { id: v, name: v } : v)),
+  });
+  const sd = seriesDims.map(cat);
+  const od = obsDim ? cat(obsDim) : null;
+
+  const out = [];
+  for (const ds of data.dataSets || []) {
+    for (const key of Object.keys(ds.series || {})) {
+      const parts = key.split(":").map(Number);
+      const keys = {};
+      sd.forEach((d, i) => { keys[d.id] = d.values[parts[i]] ? d.values[parts[i]].id : null; });
+      const obsMap = ds.series[key].observations || {};
+      for (const idx of idxs) {
+        const v = obsMap[idx];
+        const raw = Array.isArray(v) ? v[0] : v;
+        observations.push({
+          time: od && od.values[Number(idx)] ? od.values[Number(idx)].id : String(idx),
+          value: (typeof raw === "number" || typeof raw === "string") && raw !== "" ? +raw : null,
+        });
+      }
+      out.push({ keys, observations });
+    }
+  }
+  return { seriesDims: sd, obsDim: od, series: out };
+}
+
+/** Infer frequency from a TIME_PERIOD id like "2024-07" / "2024-Q3" / "2024". */
+function oecdFreqFromTime(t) {
+  if (/^\d{4}-\d{2}$/.test(t)) return "Monthly";
+  if (/^\d{4}-Q[1-4]$/i.test(t)) return "Quarterly";
+  if (/^\d{4}$/.test(t)) return "Annual";
+  return null;
+}
+
+
+/** Feed all OECD metric rows (tidy shape) into `out`. */
+async function loadOecdFlows(flowFileMap, out) {
+  let rows = 0;
+  for (const m of OECD_METRICS) {
+    const raw = flowFileMap[m.flow];
+    if (!raw || !fs.existsSync(raw) || fs.statSync(raw).size === 0) continue;
+    let decoded;
+    try {
+      decoded = decodeOecdJson2(JSON.parse(fs.readFileSync(raw, "utf8")));
+    } catch (e) {
+      logger.warn(`[OECD] parse error in ${m.flow}: ${e.message}`);
+      continue;
+    }
+    for (const s of decoded.series) {
+      if (!m.match(s.keys)) continue;
+      const freq = s.observations.length ? oecdFreqFromTime(s.observations[0].time) : null;
+      if (!freq) continue;
+      const indicator = typeof m.indicator === "function" ? m.indicator(s.keys) : m.indicator;
+      const area = s.keys.REF_AREA || "";
+      if (!area) continue;
+      const ind = String(indicator || "").trim().toUpperCase();
+      for (const o of s.observations) {
+        if (o.value === null || o.value === undefined || !o.time) continue;
+        const value = toNumber(o.value);
+        if (value === null) continue;
+        const date = normalizeDate(o.time, freq);
+        if (!date) continue;
+        const sid = makeSeriesId("OECD", area, ind, freq);
+        out.addSeries({ series_id: sid, dataset: "OECD", country: area, indicator: ind, frequency: freq, unit: String(m.unit || ""), source: "OECD" });
+        out.addData({ series_id: sid, date, value });
+        rows++;
+      }
+    }
+  }
+  return rows;
+}
+
+// ------------------------------------------------------------
+// Dispatcher
+// ------------------------------------------------------------
+
+/** List *.csv in a directory (sorted). */
+function listCsvs(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((f) => /\.csv$/i.test(f)).sort().map((f) => path.join(dir, f));
+}
+
+/**
+ * Normalize one source into normalized/<source>/{series,data}.csv.
+ * @param {string} source FRED | OECD | EUROSTAT | IMF | BIS | WORLD_BANK
+ * @returns {Promise<{source, ok, stats, seriesPath, dataPath}>}
+ */
+async function runNormalize(source) {
+  const dataset = SOURCE_TO_DATASET[source];
+  const out = new Out(source);
+  const started = Date.now();
+
+  try {
+    if (source === "FRED") {
+      for (const file of listCsvs(DOWNLOAD_DIR.FRED)) await loadTidyFile("FRED", file, out);
+    } else if (source === "EUROSTAT") {
+      for (const file of listCsvs(DOWNLOAD_DIR.EUROSTAT)) await loadTidyFile("EUROSTAT", file, out);
+    } else if (source === "IMF") {
+      for (const file of ["ifs.csv", "gfs.csv", "weo.csv"]) {
+        const p = path.join(DOWNLOAD_DIR.IMF, file);
+        if (fs.existsSync(p)) await loadImfFile(p, out);
+      }
+    } else if (source === "WORLD_BANK") {
+      const p = path.join(EXTRACT_DIR.WORLD_BANK, "WDICSV.csv");
+      if (fs.existsSync(p)) await loadWorldbankFile(p, out);
+    } else if (source === "BIS") {
+      for (const file of listCsvs(EXTRACT_DIR.BIS)) {
+        await loadBisFile(bisDatasetCodeFromFile(file), file, out);
+      }
+    } else if (source === "OECD") {
+      const map = {};
+      for (const flow of ["KEI", "QNA", "MEI_CLI"]) {
+        const p = path.join(DOWNLOAD_DIR.OECD, `${flow}.json`);
+        if (fs.existsSync(p)) map[flow] = p;
+      }
+      await loadOecdFlows(map, out);
+    } else {
+      throw new Error(`unknown source ${source}`);
+    }
+
+    out.close();
+    const { series, obs } = out.stats();
+    logger.info(`[${source}] normalized: ${series.toLocaleString()} series, ${obs.toLocaleString()} observations (${((Date.now() - started) / 1000).toFixed(1)}s)`);
+    return { source, ok: true, dataset, series, obs, seriesPath: out.seriesPath, dataPath: out.dataPath };
+  } catch (e) {
+    out.close();
+    logger.error(`[${source}] normalization failed: ${e.message}`);
+    return { source, ok: false, error: e.message };
+  }
+}
+
+module.exports = { runNormalize, Out, loadTidyFile, loadImfFile, loadWorldbankFile, loadBisFile, loadOecdFlows, OECD_METRICS };

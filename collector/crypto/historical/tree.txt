@@ -1,0 +1,122 @@
+========================================================================
+ساختار پوشه‌ی historical (بخش داده‌ی تاریخی TraderBOT)
+========================================================================
+
+این پوشه مسئول جمع‌آوری داده‌ی کندلِ خامِ ۱ دقیقه‌ای از صرافی‌ها، ذخیره‌ی آن،
+و ساختِ لحظه‌ایِ تایم‌فریم‌های بالاتر و خلاصه‌ها از روی همان داده‌ی خام است.
+فلسفه‌ی کلیدی: فقط «کندل خام ۱ دقیقه‌ای» persist می‌شود؛ تایم‌فریم/اندیکاتور/زون
+در لحظه محاسبه می‌شوند (dynamic). موتور قدیمی (smart_engine) به _legacy منتقل شده.
+
+ریشه‌ی کانونی مسیرها: _engine/root.cjs -> DEFAULT_ROOT = collector/crypto/historical
+محل ذخیره‌ی داده:  crypto/<SYMBOL>/candles_1m.db  (یک فایل به ازای هر نماد؛
+همه‌ی بازارها با کلید (symbol, exchange, timestamp_raw) در همین فایل merge می‌شوند)
+
+========================================================================
+
+collector/crypto/historical/
+│
+├── _engine/                        ← هسته‌ی موتور (و اکنون موتور داینامیک)
+│   │
+│   ├── root.cjs                    ← ریشه‌ی کانونی (DEFAULT_ROOT). همه‌ی اجزا
+│   │                                  (full/api/timeframe/summary) از این مسیر
+│   │                                  واحد استفاده می‌کنند تا آدرس ذخیره‌سازی
+│   │                                  همیشه هماهنگ و داینامیک بماند.
+│   │
+│   ├── fetch/                      ← لایه‌ی دانلود از صرافی‌ها (HTTP REST)
+│   │   ├── client.cjs              ← HTTP client مشترک: timeout + retry + backoff
+│   │   │                              (429/5xx)، برگرداندن JSON. تزریق fetchImpl
+│   │   │                              برای تست ممکن است.
+│   │   ├── interface.cjs           ← قرارداد مشترک: MARKETS (spot/futures)،
+│   │   │                              assertMarket/assertRange، normalizeKline
+│   │   │                              (تبدیل پاسخ صرافی به شکل کانونی کندل).
+│   │   ├── coverage.cjs            ← ادغام بازه‌های coverage (mergeCoverage) و
+│   │   │                              یافتن حفره‌ها (getGaps) برای تشخیص داده‌ی کم.
+│   │   ├── venues-config.cjs       ← تنظیمات هر صرافی: سقف کندل/درخواست، واحد
+│   │   │                              زمانی (ms/s)، نام پارامترهای تاریخ، جهت
+│   │   │                              (asc/desc) و نرخ مجاز درخواست.
+│   │   ├── venues.cjs              ← ساخت fetcherهای زنده از روی آداپتورها
+│   │   │                              (createVenueFetchers) بر اساس تعدادِ صرافی.
+│   │   └── crypto/                 ← آداپتورهای اختصاصی صرافی‌های کریپتو
+│   │       ├── index.cjs           ← ایندکس آداپتورها (factory map): binance,
+│   │       │                          bybit, okx, kucoin, bitget.
+│   │       ├── adapter.cjs         ← آداپتور مشترک: pagination (full/update)،
+│   │       │                          rate-limiting و نرمال‌سازی کانونی.
+│   │       ├── binance.cjs         ← آداپتور Binance (BinanceHistoricalFetcher).
+│   │       ├── bybit.cjs           ← آداپتور Bybit.
+│   │       ├── okx.cjs             ← آداپتور OKX (فقط cursor `before`).
+│   │       ├── kucoin.cjs          ← آداپتور KuCoin (spot ثانیه‌ای / futures ms).
+│   │       └── bitget.cjs          ← آداپتور Bitget.
+│   │
+│   ├── timeframe/                  ← [جدید] ساختِ داینامیک تایم‌فریم از کندل خام
+│   │   ├── utils.cjs               ← تعریف تایم‌فریم‌ها (1m..4y) و ریاضی bucketing
+│   │   │                              (tfWidthMs, bucketFloor/Ceil, assertTf).
+│   │   └── build-tf.cjs            ← خواندن candles_1m و گروه‌بندی لحظه‌ای به
+│   │                                  تایم‌فریم بالاتر (open/high/low/close/volume/
+│   │                                  quote_volume/trades) + انتخاب صرافی پیش‌فرض.
+│   │
+│   └── summary-dynamic/            ← [جدید] ساختِ داینامیک خلاصه از کندل خام
+│       └── build-summary.cjs       ← خروجی: last_close, last_volume,
+│                                      change_percent, high/low، volatility،
+│                                      trend snapshot، structure snapshot.
+│
+├── full/                           ← Full Downloader (دانلود کامل/به‌روزرسانی خام)
+│   ├── markets.cjs                 ← تاکسونومی صرافی/بازار: ساخت/تجزیه‌ی کلید
+│   │                                  "<venue>_<marketType>" و نگاشت به API بازار.
+│   ├── merge-into-1m-db.cjs        ← صاحب دیتابیس خام: schema candles_1m، مسیر
+│   │                                  crypto/<symbol>/candles_1m.db، استانداردسازی
+│   │                                  و merge امن (بدون تکرار/حفره).
+│   ├── rate-controller.cjs         ← محدودکننده‌ی نرخ درخواست (token bucket) + backoff.
+│   ├── fetch-chunk.cjs             ← گرفتن یک chunk از کندل‌ها با retry/backoff و
+│   │                                  استانداردسازی به شکل candles_1m.
+│   ├── scheduler.cjs               ← زمان‌بندی دانلود کامل: ساخت بازه‌های 300کندلی
+│   │                                  متوالی و گزارش پیشرفت/ETA.
+│   ├── run-full.cjs                ← CLI/ورودی Full Downloader: دانلود کل تاریخ یک
+│   │                                  (symbol, exchange) با قابلیت resume.
+│   │                                  ورودی: <SYMBOL> --exchange --market
+│   ├── run-update.cjs              ← CLI/ورودی به‌روزرسانی لحظه‌ای: فقط کندل‌های
+│   │                                  جدید بعد از آخرین کندل ذخیره‌شده.
+│   ├── update-1m.cjs               ← منطق به‌روزرسانی 1m (incremental) برای یک کلید
+│   │                                  صرافی (بدون بازپردازش).
+│   ├── fetch-latest.cjs            ← بروزرسانی آخرین کندل برای هر بازار (spot/futures
+│   │                                  جدا) با resume مستقل.
+│   ├── worker-full.cjs             ← کارگر دانلود (اسپان‌شده توسط ارکستراتور): یک
+│   │                                  (symbol, exchange) را بی‌صدا دانلود می‌کند و در
+│   │                                  پایان فقط یک خط JSON برمی‌گرداند.
+│   └── run-all-markets.cjs         ← ارکستراتور اجرای خودکار: رانِ ۱۰ بازار
+│                                      (۵ صرافی × spot/futures) به‌صورت موازی (یک
+│                                      پروسه برای هر بازار)، با نمایش پیشرفتِ واحد
+│                                      بدون اسپم، و گزارش موفقیت هر بازار و کل.
+│
+├── api/                            ← [جدید] API داینامیک (فقط از داده‌ی خام می‌خواند)
+│   ├── server.cjs                  ← سرور node:http بدون وابستگی؛ فقط دو مسیر داینامیک.
+│   │                                  rootDir از DEFAULT_ROOT (ریشه‌ی کانونی) می‌آید.
+│   ├── routes/
+│   │   ├── tf-dynamic.cjs          ← GET /tf/:symbol/:tf     → تایم‌فریم لحظه‌ای.
+│   │   └── summary-dynamic.cjs     ← GET /summary/:symbol/:tf → خلاصه‌ی لحظه‌ای.
+│   └── utils/
+│       ├── router.cjs              ← مسیر‌یاب regex سبک (pathToRegexp + match).
+│       └── formatter.cjs           ← envelope استاندارد ok/error + قالب timestamp.
+│
+└── crypto/                         ← محل ذخیره‌ی داده‌ی خام (داینامیک، به ازای نماد)
+    └── BTCUSDT/
+        └── candles_1m.db           ← دیتابیس خام 1m (جدول candles_1m). فقط کندل؛
+            (+ .db-shm/.db-wal)         بدون تایم‌فریم/اندیکاتور/زون.
+
+========================================================================
+نکته‌ها
+========================================================================
+- مسیر ذخیره‌سازی برای هر نماد به‌صورت داینامیک ساخته می‌شود:
+    <DEFAULT_ROOT>/crypto/<SYMBOL>/candles_1m.db
+  و همه‌ی اجزا (full دانلود + full به‌روزرسانی + ارکستراتور + API) از همین
+  ریشه‌ی کانونی (_engine/root.cjs -> DEFAULT_ROOT) استفاده می‌کنند.
+
+- اجرای دانلود کامل یک نماد (همه‌ی ۱۰ بازار: ۵ صرافی × spot/futures):
+    node full/run-all-markets.cjs <SYMBOL>
+
+- به‌روزرسانی لحظه‌ای یک بازار:
+    node full/run-update.cjs <SYMBOL> --exchange=<venue> --market=<spot|futures>
+
+- شروع API داینامیک:
+    node api/server.cjs   (پورت 4000 یا HISTORICAL_API_PORT)
+
+

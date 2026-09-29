@@ -1,0 +1,26 @@
+orchestrator/
+├── config/                          ← تنظیمات کلان سیستم
+│   ├── exchanges.cjs                ← تنظیمات صرافی‌ها (API keys, endpoints, rate limits)
+│   ├── modules.cjs                  ← فعال/غیرفعال بودن دسته‌های Pipeline
+│   ├── pipeline.cjs                 ← ترتیب دقیق اجرای مراحل Worker
+│   ├── symbols.cjs                  ← لیست جفت‌ارزها برای ساخت Workerها
+│   ├── system.cjs                   ← تنظیمات کلان سیستم (mode, logging, cluster)
+│   └── workers.cjs                  ← تنظیمات مربوط به Workerها (parallelism, throttle)
+│
+├── core/                            ← مغز Orchestrator
+│   ├── bootstrap.cjs                ← راه‌اندازی اولیه سیستم و بارگذاری تنظیمات
+│   ├── event-router.cjs             ← مسیر‌دهی رویدادها بین ماژول‌ها (real-time routing)
+│   ├── module-tree.cjs              ← ساخت درخت ماژول‌ها از روی pipeline
+│   ├── orchestrator.cjs             ← فرمانده کل سیستم؛ ساخت Workerها و اجرای pipeline
+│   └── state-tree.cjs               ← وضعیت لحظه‌ای کل سیستم و Workerها
+│
+├── utils/                           ← ابزارهای کمکی سطح بالا
+│   ├── error-manager.cjs            ← مدیریت خطاهای کلان، retry، kill-switch
+│   ├── health-monitor.cjs           ← مانیتورینگ سلامت سیستم (CPU, RAM, WS, API)
+│   ├── hot-reload.cjs               ← بارگذاری مجدد ماژول‌ها بدون توقف سیستم
+│   ├── log-manager.cjs              ← مدیریت لاگ‌ها، فرمت، ذخیره‌سازی، rotation
+│   ├── module-manager.cjs           ← مدیریت فعال/غیرفعال بودن ماژول‌ها
+│   └── state-manager.cjs            ← مدیریت وضعیت Workerها (merge, sync, store)
+│
+└── workers/                         ← واحدهای اجرایی Orchestrator
+    └── Worker.cjs                   ← کلاس اصلی Worker؛ اجرای مرحله‌به‌مرحله pipeline

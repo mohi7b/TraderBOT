@@ -1,0 +1,1163 @@
+{
+  "locale": "tr",
+  "languageName": "Turkish",
+  "nativeName": "Türkçe",
+  "dir": "ltr",
+  "meta": {
+    "documentTitle": "RADI — Technical Roadmap",
+    "tagline": "6 mimari sütun · 17 faz · Q4 2026 → Q4 2029",
+    "intro": "Bu belge, Finansal Veri Zekâsı Platformu için faz faz yol haritasıdır ve onaylanmış mimariyi tam olarak takip eder: altı sütun — Veri Gölü (Data Lake), Grafik Motoru (Chart Engine, WASM + WebGL), Düğüm Tabanlı Bot Oluşturucu (Bot Builder, Node-Based), Yapay Zekâ Motoru (AI Engine), Token Ekonomisi (Token Economy) ve Pazar Yeri (Marketplace). Aşağıdaki her teslimat, adı geçen bileşenlerden birine aittir; yeni bir mimari bileşen eklenmez ve hiçbir bileşen basitleştirilmez ya da atlanmaz.",
+    "principles": [
+      "Yeni mimari bileşen yok: bu yol haritasında yalnızca onaylanmış mimarinin bileşenleri yer alır.",
+      "Aşağıdan yukarıya inşa sırası: her sütun, kendinden önceki sütunun doğrulanmış çıktısını tüketir.",
+      "Her faz, demo yerine ölçülebilir kabul kapılarıyla kapanır.",
+      "Altı sütunun tamamı tek bir veri sözleşmesini paylaşır: ham 1 dakikalık kanonik seriler ve kanonik olaylar.",
+      "Her faz, whitepaper'ın beş dilinde yayınlanır: İngilizce, Farsça, Arapça, Türkçe ve Almanca."
+    ],
+    "programExitCriteria": [
+      "Altı sütun, tek bir kanonik veri sözleşmesi üzerinde uçtan uca birlikte çalışır: veri toplamadan pazar yeri mutabakatına kadar.",
+      "Mimarinin her bileşeni canlıdır, izlenir, fonlara dokunduğu yerlerde denetlenir ve bir kayıt defterinden ya da sürümlenmiş bir artefakttan yeniden üretilebilir.",
+      "Yol haritasının tamamı beş dilde, aynı yapıda ve aynı sayılarla mevcuttur."
+    ]
+  },
+  "labels": {
+    "language": "Dil",
+    "pillars": "Mimari sütunlar",
+    "phases": "Fazlar",
+    "phase": "Faz {n}",
+    "description": "Açıklama",
+    "deliverables": "Teslimatlar",
+    "milestones": "Teknik kilometre taşları",
+    "timeline": "Tahmini zaman çizelgesi",
+    "components": "Bileşenler",
+    "dependencies": "Bağımlılıklar ve kritik yol",
+    "criticalPath": "Kritik yol",
+    "exitCriteria": "Sütun çıkış kriterleri",
+    "programExit": "Program çıkış kriterleri",
+    "principles": "Program ilkeleri",
+    "timelineOverview": "Zaman çizelgesi özeti",
+    "summary": "Özet"
+  },
+  "hero": {
+    "brand": "RADI",
+    "tagline": "Real-time Autonomous Data Intelligence",
+    "pageName": "The Future Architecture of Trading",
+    "subtitle": "Finansal verileri akıllıca toplayan bir platform, kendine özgü bir grafik motoru, düğüm tabanlı bir işlem sistemi ve finans piyasalarının geleceği için bir token ekosistemi.",
+    "ctaRoadmap": "Yol Haritasını Gör",
+    "ctaArchitecture": "Sistem Mimarisi"
+  },
+  "tokenSummary": {
+    "badge": "RADI Ecosystem",
+    "title": "Tokenomics",
+    "intro": "Distribution structure, release models and the economic role of every token. Figures describe the planned model.",
+    "groups": [
+      {
+        "id": "identity",
+        "label": "Row 1 — Token Structure"
+      },
+      {
+        "id": "economy",
+        "label": "Row 2 — Platform Economy"
+      }
+    ],
+    "cards": [
+      {
+        "id": "pre-token",
+        "group": "identity",
+        "icon": "seed",
+        "title": "Pre-Supply Token",
+        "subtitle": [
+          "1% of total supply",
+          "100 million tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Progress-based unlock (development milestones)"
+          },
+          {
+            "label": "Value Multiplier",
+            "value": "×10 compared to the main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Reward early contributors and bootstrap ecosystem growth"
+          },
+          {
+            "label": "Economic Role",
+            "value": "High-value, scarce token powering the startup's initial momentum"
+          }
+        ]
+      },
+      {
+        "id": "total-supply",
+        "group": "identity",
+        "icon": "split",
+        "title": "Total Supply",
+        "subtitle": [
+          "1% pre-supply + 99% main token",
+          "100 billion total tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Locked until economic activation"
+          },
+          {
+            "label": "Value Ratio",
+            "value": "×10 pre-supply token + ×1 main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Full transparency in distribution structure"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Foundation of the entire ecosystem and source of long-term circulation"
+          }
+        ]
+      },
+      {
+        "id": "main-token",
+        "group": "identity",
+        "icon": "coins",
+        "title": "Main Token",
+        "subtitle": [
+          "99% of total supply",
+          "99 billion tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Utility-driven and revenue-based unlock"
+          },
+          {
+            "label": "Value Multiplier",
+            "value": "×1 main token"
+          },
+          {
+            "label": "Purpose",
+            "value": "Balanced growth between token value and platform utility"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Primary asset for payments, tools, automation, and user interactions"
+          }
+        ]
+      },
+      {
+        "id": "economic-engine",
+        "group": "economy",
+        "icon": "engine",
+        "title": "Economic Engine",
+        "subtitle": [
+          "Consumption-driven + revenue-driven model",
+          "Gradual increase of circulating tokens"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Scales with platform revenue and user expansion"
+          },
+          {
+            "label": "Consumption Flow",
+            "value": "AI Engine, Bot Builder, Marketplace"
+          },
+          {
+            "label": "Purpose",
+            "value": "Build a sustainable revenue ecosystem"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Convert user activity into real token value"
+          }
+        ]
+      },
+      {
+        "id": "utility",
+        "group": "economy",
+        "icon": "wallet",
+        "title": "Utility",
+        "subtitle": [
+          "Payments for intelligent trading and AI-powered services",
+          "User-to-service transaction layer"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Direct token purchase for service access"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Model execution, bot creation, tool purchases, data APIs"
+          },
+          {
+            "label": "Purpose",
+            "value": "Establish real and continuous token consumption"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Activate all platform modules through token usage"
+          }
+        ]
+      },
+      {
+        "id": "staking",
+        "group": "economy",
+        "icon": "lock",
+        "title": "Staking",
+        "subtitle": [
+          "Dynamic APR + token freeze for premium services",
+          "Value-driven policy mechanism"
+        ],
+        "fields": [
+          {
+            "label": "Release Model",
+            "value": "Allocation of a portion of unlocked tokens into staking pools"
+          },
+          {
+            "label": "Reward Model",
+            "value": "Access to platform services and exclusive features"
+          },
+          {
+            "label": "Purpose",
+            "value": "Increase network stability and reduce circulating supply"
+          },
+          {
+            "label": "Economic Role",
+            "value": "Long-term incentive mechanism strengthening token value"
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "columnLabels": {
+        "label": "Token",
+        "total": "Total supply",
+        "released": "Released to date",
+        "percent": "Released",
+        "multiplier": "Value multiplier"
+      },
+      "rows": [
+        {
+          "id": "pre",
+          "label": "Pre-supply token",
+          "total": "100,000,000",
+          "released": "1,000,000",
+          "percent": "1%",
+          "multiplier": "×10",
+          "highlight": true
+        },
+        {
+          "id": "main",
+          "label": "Main token",
+          "total": "99,000,000,000",
+          "released": "0",
+          "percent": "0%",
+          "multiplier": "×1",
+          "highlight": false
+        }
+      ],
+      "conversion": {
+        "fromValue": "1",
+        "fromLabel": "pre-supply token",
+        "toValue": "10",
+        "toLabel": "main tokens",
+        "caption": "1 pre-supply token = 10 main tokens"
+      },
+      "stage": {
+        "title": "Current stage",
+        "value": "Development-based pre-supply",
+        "items": [
+          {
+            "label": "Tokens in this stage",
+            "value": "1,000,000"
+          },
+          {
+            "label": "Released to date",
+            "value": "100,000"
+          },
+          {
+            "label": "Value per unit",
+            "value": "×10 versus the main token"
+          }
+        ]
+      },
+      "cta": {
+        "label": "Buy Samara token",
+        "note": "Purchase through the official RADI wallet or partner exchanges."
+      }
+    }
+  },
+  "ui": {
+    "snapLabel": "Kaydırma yakalama",
+    "snapOn": "Açık",
+    "snapOff": "Kapalı",
+    "openLabel": "Faz ayrıntılarını göster",
+    "closeLabel": "Faz ayrıntılarını gizle",
+    "collapseAll": "Tümünü kapat",
+    "moreComponents": "+{n} tane daha",
+    "showAll": "Tümünü göster",
+    "showLess": "Daha az göster",
+    "expandAll": "Tümünü aç",
+    "railLabel": "Sayfa bölümleri",
+    "planned": "Planlanan çıktılar"
+  },
+  "pillars": [
+    {
+      "id": "data-lake",
+      "order": 1,
+      "title": "1. Sütun — Veri Gölü (Data Lake)",
+      "summary": "Veri Gölü, piyasa ve makro verisinin tek ve yeniden oynatılabilir kanonik akışını üretir: çok kaynaklı toplama, normalleştirme, ağırlıklandırma, gürültü temizliği, zaman serisi depolama ve sürekli kalite izleme.",
+      "components": [
+        {
+          "id": "fetcher-engine",
+          "name": "Çok Kaynaklı Toplayıcı Motoru (Fetcher Engine)"
+        },
+        {
+          "id": "normalizer-engine",
+          "name": "Normalleştirme Motoru (Normalizer Engine)"
+        },
+        {
+          "id": "weighting-engine",
+          "name": "Ağırlıklandırma Motoru (Weighting Engine)"
+        },
+        {
+          "id": "noise-filter-engine",
+          "name": "Gürültü Filtreleme Motoru (Noise Filter Engine)"
+        },
+        {
+          "id": "tsdb",
+          "name": "Zaman Serisi Veritabanı (TSDB)"
+        },
+        {
+          "id": "data-quality-monitor",
+          "name": "Veri Kalitesi İzleyicisi (Data Quality Monitor)"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p1",
+          "order": 1,
+          "title": "Faz 1 — Çok Kaynaklı Veri Toplama ve Kanonik Normalleştirme",
+          "description": "Toplayıcı Motoru'nu (Fetcher Engine) tüm borsalarda ve makro beslemelerde devreye alıyoruz ve her ham yükü Normalleştirme Motoru'ndan (Normalizer Engine) geçiriyoruz; böylece sonraki sütunlar ham borsa yükleri yerine kaynağı işaretlenmiş tek bir kanonik olay akışı tüketir.",
+          "components": [
+            "fetcher-engine",
+            "normalizer-engine"
+          ],
+          "deliverables": [
+            "Spot, vadeli, emir defteri, işlemler, fonlama, açık pozisyon, tasfiyeler, makro ve zincir üstü beslemeler için çok kaynaklı Toplayıcı Motoru bağlayıcıları.",
+            "Kaynak başına zamanlayıcı; hız sınırı yöneticisi, uyarlanabilir yeniden deneme, boşluk tespiti ve tarihsel geri doldurma.",
+            "Normalleştirme Motoru kanonik zarfı: kaynak, borsa, sembol, zaman damgası, sıra numarası, yük ve kalite bayrakları.",
+            "Hassasiyet ve ölçek kuralları, UTC hizalaması ve ham mumların 1 dakikalık gruplanması ile kanonik sembol ve borsa kayıt defteri.",
+            "Her toplanan yükün sağlama toplamlarıyla birlikte değiştirilemez ham arşivi; böylece her kanonik akış sıfırdan yeniden türetilebilir."
+          ],
+          "milestones": [
+            "En az 25 canlı kaynak bağlayıcısı; her biri kaydedilmiş bir fixture üzerinde sözleşme testi ile kapsanır.",
+            "Borsa zaman damgasından yayımlanan kanonik olaya kadar alım gecikmesi p95 500 ms altında.",
+            "Kayıpsız yeniden oynatma: herhangi bir 24 saatlik pencerenin yeniden toplanması bayt bayt aynı kanonik akışı üretir.",
+            "Kanonik olayların %100'ü kaynak izi ve kalite bayrakları taşır.",
+            "Staging ortamında p95 CPU kullanımı %70 altında, en az 50.000 olay/sn sürdürülebilir alım."
+          ],
+          "timeline": {
+            "start": "Q4 2026",
+            "end": "Q4 2026",
+            "label": "Q4 2026"
+          }
+        },
+        {
+          "id": "p2",
+          "order": 2,
+          "title": "Faz 2 — Ağırlıklandırma ve Gürültü Filtreleme",
+          "description": "Paralel kaynakları tek ve güvenilir bir referans fiyata çeviriyoruz: Ağırlıklandırma Motoru her kaynağı ve gözlemi puanlar, Gürültü Filtreleme Motoru ise kayıt öncesinde yapısal gürültüyü — sıçramalar, bayat kotasyonlar, yıkama işlemleri ve bozuk tikler — temizler.",
+          "components": [
+            "weighting-engine",
+            "noise-filter-engine"
+          ],
+          "deliverables": [
+            "Ağırlıklandırma Motoru: kaynak güven katmanları, dinamik ağırlıklar, güncellik azalması, kaynaklar arası sapma cezası ve gözlem başına güven skoru.",
+            "Gürültü Filtreleme Motoru: aykırı değer ve sıçrama tespiti, bayat kotasyon bastırma, yıkama işlemi tespiti, bozuk tik karantinası ve açık boşluk politikası.",
+            "Varlık sınıfı başına gürültü profilleri (kripto spot ve vadeli, makro açıklamaları, zincir üstü metrikler) ve sürümlenmiş yapılandırma.",
+            "Ağırlık ve filtre yapılandırmasının yeniden oynatılabilir olması; her tarihsel pencere yeni bir profille yeniden işlenebilir.",
+            "Yayımlanan her kanonik olaya eklenen ağırlık ve güven inceleme çıktısı."
+          ],
+          "milestones": [
+            "Kanonik olayların %100'ünde güven skoru bulunur; ağırlık izi kaynak, katman ve kural sürümüne kadar izlenebilir.",
+            "Etiketli anomali korpusunda en az %95 gürültü yakalama ve en az %98 kesinlik; karışıklık matrisi yayımlanır.",
+            "Değiştirilmiş profille 90 günlük geçmişin yeniden işlenmesi 30 dakikadan kısa sürer.",
+            "Deterministik çıktı: aynı girdiler ve aynı profil sürümü her zaman aynı ağırlıkları üretir.",
+            "Temiz piyasa verisinde filtre yanlış pozitif oranı en fazla %0,1; ayrılmış bir haftada ölçülür."
+          ],
+          "timeline": {
+            "start": "Q1 2027",
+            "end": "Q1 2027",
+            "label": "Q1 2027"
+          }
+        },
+        {
+          "id": "p3",
+          "order": 3,
+          "title": "Faz 3 — Zaman Serisi Depolama ve Veri Kalitesi İzleme",
+          "description": "Kanonik akışı açık saklama ve örnekleme indirme politikalarıyla Zaman Serisi Veritabanı'nda (TSDB) kalıcı hâle getiriyoruz; güvenilirliğini ise her kaynağı ve sembolü puanlayıp bozuk veriyi otomatik karantinaya alan Veri Kalitesi İzleyicisi (Data Quality Monitor) sağlar.",
+          "components": [
+            "tsdb",
+            "data-quality-monitor"
+          ],
+          "deliverables": [
+            "TSDB: ham 1 dakikalık kanonik seri ve kanonik olaylar için sembol, borsa ve zamana göre bölümlenmiş kolonlu zaman serisi depolama.",
+            "Çok yıllı sorgu iş yükleri için sıkıştırma, saklama katmanları, örnekleme indirme ve materyalize görünümler.",
+            "Yüksek kardinaliteli indeksleme ve Grafik Motoru, Bot Oluşturucu ile Yapay Zekâ Motoru'nun tükettiği sorgu API'si.",
+            "Veri Kalitesi İzleyicisi: kaynak, sembol ve zaman dilimi başına tamlık, güncellik, doğruluk ve tutarlılık skorları.",
+            "Kalite uyarıları, soy kütüğü izleme, otomatik karantina, kendini onaran yeniden toplama ve genel kalite panosu."
+          ],
+          "milestones": [
+            "Ham JSON yüklere kıyasla disk üzerinde en az 10 kat sıkıştırma.",
+            "Tek bir sembolde 30 günlük 1 dakikalık aralık için sorgu gecikmesi p95 150 ms altında.",
+            "Güncellik SLA'sı: kanonik olaydan sorgulanabilir seriye p95 2 saniye altında ve sürekli doğrulanır.",
+            "İzlenen sembollerin %100'ü için saatlik kalite skoru yayımlanır; veri olayı MTTR'ı 30 dakikanın altında.",
+            "Otomatik karantina kayıtların en fazla %0,01'ini izole eder ve her karar tam olarak denetlenebilir bir ize sahiptir."
+          ],
+          "timeline": {
+            "start": "Q1 2027",
+            "end": "Q2 2027",
+            "label": "Q1 – Q2 2027"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chart-engine",
+      "order": 2,
+      "title": "2. Sütun — Grafik Motoru (Chart Engine, WASM + WebGL)",
+      "summary": "GPU hızlandırmalı render, çok katmanlı grafikleme, özel gölgelendiriciler, gösterge motoru, olay katmanları ve yüksek frekanslı render hattı — tümü tek bir ortak WASM + WebGL çekirdeği üzerinde.",
+      "components": [
+        {
+          "id": "gpu-accelerated-rendering",
+          "name": "GPU hızlandırmalı render"
+        },
+        {
+          "id": "multi-layer-charting",
+          "name": "Çok katmanlı grafikleme"
+        },
+        {
+          "id": "custom-shaders",
+          "name": "Özel gölgelendiriciler"
+        },
+        {
+          "id": "indicator-engine",
+          "name": "Gösterge motoru"
+        },
+        {
+          "id": "event-overlays",
+          "name": "Olay katmanları"
+        },
+        {
+          "id": "high-frequency-rendering-pipeline",
+          "name": "Yüksek frekanslı render hattı"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p4",
+          "order": 4,
+          "title": "Faz 4 — Render Çekirdeği: WASM, GPU Hızlandırma ve Yüksek Frekanslı Hat",
+          "description": "Grafik Motoru'nun performans temelini kuruyoruz: ayrıştırma, toplama ve yerleşim için bir WASM hesaplama çekirdeği, WebGL üzerinde GPU hızlandırmalı render katmanı ve saniyede on binlerce tiki emebilen yüksek frekanslı render hattı.",
+          "components": [
+            "gpu-accelerated-rendering",
+            "high-frequency-rendering-pipeline"
+          ],
+          "deliverables": [
+            "Ayrıştırma, toplama, indeks kurma ve viewport yerleşimi için WASM hesaplama çekirdeği (Rust'tan derlenmiş).",
+            "WebGL üzerinde instanced çizim çağrıları, doku atlası ve tampon havuzu ile GPU hızlandırmalı render katmanı.",
+            "Yüksek frekanslı render hattı: halka tamponlar, kirli bölge güncellemeleri, işçi iş parçacıklarına devretme ve kare zamanlaması.",
+            "Her yakınlaştırma seviyesinde kare bütçesini sabit tutan ayrıntı seviyesi (LOD) ve eleme (culling) sistemi.",
+            "Yeniden üretilebilir sahneler, bellek tavanı ve kare süresi regresyon takibi içeren kıyaslama altyapısı."
+          ],
+          "milestones": [
+            "Orta segment bir GPU'da en az 1.000.000 görünür nokta ile sürdürülebilir 60 fps.",
+            "Kare kaybı olmadan en az 10.000 tik/sn alım.",
+            "p99 kare süresi en fazla 8 ms, WASM hesaplama adımı en fazla 2 ms, WASM-JS sınırı kare başına 0,2 ms altında.",
+            "Kıyaslama sahnesinde soğuk başlangıç (WASM yükleme ve ilk çizim) 500 ms altında.",
+            "30 günlük 1 dakikalık oturum için en yüksek bellek kullanımı en fazla 300 MB."
+          ],
+          "timeline": {
+            "start": "Q2 2027",
+            "end": "Q3 2027",
+            "label": "Q2 – Q3 2027"
+          }
+        },
+        {
+          "id": "p5",
+          "order": 5,
+          "title": "Faz 5 — Çok Katmanlı Grafikleme ve Özel Gölgelendiriciler",
+          "description": "Platformun görsel dilini kuruyoruz: motorun bir araya getirdiği, bağımsız olarak açılıp kapatılabilen katmanlar ve her görsel öğeyi GPU'da çizen özel gölgelendirici sistemi.",
+          "components": [
+            "multi-layer-charting",
+            "custom-shaders"
+          ],
+          "deliverables": [
+            "Çok katmanlı grafikleme: fiyat, hacim, emir defteri derinliği, tasfiye ısı haritası, fonlama ve açık pozisyon katmanları ile makro katmanlar.",
+            "z-sırası, birleştirme, tembel başlatma, ekran dışı katmanlar ve katman durumu kalıcılığı olan katman yöneticisi.",
+            "Mum çubukları, gradyan hacim, ısı haritaları, parlayan çizgiler ve crosshair öğeleri için GLSL özel gölgelendiriciler.",
+            "Sıcak yeniden yükleme, sürümleme ve bir gölgelendirici derlenemediğinde düzgün yedek yol sunan gölgelendirici kayıt defteri.",
+            "Bot Oluşturucu görüntüleyicisinde kaydedilebilen, paylaşılabilen ve geri yüklenebilen katman ve gölgelendirici ön ayarları."
+          ],
+          "milestones": [
+            "En az 12 bağımsız katmanın aynı anda 60 fps ile birleştirilmesi.",
+            "Gölgelendirici derlemesi 50 ms altında; grafiği yeniden yüklemeden ve viewport durumunu kaybetmeden sıcak yeniden yükleme.",
+            "Etkin tüm katmanların toplam maliyeti referans yakınlaştırmada kare başına en fazla 2 ms.",
+            "Yedek render yolu aynı yerleşim geometrisini 1 piksel toleransla üretir.",
+            "CI GPU'larında geçen en az 50 altın kareden oluşan görsel regresyon paketi."
+          ],
+          "timeline": {
+            "start": "Q3 2027",
+            "end": "Q4 2027",
+            "label": "Q3 – Q4 2027"
+          }
+        },
+        {
+          "id": "p6",
+          "order": 6,
+          "title": "Faz 6 — Gösterge Motoru ve Olay Katmanları",
+          "description": "Göstergeleri WASM içinde artımlı hesaplıyoruz; böylece grafik ve stratejiler tek bir uygulamayı paylaşır. Veri Gölü'nden gelen olayları da aynı tuvalde göstererek piyasa bağlamını görünür kılıyoruz.",
+          "components": [
+            "indicator-engine",
+            "event-overlays"
+          ],
+          "deliverables": [
+            "Gösterge motoru: WASM içinde tik başına O(1) güncellemeli artımlı ve akışkan hesaplama.",
+            "Parametre şemaları, warm-up yönetimi ve özel göstergeler için genel API içeren gösterge kayıt defteri.",
+            "Grafik Motoru ile Bot Oluşturucu arasında aynı gösterge çıktısını garanti eden sayısal eşlik katmanı.",
+            "Veri Gölü olaylarıyla beslenen olay katmanları: makro açıklamaları, fonlama dönüşleri, tasfiyeler, listeleme ve listeden çıkarma.",
+            "Zaman çizelgesi işaretleri, uzak yakınlaştırmada kümeleme, filtreler ve kalıcı kullanıcı notları içeren açıklama katmanı."
+          ],
+          "milestones": [
+            "En az 60 yerleşik gösterge; her biri tik başına 0,1 ms içinde güncellenir.",
+            "Grafik ve geri test gösterge değerleri arasında %100 eşlik, göreli hata en fazla 1e-9.",
+            "En az 100.000 olay katmanının kümeleme ile 60 fps'de çizilmesi.",
+            "Deterministik warm-up: gösterge değerleri yüklenen geçmiş miktarından bağımsız.",
+            "Açıklama oluşturma, güncelleme ve silme işlemlerinin oturumlar arasında kayıpsız çalışması."
+          ],
+          "timeline": {
+            "start": "Q4 2027",
+            "end": "Q1 2028",
+            "label": "Q4 2027 – Q1 2028"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bot-builder",
+      "order": 3,
+      "title": "3. Sütun — Düğüm Tabanlı Bot Oluşturucu (Bot Builder, Node-Based)",
+      "summary": "Tipli düğüm grafiği editörü, deterministik düğüm yorumlayıcısı, strateji derleyicisi, geri test motoru, canlı işlem yürütücüsü ve risk yönetimi modülü — fikirden canlı emre tek bir artefakt.",
+      "components": [
+        {
+          "id": "node-graph-editor",
+          "name": "Düğüm grafiği editörü"
+        },
+        {
+          "id": "node-interpreter",
+          "name": "Düğüm yorumlayıcısı"
+        },
+        {
+          "id": "strategy-compiler",
+          "name": "Strateji derleyicisi"
+        },
+        {
+          "id": "backtesting-engine",
+          "name": "Geri test motoru"
+        },
+        {
+          "id": "live-trading-executor",
+          "name": "Canlı işlem yürütücüsü"
+        },
+        {
+          "id": "risk-management-module",
+          "name": "Risk yönetimi modülü"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p7",
+          "order": 7,
+          "title": "Faz 7 — Düğüm Grafiği Editörü ve Düğüm Yorumlayıcısı",
+          "description": "Bot Oluşturucu'nun yazım yüzeyini teslim ediyoruz: tipli bir düğüm grafiği editörü ve her grafiği sanal alan içinde güvenle yürüten deterministik bir yorumlayıcı.",
+          "components": [
+            "node-graph-editor",
+            "node-interpreter"
+          ],
+          "deliverables": [
+            "Düğüm grafiği editörü: düğüm paleti, tipli portlar, canlı doğrulama, geri al ve yinele, gruplar, yorumlar ve minimap içeren tuval.",
+            "Grafiğin sürümlenmiş AST/JSON belgesine serileştirilmesi; kopyala ve yapıştır, alt grafik çıkarma ve diff alınabilir kayıtlar.",
+            "Düğüm yorumlayıcısı: topolojik zamanlayıcı, akışkan ve olay güdümlü düğümler, durum tutan düğümler ve geri basınç kontrolü.",
+            "Sınırlı bellekli halka tamponlar, deterministik tohumlama ve ağ ile dosya sistemine erişimi olmayan sanal alan yürütmesi.",
+            "Düzenlenen alt grafiklerin çalışan bir yorumlama oturumunda sıcak yeniden yüklenmesi."
+          ],
+          "milestones": [
+            "Tipli imzalar ve dokümantasyonla birlikte en az 150 çekirdek düğüm.",
+            "2.000 düğümlü bir grafiği 60 fps'de açma ve düzenleme; doğrulama geçişi 100 ms altında.",
+            "Aynı grafiği aynı girdi akışında yeniden oynatırken bayt bayt aynı çıktı.",
+            "Sanal alandan kaçış test paketi sıfır bulguyla geçer.",
+            "2.000 düğümlü bir grafik için kararlı durum yorumlayıcı belleği 512 MB altında."
+          ],
+          "timeline": {
+            "start": "Q1 2028",
+            "end": "Q2 2028",
+            "label": "Q1 – Q2 2028"
+          }
+        },
+        {
+          "id": "p8",
+          "order": 8,
+          "title": "Faz 8 — Strateji Derleyicisi ve Geri Test Motoru",
+          "description": "Grafikleri optimize edilmiş bir yürütme planına derliyor ve tarihe karşı kanıtlıyoruz: Strateji derleyicisi imzalı artefaktlar üretir, Geri test motoru bunları gerçekçi mikro yapı, komisyon ve gecikmeyle yeniden oynatır.",
+          "components": [
+            "strategy-compiler",
+            "backtesting-engine"
+          ],
+          "deliverables": [
+            "Strateji derleyicisi: grafikten ara temsile ve optimize edilmiş yürütme planına; sabit katlama, ölü düğüm eleme ve dal paralelleştirme.",
+            "Strateji sürümleme, artefakt imzalama ve diff alınabilir strateji geçmişi.",
+            "Geri test motoru: tik ve bar çözünürlüğünde olay güdümlü yeniden oynatma ve çok varlıklı portföy muhasebesi.",
+            "Gerçekçi maliyet modeli: komisyon, kayma, fonlama, borçlanma, gecikme ve kısmi gerçekleşme simülasyonu.",
+            "Yürüyen pencere analizi, parametre taraması, Monte Carlo yeniden örnekleme ve tam metrik seti (Sharpe, Sortino, Calmar, kâr faktörü, maksimum düşüş, kazanma oranı)."
+          ],
+          "milestones": [
+            "Derlenmiş artefakt, referans iş yükünde yorumlanan grafikten en az 5 kat hızlı.",
+            "İleriye bakma sızıntısı test paketi %100 geçer; her sonuç veri sınırı kanıtını kaydeder.",
+            "50 sembolde bir yıllık 1 dakikalık veri, paralel koşucuda 5 dakikadan kısa sürede geri test edilir.",
+            "1.000 parametre kombinasyonu 30 dakikadan kısa sürede ve yeniden üretilebilir sırayla değerlendirilir.",
+            "Aynı yapılandırma ve tohumla iki çalıştırma bayt bayt aynıdır."
+          ],
+          "timeline": {
+            "start": "Q2 2028",
+            "end": "Q3 2028",
+            "label": "Q2 – Q3 2028"
+          }
+        },
+        {
+          "id": "p9",
+          "order": 9,
+          "title": "Faz 9 — Canlı İşlem Yürütücüsü ve Risk Yönetimi Modülü",
+          "description": "Derlenmiş stratejileri mutabakata dayanıklı bir yürütücü üzerinden canlı işleme alıyoruz ve her emri borsaya ulaşmadan önce Risk yönetimi modülünden geçiriyoruz.",
+          "components": [
+            "live-trading-executor",
+            "risk-management-module"
+          ],
+          "deliverables": [
+            "Canlı işlem yürütücüsü: emir yönlendirici, OMS durum makinesi, idempotent istemci emir kimlikleri ve borsa mutabakatı.",
+            "Geri test edilip doğrulanan aynı derlenmiş artefakt ile kâğıt işlemden canlıya geçiş.",
+            "Bağlantı dayanıklılığı: yeniden bağlanma, yedek geçiş, yeniden oynatmaya güvenli yeniden gönderim ve küresel acil durdurma anahtarı.",
+            "Risk yönetimi modülü: işlem öncesi kontroller, pozisyon, maruziyet ve kaldıraç limitleri, strateji başına risk bütçesi ve düşüş devre kesicileri.",
+            "Teminat ve tasfiye izleme; her risk kararının eksiksiz denetim kaydı."
+          ],
+          "milestones": [
+            "30 gün boyunca kâğıt ve canlı arasında en az %99,9 emir niyeti eşliği.",
+            "Borsa gidiş dönüşü dahil emir onayı p95 100 ms altında.",
+            "100 zorunlu yeniden bağlanma senaryosunda sıfır mükerrer emir.",
+            "Acil durdurma anahtarı 1 saniyenin altında devreye girer; 60 gün boyunca gün sonu mutabakat farkı sıfır.",
+            "Risk kontrolleri p99 5 ms altında ve emirlerin %100'ü kayıtlı bir risk kararı taşır."
+          ],
+          "timeline": {
+            "start": "Q3 2028",
+            "end": "Q4 2028",
+            "label": "Q3 – Q4 2028"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ai-engine",
+      "order": 4,
+      "title": "4. Sütun — Yapay Zekâ Motoru (AI Engine)",
+      "summary": "Sinyal üretimi, desen tespiti, piyasa rejimi sınıflandırıcısı, pekiştirmeli öğrenme modülü ve model eğitim hattı — ham serilerden yeniden üretilebilir ve riskle sınırlanmış kararlara.",
+      "components": [
+        {
+          "id": "signal-generation",
+          "name": "Sinyal üretimi"
+        },
+        {
+          "id": "pattern-detection",
+          "name": "Desen tespiti"
+        },
+        {
+          "id": "market-regime-classifier",
+          "name": "Piyasa rejimi sınıflandırıcısı"
+        },
+        {
+          "id": "reinforcement-learning-module",
+          "name": "Pekiştirmeli öğrenme modülü"
+        },
+        {
+          "id": "model-training-pipeline",
+          "name": "Model eğitim hattı"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p10",
+          "order": 10,
+          "title": "Faz 10 — Sinyal Üretimi ve Desen Tespiti",
+          "description": "Veri Gölü'nü karara dönüştürüyoruz: kalibre edilmiş ve sürümlenmiş sinyaller üretiyor, bu sinyalleri açıklayan desenleri — grafik, mum ve mikro yapı — tespit ediyoruz.",
+          "components": [
+            "signal-generation",
+            "pattern-detection"
+          ],
+          "deliverables": [
+            "Sinyal üretimi: TSDB üzerinde kalibre edilmiş olasılıklar ve güven aralıklarıyla özellik katmanı.",
+            "Sürümlenmiş meta veri, TTL, sahiplik ve Bot Oluşturucu grafiklerine doğrudan bağlama içeren sinyal veri yolu.",
+            "Sinyal başına sürüklenme izleme: özellik sürüklenmesi, etiket sürüklenmesi ve kalibrasyon bozulması, uyarı ile birlikte.",
+            "Desen tespiti: geometrik grafik desenleri, mum desenleri ve mikro yapı desenleri (iceberg, spoofing, absorption).",
+            "Desen ailesi başına yayımlanan kesinlik ve yakalama raporlarıyla etiketli desen korpusu."
+          ],
+          "milestones": [
+            "En az 20 üretim sinyali; her biri ayrılmış veride kendi rastgele karıştırma kontrolünü geçer.",
+            "Etiketli korpusta en az 0,75 desen kesinliği ve en az 0,70 yakalama.",
+            "Tetikleyici bar veya olay hazır olduktan sonra sinyal gecikmesi p95 50 ms altında.",
+            "Saptanan dağılım kaymasından sonra 1 saat içinde sürüklenme alarmı.",
+            "Sinyallerin %100'ü sürümüyle birlikte model kayıt defterinden yeniden üretilebilir."
+          ],
+          "timeline": {
+            "start": "Q4 2028",
+            "end": "Q1 2029",
+            "label": "Q4 2028 – Q1 2029"
+          }
+        },
+        {
+          "id": "p11",
+          "order": 11,
+          "title": "Faz 11 — Piyasa Rejimi Sınıflandırıcısı",
+          "description": "Piyasa durumunu gerçek zamanlı etiketliyoruz; böylece sinyaller, stratejiler ve risk limitleri uyum sağlayabilir: varlık başına ve varlıklar arası rejimler ile güven, histerezis ve tam geçmiş.",
+          "components": [
+            "market-regime-classifier"
+          ],
+          "deliverables": [
+            "Rejim taksonomisi: yukarı ve aşağı trend, yatay aralık, yüksek ve düşük volatilite, sığ ve derin likidite, risk iştahı ve riskten kaçınma; varlık başına ve varlıklar arası.",
+            "Durum başına güven skoru içeren çevrimiçi değişim noktası tespiti.",
+            "Rejim titremesini önleyen histerezis ve minimum kalma süresi kuralları.",
+            "Tam yeniden oynatma ve noktasal zaman geri kurulumu sunan, revizyon yanlılığı içermeyen rejim geçmişi deposu.",
+            "Yapay Zekâ Motoru ve Bot Oluşturucu risk bütçelemesinin tükettiği rejim duyarlı yönlendirme."
+          ],
+          "milestones": [
+            "Ayrılmış dönemlerde en az 0,80 rejim doğruluğu ve en fazla 0,05 beklenen kalibrasyon hatası.",
+            "Yanlış anahtar değiştirme oranı %5'in altında ve medyan tespit gecikmesi 15 barın altında.",
+            "Varlık başına rejim her barda p95 20 ms altında güncellenir.",
+            "Beş yıllık rejim geçmişi sınıflandırılmış ve TSDB'den yeniden üretilebilir.",
+            "Rejime koşullu performans artışı her üretim sinyali için ölçülüp belgelenir."
+          ],
+          "timeline": {
+            "start": "Q1 2029",
+            "end": "Q2 2029",
+            "label": "Q1 – Q2 2029"
+          }
+        },
+        {
+          "id": "p12",
+          "order": 12,
+          "title": "Faz 12 — Pekiştirmeli Öğrenme Modülü ve Model Eğitim Hattı",
+          "description": "Döngüyü kapatıyoruz: politikaları Geri test motoru üzerine kurulu bir simülatörde eğitiyoruz, Risk yönetimi modülünün sınırlarına tasarım gereği uyuyoruz ve modelleri yönetişimli bir eğitim hattından yayınlıyoruz.",
+          "components": [
+            "reinforcement-learning-module",
+            "model-training-pipeline"
+          ],
+          "deliverables": [
+            "Pekiştirmeli öğrenme modülü: Geri test motorundan türetilen ve gym tarzı API sunan ortam.",
+            "Risk yönetimi modülünün uyguladığı limitlerle uyumlu ödül şekillendirme.",
+            "Çevrimdışı ve taklit tabanlı ön eğitim ile çevrimiçi ince ayar; politikanın Bot Oluşturucu grafiklerinde kullanılabilir bir artefakt olarak dışa aktarımı.",
+            "Model eğitim hattı: veri kümesi sürümleme ve soy kütüğü, özellik deposu anlık görüntüleri, orkestrasyon ve GPU zamanlaması.",
+            "Deney takibi, hiper parametre araması, model kayıt defteri, değerlendirme kapıları, kanarya sürümü ve geri alma."
+          ],
+          "milestones": [
+            "RL politikaları, aynı risk limitleri altında 5 ayrılmış piyasanın en az 3'ünde en iyi ayarlanmış manuel stratejiyi geçer.",
+            "Simülatör verimi dakikada en az 1.000.000 ortam adımı.",
+            "Herhangi bir eğitim çalışması tek bir manifest dosyasından yeniden üretilebilir.",
+            "Onaylı değerlendirme kapısı kaydı olmadan sıfır model sürümü; geri alma 5 dakikanın altında.",
+            "Küçük bir model için eğitimden kayıt defterine ve dağıtılabilir artefakta geçiş 1 saatten kısa."
+          ],
+          "timeline": {
+            "start": "Q2 2029",
+            "end": "Q3 2029",
+            "label": "Q2 – Q3 2029"
+          }
+        }
+      ]
+    },
+    {
+      "id": "token-economy",
+      "order": 5,
+      "title": "5. Sütun — Token Ekonomisi (Token Economy)",
+      "summary": "Kaynak ve gider muhasebesi olan bir fayda modeli, kilit katmanlı bir staking sistemi, dönem bazlı ödül dağıtımı, zincir üzerinde doğrulanabilir yakma mekanizması ve tüm bunların parametrelerini kontrol eden bir yönetişim modeli.",
+      "components": [
+        {
+          "id": "utility-model",
+          "name": "Fayda modeli"
+        },
+        {
+          "id": "staking-system",
+          "name": "Staking sistemi"
+        },
+        {
+          "id": "reward-distribution",
+          "name": "Ödül dağıtımı"
+        },
+        {
+          "id": "burn-mechanism",
+          "name": "Yakma mekanizması"
+        },
+        {
+          "id": "governance-model",
+          "name": "Yönetişim modeli"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p13",
+          "order": 13,
+          "title": "Faz 13 — Fayda Modeli ve Staking Sistemi",
+          "description": "Token'ın ne için olduğunu ve taahhüdün nasıl fiyatlandığını tanımlıyoruz: kaynak ve gider muhasebesi olan eksiksiz bir fayda haritası ile kilit katmanı, ağırlıklandırma ve slashing kancaları olan bir staking sistemi.",
+          "components": [
+            "utility-model",
+            "staking-system"
+          ],
+          "deliverables": [
+            "Fayda modeli: işlem komisyonları, abonelikler, pazar yeri ödemeleri, hesaplama ve çıkarım kredileri, API kotası ve katman erişimini kapsayan token fayda haritası.",
+            "Kaynak ve gider muhasebesi, katman tablosu, fiyatlama modeli ve kötüye kullanımı önleme kural kitabı.",
+            "Hazine politikası ve kilitleme takvimi, yayımlanmış açılış şeffaflığıyla.",
+            "Staking sistemi: kilit katmanlarıyla stake ve unstake, zaman ve miktar ağırlıklı oy gücü ve ödül tahakkuku.",
+            "Pazar yeri ihlalleri için slashing kancaları, acil durdurma ve dış denetimden geçmiş sözleşmeler."
+          ],
+          "milestones": [
+            "Testnet'te uçtan uca çalışan tam fayda akışları: komisyon, abonelik, kredi ve kota.",
+            "En az 3 sözleşme denetlenmiş ve açık kritik veya yüksek bulgu yok.",
+            "Stake ve unstake gazı en fazla 120.000; ödül tahakkuku ve slashing değişmezlik testleri %100 geçer.",
+            "Değişmezlik ve fuzz paketi en az 10.000 çalıştırma yapar ve hiçbir değişmezlik ihlal edilmez.",
+            "Ekonomik parametre tablosu hakem değerlendirmesinden geçmiş ve beş dilde yayımlanmıştır."
+          ],
+          "timeline": {
+            "start": "Q1 2029",
+            "end": "Q2 2029",
+            "label": "Q1 – Q2 2029"
+          }
+        },
+        {
+          "id": "p14",
+          "order": 14,
+          "title": "Faz 14 — Ödül Dağıtımı ve Yakma Mekanizması",
+          "description": "Katkıyı ödüllendiriyor ve arz politikasını açık hâle getiriyoruz: doğrulanabilir talepli, dönem bazlı ve katkı ağırlıklı ödüller ile platform komisyonlarına bağlı, zincir üzerinde doğrulanabilir bir yakma mekanizması.",
+          "components": [
+            "reward-distribution",
+            "burn-mechanism"
+          ],
+          "deliverables": [
+            "Ödül dağıtımı: dönem tahakkuku, anlık görüntü muhasebesi ve Merkle tabanlı talepler.",
+            "Veri kalitesi, stratejiler, göstergeler, modeller ve hesaplama katkısı üzerinden katkı ağırlıklandırması.",
+            "Çiftçiliğe ve sybil saldırılarına direnç, ödül kilitlemesi ve gaz verimli toplu talep.",
+            "Anlık görüntülerden dönem başına yeniden üretilebilir genel ödül panoları.",
+            "Yakma mekanizması: komisyon yakma takvimi, doğrulanabilir yakma adresi, hazine geri alım ve yakma politikası, yakma üst sınırı ve acil durdurma."
+          ],
+          "milestones": [
+            "3 ay boyunca kesintisiz operasyonda kaçırılan ödül dönemi sıfır.",
+            "Ödül hesaplaması anlık görüntülerden ve yayımlanan ağırlıklardan bağımsız olarak yeniden üretilebilir.",
+            "Yakmaların %100'ü zincir üzerinde genel bir kayda karşı doğrulanabilir.",
+            "Simüle edilmiş çiftçilik kümelerinin en az %95'i sybil karşıtı kurallarla tespit edilir.",
+            "Yakma oranı ve ödül ağırlıkları yalnızca yönetişim kontrollü parametre kayıt defteri üzerinden değiştirilebilir."
+          ],
+          "timeline": {
+            "start": "Q3 2029",
+            "end": "Q3 2029",
+            "label": "Q3 2029"
+          }
+        },
+        {
+          "id": "p15",
+          "order": 15,
+          "title": "Faz 15 — Yönetişim Modeli",
+          "description": "Ekonominin parametrelerini onu kullananlara devrediyoruz: tam bir öneri yaşam döngüsü, stake ağırlıklı ve zaman kilitli oylama, delegasyon ve zaman kilitli zincir üstü yürütme.",
+          "components": [
+            "governance-model"
+          ],
+          "deliverables": [
+            "Eksiksiz öneri yaşam döngüsüne sahip yönetişim modeli: forum taslağı, zincir üstü öneri, oylama, zaman kilidi ve yürütme.",
+            "Delegasyon destekli, stake ağırlıklı ve zaman kilitli oy gücü.",
+            "Nisap ve onay eşikleri ile komisyon, yakma oranı, ödül ağırlıkları ve listelemeler için yönetişim kontrollü parametre kayıt defteri.",
+            "Yayımlanmış oyun kitaplarıyla zaman kilidi ve çok imzalı acil durum prosedürleri.",
+            "Yönetişim dokümantasyonu, öneri şablonları ve genel oylama geçmişi."
+          ],
+          "milestones": [
+            "Testnet'te tam yaşam döngüsü en az 20 kez yürütüldü; bunların içinde 2 parametre değişikliği ve 1 acil durdurma tatbikatı var.",
+            "En az 48 saatlik zaman kilidi zincir üzerinde uygulanır ve tek bir anahtarla atlatılamaz.",
+            "Yönetişim eylemlerinin %100'ü denetlenebilir bir zincir üstü kayıt üretir.",
+            "Delege ve oy gücü muhasebesi, sıfır yüksek bulguyla dış denetimden geçmiştir.",
+            "Yönetişim dokümantasyonu beş dilde yayımlanmıştır."
+          ],
+          "timeline": {
+            "start": "Q4 2029",
+            "end": "Q4 2029",
+            "label": "Q4 2029"
+          }
+        }
+      ]
+    },
+    {
+      "id": "marketplace",
+      "order": 6,
+      "title": "6. Sütun — Pazar Yeri (Marketplace)",
+      "summary": "Strateji pazar yeri, gösterge pazar yeri, yapay zekâ modeli pazar yeri ve üretici ekonomisi — önceki beş sütunun çıktısının lisanslı, ödemesi yapılmış ve doğrulanabilir bir ürüne dönüştüğü yer.",
+      "components": [
+        {
+          "id": "strategy-marketplace",
+          "name": "Strateji pazar yeri"
+        },
+        {
+          "id": "indicator-marketplace",
+          "name": "Gösterge pazar yeri"
+        },
+        {
+          "id": "ai-model-marketplace",
+          "name": "Yapay zekâ modeli pazar yeri"
+        },
+        {
+          "id": "creator-economy",
+          "name": "Üretici ekonomisi"
+        }
+      ],
+      "phases": [
+        {
+          "id": "p16",
+          "order": 16,
+          "title": "Faz 16 — Strateji Pazar Yeri ve Gösterge Pazar Yeri",
+          "description": "Platformun çıktısını üçüncü taraflara açıyoruz: stratejiler makine tarafından doğrulanmış performansla listelenir, göstergeler ise Gösterge motoru için sanal alanlı WASM paketleri olarak dağıtılır.",
+          "components": [
+            "strategy-marketplace",
+            "indicator-marketplace"
+          ],
+          "deliverables": [
+            "Strateji pazar yeri: listelemeler, meta veri, lisanslama ve abonelik ya da kopya modelleri.",
+            "Her listeleme için, Geri test motorunun ileriye bakmama beyanıyla ürettiği makine tarafından doğrulanmış performans.",
+            "Satın alınan stratejilerin canlı veri üzerinde sanal alanda çalıştırılması; puanlama, inceleme ve itiraz ile iade akışı.",
+            "Gösterge pazar yeri: Gösterge motoru için şema ve sürüm kısıtları olan WASM gösterge paketleri.",
+            "Sanal alan kaynak limitleri (CPU, bellek, ağ yok), lisans şartları ve otomatik gelir paylaşımı."
+          ],
+          "milestones": [
+            "Yayınla, doğrula, listele hattı listeleme başına 24 saatten kısa sürede tam otomatik.",
+            "Canlı listelemelerin en az %90'ı makine tarafından doğrulanmış metrikler taşır; doğrulanmamış listelemeler görünür şekilde işaretlenir.",
+            "Sanal alandan kaçış ve kaynak kötüye kullanımı test paketleri sıfır bulguyla geçer.",
+            "Lisanslama ve üretici ödeme mutabakatı 3 ay boyunca sıfır uyuşmazlıkla tamamlanır.",
+            "Pazar yeri 1.000 eşzamanlı listeleme ile yük testinden geçer; sayfa yanıtı p95 300 ms altında."
+          ],
+          "timeline": {
+            "start": "Q2 2029",
+            "end": "Q3 2029",
+            "label": "Q2 – Q3 2029"
+          }
+        },
+        {
+          "id": "p17",
+          "order": 17,
+          "title": "Faz 17 — Yapay Zekâ Modeli Pazar Yeri ve Üretici Ekonomisi",
+          "description": "Ekosistemi tamamlıyoruz: modeller değerlendirme kanıtları ve ölçümlü çıkarımla yayınlanır, üretici ekonomisi ise kalıcı performans için katkı sağlayanlara ödeme yapar.",
+          "components": [
+            "ai-model-marketplace",
+            "creator-economy"
+          ],
+          "deliverables": [
+            "Yapay zekâ modeli pazar yeri: model kartları, değerlendirme karneleri ve ayrılmış veri üzerinde kıyaslama sonuçları.",
+            "Gecikme katmanları ve her çağrı için şeffaf muhasebe ile barındırılan ve ölçümlenen çıkarım.",
+            "Otomatik inceleme tetikleyicileriyle sürüklenme ve bozulma kaynaklı listeden çıkarma politikası.",
+            "Üretici ekonomisi: üretici profilleri, doğrulama, canlı performans ve kullanımdan gelen itibar, telif ve katmanlı gelir paylaşımı.",
+            "Üretici analitikleri, bir üretici SDK'sı ve vergi ile raporlama çıktıları olan token ödeme rayları."
+          ],
+          "milestones": [
+            "Barındırılan çıkarım p95 200 ms altında ve kayda karşı %100 ölçüm doğruluğu.",
+            "Her model kartı listelenmeden önce imzalı bir değerlendirme kapısı kaydı taşır.",
+            "Otomatik sürüklenme incelemesi, bozulma eşiği aşıldıktan sonra 24 saat içinde tetiklenir.",
+            "Birleşik üretici itibarı, listelemelerin %100'ü için canlı ve inceleme verisinden hesaplanır.",
+            "Üretici SDK'sı beş dilde dokümantasyonla yayımlanır."
+          ],
+          "timeline": {
+            "start": "Q4 2029",
+            "end": "Q4 2029",
+            "label": "Q4 2029"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "p1",
+      "to": "p2",
+      "note": "Ağırlıklandırma Motoru puanlama yapmadan önce kanonik ve normalleştirilmiş olaylara ihtiyaç duyar."
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "note": "TSDB ham yükleri değil, ağırlıklandırılmış ve gürültüden arındırılmış gözlemleri saklar."
+    },
+    {
+      "from": "p3",
+      "to": "p4",
+      "note": "Render çekirdeği kanonik serileri TSDB'den okur."
+    },
+    {
+      "from": "p3",
+      "to": "p6",
+      "note": "Olay katmanları, Veri Gölü'nün yayımladığı kanonik olaylarla beslenir."
+    },
+    {
+      "from": "p3",
+      "to": "p9",
+      "note": "Risk kontrolleri, Veri Gölü kalite ve güven skorlarına göre kalibre edilir."
+    },
+    {
+      "from": "p4",
+      "to": "p5",
+      "note": "Her katman ve gölgelendirici GPU render çekirdeğinin üzerine oturur."
+    },
+    {
+      "from": "p5",
+      "to": "p6",
+      "note": "Göstergeler ve olay katmanları katman yöneticisine bağlanır."
+    },
+    {
+      "from": "p6",
+      "to": "p7",
+      "note": "Grafik düğümleri, grafiğin çizdiği gösterge uygulamasının aynısını tüketir."
+    },
+    {
+      "from": "p7",
+      "to": "p8",
+      "note": "Derleyici ve geri test aracı serileştirilmiş düğüm grafiklerini tüketir."
+    },
+    {
+      "from": "p8",
+      "to": "p9",
+      "note": "Canlı yürütücü, geri test edilen aynı derlenmiş artefaktı yeniden oynatır."
+    },
+    {
+      "from": "p8",
+      "to": "p10",
+      "note": "Sinyaller sürümden önce geri test motorunda doğrulanır."
+    },
+    {
+      "from": "p9",
+      "to": "p12",
+      "note": "RL politikaları canlı işlemle aynı risk limitlerine uyar."
+    },
+    {
+      "from": "p9",
+      "to": "p13",
+      "note": "Token faydası gerçek işlem komisyonlarına ve ölçülen kullanıma göre fiyatlanır."
+    },
+    {
+      "from": "p10",
+      "to": "p11",
+      "note": "Rejim özellikleri sinyal özellik katmanından türetilir."
+    },
+    {
+      "from": "p11",
+      "to": "p12",
+      "note": "Rejim durumu, RL modülündeki ödül şekillendirmenin girdisidir."
+    },
+    {
+      "from": "p12",
+      "to": "p17",
+      "note": "Yapay zekâ modeli listelemeleri, eğitim hattının değerlendirme kapılarıyla kontrol edilir."
+    },
+    {
+      "from": "p13",
+      "to": "p14",
+      "note": "Ödüller ve yakmalar fayda ve staking muhasebesi üzerinden kapanır."
+    },
+    {
+      "from": "p13",
+      "to": "p16",
+      "note": "Pazar yeri ödemeleri ve lisans ücretleri token ekonomisinde kapanır."
+    },
+    {
+      "from": "p14",
+      "to": "p15",
+      "note": "Yönetişim, ödül dağıtımı ve yakmanın sahip olduğu parametreleri kontrol eder."
+    },
+    {
+      "from": "p14",
+      "to": "p17",
+      "note": "Üretici ödemeleri, ödül dağıtımı ve yakma politikası muhasebesi üzerinden kapanır."
+    },
+    {
+      "from": "p6",
+      "to": "p16",
+      "note": "Gösterge pazar yeri paketleri Gösterge motorunu hedefler."
+    },
+    {
+      "from": "p8",
+      "to": "p16",
+      "note": "Strateji listelemeleri uçtan uca Geri test motoru tarafından doğrulanır."
+    },
+    {
+      "from": "p16",
+      "to": "p17",
+      "note": "Üretici ekonomisi, strateji ve göstergeleri listeleyen pazar yerini genişletir."
+    }
+  ],
+  "criticalPath": [
+    "p1",
+    "p2",
+    "p3",
+    "p4",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p11",
+    "p12",
+    "p17"
+  ],
+  "exitCriteria": [
+    {
+      "pillarId": "data-lake",
+      "criteria": [
+        "Her tarihsel pencere, aktif ağırlık ve filtre profili altında ham arşivden bayt bayt yeniden türetilebilir.",
+        "Her izlenen sembol için kalite skoru yayımlanır ve karantinaya alınan her kayıt uçtan uca izlenebilir."
+      ]
+    },
+    {
+      "pillarId": "chart-engine",
+      "criteria": [
+        "Gösterge motoru Bot Oluşturucu ile sayısal eşliğini korurken tüm katman yığını 60 fps'de çizilir.",
+        "Veri Gölü'nün yayımladığı her olay aynı tuvalde bir katman olarak gösterilebilir."
+      ]
+    },
+    {
+      "pillarId": "bot-builder",
+      "criteria": [
+        "Aynı derlenmiş strateji artefaktı geri test, kâğıt ve canlı için kullanılır; yeniden yazım gerekmez.",
+        "Hiçbir emir, Risk yönetimi modülünden kayıtlı bir risk kararı olmadan borsaya ulaşmaz."
+      ]
+    },
+    {
+      "pillarId": "ai-engine",
+      "criteria": [
+        "Yayınlanan her sinyal, model ve politika kayıt defterinden yeniden üretilebilir ve canlı risk limitleri altında değerlendirme kapısını geçer.",
+        "Her sinyal ve model otomatik bir inceleme yoluyla sürüklenme açısından izlenir."
+      ]
+    },
+    {
+      "pillarId": "token-economy",
+      "criteria": [
+        "Fayda, staking, ödüller, yakma ve yönetişim denetlenmiş sözleşmelerle ve imtiyazlı atlatma olmadan zincir üzerinde canlıdır.",
+        "Her ekonomik parametre yalnızca yönetişim kontrollü parametre kayıt defteri üzerinden değiştirilebilir."
+      ]
+    },
+    {
+      "pillarId": "marketplace",
+      "criteria": [
+        "Üçüncü taraflar doğrulanmış, sanal alanlı, lisanslı ve otomatik ödenen strateji, gösterge ve modeller yayınlar.",
+        "Her listeleme satılmadan önce makine tarafından doğrulanmış kanıt taşır."
+      ]
+    }
+  ]
+}

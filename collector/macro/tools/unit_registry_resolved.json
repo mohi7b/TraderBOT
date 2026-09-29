@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "tool": "unit_registry_resolve.cjs v1"
+  },
+  "by_dataset": {
+    "BIS": {
+      "resolved": 3,
+      "unresolved": 24
+    },
+    "IMF": {
+      "resolved": 21,
+      "unresolved": 12
+    },
+    "WB": {
+      "resolved": 0,
+      "unresolved": 1498
+    },
+    "OECD": {
+      "resolved": 0,
+      "unresolved": 12
+    },
+    "FRED": {
+      "resolved": 0,
+      "unresolved": 12
+    },
+    "EUROSTAT": {
+      "resolved": 0,
+      "unresolved": 7
+    }
+  },
+  "resolved": [
+    {
+      "dataset": "BIS",
+      "code": "CREDIT_GAP",
+      "unit": "% of trend GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "BIS",
+      "code": "DEBT_SERVICE_RATIO",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "BIS",
+      "code": "PROPERTY_PRICES",
+      "unit": "Index (Real Property Prices)",
+      "kind": "index"
+    },
+    {
+      "dataset": "IMF",
+      "code": "BM_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "BT_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "BX_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "ENEER",
+      "unit": "Index (EER)",
+      "kind": "index"
+    },
+    {
+      "dataset": "IMF",
+      "code": "EREER",
+      "unit": "Index (EER)",
+      "kind": "index"
+    },
+    {
+      "dataset": "IMF",
+      "code": "FDSAOP_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "FDSAOP_PCH",
+      "unit": "YoY %",
+      "kind": "rate"
+    },
+    {
+      "dataset": "IMF",
+      "code": "FMB_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "FMB_PCH",
+      "unit": "YoY %",
+      "kind": "rate"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GG_DEBT_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGR_G01_GDP_PT",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGRXG_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGX_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXCNL_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXCNL_NGDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXCNLXG_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXONLB_G01_GDP_PT",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXWDG_GDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXWDG_NGDP",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "GGXWDN_G01_GDP_PT",
+      "unit": "% of GDP",
+      "kind": "percent"
+    },
+    {
+      "dataset": "IMF",
+      "code": "NGDP_R_PCH",
+      "unit": "YoY %",
+      "kind": "rate"
+    }
+  ],
+  "unresolved": 1565
+}

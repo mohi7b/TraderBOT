@@ -1,0 +1,8 @@
+micro
+short
+intraday
+medium
+long
+weekly
+monthly
+yearly

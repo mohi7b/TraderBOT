@@ -1,0 +1,25 @@
+{
+  "country": { "type": "UTF8" },
+  "variable": { "type": "UTF8" },
+  "value": { "type": "DOUBLE" },
+
+  "macro_value_start_time_utc": { "type": "UTF8" },
+  "macro_value_end_time_utc": { "type": "UTF8", "optional": true },
+  "macro_value_duration_days": { "type": "DOUBLE", "optional": true },
+  "macro_value_is_active": { "type": "BOOLEAN" },
+
+  "category": { "type": "UTF8", "optional": true },
+  "sub_category": { "type": "UTF8", "optional": true },
+  "frequency": { "type": "UTF8", "optional": true },
+  "unit": { "type": "UTF8", "optional": true },
+
+  "source_primary": { "type": "UTF8", "optional": true },
+  "source_secondary": { "type": "UTF8", "optional": true },
+  "release_lag_days": { "type": "DOUBLE", "optional": true },
+
+  "date": { "type": "UTF8" },
+  "quality_flag": { "type": "UTF8" },
+  "revision_flag": { "type": "UTF8" },
+
+  "last_updated": { "type": "UTF8" }
+}

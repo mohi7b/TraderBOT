@@ -1,0 +1,346 @@
+{
+  "title": "ماکرو",
+  "groups": {
+    "1A_inflation": "تورم",
+    "1B_growth": "رشد",
+    "1C_labor": "بازار کار"
+  },
+  "metrics": {
+    "CPI": "شاخص قیمت مصرف‌کننده",
+    "CORE_CPI": "تورم پایه",
+    "PPI": "شاخص قیمت تولیدکننده",
+    "GDP_DEFL": "دِفلِیتور تولید ناخالص داخلی",
+    "GDP": "تولید ناخالص داخلی",
+    "GDP_GROWTH": "رشد تولید ناخالص داخلی",
+    "UNEMP": "نرخ بیکاری",
+    "EMP": "اشتغال"
+  },
+  "cards": {
+    "inflation": "کارت تورم",
+    "gdp": "کارت رشد",
+    "labor": "کارت بازار کار",
+    "country": "کشور"
+  },
+  "charts": {
+    "cpi_yoy_title": "تورم سالانهٔ CPI — کلی در برابر پایه",
+    "countries_available": "{count} کشور",
+    "as_of": "تا تاریخ",
+    "yoy_axis": "تورم سالانه ٪",
+    "source": "منبع",
+    "frequency": "دوره",
+    "empty": "برای این کشور دادهٔ CPI موجود نیست",
+    "legend": {
+      "headline": "کلی (Headline)",
+      "core": "هسته (Core)",
+      "annualized3m": "سالانه‌شدهٔ ۳ماهه"
+    },
+    "mode": {
+      "raw": "نرخ آماده (بدون محاسبه)",
+      "computed": "محاسبه‌شده"
+    },
+    "cadence_padded": "منبع فصلی (تجمیع‌شده)",
+    "empty_cpi": "برای این کشور دادهٔ تورم (CPI) موجود نیست",
+    "empty_policy": "برای این کشور دادهٔ نرخ سیاستی موجود نیست",
+    "empty_growth": "برای این کشور دادهٔ رشد اقتصادی موجود نیست",
+    "empty_financial": "برای این کشور دادهٔ شرایط مالی موجود نیست",
+    "empty_hist": "برای این دارایی/ونو/تایم‌فریم کندلی موجود نیست",
+    "hist_service_title": "سرویس تاریخی در دسترس نیست (پورت ۴۰۰۰)",
+    "hist_service_hint": "فایل collector/crypto/historical/api/server.cjs را روی پورت {port} بالا بیاورید؛ چارت به‌محض پاسخ سرویس رسم می‌شود.",
+    "hist_clamped_note": "بازهٔ درخواستی به سقف‌های سرویس برش خورد (بازهٔ کوتاه‌تر نمایش داده می‌شود).",
+    "policy_title": "نرخ بهرهٔ رسمی در برابر تورم کل",
+    "policy_unit": "٪ (نرخ و تورم)",
+    "policy_legend": {
+      "rate": "نرخ سیاستی",
+      "ecb": "نرخ سیاستی ECB (منطقهٔ یورو)",
+      "inflation": "تورم کل"
+    },
+    "growth_title": "رشد اقتصادی (GDP)",
+    "growth_unit": "٪ (سالانه و فصلی SAAR)",
+    "growth_legend": {
+      "yoy": "رشد سالانه",
+      "qoq": "رشد فصلی (سالانه‌شده)",
+      "trend": "روند (میانگین ۴ فصل)"
+    },
+    "financial_title": "شرایط مالی",
+    "financial_unit": "شاخص FCI · ٪ (بازدهی ۱۰ساله)",
+    "financial_legend": {
+      "fci": "شاخص شرایط مالی (FCI)",
+      "y10": "بازدهی ۱۰سالهٔ کشوری"
+    }
+  },
+  "signals": {
+    "_doc": "v3: tooltipهای سیگنالها — هیچ متن ثابتی در دامنه/کامپوننت نیست (Chart Engine v3)",
+    "pas": {
+      "hint": "PAS · EFT={eft}% (فعلی={current} · آینده={future}) · جهت={direction} · شدت={count} · RMI={rmi} · IM={im} · GAP={gap} · PRF={prf}"
+    },
+    "rmi": {
+      "hint": "RMI = ΔRate(1m)+ΔRate(3m) = {value} — مثبت = سیاست انقباضی"
+    },
+    "im": {
+      "hint": "IM = ΔCPI(1m)+ΔCPI(3m) = {value} — مثبت = تورم شتاب‌گرفته"
+    },
+    "gap": {
+      "hint": "GAP = نرخ سیاستی − تورم = {value}% — مثبت = نرخ حقیقی مثبت"
+    },
+    "prf": {
+      "hint": "PRF = قابلیت‌اعتماد سیاست = {value}% (انطباق با هدف ۶۰٪ + پایداری نرخ ۴۰٪)"
+    },
+    "real": {
+      "hint": "Real = نرخ سیاستی − تورم کل = {policy} − {cpi} = {real}pp · آستانه‌ها: کمتر از {strongNeg} فوق‌انبساطی · کمتر از {mildNeg} انبساطی · بین ±{neutral} خنثی · بیشتر از {neutral} انقباضیِ واقعی",
+      "noData": "Real — نرخ سیاستی یا تورم کل برای این کشور موجود نیست ⇒ مقدار رسم نمی‌شود.",
+      "invalid": "Real — مقدار نامعتبر در دادهٔ منبع."
+    },
+    "yld": {
+      "hint": "Yld = بازدهی ۱۰ساله = {value}% ({date}) · آستانه‌ها: کمتر از {low} شرایط آسان · کمتر از {neutralHigh} خنثی · کمتر از {tightHigh} سخت · {tightHigh} و بیشتر = فشار مالی",
+      "noDataStale": "Yld — آخرین دادهٔ موجود {date} است (کهن‌تر از {maxAge} ماه ⇒ رسم نمی‌شود).",
+      "noDataSource": "Yld — منبع بازدهی ۱۰ساله برای این کشور سری ندارد (FRED/OECD پوشش نمی‌دهند)."
+    },
+    "gas": {
+      "hint": "GAS · GFT={gft} (سطح {level}) · فعلی={current} · آینده={future} · جهت={direction} · شدت={count} · فشار={pressure} · GMI={gmi} · OGI={ogi}% · σ={sigma} · پایداری={stability}% · GAPg={gapg}pp · منبع: YoY={yoySrc} · QoQ={qoqSrc} · {sources}",
+      "noData": "GAS — دادهٔ رشد کافی برای این کشور موجود نیست. منبع: YoY={yoySrc} · QoQ={qoqSrc} · {sources}"
+    },
+    "gmi": {
+      "hint": "GMI = Δ۱+Δ۳ رشد YoY به‌علاوهٔ Δ۱+Δ۳ رشد QoQ = {value} · منبع: YoY={yoySrc} · QoQ={qoqSrc} · {sources}"
+    },
+    "ogi": {
+      "hint": "OGI = انحراف سطح GDP از روند ۴فصلی = {value}% (پروکسی مستند «GDP بالقوه»)"
+    },
+    "gsi": {
+      "hint": "GSI = σ گام‌های رشد YoY = {sigma} · پایداری نرمال‌شده = {stability}% (σ مرجع {sigmaRef})"
+    },
+    "pmi": {
+      "noData": "PMI — هیچ providerی PMI را در pipeline منتشر نمی‌کند (IND_PROD تنها پروکسی صنعت است)."
+    },
+    "now": {
+      "noData": "NOW — منبع Nowcast در pipeline موجود نیست؛ مقدار تقریبی ساخته نمی‌شود."
+    },
+    "gapg": {
+      "hint": "GAPg = رشد YoY منهای میانگین ۴ فصل قبل = {value}pp · مثبت = رشد بالای روند"
+    },
+    "fas": {
+      "hint": "FAS · FCI={fci} (سطح {level}) · Hardness={hardness}% · جهت={direction} · شدت={count} · ΔY10+ΔCredit={deltaSum} · اجزا: y10={y10} · credit={credit} · vol={vol} · equity={equity} · dxy={dxy} · liquidity={liquidity} · موجود: {used}",
+      "noData": "FAS — هیچ ورودی شرایط مالی در دسترس/تازه نبود ⇒ بج خنثی."
+    },
+    "financial": {
+      "sourceNote": "Y10 کشوری: {country} ({y10Date}) · موجود={y10Available} · Credit/DXY/Equity/Liquidity/Vol شاخصهای جهانی‌اند (FRED/US)"
+    },
+    "y10": {
+      "hint": "Y10 = بازدهی ۱۰سالهٔ {country} = {value} · Δ۱={delta} واحد درصد ⇒ بالا رفتن = سخت‌تر",
+      "noData": "Y10 — بازدهی ۱۰ساله برای این کشور در دسترس نیست."
+    },
+    "credit": {
+      "hint": "Credit = اسپرد اعتباری IG (OAS) = {value} · Δ۱={delta} ⇒ پهن‌تر شدن = سخت‌تر · جهانی (US)",
+      "noData": "Credit — اسپرد اعتباری در دسترس نیست."
+    },
+    "dxy": {
+      "hint": "DXY = شاخص مؤثر دلار = {value} · Δ۱={delta}% ⇒ قوی‌تر شدن = سخت‌تر · جهانی",
+      "noData": "DXY — شاخص دلار در دسترس نیست."
+    },
+    "equity": {
+      "hint": "Equity = شاخص سهام (S&P 500) = {value} · Δ۱={delta}% ⇒ بالا رفتن = آسان‌تر · جهانی",
+      "noData": "Equity — شاخص سهام در دسترس نیست."
+    },
+    "liquidity": {
+      "hint": "Liquidity = رشد سالانهٔ نقدینگی (M2) = {yoy} · Δ۳ماه={delta3} · سطح={level} · پروکسی جهانی (M2 آمریکا)",
+      "noData": "Liquidity — سری نقدینگی (M2) در دسترس نیست."
+    },
+    "vol": {
+      "hint": "Vol = نوسان انتظاری (VIX) = {value} · Δ۱={delta}% ⇒ بالا رفتن = سخت‌تر · جهانی",
+      "noData": "Vol — نوسان بازار (VIX) در دسترس نیست."
+    }
+  },
+  "meta": {
+    "inflation_target": "هدف تورمی",
+    "country": "کشور"
+  },
+  "summary": {
+    "title": "خلاصهٔ گروه",
+    "global_trend": "روند کلی",
+    "trend": {
+      "heating": "فشار صعودی",
+      "cooling": "فشار نزولی",
+      "stable": "باثبات",
+      "mixed": "مختلط"
+    },
+    "rising": "صعودی",
+    "falling": "نزولی",
+    "flat": "بی‌تغییر",
+    "avg_yoy": "میانگین سالانه",
+    "avg_mom": "میانگین ماهانه",
+    "as_of": "تاریخ داده",
+    "series_count": "تعداد سری",
+    "coverage": "پوشش"
+  },
+  "risk": {
+    "title": "ریسک",
+    "high_volatility": "نوسان بالا",
+    "sharp_reversal": "بازگشت تند",
+    "abnormal_momentum": "مومنتوم غیرعادی",
+    "vol_spike": "جهش نوسان",
+    "near_peak": "نزدیک سقف",
+    "near_trough": "نزدیک کف",
+    "none": "بدون ریسک"
+  },
+  "cc": {
+    "title": "مرکز فرماندهی",
+    "open": "باز کردن مرکز فرماندهی",
+    "close": "بستن مرکز فرماندهی",
+    "on": "روشن",
+    "off": "خاموش",
+    "active": "آیتم‌های فعال",
+    "library": "کتابخانه",
+    "add": "افزودن",
+    "remove": "حذف",
+    "empty": "چیزی فعال نیست",
+    "settings": "تنظیمات",
+    "params": "پارامترها",
+    "noParams": "این آیتم پارامتر عددی ندارد",
+    "range": "بازه",
+    "removeItem": "حذف آیتم",
+    "instance": "نمونه",
+    "clickAway": "برای بستن، روی چارت کلیک کن",
+    "module": {
+      "multichart": "چارت چندگانه",
+      "microflow": "ریزساختار و جریان سفارش",
+      "indicators": "نشانگرهای تکنیکال",
+      "priceaction": "پرایس اکشن و ساختار بازار",
+      "signals": "سیگنال‌های معاملاتی",
+      "moneyflow": "جریان پول و بازار مشتقات",
+      "pulse": "نبض بازار و رویدادها",
+      "ai": "تحلیل هوش مصنوعی",
+      "bots": "ربات‌های معاملاتی",
+      "advanced": "تنظیمات پیشرفته"
+    },
+    "item": {
+      "multichart.panes": "پنل‌ها",
+      "multichart.sync": "همگام‌سازی",
+      "microflow.delta": "دلتا",
+      "microflow.imbalance": "عدم تعادل",
+      "indicators.ema": "میانگین نمایی (EMA)",
+      "indicators.sma": "میانگین ساده (SMA)",
+      "indicators.rsi": "RSI",
+      "indicators.macd": "MACD",
+      "indicators.atr": "ATR",
+      "indicators.bb": "باندهای بولینگر",
+      "indicators.vwap": "VWAP",
+      "priceaction.swing": "سوئینگ",
+      "priceaction.bos": "شکست ساختار",
+      "priceaction.fvg": "گپ ارزش منصفانه",
+      "signals.cross": "کراس",
+      "signals.volumeSpike": "جهش حجم",
+      "signals.atrBreakout": "شکست ATR",
+      "moneyflow.cvd": "دلتای تجمعی",
+      "moneyflow.funding": "نرخ فاندینگ",
+      "moneyflow.openInterest": "موقعیت باز",
+      "pulse.events": "رویدادها",
+      "pulse.sentiment": "احساسات بازار",
+      "ai.summary": "خلاصه",
+      "bots.paper": "معاملات کاغذی",
+      "bots.alerts": "هشدارها",
+      "advanced.frame": "قاب",
+      "advanced.payload": "بار داده",
+      "advanced.cache": "کش"
+    },
+    "desc": {
+      "multichart": "چیدمان پنل‌ها و همگام‌سازی نماها",
+      "microflow": "دلتا و عدم تعادل سفارش‌ها در هر کندل",
+      "indicators": "میانگین‌ها، نوسان و مومنتوم روی کندل بسته",
+      "priceaction": "سوئینگ‌ها، شکست ساختار و گپ‌های ارزش",
+      "signals": "رویدادهای کراس، حجم و شکست دامنه",
+      "moneyflow": "دلتای تجمعی، فاندینگ و موقعیت باز",
+      "pulse": "رویدادهای بازار و جهت احساسات",
+      "ai": "خلاصهٔ تحلیلی داده‌های همین چارت",
+      "bots": "اجرای کاغذی و هشدارها",
+      "advanced": "قاب، بار داده و وضعیت کش"
+    }
+  },
+  "al": {
+    "signals": {
+      "volume": {
+        "label": "VS",
+        "hint": "جهش حجم: حجم کندل با میانگین {window} کندل قبل، |z| ≥ {z} انحراف معیار فاصله دارد."
+      },
+      "atr": {
+        "label": "AB",
+        "hint": "شکست ATR: دامنه از {k} برابر ATR کندل قبل بیشتر شده است (شکست مبتنی بر نوسان، نه BOS ساختاری)."
+      },
+      "patterns": {
+        "label": "PAT",
+        "hint": "الگوهای کندلی: دوجی (بدنه ≤ {dojiRatio}×دامنه)، چکش/ستاره ثاقب (سایه ≥ {shadowRatio}×بدنه) و پوشای صعودی/نزولی. فقط «هشدار الگو» است، نه سیگنال ورود."
+      },
+      "divergence": {
+        "label": "DIV",
+        "hint": "دایورجنس بین پیوت قیمت و اسیلاتور (عرض پیوت {pivot} و حداکثر {lookback} کندل فاصله)، تأییدشده فقط بعد از {pivot} کندل — پیش از تأیید به آن اتکا نشود."
+      },
+      "structure": {
+        "label": "STR",
+        "hint": "ساختار بازار: بسته‌شدن فراتر از آخرین سوینگ **تأییدشده** (عرض {pivot} و ادغام پیوت‌های نزدیک‌تر از {minBars} کندل). شکست هم‌جهت = BOS (ادامه) و خلاف جهت = CHoCH (تغییر کاراکتر). تأیید روی close کندل شکست."
+      },
+      "fvg": {
+        "label": "FVG",
+        "hint": "شکاف ارزش منصفانه: عدم‌تعادل سه‌کندلی (low[i] > high[i−2] یا high[i] < low[i−2]) با ناحیهٔ معامله‌نشده. ناحیه‌های پرشده علامت می‌خورند، حذف نمی‌شوند."
+      }
+    }
+  },
+  "hist": {
+    "title": "کندل تاریخی — BTC/USDT",
+    "asset": "دارایی",
+    "venue": "صرافی",
+    "timeframe": "تایم‌فریم",
+    "apply": "اعمال",
+    "legend_candle": "OHLC",
+    "legend_ema": "EMA",
+    "legend_sma": "SMA",
+    "legend_volume": "حجم",
+    "cross_golden": "طلایی",
+    "cross_death": "مرگ",
+    "cross_none": "N/A",
+    "warn_ok": "سالم",
+    "pane": "پنل",
+    "signals": {
+      "btc": {
+        "label": "BTC",
+        "hint": "آخرین قیمت بسته‌شدن و تغییر آن نسبت به کندل قبل (روی محور بسته‌شدن نیویورک)."
+      },
+      "tf": {
+        "label": "TF",
+        "hint": "تایم‌فریم درخواستی از سرویس تاریخی (کلید lowercase موتور)."
+      },
+      "venue": {
+        "label": "VENUE",
+        "hint": "فیلتر صرافی؛ «همهٔ ونوها» پارامتر exchange نمی‌فرستد و همهٔ صرافی‌ها را تجمیع می‌کند."
+      },
+      "cross": {
+        "label": "CX",
+        "hint": "آخرین قطع EMA{fast} نسبت به SMA{slow}؛ عدد نشان می‌دهد چند کندل قبل رخ داده است."
+      },
+      "gap": {
+        "label": "GAP",
+        "hint": "شکاف‌های کندل غایب در بازهٔ بازگشتی: پوشش {coverage}٪ و بزرگ‌ترین شکاف {max} کندل. گپ‌ها فقط گزارش می‌شوند و هیچ کندل ساختگی ساخته نمی‌شود."
+      },
+      "vol": {
+        "label": "VOL",
+        "hint": "حجم آخرین کندل به‌صورت z-score نسبت به میانگین ۲۰ کندل؛ |z| ≥ ۲ برجسته می‌شود."
+      },
+      "spread": {
+        "label": "SPRD",
+        "hint": "فاصلهٔ EMA{fast} و SMA{slow} به درصد میانگین کند."
+      },
+      "warn": {
+        "label": "WARN",
+        "hint": "بج هشدار سلامت داده (عرض دوبرابر): کهنگی، گپ، پوشش کم یا خطای سرویس."
+      }
+    }
+  },
+  "series": {
+    "latest": "آخرین",
+    "yoy": "سالانه",
+    "mom": "ماهانه",
+    "unit": "واحد",
+    "trend": "روند",
+    "source": "منبع",
+    "no_data": "داده‌ای برای نمایش نیست"
+  },
+  "crypto_soon_title": "این نوع چارت هنوز فعال نشده است",
+  "crypto_soon_body": "به‌زودی فعال می‌شود؛ فعلاً فقط چارت کندلی در دسترس است."
+}

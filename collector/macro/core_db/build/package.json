@@ -1,0 +1,14 @@
+{
+  "name": "macro-core-db-build",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build tool for Macro Core DB (collector/macro/core_db/core.db) - lightweight subset of macro.db",
+  "main": "build_core_db.cjs",
+  "scripts": {
+    "build": "node build_core_db.cjs",
+    "count": "node build_core_db.cjs --count-only"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0"
+  }
+}

@@ -1,0 +1,5 @@
+جدول ارتباط سشن‌ها با قدرت حرکت قیمت
+سشن	قدرت حرکت	علت علمی	داده‌های لازم
+Asia	کم	نقدینگی کم، عمق کم	Volume، Depth، Liquidity
+London	زیاد	ورود نقدینگی اروپا	Volume Burst، Depth Expansion
+New York	بسیار زیاد	ورود نقدینگی آمریکا، لیکوییدیشن	Liquidation Map، Orderflow، Whale Flow

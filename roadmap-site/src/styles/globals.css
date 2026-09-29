@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RTL support: src/pages/index.tsx sets dir on the content wrapper (<main>),
+   while the sticky header always stays LTR. */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+  padding-inline-start: 1.25rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll snapping (opt-in).
+ *
+ * `html[data-snap="on"]` is set by <SnapToggle />. Snap targets carry
+ * `snap-stop`; pillar cards drop that class while expanded so a long open
+ * card can be read without fighting the snap points.
+ * ------------------------------------------------------------------ */
+.snap-stop,
+.anchor-offset {
+  scroll-margin-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-snap="on"] {
+    scroll-snap-type: y proximity;
+  }
+
+  html[data-snap="on"] .snap-stop {
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Reveal on scroll — progressive enhancement.
+ *
+ * Pure CSS scroll-driven animation: browsers without
+ * `animation-timeline: view()` simply render the content immediately,
+ * so there is no JS, no layout shift and no flash of hidden content.
+ * ------------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+
+    @keyframes reveal-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+}
+

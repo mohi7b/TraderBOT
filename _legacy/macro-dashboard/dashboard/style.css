@@ -1,0 +1,102 @@
+:root {
+  --bg: #0f1420;
+  --panel: #171e2e;
+  --panel-2: #1e2739;
+  --line: #2a3550;
+  --text: #e7ecf6;
+  --muted: #8b98b5;
+  --accent: #4da3ff;
+  --good: #34c98a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 13px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 18px; margin: 0; color: #fff; }
+header p { margin: 0; color: var(--muted); font-size: 12px; }
+
+main#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
+  gap: 14px;
+  padding: 16px 20px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 12px 4px;
+}
+.card h2 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  letter-spacing: 0.4px;
+  color: var(--accent);
+}
+.series-count {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.table-wrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+th {
+  position: sticky;
+  top: 0;
+  background: var(--panel-2);
+  color: var(--muted);
+  text-align: left;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+td {
+  padding: 5px 8px;
+  border-bottom: 1px solid rgba(42, 53, 80, 0.5);
+  white-space: nowrap;
+}
+tr:hover td { background: rgba(77, 163, 255, 0.06); }
+
+td.sid { color: var(--muted); font-family: ui-monospace, monospace; font-size: 11px; }
+td.freq { text-align: center; color: var(--muted); }
+td.dt { font-family: ui-monospace, monospace; color: var(--text); }
+td.val {
+  text-align: right;
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+  color: var(--good);
+}
+
+footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+footer code { color: var(--accent); }

@@ -1,0 +1,51 @@
+collector/crypto/realtime/futures
+├── candles
+│   ├── candles.cjs
+│   ├── candles_aggregator.cjs
+│   └── candles_multi_tf.cjs
+├── depth
+│   ├── depth.cjs
+│   ├── depth_100.cjs
+│   ├── depth_aggregator.cjs
+│   ├── depth_delta.cjs
+│   ├── depth_engine.cjs
+│   ├── depth_full.cjs
+│   ├── depth_history.cjs
+│   ├── depth_imbalance.cjs
+│   ├── depth_pressure.cjs
+│   ├── depth_router.cjs
+│   ├── dynamic_grid.cjs
+│   ├── liquidity_score.cjs
+│   ├── master_grid.cjs
+│   └── ticksize.cjs
+├── funding
+│   ├── funding.cjs
+│   ├── funding_aggregator.cjs
+│   ├── funding_delta.cjs
+│   ├── funding_pressure.cjs
+│   └── funding_trend.cjs
+├── liquidations
+│   ├── liquidation.cjs
+│   ├── liquidation_aggregator.cjs
+│   ├── liquidation_clusters.cjs
+│   ├── liquidation_delta.cjs
+│   ├── liquidation_pressure.cjs
+│   └── liquidation_trend.cjs
+├── mark_price
+│   ├── mark_price.cjs
+│   ├── mark_price_delta.cjs
+│   ├── mark_price_trend.cjs
+│   └── mark_price_volatility.cjs
+├── oi
+│   ├── oi.cjs
+│   ├── oi_aggregator.cjs
+│   ├── oi_delta.cjs
+│   ├── oi_pressure.cjs
+│   ├── oi_trend.cjs
+│   └── oi_volatility.cjs
+└── price
+    ├── price.cjs
+    ├── price_delta.cjs
+    ├── price_speed.cjs
+    ├── price_trend.cjs
+    └── price_volatility.cjs

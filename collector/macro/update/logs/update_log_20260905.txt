@@ -1,0 +1,82 @@
+[2026-09-05T20:54:34.221Z] [======] Macro Live Update started at 2026-09-05T20:54:34.221Z
+[2026-09-05T20:54:34.224Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:54:34.224Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:54:34.224Z] [INFO] Scheduled (release_events, nearest-first): FRED
+[2026-09-05T20:54:34.224Z] [======] === FRED (schedule: explicit) ===
+[2026-09-05T20:54:36.656Z] [INFO] [FRED] light check -> new_data (signal changed: true)
+[2026-09-05T20:54:36.660Z] [======] === Update summary ===
+[2026-09-05T20:54:36.660Z] [INFO] [FRED] new_data
+[2026-09-05T20:54:36.660Z] [SUCCESS] Macro Live Update finished (2.4s)
+[2026-09-05T20:57:23.015Z] [======] Macro Live Update started at 2026-09-05T20:57:23.015Z
+[2026-09-05T20:57:23.017Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:57:23.017Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:57:23.017Z] [INFO] Scheduled (release_events, nearest-first): FRED
+[2026-09-05T20:57:23.017Z] [======] === FRED (schedule: explicit) ===
+[2026-09-05T20:57:23.533Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-09-05T20:57:23.533Z] [======] === Update summary ===
+[2026-09-05T20:57:23.533Z] [INFO] [FRED] no_new_data
+[2026-09-05T20:57:23.534Z] [SUCCESS] Macro Live Update finished (0.5s)
+[2026-09-05T20:57:50.299Z] [======] Macro Live Update started at 2026-09-05T20:57:50.299Z
+[2026-09-05T20:57:50.301Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:57:50.301Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:57:50.301Z] [INFO] Scheduled (release_events, nearest-first): BIS
+[2026-09-05T20:57:50.301Z] [======] === BIS (schedule: explicit) ===
+[2026-09-05T20:57:50.524Z] [INFO] [BIS] light check -> new_data (signal changed: true)
+[2026-09-05T20:57:50.525Z] [======] === Update summary ===
+[2026-09-05T20:57:50.525Z] [INFO] [BIS] new_data
+[2026-09-05T20:57:50.525Z] [SUCCESS] Macro Live Update finished (0.2s)
+[2026-09-05T20:58:19.921Z] [======] Macro Live Update started at 2026-09-05T20:58:19.921Z
+[2026-09-05T20:58:19.923Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:58:19.923Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:58:19.923Z] [INFO] Scheduled (release_events, nearest-first): EUROSTAT
+[2026-09-05T20:58:19.923Z] [======] === EUROSTAT (schedule: explicit) ===
+[2026-09-05T20:58:20.093Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-09-05T20:58:20.093Z] [======] === Update summary ===
+[2026-09-05T20:58:20.094Z] [INFO] [EUROSTAT] no_new_data
+[2026-09-05T20:58:20.094Z] [SUCCESS] Macro Live Update finished (0.2s)
+[2026-09-05T20:58:57.076Z] [======] Macro Live Update started at 2026-09-05T20:58:57.075Z
+[2026-09-05T20:58:57.077Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:58:57.077Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:58:57.078Z] [INFO] Scheduled (release_events, nearest-first): OECD
+[2026-09-05T20:58:57.078Z] [======] === OECD (schedule: monthly) ===
+[2026-09-05T20:58:59.406Z] [INFO] [OECD] light check -> new_data (signal changed: true)
+[2026-09-05T20:58:59.407Z] [======] === Update summary ===
+[2026-09-05T20:58:59.407Z] [INFO] [OECD] new_data
+[2026-09-05T20:58:59.407Z] [SUCCESS] Macro Live Update finished (2.3s)
+[2026-09-05T20:59:40.595Z] [======] Macro Live Update started at 2026-09-05T20:59:40.595Z
+[2026-09-05T20:59:40.597Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T20:59:40.597Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T20:59:40.598Z] [INFO] Scheduled (release_events, nearest-first): IMF
+[2026-09-05T20:59:40.598Z] [======] === IMF (schedule: quarterly) ===
+[2026-09-05T20:59:43.382Z] [INFO] [IMF] light check -> no_new_data (signal changed: false)
+[2026-09-05T20:59:43.383Z] [======] === Update summary ===
+[2026-09-05T20:59:43.383Z] [INFO] [IMF] no_new_data
+[2026-09-05T20:59:43.383Z] [SUCCESS] Macro Live Update finished (2.8s)
+[2026-09-05T21:00:16.179Z] [======] Macro Live Update started at 2026-09-05T21:00:16.179Z
+[2026-09-05T21:00:16.181Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T21:00:16.181Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T21:00:16.181Z] [INFO] Scheduled (release_events, nearest-first): WORLD_BANK
+[2026-09-05T21:00:16.181Z] [======] === WORLD_BANK (schedule: yearly) ===
+[2026-09-05T21:00:16.314Z] [INFO] [WORLD_BANK] light check -> no_new_data (signal changed: false)
+[2026-09-05T21:00:16.315Z] [======] === Update summary ===
+[2026-09-05T21:00:16.315Z] [INFO] [WORLD_BANK] no_new_data
+[2026-09-05T21:00:16.315Z] [SUCCESS] Macro Live Update finished (0.1s)
+[2026-09-05T21:00:41.197Z] [======] Macro Live Update started at 2026-09-05T21:00:41.197Z
+[2026-09-05T21:00:41.199Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-05T21:00:41.199Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260905.txt
+[2026-09-05T21:00:41.199Z] [INFO] Scheduled (release_events, nearest-first): FRED
+[2026-09-05T21:00:41.199Z] [======] === FRED (schedule: explicit) ===
+[2026-09-05T21:00:43.485Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-09-05T21:00:43.486Z] [INFO] [FRED] new data confirmed → downloading...
+[2026-09-05T21:00:43.486Z] [INFO] [FRED] smart download started...
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   interest_rate.csv  downloaded (998579 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   cpi.csv  downloaded (43501 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   core_cpi.csv  downloaded (38101 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   ppi.csv  downloaded (68031 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   gdp.csv  downloaded (33289 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   money_supply.csv  downloaded (77550 bytes)
+[2026-09-05T21:00:45.381Z] [INFO] [FRED]   unemployment.csv  downloaded (34019 bytes)
+[2026-09-05T21:00:45.382Z] [ERROR] [FRED] pipeline error: runNormalize is not a function
+[2026-09-05T21:00:45.382Z] [======] === Update summary ===
+[2026-09-05T21:00:45.382Z] [INFO] [FRED] error
+[2026-09-05T21:00:45.382Z] [SUCCESS] Macro Live Update finished (4.2s)

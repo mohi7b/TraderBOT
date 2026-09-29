@@ -1,0 +1,94 @@
+{
+  "created_at": "2026-08-31T08:27:58.009Z",
+  "last_run": "2026-09-20T17:36:45.471Z",
+  "sources": {
+    "FRED": {
+      "schedule": "explicit",
+      "last_checked_at": "2026-09-07T17:55:01.528Z",
+      "signal": "CPIAUCSL:2026-07-01:f9afcf84;UNRATE:2026-08-01:e8c067e2;M2SL:2026-07-01:2aa378c6;",
+      "status": "no_new_data",
+      "detail": {
+        "CPIAUCSL": {
+          "last_date": "2026-07-01",
+          "last_value": "332.813"
+        },
+        "UNRATE": {
+          "last_date": "2026-08-01",
+          "last_value": "4.1"
+        },
+        "M2SL": {
+          "last_date": "2026-07-01",
+          "last_value": "23218.0"
+        }
+      }
+    },
+    "OECD": {
+      "schedule": "monthly",
+      "last_checked_at": "2026-09-07T17:55:06.097Z",
+      "signal": "Mon, 07 Sep 2026|-",
+      "status": "new_data",
+      "detail": {
+        "last_modified": "Mon, 07 Sep 2026 17:55:06 GMT",
+        "etag": "",
+        "size": ""
+      }
+    },
+    "EUROSTAT": {
+      "schedule": "explicit",
+      "last_checked_at": "2026-09-20T17:36:41.067Z",
+      "signal": "2026-02-06T23:00:00+0100",
+      "status": "no_new_data",
+      "detail": {
+        "updated": "2026-02-06T23:00:00+0100",
+        "bytes": 3050
+      }
+    },
+    "IMF": {
+      "schedule": "quarterly",
+      "last_checked_at": "2026-09-07T17:55:02.954Z",
+      "signal": "NGDP_RPCH:2031:47928dfc;PCPIPCH:2031:6e22ea30;GGXWDG_NGDP:2031:c0ce691f;",
+      "status": "no_new_data",
+      "detail": {
+        "NGDP_RPCH": {
+          "max_year": 2031,
+          "bytes": 121723
+        },
+        "PCPIPCH": {
+          "max_year": 2031,
+          "bytes": 120999
+        },
+        "GGXWDG_NGDP": {
+          "max_year": 2031,
+          "bytes": 98046
+        }
+      }
+    },
+    "BIS": {
+      "schedule": "explicit",
+      "last_checked_at": "2026-09-07T17:54:58.908Z",
+      "signal": "policy_rates=Wed, 02 Sep 2026|283763;;credit=Wed, 02 Sep 2026|26069939",
+      "status": "no_new_data",
+      "detail": {
+        "policy_rates": {
+          "etag": "W/\"45473-1a0610ae92a\"",
+          "last_modified": "Wed, 02 Sep 2026 07:35:00 GMT",
+          "size": "283763"
+        },
+        "credit": {
+          "etag": "W/\"18dcbb3-1a0610b0259\"",
+          "last_modified": "Wed, 02 Sep 2026 07:35:06 GMT",
+          "size": "26069939"
+        }
+      }
+    },
+    "WORLD_BANK": {
+      "schedule": "yearly",
+      "last_checked_at": "2026-09-07T17:55:06.190Z",
+      "signal": "2026-07-13",
+      "status": "no_new_data",
+      "detail": {
+        "lastupdated": "2026-07-13"
+      }
+    }
+  }
+}

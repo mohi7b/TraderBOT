@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TraderBOT Market Console</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <div><span class="eyebrow">LIVE MARKET CONSOLE</span><h1>TraderBOT</h1></div>
+        <label class="symbol-picker">Symbol <select id="symbol"><option>BTCUSDT</option><option>ETHUSDT</option></select></label>
+    </header>
+    <main>
+        <section class="summary" id="summary"></section>
+        <section class="charts" id="charts"></section>
+        <section class="health-section"><div class="section-heading"><span class="eyebrow">DATA QUALITY</span><h2>Market health</h2></div><div class="health-table-wrap"><table><thead><tr><th>Venue</th><th>Market</th><th>Event</th><th>Source</th><th>Age</th><th>Status</th></tr></thead><tbody id="health"></tbody></table></div></section>
+    </main>
+    <script src="/dashboard.js"></script>
+</body>
+</html>

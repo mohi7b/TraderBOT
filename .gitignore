@@ -1,0 +1,65 @@
+# ============================================================
+# TraderBOT — repository ignores
+#
+# The working tree holds ~17 GB of market/macro data, SQLite
+# stores, downloaded provider dumps and Next.js build output.
+# GitHub is not a data store, so only source, configuration and
+# documentation are tracked. Everything listed as "generated
+# data" below can be re-created by re-running the collectors.
+# ============================================================
+
+# ---------- dependencies ----------
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ---------- build output ----------
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# ---------- logs / runtime state ----------
+*.log
+*.pid
+
+# ---------- secrets & local credentials ----------
+# Real provider API keys live in keys.json (see keys.example.json).
+collector/macro/config/keys.json
+.env
+.env.*
+!.env.example
+*.pem
+
+# ---------- SQLite stores ----------
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ---------- bulky market / macro data ----------
+*.parquet
+*.csv
+*.zip
+*.gz
+*.xlsx
+
+# ---------- generated & downloaded artefacts ----------
+/data/*
+!/data/.gitkeep
+collector/macro/offline/*/raw/
+collector/macro/update/downloaded/
+collector/macro/update/extracted/
+collector/macro/update/normalized/
+collector/crypto/historical/api/.cache/
+collector/macro/tools/unit_audit_out.json
+
+# ---------- nested checkouts kept outside history ----------
+.nested-git-backup/

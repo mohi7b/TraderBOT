@@ -1,0 +1,30 @@
+{
+  "name": "roadmap-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+   "dev": "next dev -p 4500",
+  "build": "next build",
+  "start": "next start -p 4500",
+    "lint": "eslint",
+    "images:build": "node scripts/optimize-images.mjs",
+    "roadmap:build": "node scripts/generate-roadmap-md.mjs",
+    "roadmap:check": "node scripts/generate-roadmap-md.mjs --check",
+    "roadmap:mirror": "node scripts/mirror-from-en.mjs"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

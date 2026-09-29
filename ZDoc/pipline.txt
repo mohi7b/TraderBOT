@@ -1,0 +1,64 @@
+1: Core & Infrastructure
+central config
+orchestrator
+module lifecycle
+log manager
+health monitor
+debug mode
+state manager
+فاز 2: Realtime Data Acquisition
+WS connections
+exchange-specific parsers
+symbol config
+exchange activation matrix
+typing + canonical normalization
+فاز 3: Historical Data
+REST fetchers
+historical candles
+orderbook snapshots
+trade history
+storage layer
+فاز 4: Macro + Sentiment
+macro feeds
+social news
+trend feeds
+impact scoring
+aggregation
+فاز 5: Standardization Layer
+canonical packet model
+standard exchange adapter
+health validation
+stale detection
+فاز 6: Analysis Layer
+depth analysis
+candles analysis
+volatility
+liquidity
+orderflow
+imbalance
+فاز 7: Strategy Engine
+signal fusion
+multi-condition strategy
+confidence score
+strategy registry
+فاز 8: Risk & Portfolio
+bankroll constraints
+exposure limits
+dynamic sizing
+emergency stop
+kill switch logic
+فاز 9: Execution
+exchange order adapters
+positions and balances
+order lifecycle
+execution bus
+فاز 10: Observability
+dashboard
+alerting
+metrics
+audit trail
+فاز 11: Optimization
+adaptive parameters
+learning loop
+regime detection
+backtest-driven tuning

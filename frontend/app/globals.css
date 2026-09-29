@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* Tailwind v4 — class-based dark mode (به‌جای prefers-color-scheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------- Design tokens (Light) ------- */
+:root {
+  --background: #f7f8fa;
+  --foreground: #0b1220;
+  --surface: #ffffff;
+  --surface-2: #f1f3f7;
+  --border: #e2e6ee;
+  --muted: #6b7488;
+  --accent: #2563eb;
+
+  /* semantic (data) */
+  --pos: #16a34a;
+  --neg: #dc2626;
+  --warn: #d97706;
+  --neutral: #64748b;
+
+  /* chart series palette (colorblind-friendly) */
+  --chart-1: #2563eb;
+  --chart-2: #d97706;
+  --chart-3: #16a34a;
+  --chart-4: #9333ea;
+  --chart-5: #0891b2;
+  --chart-6: #be123c;
+}
+
+/* ------- Design tokens (Dark) ------- */
+.dark {
+  --background: #0a0f1a;
+  --foreground: #e7ecf5;
+  --surface: #111826;
+  --surface-2: #18202f;
+  --border: #253046;
+  --muted: #94a3b8;
+  --accent: #60a5fa;
+
+  --pos: #34d399;
+  --neg: #f87171;
+  --warn: #fbbf24;
+  --neutral: #94a3b8;
+
+  --chart-1: #60a5fa;
+  --chart-2: #fbbf24;
+  --chart-3: #34d399;
+  --chart-4: #c084fc;
+  --chart-5: #22d3ee;
+  --chart-6: #fb7185;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-pos: var(--pos);
+  --color-neg: var(--neg);
+  --color-warn: var(--warn);
+  --color-neutral: var(--neutral);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, system-ui, Arial, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* اعداد جدولی/چارت پایدار */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* اسکرول‌بار تم‌پذیر */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* RTL/LTR helpers (i18n) */
+[dir="rtl"] .flip-x {
+  transform: scaleX(-1);
+}
+
+/* ------------------------------------------------------------------
+ * P5/4-UI (بازبینی ششم) — **حذف کادر فوکوسِ پیش‌فرض مرورگر** ✗
+ * علت مشاهدهٔ کاربر: کنترل‌های ماوس‌محور (تبِ ریل · کارت آیتم · اسکریمِ چارت)
+ * با کلیک، حلقهٔ فوکوسِ UA را نشان می‌دادند ✗. این‌جا:
+ *   · `:focus:not(:focus-visible)` ⇒ با کلیک هیچ کادری نمی‌آید ✓
+ *   · `.no-focus-ring` ⇒ حتی در :focus-visible هم کادر/رینگ ندارد ✓ (کلاس صریح ✓)
+ *   · `-webkit-tap-highlight-color` ⇒ هیچ هایلایت لمسی مرورگر ✗
+ * ⚠️ دسترس‌پذیری: هر کنترل `aria-label`/`aria-*` دارد ✓ (مسیر غیربصری حفظ ✓).
+ * ------------------------------------------------------------------ */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+/* P5/4-UI — حذف کادر فوکوس پیش‌فرض مرورگر (سیاست رسمی · §۱۳.۵ الف) ✗ */
+.no-focus-ring,
+.no-focus-ring:focus,
+.no-focus-ring:focus-visible,
+.no-focus-ring:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ------------------------------------------------------------------
+ * P5/4-UI (بازبینی هفتم) — **فیلد عددی تمیز** (بدون فلش‌های مرورگر ✗)
+ *  · `::-webkit-*-spin-button` و `-moz-appearance:textfield` ⇒ فلش بالا/پایین
+ *    پیش‌فرض مرورگر **کاملاً حذف** می‌شود ✗ (کاربر: «کاربردی نیست، ظاهر را خراب
+ *    می‌کند») ✓
+ *  · مقداردهی فقط با **تایپ** یا دکمه‌های `+`/`−` خودِ پنل ✓ (نه spinner ✗)
+ *  · استایل `.num-field` با توکن‌های تم (سطح/بوردر/متن ✓) و لهجهٔ `--pos` در فوکوس ✓
+ *    و هم‌راستا با سیاست «no-focus-ring» ✓ (بدون حلقه ✗ · فقط تغییر رنگ بوردر ✓)
+ * ------------------------------------------------------------------ */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.num-field {
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 150ms ease;
+}
+.num-field:hover {
+  border-color: color-mix(in srgb, var(--pos) 45%, var(--border));
+}
+.num-field:focus,
+.num-field:focus-visible {
+  border-color: var(--pos);
+  outline: none;
+  box-shadow: none;
+}
+
+/* P5/4-UI — (بازبینی پنجم) انیمیشن `cc-sheet` حذف شد ✗:
+   تنظیمات هر آیتم دیگر کشوی جداگانه نیست ✓ بلکه **آکاردئونِ درجای خودِ کارت**
+   است ✓ و انیمیشنش با `grid-template-rows: 0fr → 1fr` (کلاس‌های Tailwind ✓)
+   انجام می‌شود ⇒ نیازی به keyframe سراسری نیست ✓.
+   ⚠️ پرشِ «اسکرول افقی صفحه» هنگام بستن کشو هم با `overflow-hidden` روی میزبان
+      چارت رفع شد ✓ (انیمیشن داخل محدودهٔ چارت کلیپ می‌شود ✓). */

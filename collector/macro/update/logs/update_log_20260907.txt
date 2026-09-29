@@ -1,0 +1,60 @@
+[2026-09-07T17:54:22.896Z] [======] Macro Live Update started at 2026-09-07T17:54:22.895Z
+[2026-09-07T17:54:22.898Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T17:54:22.898Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T17:54:22.899Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T17:54:58.675Z] [======] Macro Live Update started at 2026-09-07T17:54:58.675Z
+[2026-09-07T17:54:58.677Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T17:54:58.677Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T17:54:58.678Z] [INFO] Scheduled (release_events, nearest-first): BIS, EUROSTAT, FRED, IMF, OECD, WORLD_BANK
+[2026-09-07T17:54:58.678Z] [======] === BIS (schedule: explicit) ===
+[2026-09-07T17:54:58.908Z] [INFO] [BIS] light check -> no_new_data (signal changed: false)
+[2026-09-07T17:54:58.908Z] [======] === EUROSTAT (schedule: explicit) ===
+[2026-09-07T17:54:59.009Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-09-07T17:54:59.009Z] [======] === FRED (schedule: explicit) ===
+[2026-09-07T17:55:01.529Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-09-07T17:55:01.529Z] [======] === IMF (schedule: quarterly) ===
+[2026-09-07T17:55:02.954Z] [INFO] [IMF] light check -> no_new_data (signal changed: false)
+[2026-09-07T17:55:02.954Z] [======] === OECD (schedule: monthly) ===
+[2026-09-07T17:55:06.097Z] [INFO] [OECD] light check -> new_data (signal changed: true)
+[2026-09-07T17:55:06.097Z] [======] === WORLD_BANK (schedule: yearly) ===
+[2026-09-07T17:55:06.190Z] [INFO] [WORLD_BANK] light check -> no_new_data (signal changed: false)
+[2026-09-07T17:55:06.190Z] [======] === Update summary ===
+[2026-09-07T17:55:06.190Z] [INFO] [BIS] no_new_data
+[2026-09-07T17:55:06.191Z] [INFO] [EUROSTAT] no_new_data
+[2026-09-07T17:55:06.191Z] [INFO] [FRED] no_new_data
+[2026-09-07T17:55:06.191Z] [INFO] [IMF] no_new_data
+[2026-09-07T17:55:06.191Z] [INFO] [OECD] new_data
+[2026-09-07T17:55:06.191Z] [INFO] [WORLD_BANK] no_new_data
+[2026-09-07T17:55:06.191Z] [SUCCESS] Macro Live Update finished (7.5s)
+[2026-09-07T18:17:55.996Z] [======] Macro Live Update started at 2026-09-07T18:17:55.996Z
+[2026-09-07T18:17:55.998Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T18:17:55.999Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T18:17:56.000Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:05:41.953Z] [======] Macro Live Update started at 2026-09-07T19:05:41.953Z
+[2026-09-07T19:05:41.956Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:05:41.956Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:05:41.956Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:10:41.939Z] [======] Macro Live Update started at 2026-09-07T19:10:41.939Z
+[2026-09-07T19:10:41.941Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:10:41.941Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:10:41.941Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:15:42.039Z] [======] Macro Live Update started at 2026-09-07T19:15:42.039Z
+[2026-09-07T19:15:42.041Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:15:42.041Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:15:42.041Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:20:42.138Z] [======] Macro Live Update started at 2026-09-07T19:20:42.138Z
+[2026-09-07T19:20:42.140Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:20:42.140Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:20:42.141Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:25:42.220Z] [======] Macro Live Update started at 2026-09-07T19:25:42.220Z
+[2026-09-07T19:25:42.222Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:25:42.222Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:25:42.223Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:30:42.307Z] [======] Macro Live Update started at 2026-09-07T19:30:42.307Z
+[2026-09-07T19:30:42.309Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:30:42.309Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:30:42.310Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.
+[2026-09-07T19:35:42.401Z] [======] Macro Live Update started at 2026-09-07T19:35:42.401Z
+[2026-09-07T19:35:42.403Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-09-07T19:35:42.403Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260907.txt
+[2026-09-07T19:35:42.404Z] [INFO] No macro release event is due right now (single release_events timing) — nothing to run.

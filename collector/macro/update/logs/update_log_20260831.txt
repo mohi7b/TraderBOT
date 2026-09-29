@@ -1,0 +1,172 @@
+[2026-08-31T08:27:58.009Z] [======] Macro Live Update started at 2026-08-31T08:27:58.009Z
+[2026-08-31T08:27:58.011Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:27:58.011Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:27:58.012Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:27:58.012Z] [ERROR] [FRED] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.012Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:27:58.012Z] [ERROR] [OECD] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.012Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:27:58.013Z] [ERROR] [EUROSTAT] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.013Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:27:58.013Z] [ERROR] [IMF] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.014Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:27:58.014Z] [ERROR] [BIS] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.014Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:27:58.014Z] [ERROR] [WORLD_BANK] pipeline error: runLightCheck is not a function
+[2026-08-31T08:27:58.014Z] [======] === Update summary ===
+[2026-08-31T08:27:58.014Z] [INFO] [FRED] error
+[2026-08-31T08:27:58.014Z] [INFO] [OECD] error
+[2026-08-31T08:27:58.014Z] [INFO] [EUROSTAT] error
+[2026-08-31T08:27:58.014Z] [INFO] [IMF] error
+[2026-08-31T08:27:58.015Z] [INFO] [BIS] error
+[2026-08-31T08:27:58.015Z] [INFO] [WORLD_BANK] error
+[2026-08-31T08:27:58.015Z] [SUCCESS] Macro Live Update finished (0.0s)
+[2026-08-31T08:28:38.355Z] [======] Macro Live Update started at 2026-08-31T08:28:38.355Z
+[2026-08-31T08:28:38.357Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:28:38.357Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:28:38.358Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:28:39.616Z] [INFO] [FRED] light check -> new_data
+[2026-08-31T08:28:39.616Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:28:39.688Z] [INFO] [OECD] light check -> new_data
+[2026-08-31T08:28:39.688Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:28:39.819Z] [INFO] [EUROSTAT] light check -> new_data
+[2026-08-31T08:28:39.819Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:28:41.158Z] [INFO] [IMF] light check -> new_data
+[2026-08-31T08:28:41.158Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:28:41.393Z] [INFO] [BIS] light check -> new_data
+[2026-08-31T08:28:41.393Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:28:41.496Z] [INFO] [WORLD_BANK] light check -> new_data
+[2026-08-31T08:28:41.496Z] [======] === Update summary ===
+[2026-08-31T08:28:41.496Z] [INFO] [FRED] new_data
+[2026-08-31T08:28:41.496Z] [INFO] [OECD] new_data
+[2026-08-31T08:28:41.496Z] [INFO] [EUROSTAT] new_data
+[2026-08-31T08:28:41.496Z] [INFO] [IMF] new_data
+[2026-08-31T08:28:41.496Z] [INFO] [BIS] new_data
+[2026-08-31T08:28:41.496Z] [INFO] [WORLD_BANK] new_data
+[2026-08-31T08:28:41.496Z] [SUCCESS] Macro Live Update finished (3.1s)
+[2026-08-31T08:28:45.201Z] [======] Macro Live Update started at 2026-08-31T08:28:45.201Z
+[2026-08-31T08:28:45.202Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:28:45.202Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:28:45.203Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:28:45.203Z] [INFO] [FRED] not due yet — skipped (checked 2026-08-31T08:28:39.615Z)
+[2026-08-31T08:28:45.203Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:28:45.203Z] [INFO] [OECD] not due yet — skipped (checked 2026-08-31T08:28:39.687Z)
+[2026-08-31T08:28:45.204Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:28:45.204Z] [INFO] [EUROSTAT] not due yet — skipped (checked 2026-08-31T08:28:39.819Z)
+[2026-08-31T08:28:45.204Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:28:45.204Z] [INFO] [IMF] not due yet — skipped (checked 2026-08-31T08:28:41.157Z)
+[2026-08-31T08:28:45.204Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:28:45.204Z] [INFO] [BIS] not due yet — skipped (checked 2026-08-31T08:28:41.392Z)
+[2026-08-31T08:28:45.204Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:28:45.204Z] [INFO] [WORLD_BANK] not due yet — skipped (checked 2026-08-31T08:28:41.495Z)
+[2026-08-31T08:28:45.204Z] [======] === Update summary ===
+[2026-08-31T08:28:45.204Z] [INFO] [FRED] not_due
+[2026-08-31T08:28:45.204Z] [INFO] [OECD] not_due
+[2026-08-31T08:28:45.205Z] [INFO] [EUROSTAT] not_due
+[2026-08-31T08:28:45.205Z] [INFO] [IMF] not_due
+[2026-08-31T08:28:45.205Z] [INFO] [BIS] not_due
+[2026-08-31T08:28:45.205Z] [INFO] [WORLD_BANK] not_due
+[2026-08-31T08:28:45.205Z] [SUCCESS] Macro Live Update finished (0.0s)
+[2026-08-31T08:28:49.195Z] [======] Macro Live Update started at 2026-08-31T08:28:49.195Z
+[2026-08-31T08:28:49.197Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:28:49.197Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:28:49.197Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:28:49.368Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:28:49.368Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:28:49.421Z] [INFO] [OECD] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:28:49.421Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:28:49.523Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:28:49.524Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:28:51.014Z] [INFO] [IMF] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:28:51.014Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:28:51.172Z] [INFO] [BIS] light check -> new_data (signal changed: true)
+[2026-08-31T08:28:51.172Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:28:51.234Z] [INFO] [WORLD_BANK] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:28:51.235Z] [======] === Update summary ===
+[2026-08-31T08:28:51.235Z] [INFO] [FRED] no_new_data
+[2026-08-31T08:28:51.235Z] [INFO] [OECD] no_new_data
+[2026-08-31T08:28:51.235Z] [INFO] [EUROSTAT] no_new_data
+[2026-08-31T08:28:51.235Z] [INFO] [IMF] no_new_data
+[2026-08-31T08:28:51.235Z] [INFO] [BIS] new_data
+[2026-08-31T08:28:51.235Z] [INFO] [WORLD_BANK] no_new_data
+[2026-08-31T08:28:51.235Z] [SUCCESS] Macro Live Update finished (2.0s)
+[2026-08-31T08:29:22.804Z] [======] Macro Live Update started at 2026-08-31T08:29:22.804Z
+[2026-08-31T08:29:22.806Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:29:22.806Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:29:22.806Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:29:22.972Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:22.972Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:29:23.037Z] [INFO] [OECD] light check -> new_data (signal changed: true)
+[2026-08-31T08:29:23.037Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:29:23.224Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:23.224Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:29:24.830Z] [INFO] [IMF] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:24.830Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:29:24.992Z] [INFO] [BIS] light check -> new_data (signal changed: true)
+[2026-08-31T08:29:24.993Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:29:25.107Z] [INFO] [WORLD_BANK] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:25.108Z] [======] === Update summary ===
+[2026-08-31T08:29:25.108Z] [INFO] [FRED] no_new_data
+[2026-08-31T08:29:25.108Z] [INFO] [OECD] new_data
+[2026-08-31T08:29:25.108Z] [INFO] [EUROSTAT] no_new_data
+[2026-08-31T08:29:25.108Z] [INFO] [IMF] no_new_data
+[2026-08-31T08:29:25.108Z] [INFO] [BIS] new_data
+[2026-08-31T08:29:25.108Z] [INFO] [WORLD_BANK] no_new_data
+[2026-08-31T08:29:25.108Z] [SUCCESS] Macro Live Update finished (2.3s)
+[2026-08-31T08:29:29.493Z] [======] Macro Live Update started at 2026-08-31T08:29:29.493Z
+[2026-08-31T08:29:29.495Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:29:29.495Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:29:29.495Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:29:29.650Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:29.650Z] [======] === OECD (schedule: daily) ===
+[2026-08-31T08:29:29.698Z] [INFO] [OECD] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:29.698Z] [======] === EUROSTAT (schedule: daily) ===
+[2026-08-31T08:29:29.790Z] [INFO] [EUROSTAT] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:29.790Z] [======] === IMF (schedule: weekly) ===
+[2026-08-31T08:29:31.013Z] [INFO] [IMF] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:31.013Z] [======] === BIS (schedule: weekly) ===
+[2026-08-31T08:29:31.165Z] [INFO] [BIS] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:31.165Z] [======] === WORLD_BANK (schedule: monthly) ===
+[2026-08-31T08:29:31.314Z] [INFO] [WORLD_BANK] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:29:31.314Z] [======] === Update summary ===
+[2026-08-31T08:29:31.314Z] [INFO] [FRED] no_new_data
+[2026-08-31T08:29:31.314Z] [INFO] [OECD] no_new_data
+[2026-08-31T08:29:31.314Z] [INFO] [EUROSTAT] no_new_data
+[2026-08-31T08:29:31.314Z] [INFO] [IMF] no_new_data
+[2026-08-31T08:29:31.314Z] [INFO] [BIS] no_new_data
+[2026-08-31T08:29:31.314Z] [INFO] [WORLD_BANK] no_new_data
+[2026-08-31T08:29:31.314Z] [SUCCESS] Macro Live Update finished (1.8s)
+[2026-08-31T08:30:36.436Z] [======] Macro Live Update started at 2026-08-31T08:30:36.436Z
+[2026-08-31T08:30:36.438Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T08:30:36.438Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T08:30:36.438Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T08:30:36.673Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T08:30:36.673Z] [INFO] [FRED] new data confirmed → downloading...
+[2026-08-31T08:30:36.673Z] [ERROR] [FRED] pipeline error: runSmartDownload is not a function
+[2026-08-31T08:30:36.673Z] [======] === Update summary ===
+[2026-08-31T08:30:36.674Z] [INFO] [FRED] error
+[2026-08-31T08:30:36.674Z] [SUCCESS] Macro Live Update finished (0.2s)
+[2026-08-31T22:16:51.604Z] [======] Macro Live Update started at 2026-08-31T22:16:51.604Z
+[2026-08-31T22:16:51.606Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T22:16:51.606Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T22:16:51.606Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T22:16:51.606Z] [INFO] [FRED] not due yet — skipped (checked 2026-08-31T08:30:36.673Z)
+[2026-08-31T22:16:51.607Z] [======] === Update summary ===
+[2026-08-31T22:16:51.607Z] [INFO] [FRED] not_due
+[2026-08-31T22:16:51.607Z] [SUCCESS] Macro Live Update finished (0.0s)
+[2026-08-31T22:17:13.977Z] [======] Macro Live Update started at 2026-08-31T22:17:13.977Z
+[2026-08-31T22:17:13.979Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T22:17:13.979Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T22:17:13.979Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T22:17:15.404Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T22:17:15.404Z] [======] === Update summary ===
+[2026-08-31T22:17:15.404Z] [INFO] [FRED] no_new_data
+[2026-08-31T22:17:15.404Z] [SUCCESS] Macro Live Update finished (1.4s)
+[2026-08-31T22:17:26.217Z] [======] Macro Live Update started at 2026-08-31T22:17:26.217Z
+[2026-08-31T22:17:26.219Z] [INFO] Database: /root/TraderBOT/collector/macro/db/macro.db
+[2026-08-31T22:17:26.219Z] [INFO] Log file: /root/TraderBOT/collector/macro/update/logs/update_log_20260831.txt
+[2026-08-31T22:17:26.219Z] [======] === FRED (schedule: daily) ===
+[2026-08-31T22:17:26.717Z] [INFO] [FRED] light check -> no_new_data (signal changed: false)
+[2026-08-31T22:17:26.717Z] [======] === Update summary ===
+[2026-08-31T22:17:26.717Z] [INFO] [FRED] no_new_data
+[2026-08-31T22:17:26.717Z] [SUCCESS] Macro Live Update finished (0.5s)

@@ -1,0 +1,13 @@
+CREATE TABLE candles_1m (
+    timestamp_raw  INTEGER NOT NULL,   -- open-time epoch-ms UTC
+    open           REAL NOT NULL,
+    high           REAL NOT NULL,
+    low            REAL NOT NULL,
+    close          REAL NOT NULL,
+    volume         REAL,
+    quote_volume   REAL,
+    number_of_trades INTEGER,
+    exchange       TEXT NOT NULL,      -- "<venue>_<marketType>" (کلید تفکیک)
+    symbol         TEXT NOT NULL,
+    PRIMARY KEY (symbol, exchange, timestamp_raw)
+);

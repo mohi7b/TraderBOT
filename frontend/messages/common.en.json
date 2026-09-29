@@ -1,0 +1,39 @@
+{
+  "app": {
+    "title": "TraderBot",
+    "subtitle": "Unified Console"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "macro": "Macro",
+    "markets": "Markets",
+    "energy": "Energy",
+    "crypto": "Crypto",
+    "trading": "Trading",
+    "risk": "Risk",
+    "settings": "Settings"
+  },
+  "actions": {
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Switch language"
+  },
+  "state": {
+    "loading": "Loading…",
+    "empty": "No data to display",
+    "error": "Failed to fetch data",
+    "offline": "Service unreachable",
+    "pending": "This section is not implemented yet"
+  },
+  "labels": {
+    "asOf": "As of",
+    "yoy": "YoY",
+    "mom": "MoM",
+    "value": "Value",
+    "unit": "Unit",
+    "frequency": "Frequency",
+    "trend": "Trend",
+    "risk": "Risk"
+  }
+}

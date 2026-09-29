@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Macro Overview Dashboard</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Macro Overview</h1>
+    <p id="meta">core.db &mdash; loading&hellip;</p>
+  </header>
+
+  <main id="grid"></main>
+
+  <footer>
+    <span>Data source: <code>collector/macro/core_db/core.db</code></span>
+    <span id="updated"></span>
+  </footer>
+
+  <template id="card-tmpl">
+    <section class="card">
+      <h2 class="ds-name"></h2>
+      <span class="series-count"></span>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Series</th><th>Country</th><th>Indicator</th><th>Freq</th><th>Date</th><th>Value</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </template>
+
+  <!-- 10 most recent, indicator-diverse rows per dataset -->
+  <script>
+    const DATASETS = ["BIS", "IMF", "WB", "OECD", "FRED", "EUROSTAT"];
+    const MAX_ROWS = 10;
+
+    // Build a compact, meaningful "top 10" per dataset.
+    // Priority = indicator diversity (indicator-driven dashboard).
+    // For each series exactly ONE row is kept = its last valid observation
+    // (guaranteed by the backend), so a single series can never spam.
+    //
+    // Strategy:
+    //   1) sort by recency (date desc)
+    //   2) bucket each series by its indicator code
+    //   3) round-robin across indicator buckets (newest indicator first)
+    //      taking one representative per turn -> up to 10 distinct series
+    function pickTop(list) {
+      const sorted = list.slice().sort((a, b) =>
+        a.date < b.date ? 1 : a.date > b.date ? -1 : a.series_id < b.series_id ? -1 : 1
+      );
+
+      // bucket by indicator
+      const bucketsByInd = new Map();
+      for (const it of sorted) {
+        const ind = it.indicator || it.series_id;
+        if (!bucketsByInd.has(ind)) bucketsByInd.set(ind, []);
+        bucketsByInd.get(ind).push(it);
+      }
+
+      // order buckets by their newest observation (indicator recency)
+      const buckets = [...bucketsByInd.values()]
+        .map((rows) => rows.sort((x, y) => (x.date < y.date ? 1 : -1)))
+        .sort((x, y) => (x[0].date < y[0].date ? 1 : -1));
+
+      const chosen = [];
+      let gi = 0;
+      while (chosen.length < MAX_ROWS && buckets.length > 0) {
+        const arr = buckets[gi % buckets.length];
+        const row = arr.shift(); // newest remaining of this indicator
+        chosen.push(row);
+        if (arr.length === 0) buckets.splice(gi % buckets.length, 1);
+        else gi++;
+        if (buckets.length > 0 && gi >= buckets.length) gi = 0;
+      }
+      return chosen;
+    }
+
+    function num(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "&mdash;";
+      if (typeof v === "number") {
+        const abs = Math.abs(v);
+        if (abs >= 100000) return v.toExponential(2);
+        if (abs >= 10) return v.toLocaleString("en-US", { maximumFractionDigits: 3 });
+        return new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 }).format(v);
+      }
+      return v;
+    }
+
+    async function render() {
+      const res = await fetch("/api/latest");
+      const payload = await res.json();
+      document.getElementById("meta").textContent =
+        `${payload.db} — ${Object.keys(payload.by_dataset).length} datasets`;
+      document.getElementById("updated").textContent =
+        `generated ${new Date(payload.generated_at).toLocaleString()}`;
+
+      const grid = document.getElementById("grid");
+      grid.textContent = "";
+      const tmpl = document.getElementById("card-tmpl");
+
+      for (const ds of DATASETS) {
+        const all = payload.by_dataset[ds] || [];
+        const top = pickTop(all);
+
+        const frag = tmpl.content.cloneNode(true);
+        frag.querySelector(".ds-name").textContent = ds;
+        frag.querySelector(".series-count").textContent =
+          `${top.length} shown / ${all.length} series`;
+
+        const tbody = frag.querySelector("tbody");
+        for (const r of top) {
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            `<td class="sid" title="${r.series_id}">${r.series_id}</td>` +
+            `<td>${r.country}</td>` +
+            `<td>${r.indicator}</td>` +
+            `<td class="freq">${r.frequency}</td>` +
+            `<td class="dt">${r.date}</td>` +
+            `<td class="val">${num(r.value)}</td>`;
+          tbody.appendChild(tr);
+        }
+        grid.appendChild(frag);
+      }
+    }
+
+    render().catch((e) => {
+      document.getElementById("meta").textContent = "error: " + e.message;
+    });
+  </script>
+</body>
+</html>

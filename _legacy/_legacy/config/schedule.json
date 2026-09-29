@@ -1,0 +1,53 @@
+{
+  "historical": {
+    "gmd_loader": {
+      "enabled": true,
+      "frequency": "monthly",
+      "run_at_utc": "03:00"
+    },
+    "imf_loader": {
+      "enabled": true,
+      "frequency": "monthly",
+      "run_at_utc": "03:30"
+    },
+    "bis_loader": {
+      "enabled": true,
+      "frequency": "monthly",
+      "run_at_utc": "04:00"
+    }
+  },
+
+  "live": {
+    "cpi_live": {
+      "enabled": true,
+      "frequency": "daily",
+      "run_at_utc": "06:00"
+    },
+    "cbrate_live": {
+      "enabled": true,
+      "frequency": "daily",
+      "run_at_utc": "06:10"
+    },
+    "m2_live": {
+      "enabled": true,
+      "frequency": "daily",
+      "run_at_utc": "06:20"
+    },
+    "pmi_live": {
+      "enabled": true,
+      "frequency": "daily",
+      "run_at_utc": "06:30"
+    },
+    "fx_live": {
+      "enabled": true,
+      "frequency": "hourly",
+      "run_at_utc": "every_hour"
+    }
+  },
+
+  "merge_engine": {
+    "enabled": true,
+    "frequency": "daily",
+    "run_at_utc": "07:00"
+  }
+}

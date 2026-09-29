@@ -1,0 +1,8 @@
+{
+  "FRED": "daily",
+  "OECD": "daily",
+  "EUROSTAT": "daily",
+  "IMF": "weekly",
+  "BIS": "weekly",
+  "WORLD_BANK": "monthly"
+}

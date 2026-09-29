@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>Macro Backend Test</title>
+<style>
+    body {
+        font-family: sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+    }
+    h1 {
+        margin-bottom: 20px;
+    }
+    .btn {
+        padding: 10px 20px;
+        background: #0078ff;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    pre {
+        background: #fff;
+        padding: 20px;
+        border-radius: 6px;
+        margin-top: 20px;
+        white-space: pre-wrap;
+    }
+</style>
+</head>
+<body>
+
+<h1>نمایش ساده خروجی بک‌اند ماکرو</h1>
+
+<button class="btn" onclick="loadData('inflation')">Inflation 1A</button>
+<button class="btn" onclick="loadData('growth')">Growth 1B</button>
+<button class="btn" onclick="loadData('labor')">Labor 1C</button>
+
+<pre id="output">اینجا خروجی JSON نمایش داده می‌شود…</pre>
+
+<script>
+function loadData(type) {
+    fetch(`http://localhost:4001/api/${type}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("output").textContent =
+                JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById("output").textContent = "خطا در دریافت داده";
+        });
+}
+</script>
+
+</body>
+</html>

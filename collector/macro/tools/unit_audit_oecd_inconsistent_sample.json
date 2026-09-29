@@ -1,0 +1,48 @@
+{
+  "note": "first 30 OECD codes flagged inconsistent (raw vs expected diff)",
+  "count": 1,
+  "items": [
+    {
+      "dataset": "OECD",
+      "code": "INDPRO",
+      "country_count": 52,
+      "countries_sample": [
+        "USA",
+        "TUR",
+        "ESP",
+        "EA20",
+        "SWE",
+        "GBR",
+        "EA19",
+        "G7",
+        "CHE",
+        "OECDE",
+        "OECD",
+        "IND"
+      ],
+      "frequencies": [
+        "A",
+        "M",
+        "Q"
+      ],
+      "series_count": 153,
+      "has_missing": false,
+      "unit_variants": [
+        {
+          "unit": "index",
+          "rows": 153
+        }
+      ],
+      "var_count": 1,
+      "issue": "inconsistent",
+      "raw_unit_vs_expected": {
+        "stored_raw_units": [
+          "index"
+        ],
+        "expected_unit": "YoY %"
+      },
+      "expected_kind": "rate",
+      "expected_source": "canonical-family:IND_PROD"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$comment": "AL — پارامترهای اندیکاتورها. تنها منبع حقیقت (D11). هر تغییر ⇒ paramsHash تازه ⇒ کلید کش تازه (D7). هیچ عدد پارامتری در کد هاردکد نمی‌شود.",
+  "ema": { "period": 21 },
+  "ema_fast": { "period": 9 },
+  "ema_slow": { "period": 200 },
+  "sma": { "period": 50 },
+  "rsi": { "period": 14 },
+  "macd": { "fast": 12, "slow": 26, "signal": 9 },
+  "atr": { "period": 14 },
+  "bbands": { "period": 20, "deviation": 2 },
+  "vwap": {},
+  "signals": {
+    "$comment": "پارامترهای سیگنال‌ها (فاز A2) — همان قاعده: هیچ عدد پارامتری در کد نیست.",
+    "cross": {},
+    "volume_spike": { "window": 20, "z": 2, "maxEvents": 50 },
+    "atr_breakout": { "k": 1.5, "maxEvents": 50 },
+    "patterns": { "dojiRatio": 0.1, "shadowRatio": 2, "maxEvents": 50 },
+    "divergence": { "pivot": 2, "lookback": 30, "maxEvents": 50 },
+    "structure": { "pivot": 2, "minBars": 3, "maxEvents": 50 },
+    "fvg": { "maxEvents": 50, "unfilledOnly": 1 }
+  }
+}
+

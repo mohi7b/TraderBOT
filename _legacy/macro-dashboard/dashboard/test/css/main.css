@@ -1,0 +1,102 @@
+/* Macro Backend test UI — theme (dark, responsive, Bloomberg-ish). */
+:root {
+  --bg: #0b1020;
+  --panel: #131a2b;
+  --panel2: #1b253a;
+  --line: #26324d;
+  --text: #e7ecf6;
+  --muted: #8b98b5;
+  --accent: #4da3ff;
+  --good: #34c98a;
+  --bad: #ff6d6a;
+  --amber: #f0b429;
+}
+* { box-sizing: border-box; }
+html,body { margin: 0; }
+body {
+  font: 13px/1.55 "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(1100px 480px at 15% -10%, #15203c, var(--bg) 60%);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.accent { color: var(--accent); }
+
+header.top {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  position: sticky; top: 0; z-index: 6;
+  background: rgba(11,16,32,.72); backdrop-filter: blur(4px);
+}
+header h1 { font-size: 18px; margin: 0; color: #fff; letter-spacing:.2px; }
+#meta { margin:4px 0 0; color: var(--muted); font-size:12px; }
+
+#tabs { display:flex; gap:8px; flex-wrap:wrap; }
+#tabs button {
+  background: var(--panel2); border:1px solid var(--line); color: var(--text);
+  border-radius:8px; padding:8px 12px; cursor:pointer; font: inherit;
+}
+#tabs button:hover { border-color: var(--accent); }
+#tabs button.on { background:var(--accent); border-color:var(--accent); color:#06121f; font-weight:600; }
+
+.container { padding: 16px 22px 40px; flex:1; }
+
+/* group header = summary chips */
+.g-head { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.g-head h2 { margin:0; font-size:20px; color:#fff; }
+.sum { display:flex; gap:12px; flex-wrap:wrap; color: var(--muted); }
+.sum b { color:var(--text); font-variant-numeric: tabular-nums; }
+.pill { background:var(--panel2); border:1px solid var(--line); border-radius:999px; padding:3px 10px; }
+
+/* country filter */
+.toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 4px; }
+.toolbar input {
+  background:var(--panel); border:1px solid var(--line); color:var(--text);
+  border-radius:8px; padding:7px 10px; width:260px;
+}
+.toolbar .hint { color:var(--muted); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* one country = one panel card */
+.country-panel {
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  margin:12px 0; overflow:hidden;
+}
+.country-panel summary {
+  list-style:none; cursor:pointer;
+  display:flex; align-items:center; gap:12px; padding:10px 14px; flex-wrap:wrap;
+  background:linear-gradient(90deg, var(--panel2), transparent);
+}
+.country-panel summary::-webkit-details-marker { display:none; }
+.cp-code { font-weight:800; font-size:16px; color:#fff; letter-spacing:1px; }
+.cp-name { color:var(--muted); }
+.cp-score { margin-left:auto; color:var(--muted); }
+.chip { padding:2px 9px; border-radius:999px; border:1px solid var(--line); background:var(--panel2); white-space:nowrap; font-size:11px; color:var(--text); }
+.chip .quiet { color:var(--muted); }
+.dir-up   { border-color:rgba(52,201,138,.55); color:var(--good); }
+.dir-down { border-color:rgba(255,109,106,.55); color:var(--bad); }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+
+/* metrics grid inside a country panel */
+.metrics {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:12px; padding:12px 14px;
+}
+.metric {
+  background:var(--panel2); border:1px solid var(--line); border-radius:10px;
+  padding:10px 12px; display:flex; flex-direction:column; gap:4px;
+}
+.metric.has-risk { border-color:var(--amber); }
+.m-top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.m-title { font-weight:700; color:#fff; }
+.m-sub { color:var(--muted); font-size:11px; }
+.m-num { font-weight:700; color:#fff; font-size:22px; font-variant-numeric:tabular-nums; }
+.m-num .acc { color:var(--muted); font-size:12px; }
+.m-line { align-items:center; gap:8px; font-size:11px; color:var(--muted); }
+.m-line span:not(:last-child)::after { content:"·"; margin:0 5px; color:var(--muted); }
+.spark { width:100%; }
+.spark svg { width:100%; height:38px; display:block; }
+empty, .muted { color: var(--muted); }
+footer { margin-top:auto; padding:10px 22px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }

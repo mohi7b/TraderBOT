@@ -1,0 +1,9 @@
+{
+  "name": "inflation_modern",
+  "family": "inflation_modern",
+  "modes": ["dark", "light"],
+  "version": "1.0.0",
+  "author": "Mohsen",
+  "created": "2026-09-20",
+  "description_key": "themeNames.inflation_modern.description"
+}
