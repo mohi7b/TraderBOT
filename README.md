@@ -132,6 +132,19 @@ documentation**:
 
 `data/.gitkeep` keeps the data root in the tree so runtime paths resolve.
 
+## Publishing to GitHub
+
+The repository is initialised on `main` with a single squashed initial commit. To publish:
+
+```bash
+gh auth login --hostname github.com --git-protocol https --web   # once
+bash scripts/publish-to-github.sh                                # private repo "TraderBOT"
+bash scripts/publish-to-github.sh TraderBOT --public             # public instead
+```
+
+The helper is idempotent: it creates the repo and pushes the first time, and only pushes on
+later runs.
+
 ## Tests
 
 ```bash
