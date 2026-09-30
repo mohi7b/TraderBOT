@@ -1263,7 +1263,7 @@ const EXAMPLE = deepFreeze({
     when: {
         all: [
             { count: { feed: "flow", window: 5, atLeast: 3, when: { gt: ["$cvd", 0] }, label: "three of the last five frames bought" } },
-            { gt: ["$takerRatio", 1.1], label: "the aggressors are buyers" },
+            { gt: ["$takerRatio", 0.55], label: "the aggressors are buyers" },
             { gt: ["$imbalance", 0.05], label: "the book leans bid" },
             { in: ["$bookBias", ["bid", "flat"]] },
             { lt: ["$fundingAnnualized", 0.5], label: "funding has not priced it in" },
