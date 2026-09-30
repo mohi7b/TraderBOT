@@ -38,7 +38,7 @@
     ],
 
     // ---------- 2. never watch / search / index the data lake ----------
-    "files.maxMemoryForLargeFilesMB": 512,
+    "files.maxMemoryForLargeFilesMB": 256,
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
@@ -63,7 +63,11 @@
         "**/data/**": true,
         "**/collector/macro/offline/**": true,
         "**/collector/macro/raw/**": true,
-        "**/collector/crypto/data/**": true
+        "**/collector/macro/**": true,
+        "**/collector/crypto/data/**": true,
+        "**/collector/crypto/historical/**": true,
+        "**/*.ndjson": true,
+        "**/*.jsonl": true
     },
     "search.exclude": {
         "**/node_modules": true,
@@ -81,7 +85,11 @@
         "**/*.sst": true,
         "**/data": true,
         "**/collector/macro/offline": true,
-        "**/collector/macro/raw": true
+        "**/collector/macro/raw": true,
+        "**/collector/macro": true,
+        "**/collector/crypto/historical": true,
+        "**/*.ndjson": true,
+        "**/*.jsonl": true
     },
     "search.followSymlinks": false,
     "search.useIgnoreFiles": true,
@@ -99,5 +107,54 @@
     "workbench.editor.limit.value": 10,
     "workbench.editor.limit.perEditorGroup": false,
     "workbench.editor.limit.excludeDirty": true,
-    "editor.largeFileOptimizations": true
+    "editor.largeFileOptimizations": true,
+
+    // ---------- 5. terminal: a command must never hang the chat ----------
+    // Root cause of the "chat keeps crashing" symptom (2026-09-30): VS Code's
+    // bash shell integration emits its OSC 633 markers from a DEBUG trap, so a
+    // command that redirects its own stdout (`some-tool > /tmp/out.txt`)
+    // swallows those markers into the file. VS Code then never observes
+    // "command finished", every agent tool call hangs until it times out, and
+    // the session dies. With integration off, completion is read from the
+    // buffer, which no redirect can swallow. If a shell needs the decorations
+    // again, close every old terminal first, then re-enable this.
+    "terminal.integrated.shellIntegration.enabled": false,
+    "terminal.integrated.shellIntegration.history": 0,
+    "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.scrollback": 2000,
+
+    // ---------- 6. background chores: fewer node workers, same heap ----------
+    "git.autorefresh": false,
+    "git.autofetch": false,
+    "npm.autoDetect": "off",
+    "extensions.autoUpdate": false,
+    "telemetry.telemetryLevel": "off",
+    "update.mode": "none",
+
+    // ---------- 7. nothing walks the 17 GB tree on its own (2026-09-30) ----------
+    // The extension host on this box reached 2.35 GB RSS and kept growing until
+    // node's heap limit killed it ("Reached heap limit"), which closes the chat.
+    // Every automatic tree-walk below runs inside that same heap: task
+    // auto-detection scans for build files, git decorations diff the tree,
+    // auto-reveal stats the explorer, and the language servers keep per-file
+    // caches. All of them are off; the settings above keep the big folders out.
+    "task.autoDetect": "off",
+    "explorer.autoReveal": false,
+    "git.decorations.enabled": false,
+    "scm.diffDecorations": "none",
+    "breadcrumbs.enabled": false,
+    "editor.codeLens": false,
+    "search.searchOnType": false,
+    "workbench.enableExperiments": false,
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "update.showReleaseNotes": false,
+    "extensions.ignoreRecommendations": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+
+    // ---------- 8. one big file must never be read into the heap ----------
+    // Cline's own file reads go through the extension host; the logger below
+    // marks anything the tools must page instead of slurp (see tools/*.cjs).
+    "files.maxMemoryForLargeFilesMB": 256
 }
