@@ -1287,6 +1287,22 @@ module.exports = {
     SEVERITIES,
     ENTER_SIDES,
     EXIT_SIDES,
+    /* The vocabulary of the words a document is written in — the patterns a key
+     * must match, the triggers and mutations a state variable has and the field
+     * sets each block is allowed to carry. Exported so that bot-canvas/ holds
+     * one grammar instead of a second copy of it: the canvas names a node after
+     * a key, so it has to know what a key may be. */
+    KEY_PATTERN,
+    FEED_PATTERN,
+    PLACEHOLDER,
+    STATE_TRIGGERS,
+    MUTATIONS,
+    ROOT_FIELDS,
+    NODE_FIELDS,
+    COUNT_FIELDS,
+    STATE_FIELDS,
+    ACTION_FIELDS,
+    UNIVERSE_FIELDS,
     parseFeedTopic,
     compileStrategy,
     formatErrors,
