@@ -64,7 +64,12 @@ const SOURCE_TYPE = Object.freeze({
      * the same frame because a decision must be as easy to route, store and
      * audit as a reading: the bot engine publishes it exactly the way the
      * analytics engine publishes a reading. */
-    BOT: "bot"
+    BOT: "bot",
+    /* The execution layer's own output — an order, or an order that was
+     * blocked. It travels the same frame and the same namespace as a decision,
+     * under its own sourceType, so the layer that reads decisions can refuse
+     * its own events as what they are instead of re-reading them. */
+    EXECUTION: "execution"
 });
 
 const MARKET_TYPE = Object.freeze({

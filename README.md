@@ -159,7 +159,7 @@ node analytics-engine/tests/<name>.test.cjs
 `MACRO_DATA_INVENTORY.md` · `MACRO_SOURCE_INVENTORY.md` · `MACRO_INFLATION_COVERAGE.md` ·
 `CPI_YOY_DATA_AUDIT.md` · `MACRO_HANDOFF_v3.md` · `ROADMAP_FRONTEND.md` · `planC.md` ·
 `TraderBOT.txt` (structural walkthrough) · `ZDoc/` (design notes) ·
-`analytics-engine/README.md` (topic reference).
+`analytics-engine/README.md` (topic reference) · `execution-engine/HANDOFF.md` (Phase 4 state).
 
 ---
 
