@@ -1,0 +1,18 @@
+{
+  "name": "nav-ecosystem-token",
+  "version": "1.0.0",
+  "description": "NAV Ecosystem Token (NAV) - ERC20 token with first-hand eligibility / redemption quota tracking",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.10"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
+  }
+}
