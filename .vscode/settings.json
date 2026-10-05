@@ -67,7 +67,13 @@
         "**/collector/crypto/data/**": true,
         "**/collector/crypto/historical/**": true,
         "**/*.ndjson": true,
-        "**/*.jsonl": true
+        "**/*.jsonl": true,
+        "**/_legacy/**": true,
+        "**/.nested-git-backup/**": true,
+        "**/*.parquet": true,
+        "**/*.zip": true,
+        "**/*.db-journal": true,
+        "**/*.db-wal": true
     },
     "search.exclude": {
         "**/node_modules": true,
@@ -89,7 +95,11 @@
         "**/collector/macro": true,
         "**/collector/crypto/historical": true,
         "**/*.ndjson": true,
-        "**/*.jsonl": true
+        "**/*.jsonl": true,
+        "**/_legacy": true,
+        "**/.nested-git-backup": true,
+        "**/*.parquet": true,
+        "**/*.zip": true
     },
     "search.followSymlinks": false,
     "search.useIgnoreFiles": true,
@@ -109,19 +119,25 @@
     "workbench.editor.limit.excludeDirty": true,
     "editor.largeFileOptimizations": true,
 
-    // ---------- 5. terminal: a command must never hang the chat ----------
-    // Root cause of the "chat keeps crashing" symptom (2026-09-30): VS Code's
-    // bash shell integration emits its OSC 633 markers from a DEBUG trap, so a
-    // command that redirects its own stdout (`some-tool > /tmp/out.txt`)
-    // swallows those markers into the file. VS Code then never observes
-    // "command finished", every agent tool call hangs until it times out, and
-    // the session dies. With integration off, completion is read from the
-    // buffer, which no redirect can swallow. If a shell needs the decorations
-    // again, close every old terminal first, then re-enable this.
-    "terminal.integrated.shellIntegration.enabled": false,
+    // ---------- 5. terminal: completion must be observable ----------
+    // 2026-09-30: shell integration was turned off here, on the theory that
+    // bash's OSC 633 debug trap plus a self-redirecting command (`tool > file`)
+    // swallowed the "command finished" marker.
+    //
+    // 2026-10-04: that theory does not hold. The logs show the real event —
+    // the extension host died of its own heap (SIGABRT) at 18:07 and again at
+    // 18:25, a second extension host came up at 18:26, and every terminal the
+    // agent had created belonged to the dead one. Nothing could be observed
+    // afterwards, not even `true`, *because integration was off*: with it off
+    // Cline has no reliable channel left for "this command finished".
+    //
+    // So integration is on again, and long commands no longer trust the
+    // terminal at all: they run detached and write to a file
+    // (scripts/dev/run-detached.sh), which survives a dropped pty.
+    "terminal.integrated.shellIntegration.enabled": true,
     "terminal.integrated.shellIntegration.history": 0,
     "terminal.integrated.enablePersistentSessions": false,
-    "terminal.integrated.scrollback": 2000,
+    "terminal.integrated.scrollback": 1000,
 
     // ---------- 6. background chores: fewer node workers, same heap ----------
     "git.autorefresh": false,
@@ -153,8 +169,28 @@
     "editor.minimap.enabled": false,
     "editor.renderWhitespace": "none",
 
-    // ---------- 8. one big file must never be read into the heap ----------
-    // Cline's own file reads go through the extension host; the logger below
-    // marks anything the tools must page instead of slurp (see tools/*.cjs).
-    "files.maxMemoryForLargeFilesMB": 256
+    // ---------- 8. one setting, stated once ----------
+    // `files.maxMemoryForLargeFilesMB` used to appear twice in this file (here
+    // and in section 2). A duplicate key is how a settings file starts to lie
+    // about itself, so the second copy is gone; the surviving one is above.
+    // What is added here is the update check, which is the last thing that
+    // walks the tree on its own without being asked.
+    "extensions.autoCheckUpdates": false,
+
+    // ---------- 9. search and symbols: bounded, and no symlink walks
+    //               (2026-10-05) ----------
+    // Measured this morning: the extension host was back at 1.75 GB RSS after
+    // only 25 minutes of a chat-only session, and ~/.vscode-server/data/logs
+    // holds two server starts before it (07:35, 07:49) — which is what "the
+    // run was interrupted" means on this box: the process that owned the
+    // terminal died, not the run. The tree is 61,264 files and 17 GB, and
+    // every automatic walk still enabled happens *inside* that same heap, so
+    // the remaining ones are turned down instead of off — nothing here changes
+    // how the code runs, and no source folder is hidden from search.
+    "search.followSymlinks": false,
+    "search.maxResults": 2000,
+    "search.quickOpen.includeSymbols": false,
+    "search.quickOpen.includeHistory": false,
+    "typescript.tsc.autoDetect": "off",
+    "javascript.updateImportsOnFileMove.enabled": "never"
 }

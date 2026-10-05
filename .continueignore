@@ -2,4 +2,35 @@ node_modules/
 .next/
 dist/
 build/
+out/
+coverage/
+__pycache__/
+.venv/
+venv/
 .git/
+_legacy/
+.nested-git-backup/
+
+# ---------- the data lake (15.7 GB — never index it) ----------
+# collector/ alone is 13.7 GB, data/ is 1.35 GB. Indexing them
+# was part of what pushed the extension host past its heap limit.
+data/
+collector/macro/offline/
+collector/macro/raw/
+collector/crypto/historical/
+collector/crypto/data/
+collector/**/logs/
+
+# ---------- any file too big to belong in an index ----------
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.csv
+*.ndjson
+*.jsonl
+*.parquet
+*.zip
+*.gz
+*.log

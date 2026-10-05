@@ -1,0 +1,58 @@
+# ============================================================
+# TraderBOT — Cline ignore rules
+# ============================================================
+# Why this file exists (2026-10-02)
+#
+# The Cline extension host kept dying with
+#   FATAL ERROR: Reached heap limit   (1-Cline.log, exthost1)
+# while the state it mirrors over gRPC was already 31.2 MB
+# ("Large gRPC response: subscribeToState size=31.2MB").
+#
+# A part of that state comes from what the agent is allowed to
+# read, and this tree is 15.7 GB of it:
+#   collector/   13.7 GB      data/   1.35 GB
+#   frontend/     0.5 GB      roadmap-site/ 0.14 GB
+#
+# Everything below is data, build output or a store — never
+# source. Source and docs inside those folders stay readable on
+# purpose: the agent still needs collector/crypto/*.cjs and
+# roadmap-site/ROADMAP.md, so only the data is blocked.
+# ============================================================
+
+# ---------- dependencies and build output ----------
+node_modules/
+.next/
+.turbo/
+dist/
+build/
+out/
+coverage/
+__pycache__/
+.venv/
+venv/
+.git/
+_legacy/
+.nested-git-backup/
+
+# ---------- the data lake ----------
+data/
+collector/macro/offline/
+collector/macro/raw/
+collector/crypto/historical/
+collector/crypto/data/
+collector/**/logs/
+collector/**/*.db
+collector/**/*.db-wal
+collector/**/*.db-shm
+
+# ---------- any file too big to belong in a chat ----------
+*.db
+*.sqlite
+*.sqlite3
+*.csv
+*.ndjson
+*.jsonl
+*.parquet
+*.zip
+*.gz
+*.log
