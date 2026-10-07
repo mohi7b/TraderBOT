@@ -91,8 +91,10 @@ language: one near‑black plate, hairline borders, no glass, no glow — with g
 and key figures. Only CSS + the header/hero markup moved; the inline script is byte‑identical, because
 it only ever touches ids/classes.
 
-- **Snap scroll** — `html { scroll-snap-type: y mandatory }` plus `main > section { scroll-snap-align: start }`.
-  `#hero` and `#trust` are full slides (`.snap` = `min-height: 100svh`, vertically centred content).
+- **Snap scroll / page deck** — `html { scroll-snap-type: y mandatory }` plus `main > section { scroll-snap-align: start }`.
+  The deck reads as a sequence of full pages: `#hero`, `#roadmap` and `#tokenomics` carry `.snap`
+  (`min-height: 100svh`, vertically centred content); the tokenomics page folds the live treasury
+  block in right after its counters. `#trust` also carries `.snap`.
   Tablets/phones and short windows relax to `y proximity`, and `prefers-reduced-motion: reduce`
   disables snapping entirely.
 - **"Quiet plate" palette (Pass A)** — void `#05070B`, raised plate `#0B0F16`/`#0D1219`, ink
@@ -116,17 +118,20 @@ it only ever touches ids/classes.
   keeps a read‑only phase summary that links back to the widget, which is why every hook still
   appears **exactly once** in the live shell.
 - **Centred emblem hero** — the hero's two‑column intro was replaced by one centred column: the
-  `navisprotocol.png` wordmark (`.hero-mark`, clamped width), the headline (`.hero-tag`, capped to the
-  wordmark's own box so it never spills wider) and the protocol lead (`.hero-lead` — a finer, lighter
-  face set apart from the display headline). Below the column come two centred rows about half the
-  plate wide (`.hero-half`): first the gold `#countdown` card, then the Genesis presale card
-  (`#phaseNumber`, phase bar). Under those, `.gx-grid` holds two equal-height columns — the price/buy
+  `navisprotocol.png` wordmark (`.hero-mark`, clamped width, centred). The former `.hero-tag` headline
+  and `.hero-lead` protocol lead were removed from the hero and moved into the Roadmap view (the
+  headline is now its `.lead` header subtitle, the lead becomes the narrative card). Below the wordmark
+  come two centred rows about half the plate wide (`.hero-half`, the gap tightened to `mt-4`): first the gold `#countdown` card, then the Genesis presale card
+  (`#phaseNumber`, phase bar). Under those, the full-width `.gx-grid` holds two equal-height columns — the price/buy
   panel on the right and the NAV‑Floor card on the left. The CTA pair that used to sit under the lead
   is gone; the buy button inside the widget is the hero's only CTA. Every figure on the block still
   reads from the contracts (`.bar-head`/`.bar-foot` for the allocation, percent and sold amount). This
-  is also the flattest block on the page: the `.hero-tag`/`.hero-lead` type is set small, the eyebrow
-  label is gone, the four cards drop their hairline frame entirely (`#hero .glass` + `#hero .floor-hl`
-  set `border: 0`) and the chip, countdown rule, input and buy button are border-less fills.
+  is also the flattest block on the page: the eyebrow
+  label is gone, and the two hero-half cards (`.no-plate`) drop their frame entirely (`#hero .glass` +
+  `#hero .floor-hl` set `border: 0`) along with the chip, countdown rule and input fills. The price/buy
+  and NAV-Floor cards inside `.gx-grid` are the exception: they span the full plate width, reuse the
+  faint `--hair` hairline of the roadmap plates (`#hero .gx-grid .glass` + `#hero .gx-grid .floor-hl`)
+  and arrange their readouts in two columns.
 - **CDN‑independent responsive visibility** — the shell's own `.hidden { display: none }` would
   otherwise out‑rank Tailwind's `lg:flex` / `sm:inline` (same specificity, later in the cascade), so
   the header uses explicit classes with their own media queries instead: `.nav-desk`, `.menu-btn`,
@@ -200,14 +205,13 @@ must never bind a port the panel/VPN uses, because that would take the tunnels d
 | Section | Anchor | Content |
 | --- | --- | --- |
 | Header (sticky) | `#top` | `navislogo.png` medal + brand, desktop nav, `BSC Testnet · 97` badge, language switcher (FA/EN/DE/AR/TR), **`#connectWallet`**, mobile menu |
-| Hero | `#hero` | centred `navisprotocol.png` wordmark, `.hero-tag` headline + `.hero-lead` protocol lead, then two centred `.hero-half` rows — the gold `#countdown` card and the Genesis presale card (`#phaseNumber`, phase bar) — above the `.gx-grid` pair: the price/buy panel (`#presalePrice`, `#usdtAmount`, `#tokenEstimate`, `#walletBalance`, `#buyPresale`, `#walletStatus`, `#networkStatus`) on the right and the gold NAV‑Floor column on the left |
+| Hero · **page 1** | `#hero` | centred `navisprotocol.png` wordmark, then two centred `.hero-half` rows — the gold `#countdown` card and the Genesis presale card (`#phaseNumber`, phase bar) — above the `.gx-grid` pair: the price/buy panel (`#presalePrice`, `#usdtAmount`, `#tokenEstimate`, `#walletBalance`, `#buyPresale`, `#walletStatus`, `#networkStatus`) on the right and the gold NAV‑Floor column on the left |
+| Roadmap · **page 2** | `#roadmap` | `#about` anchor + `.lead` header subtitle (`آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار`), protocol narrative and 4 feature cards, then the 4‑phase timeline with its bullet items, laid out as two equal columns on wide screens — phases 1‑2 stacked down the right column and phases 3‑4 down the left — with a hairline connector linking the stacked phases of each column (full `.snap` page) |
+| Tokenomics · **page 3** | `#tokenomics` | 100B / 1B / ≥ $0.039 / 100% counters + transparency dashboard, then the live on‑chain treasury block folded in below (`#treasury`: `#tBlock`, `#tClock`, `#tTreasury`, `#tFloor`, `#tRatio`, `#tHolders`, `#tRedeemed`) |
 | Trust band | `#trust` | live `#livePrice` market card, verified / liquidity‑lock / treasury cards, RTL fact tape |
 | Platform preview | `#platform` | app chrome, node graph, candlestick chart, money‑flow panel, market ticker |
-| About | `#about` | protocol summary + 4 feature cards |
-| Roadmap | `#roadmap` | timeline, 4 macro phases with bullet items |
-| Tokenomics | `#tokenomics` | 100B / 1B / ≥ $0.039 / 100% counters + transparency dashboard |
-| Presale Phase 1 | `#presale` | 4 sub‑phases (increasing price & size, decreasing lock), staking, DEX/keepers, wallet connect |
-| Treasury | `#treasury` | live on‑chain status simulation (balance, NAV floor, reserve ratio, block clock) |
+| Phase‑1 tokenomics | `#presale` | “توکنومیکس فاز اول”: four stage cards (`#sp1…sp4` × `Price`/`Supply`/`Lock`/`Bar`) painted live from the presale contract’s `subPhases`/`phasePrice`, the increasing price‑and‑size card, the decreasing redemption‑lock card, staking, DEX/keepers and the participation summary |
+| Genesis governance | `#genesis` | Genesis governance summary + live on‑chain voting status |
 | Community | `#community` | summary copy + social icons (Telegram, X, Discord, GitHub, Medium) |
 | Footer | — | navigation, investment summary, disclaimer |
 
@@ -250,6 +254,21 @@ Everything is progressive enhancement: the page never throws when `window.ethere
 the demo experience is byte-for-byte the v1 one. Verified end-to-end against a local Hardhat node
 (1000 USDT → 4000 NAVIS at the 4× sub-phase multiplier).
 
+### Phase‑1 tokenomics cards (`#presale`)
+
+The four stage cards are positional — `#sp1…sp4` each exposing `Price`, `Supply`, `Lock` and `Bar` —
+and the same reader paints them from the presale contract:
+
+- `phasePrice(i)` → the per‑stage USDT price, rendered with the on‑chain USDT decimals (`—` while the
+  NAV floor is still zero, i.e. before the treasury holds a reserve);
+- `subPhases(i)` → `tokenSupply` (compacted to `400M`), the meter’s sale progress
+  (`tokensSold / tokenSupply`) and the exclusive redemption lock (`lockPeriod`, printed as months when
+  it is a whole number of 30‑day months, otherwise as days).
+
+Only the sub‑phases the contract actually reports are touched: a card whose sub‑phase is missing — or a
+chain with `subPhaseCount() == 0` — keeps the illustrative value in the markup, exactly like the rest
+of the panel. The same values are restored whenever the reader falls back to demo mode.
+
 ## Before launch — replace the placeholders
 
 1. ~~Header emblem~~ — done: `./navislogo.png` (512×512, transparent) is the header medal + `og:image`,
@@ -263,8 +282,10 @@ the demo experience is byte-for-byte the v1 one. Verified end-to-end against a l
    and refresh the inlined fallback addresses in the script to match.
 4. Add the audit links in `#treasury` — the reserve / NAV floor / price reads are already on-chain
    whenever a node (or wallet) is reachable.
-5. Update the sub‑phase prices/sizes/lock periods in `#presale` if the model changes, then re-record
-   the script baseline (`python3 tools/strip-legacy.py check --record`).
+5. The `#presale` stage cards read price / supply / sale progress / redemption lock straight from the
+   presale contract, so they follow the model on their own; only the *illustrative* fallback numbers in
+   the markup (what a visitor sees before a node answers) need editing. The inline script is untouched
+   by that, so the recorded baseline stays valid.
 
 ## Notes
 

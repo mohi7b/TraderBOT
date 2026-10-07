@@ -231,19 +231,13 @@
     .meter-sm{height:4px}
     .meter-lg{height:10px}
 
-    /* ---------- hero · centred wordmark · tagline · lead · presale rows ---------- */
+    /* ---------- hero · centred wordmark · presale rows ---------- */
     .hero-mark{display:block;width:min(76vw,24rem);height:auto}
     @media(min-width:640px){.hero-mark{width:min(52vw,27rem)}}
     @media(min-width:1024px){.hero-mark{width:min(38vw,29rem)}}
-    /* the tagline is capped to the same box as the wordmark so it never spills wider */
-    .hero-tag{max-width:min(76vw,24rem);margin-inline:auto}
-    @media(min-width:640px){.hero-tag{max-width:min(52vw,27rem)}}
-    @media(min-width:1024px){.hero-tag{max-width:min(38vw,29rem)}}
-    /* finer, lighter lead face — deliberately distinct from the display headline */
-    .hero-lead{font-family:"Readex Pro","Vazirmatn",ui-sans-serif,system-ui,sans-serif;font-weight:300;font-size:clamp(.5rem,.75vw,.575rem);line-height:2;letter-spacing:.005em}
     /* the countdown row and the Genesis row are centred and about half the plate wide */
     .hero-half{width:min(100%,40rem)}
-    .gx-grid{display:grid;gap:1.2rem;margin-top:1.2rem;width:min(100%,52rem);margin-inline:auto}
+    .gx-grid{display:grid;gap:1.2rem;margin-top:1.2rem;width:100%;margin-inline:auto}
     @media(min-width:1024px){
       .gx-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;align-items:stretch}
     }
@@ -262,6 +256,10 @@
     #hero .divider-glow{opacity:.55}
     /* the hero cards carry no frame — the plate fill alone sets them apart */
     #hero .glass,#hero .floor-hl{border:0}
+    /* the price/buy + NAV-Floor cards reuse the faint hairline of every roadmap plate */
+    #hero .gx-grid .glass,#hero .gx-grid .floor-hl{border:1px solid var(--hair)}
+    /* the countdown and the Genesis presale cards sit directly on the page — no plate fill */
+    #hero .no-plate{background:transparent}
 
     /* ---------- terminal / chart ---------- */
     .term{border-radius:1.25rem;overflow:hidden;background:var(--plate);border:1px solid var(--hair);box-shadow:none}
@@ -302,6 +300,23 @@
     .tl-node::after{content:"";position:absolute;inset:-9px;border-radius:999px;border:1px solid rgba(255,199,0,.22)}
     .tl-node.todo{background:linear-gradient(135deg,#334155,#1E293B);color:#CBD5E1;box-shadow:0 0 0 6px rgba(148,163,184,.07)}
     .tl-node.todo::after{border-color:rgba(148,163,184,.28)}
+    /* phase cards · flat plate with the same faint hairline as the rest of the page */
+    .tl-card{background:var(--plate);border:1px solid var(--hair);border-radius:1rem;padding:1.15rem 1.25rem}
+    /* equal-height phase cells */
+    .tl-item{display:flex;flex-direction:column}
+    .tl-card{flex:1}
+    /* two equal columns on wide screens — a single vertical rail only fits the stacked list */
+    @media(min-width:1024px){
+      .tl{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem 1.75rem;align-items:stretch}
+      .tl-rail{display:none}
+      /* linear connector between the stacked phases of each column (1→2 · 3→4) */
+      .tl > .tl-item:nth-child(2)::after,
+      .tl > .tl-item:nth-child(3)::after{
+        content:"";position:absolute;z-index:1;
+        inset-inline-start:1.24rem;top:100%;height:1.5rem;width:2px;border-radius:999px;
+        background:linear-gradient(180deg,rgba(255,199,0,.55),rgba(173,206,255,.15));
+      }
+    }
     @keyframes ring{0%{transform:scale(.72);opacity:.9}70%,100%{transform:scale(1.32);opacity:0}}
 
     /* ---------- tape / ticker ---------- */
@@ -377,11 +392,10 @@
         </a>
         <nav class="nav-desk items-center gap-0.5" aria-label="ناوبری اصلی">
           <a href="#hero" class="nav-l">خانه</a>
-          <a href="#platform" class="nav-l">پلتفرم زنده</a>
           <a href="#roadmap" class="nav-l">نقشه راه</a>
           <a href="#tokenomics" class="nav-l">توکنومیکس</a>
-          <a href="#presale" class="nav-l">پیش‌عرضه</a>
           <a href="#treasury" class="nav-l">خزانه</a>
+          <a href="#platform" class="nav-l">پلتفرم زنده</a>
           <a href="#genesis" class="nav-l">حاکمیت</a>
         </nav>
         <div class="flex items-center gap-2">
@@ -428,19 +442,18 @@
       <div class="wrap py-3">
         <nav class="grid gap-1" aria-label="ناوبری موبایل">
           <a href="#hero">خانه</a>
-          <a href="#trust">تضمین‌ها و بازار</a>
-          <a href="#platform">پلتفرم زنده</a>
           <a href="#roadmap">نقشه راه و فازها</a>
           <a href="#tokenomics">توکنومیکس و شفافیت</a>
-          <a href="#presale">ریزفاز اول پیش‌عرضه</a>
           <a href="#treasury">خزانهٔ آن‌چین</a>
+          <a href="#trust">تضمین‌ها و بازار</a>
+          <a href="#platform">پلتفرم زنده</a>
           <a href="#genesis">حاکمیت گِنیسِس و رأی‌دهی</a>
         </nav>
         <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5" style="background:rgba(255,255,255,.02);border:1px solid var(--hair)">
           <span class="chip chip-cy" style="font-size:.68rem;padding:.3rem .65rem"><span class="badge-dot"></span> BSC Testnet · 97</span>
           <span class="text-[11px]" style="color:#94A3B8">پیش‌فروش گِنیسِس فعال است</span>
         </div>
-        <a href="#presale" class="btn btn-1 btn-sm mt-3 w-full">رزرو سهمیه در ریزفاز اول</a>
+        <a href="#presale" class="btn btn-1 btn-sm mt-3 w-full">رزرو سهمیه در مرحلهٔ اول</a>
       </div>
     </div>
   </header>
@@ -455,21 +468,11 @@
                width="1942" height="809" decoding="async" fetchpriority="high" />
         </div>
 
-        <!-- ---------- headline + protocol description · centred ---------- -->
-        <div class="mx-auto mt-7 max-w-3xl text-center">
-          <h1 class="reveal fdisp hero-tag text-white" style="--d:60ms;font-weight:500;font-size:clamp(.51rem,.975vw,.75rem);line-height:1.6;letter-spacing:-.01em">
-            آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار
-          </h1>
-          <p class="reveal lead hero-lead mx-auto mt-4 max-w-2xl" style="--d:120ms">
-            پلتفرم ناویس، چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی با پشتیبانی توکن NAVIS بر پایه ارزش کاملاً شفاف از قیمت کف آن‌چین را در بر می‌گیرد.
-          </p>
-        </div>
-
         <!-- ---------- row 1 · countdown · centred, about half the plate ---------- -->
         <div class="reveal hero-half mx-auto mt-9" style="--d:150ms">
-          <div class="glass gold-ring p-5 sm:p-6">
+          <div class="glass gold-ring no-plate p-5 sm:p-6">
             <div class="flex items-center justify-between gap-3">
-              <span class="label">زمان باقی‌مانده تا پایان فاز</span>
+              <span class="label">زمان باقی‌مانده تا پایان این مرحله</span>
               <span class="chip chip-gold"><span class="live-dot"></span> زنده</span>
             </div>
 
@@ -495,19 +498,19 @@
         </div>
 
         <!-- ---------- row 2 · Genesis presale · centred, about half the plate ---------- -->
-        <div class="reveal hero-half mx-auto glass gold-ring mt-6 p-5 sm:p-6" style="--d:200ms">
+        <div class="reveal hero-half mx-auto glass gold-ring no-plate mt-4 p-5 sm:p-6" style="--d:200ms">
 
           <div class="text-center">
             <h2 class="fdisp text-white" style="font-weight:600;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.6">
-              فروش توکن‌های جنیسیس · فاز <span id="phaseNumber" class="fnum">۱</span>
+              فروش توکن‌های جنیسیس مرحله <span id="phaseNumber" class="fnum">۱</span>
             </h2>
-            <p class="mt-1 text-[11px]" style="color:#94A3B8">شمارهٔ فاز طبق قرارداد هوشمند پیش‌فروش · تسویه با USDT روی BSC Testnet (۹۷)</p>
+            <p class="mt-1 text-[11px]" style="color:#94A3B8">خریداران دست اول (جنیسیس) از حق رای دهنده ی جنیسیس برخوردار خواهد بود.</p>
           </div>
 
           <!-- phase progress: percent · final amount · sold amount -->
           <div class="mt-5">
             <div class="bar-head">
-              <span>تخصیص نهایی فاز · <b class="fnum" style="color:#fff">۴۰۰,۰۰۰,۰۰۰ NAVIS</b></span>
+              <span>تعداد توکن عرضه در این مرحله <b class="fnum" style="color:#fff">۴۰۰,۰۰۰,۰۰۰ NAVIS</b></span>
               <span class="fnum" style="color:#FFC700">۲۶٪ تکمیل</span>
             </div>
             <div class="meter meter-lg mt-3"><i style="width:26%"></i></div>
@@ -534,9 +537,9 @@
 
           <!-- ---------- right · price per token + buy ---------- -->
           <div class="glass gold-ring p-5 sm:p-6">
-            <div class="grid gap-2">
-              <div class="flex items-center justify-between text-sm">
-                <span style="color:#94A3B8">قیمت هر توکن</span>
+            <div class="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              <div class="flex items-center justify-between gap-3 text-sm">
+                <span style="color:#94A3B8">قیمت هر توکن در این مرحله</span>
                 <span id="presalePrice" class="fnum text-white">$0.010</span>
               </div>
               <div class="flex items-center justify-between gap-3">
@@ -544,16 +547,16 @@
                 <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-40 max-w-[58%] rounded-lg px-3 py-2 text-end text-sm text-white outline-none" style="border:0;background:rgba(255,255,255,.06)" />
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span style="color:#94A3B8">توکن تخمینی</span>
-                <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
-              </div>
-              <div class="flex items-center justify-between text-sm">
                 <span style="color:#94A3B8">موجودی ناویس شما</span>
                 <span id="walletBalance" class="fnum" style="color:#ADCEFF">0 NAVIS</span>
               </div>
+              <div class="flex items-center justify-between text-sm">
+                <span style="color:#94A3B8">توکن تخمینی</span>
+                <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
+              </div>
             </div>
 
-            <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید در پیش‌فروش</button>
+            <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید</button>
             <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
               <span id="walletStatus" class="chip">کیف‌پولی متصل نیست</span>
               <span id="networkStatus" class="chip">شبکه: متصل نیست</span>
@@ -562,7 +565,7 @@
 
           <!-- ---------- left · guaranteed treasury floor ---------- -->
           <div class="floor-hl p-5">
-            <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+            <div class="grid gap-x-6 gap-y-4 sm:grid-cols-2 sm:items-center">
               <div>
                 <p class="label">قیمت کف تضمین‌شدهٔ خزانه · NAV Floor</p>
                 <p class="kpi kpi-em mt-1" style="font-size:clamp(1.7rem,3.4vw,2.15rem)">≥ $0.039</p>
@@ -585,6 +588,272 @@
         </div>
       </div>
     </section>
+    <!-- ======================= ABOUT + ROADMAP · one merged page ======================= -->
+    <section id="roadmap" class="snap">
+      <span id="about"></span>
+      <div class="wrap">
+        <div class="reveal text-center">
+          <span class="eyebrow">Roadmap</span>
+          <h2 class="h2s mt-4">نقشه راه</h2>
+          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار</p>
+        </div>
+
+        <div class="mt-10 grid gap-4 lg:grid-cols-12 lg:items-stretch lg:gap-6">
+          <!-- right column · protocol narrative, boxed and stretched to the feature-grid height -->
+          <div class="reveal card hl flex flex-col p-6 lg:col-span-5">
+            <p class="lead" style="font-size:.98rem;line-height:2.05">
+              پلتفرم ناویس، چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی با پشتیبانی توکن NAVIS بر پایه ارزش کاملاً شفاف از قیمت کف آن‌چین را در بر می‌گیرد. این پروتکل با بهره‌گیری از الگوریتم‌های هوش مصنوعی و تحلیل رفتاری بازار، مسیرهای بهینه تخصیص نقدینگی را شناسایی کرده و زیرساختی امن و کاملا خودکار برای فعالیت معامله‌گران و سرمایه‌گذاران در بازار می‌سازد.
+            </p>
+            <p class="soft mt-5 px-4 py-4 text-sm leading-8" style="border-inline-start:2px solid #8B5CF6;color:#C7D0DE">
+              برخلاف پروژه‌های سنتی کریپتو که ارزش آن‌ها صرفاً بر پایه هیجانات بازار است، NAVIS بر پایه ساختار ریاضی خزانه‌داری تضمین‌شده (<span class="fnum" style="color:#6EE7B7">$USDT$</span>) بنا شده است.
+            </p>
+            <div class="mt-auto flex flex-wrap gap-2 pt-6">
+              <span class="chip chip-vi">AI Money Routing</span>
+              <span class="chip chip-cy">Chart Engine</span>
+              <span class="chip chip-em">NAV Floor</span>
+            </div>
+          </div>
+
+          <!-- middle + left columns · four feature cards -->
+          <div class="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+            <div class="reveal card hl lift p-5">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8" stroke="#DDD6FE" stroke-width="1.6" stroke-linecap="round" /><circle cx="12" cy="12" r="3" stroke="#DDD6FE" stroke-width="1.6" /></svg>
+              </span>
+              <h3 class="mt-4 font-semibold text-white">هوش مصنوعی بازار</h3>
+              <p class="mt-2 text-sm leading-7 text-mut">الگوریتم‌های رفتاری و داده‌محور برای شناسایی مسیر بهینهٔ نقدینگی.</p>
+            </div>
+            <div class="reveal card hl lift p-5">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="#67E8F9" stroke-width="1.6" stroke-linecap="round" /></svg>
+              </span>
+              <h3 class="mt-4 font-semibold text-white">تحلیل داده‌های کلان</h3>
+              <p class="mt-2 text-sm leading-7 text-mut">موتور اختصاصی چارت‌انجین با ادغام داده‌های کلان و آن‌چین.</p>
+            </div>
+            <div class="reveal card hl lift p-5">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#6EE7B7" stroke-width="1.6" /><path d="m9 12 2 2 4-4" stroke="#6EE7B7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <h3 class="mt-4 font-semibold text-white">خزانه‌داری آن‌چین</h3>
+              <p class="mt-2 text-sm leading-7 text-mut">قرارداد هوشمند شفاف با پشتیبانی کامل تتر و بازخرید تضمینی.</p>
+            </div>
+            <div class="reveal card hl lift p-5">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#FDE68A" stroke-width="1.6" stroke-linecap="round" /><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#FDE68A" stroke-width="1.6" /><circle cx="12" cy="16" r="1.4" fill="#FDE68A" /></svg>
+              </span>
+              <h3 class="mt-4 font-semibold text-white">امنیت و شفافیت ریاضی</h3>
+              <p class="mt-2 text-sm leading-7 text-mut">قیمت کف تضمین‌شده که تنها با رشد خزانه افزایش می‌یابد.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- ROADMAP · four master phases ---------- -->
+        <div class="tl mt-14">
+          <div class="tl-rail" aria-hidden="true"></div>
+
+          <div class="reveal tl-item">
+            <div class="tl-node">1</div>
+            <div class="tl-card hl">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="chip chip-cy">فاز ۱</span>
+                <h3 class="fdisp text-lg font-bold text-white">طراحی و اجرای زیرساخت</h3>
+                <span class="text-xs text-mut">(Core &amp; Infrastructure)</span>
+              </div>
+              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#22D3EE"></span><span>توسعه موتور اختصاصی چارت‌انجین و پروتکل‌های آن‌چین</span></li>
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#22D3EE"></span><span>استقرار قرارداد هوشمند خزانه‌داری (Treasury) و سیستم پیش‌عرضه سپرده‌محور</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="reveal tl-item">
+            <div class="tl-node todo">3</div>
+            <div class="tl-card hl">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="chip chip-em">فاز ۳</span>
+                <h3 class="fdisp text-lg font-bold text-white">اجرا، رشد و چرخه اکوسیستم</h3>
+                <span class="text-xs text-mut">(Ecosystem &amp; Execution)</span>
+              </div>
+              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#10B981"></span><span>بهینه سازی پلتفرم ناویس و اجرای کامل ماژول های مارکت پلیس پلتفرم</span></li>
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#10B981"></span><span>هدایت کارمزدهای حاصل از پلتفرم به خزانه جهت افزایش دائمی کف قیمت توکن</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="reveal tl-item">
+            <div class="tl-node todo">2</div>
+            <div class="tl-card hl">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="chip chip-vi">فاز ۲</span>
+                <h3 class="fdisp text-lg font-bold text-white">پیاده‌سازی و گسترش افقی</h3>
+                <span class="text-xs text-mut">(Horizontal Expansion)</span>
+              </div>
+              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#8B5CF6"></span><span>راه اندازی پلتفرم ناویس و تعمیم بازار های افقی به بازار های جدید</span></li>
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#8B5CF6"></span><span>اتصال به استخرهای نقدینگی، صرافی‌های غیرمتمرکز (DEXs) و ارائه API ویژه بات‌ها</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="reveal tl-item">
+            <div class="tl-node todo">4</div>
+            <div class="tl-card hl">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="chip chip-amber">فاز ۴</span>
+                <h3 class="fdisp text-lg font-bold text-white">تحقیق، توسعه و سرمایه‌گذاری</h3>
+                <span class="text-xs text-mut">(R&amp;D &amp; Market Expansion)</span>
+              </div>
+              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#FBBF24"></span><span>توسعه الگوریتم‌های هوش مصنوعی بازارشناسی</span></li>
+                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#FBBF24"></span><span>تخصیص منابع خزانه به دارایی‌های دنیای واقعی (RWA) و بازارهای مالی سنتی</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ======================= TOKENOMICS ======================= -->
+    <section id="tokenomics" class="snap">
+      <div class="wrap">
+        <div class="reveal text-center">
+          <span class="eyebrow">Tokenomics</span>
+          <h2 class="h2s mt-4">توکنومیکس کلان و امنیت مالی</h2>
+          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">ساختار عرضه، سقف توکن و تضمین ریاضی قیمت کف در یک نگاه شفاف.</p>
+        </div>
+
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="reveal card hl lift p-5 text-center">
+            <p class="label">سقف کل عرضه (Max Supply)</p>
+            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="100">0</span>B</p>
+            <p class="mt-2 text-sm" style="color:#C7D0DE">۱۰۰ میلیارد توکن NAVIS</p>
+            <div class="meter mt-4"><i style="width:100%"></i></div>
+          </div>
+
+          <div class="reveal card hl lift p-5 text-center">
+            <p class="label">عرضه اولیه فاز طراحی</p>
+            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="1">0</span>B</p>
+            <p class="mt-2 text-sm" style="color:#C7D0DE">۱ میلیارد توکن (معادل ۱٪ کل عرضه)</p>
+            <div class="meter mt-4"><i style="width:1%"></i></div>
+          </div>
+
+          <div class="reveal card hl lift p-5 text-center">
+            <p class="label">NAV Floor Guarantee</p>
+            <p class="kpi kpi-em mt-3" style="font-size:2.1rem">≥ $<span class="counting" data-count="0.039" data-decimals="3">0</span></p>
+            <p class="mt-2 text-sm" style="color:#C7D0DE">قیمت کف تضمین‌شده و فقط صعودی</p>
+            <div class="meter mt-4"><i style="width:78%"></i></div>
+          </div>
+
+          <div class="reveal card hl lift p-5 text-center">
+            <p class="label">Reserve Ratio</p>
+            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="100">0</span>%</p>
+            <p class="mt-2 text-sm" style="color:#C7D0DE">پشتیبانی کامل تتر در خزانه</p>
+            <div class="meter mt-4"><i style="width:100%"></i></div>
+          </div>
+        </div>
+        <div class="reveal card card-xl mt-6 p-6 sm:p-8">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="ico" style="width:3rem;height:3rem;border-radius:1rem;font-size:1.35rem">🛡️</span>
+            <div>
+              <h3 class="fdisp text-xl font-bold text-white">داشبورد شفافیت و امنیت مالی</h3>
+              <p class="text-xs text-mut">Transparency &amp; Financial Security Dashboard</p>
+            </div>
+          </div>
+
+          <p class="mt-5 text-base leading-8" style="color:#C7D0DE">
+            تمام وجوه ورودی از پیش‌عرضه مستقیماً وارد قرارداد هوشمند خزانه‌داری شفاف روی بلاکچین می‌شود. هر توکن دارای یک قیمت کف تضمین‌شده (<span class="fnum" style="color:#6EE7B7">$NAV_{Floor}$</span>) است که تنها با رشد خزانه افزایش می‌یابد و هرگز کاهش پیدا نمی‌کند. سرمایه‌گذاران در هر زمان پس از دوره قفل می‌توانند توکن خود را مستقیماً به خزانه تحویل داده و تتر دریافت کنند.
+          </p>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-3">
+            <div class="soft flex items-start gap-3 p-4">
+              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              <span class="text-sm leading-7" style="color:#C7D0DE">ورود مستقیم ۱۰۰٪ وجوه به قرارداد خزانه روی بلاکچین</span>
+            </div>
+            <div class="soft flex items-start gap-3 p-4">
+              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              <span class="text-sm leading-7" style="color:#C7D0DE">قفل هوشمند خزانه با قابلیت حسابرسی عمومی</span>
+            </div>
+            <div class="soft flex items-start gap-3 p-4">
+              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              <span class="text-sm leading-7" style="color:#C7D0DE">بازخرید تضمینی توکن با تتر پس از پایان دوره قفل</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wrap mt-8 sm:mt-10" id="treasury">
+        <div class="reveal card card-xl p-6 sm:p-8">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="live-dot" aria-hidden="true"></span>
+              <div>
+                <h2 class="h2s" style="font-size:clamp(1.2rem,2.4vw,1.6rem)">وضعیت زندهٔ خزانه آن‌چین</h2>
+                <p class="text-xs text-mut">Live On-Chain Treasury Status</p>
+              </div>
+            </div>
+            <div class="fnum flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px]" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#CBD5E1">
+              <span class="badge-dot"></span> Block <span id="tBlock" style="color:#67E8F9">#21,845,102</span>
+              <span style="color:#475569">·</span>
+              <span id="tClock">--:--:--</span>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="soft p-5">
+              <p class="text-xs text-mut">موجودی خزانه (Treasury Balance)</p>
+              <p id="tTreasury" class="kpi kpi-em mt-2" style="font-size:1.5rem">$18,420,000</p>
+              <p class="mt-1 text-[11px] text-mut">پشتیبانی کامل با تتر (USDT)</p>
+            </div>
+            <div class="soft p-5">
+              <p class="text-xs text-mut">قیمت کف (NAV Floor)</p>
+              <p id="tFloor" class="kpi mt-2" style="font-size:1.5rem">$0.03910</p>
+              <p class="mt-1 text-[11px]" style="color:#6EE7B7">فقط صعودی · بدون کاهش</p>
+            </div>
+            <div class="soft p-5">
+              <p class="text-xs text-mut">نسبت ذخیره (Reserve Ratio)</p>
+              <p id="tRatio" class="kpi mt-2" style="font-size:1.5rem">100.0%</p>
+              <p class="mt-1 text-[11px] text-mut">پوشش کامل تعهدات بازخرید</p>
+            </div>
+            <div class="soft p-5">
+              <p class="text-xs text-mut">سرمایه‌گذاران و بازخرید</p>
+              <p id="tHolders" class="kpi mt-2" style="font-size:1.5rem">12,480</p>
+              <p class="mt-1 text-[11px] text-mut">بازخرید انجام‌شده: <span id="tRedeemed" class="fnum" style="color:#CBD5E1">0</span></p>
+            </div>
+          </div>
+
+          <div class="divider-soft mt-7"></div>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-3">
+            <div class="soft flex items-center gap-3 p-4">
+              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#6EE7B7">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="currentColor" stroke-width="1.8" /><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-white">قرارداد تأییدشده</p>
+                <p class="text-[11px] text-mut">Verified Smart Contract</p>
+              </div>
+            </div>
+            <div class="soft flex items-center gap-3 p-4">
+              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#67E8F9">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
+                <p class="text-[11px] text-mut">Smart Liquidity Lock</p>
+              </div>
+            </div>
+            <div class="soft flex items-center gap-3 p-4">
+              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#DDD6FE">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
+                <p class="text-[11px] text-mut">Auditable Treasury</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- ======================= TRUST BAND ======================= -->
     <section id="trust" class="snap pb-6 pt-2">
       <div class="wrap">
@@ -601,13 +870,13 @@
             <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
             <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
             <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
-            <span class="tape-item">ریزفاز ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · تخفیف ۷۴٪</span>
+            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
             <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
             <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
             <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
             <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
             <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
-            <span class="tape-item">ریزفاز ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · تخفیف ۷۴٪</span>
+            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
             <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
             <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
           </div>
@@ -846,265 +1115,76 @@
         <span class="tape-item">NAV Floor $0.03910 <b class="up">▲ stable</b></span>
       </div>
     </div>
-    <!-- ======================= ABOUT ======================= -->
-    <section id="about" class="sec">
-      <div class="wrap grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-12">
-        <div class="reveal lg:col-span-5">
-          <span class="eyebrow">About NAVIS</span>
-          <h2 class="h2s mt-4">درباره ناویس پروتکل <span style="color:#8494A8">(NAVIS Protocol)</span></h2>
-          <p class="lead mt-5" style="font-size:.98rem;line-height:2.05">
-            پروتکل NAVIS یک پلتفرم پیشرفته مدیریت داده، چارت‌انجین (Chart Engine) و مسیریاب مالی هوشمند است. این پروتکل با بهره‌گیری از الگوریتم‌های هوش مصنوعی و تحلیل رفتاری بازار، مسیرهای بهینه تخصیص نقدینگی را شناسایی کرده و زیرساختی امن برای معامله‌گران و سرمایه‌گذاران می‌سازد.
-          </p>
-          <p class="soft mt-5 px-4 py-4 text-sm leading-8" style="border-inline-start:2px solid #8B5CF6;color:#C7D0DE">
-            برخلاف پروژه‌های سنتی کریپتو که ارزش آن‌ها صرفاً بر پایه هیجانات بازار است، NAVIS بر پایه ساختار ریاضی خزانه‌داری تضمین‌شده (<span class="fnum" style="color:#6EE7B7">$USDT$</span>) بنا شده است.
-          </p>
-          <div class="mt-6 flex flex-wrap gap-2">
-            <span class="chip chip-vi">AI Money Routing</span>
-            <span class="chip chip-cy">Chart Engine</span>
-            <span class="chip chip-em">NAV Floor</span>
-          </div>
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-2 lg:col-span-7">
-          <div class="reveal card hl lift p-5">
-            <span class="ico">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8" stroke="#DDD6FE" stroke-width="1.6" stroke-linecap="round" /><circle cx="12" cy="12" r="3" stroke="#DDD6FE" stroke-width="1.6" /></svg>
-            </span>
-            <h3 class="mt-4 font-semibold text-white">هوش مصنوعی بازار</h3>
-            <p class="mt-2 text-sm leading-7 text-mut">الگوریتم‌های رفتاری و داده‌محور برای شناسایی مسیر بهینهٔ نقدینگی.</p>
-          </div>
-          <div class="reveal card hl lift p-5">
-            <span class="ico">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="#67E8F9" stroke-width="1.6" stroke-linecap="round" /></svg>
-            </span>
-            <h3 class="mt-4 font-semibold text-white">تحلیل داده‌های کلان</h3>
-            <p class="mt-2 text-sm leading-7 text-mut">موتور اختصاصی چارت‌انجین با ادغام داده‌های کلان و آن‌چین.</p>
-          </div>
-          <div class="reveal card hl lift p-5">
-            <span class="ico">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#6EE7B7" stroke-width="1.6" /><path d="m9 12 2 2 4-4" stroke="#6EE7B7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            </span>
-            <h3 class="mt-4 font-semibold text-white">خزانه‌داری آن‌چین</h3>
-            <p class="mt-2 text-sm leading-7 text-mut">قرارداد هوشمند شفاف با پشتیبانی کامل تتر و بازخرید تضمینی.</p>
-          </div>
-          <div class="reveal card hl lift p-5">
-            <span class="ico">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#FDE68A" stroke-width="1.6" stroke-linecap="round" /><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#FDE68A" stroke-width="1.6" /><circle cx="12" cy="16" r="1.4" fill="#FDE68A" /></svg>
-            </span>
-            <h3 class="mt-4 font-semibold text-white">امنیت و شفافیت ریاضی</h3>
-            <p class="mt-2 text-sm leading-7 text-mut">قیمت کف تضمین‌شده که تنها با رشد خزانه افزایش می‌یابد.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ======================= ROADMAP ======================= -->
-    <section id="roadmap" class="sec">
-      <div class="wrap">
-        <div class="reveal text-center">
-          <span class="eyebrow">Roadmap</span>
-          <h2 class="h2s mt-4">نقشه راه کلان <span style="color:#8494A8">(Roadmap)</span></h2>
-          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">چهار فاز کلان از ساخت زیرساخت تا سرمایه‌گذاری در دارایی‌های دنیای واقعی.</p>
-        </div>
-
-        <div class="tl mt-11">
-          <div class="tl-rail" aria-hidden="true"></div>
-
-          <div class="reveal tl-item">
-            <div class="tl-node">1</div>
-            <div class="tl-card hl">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="chip chip-cy">فاز ۱</span>
-                <h3 class="fdisp text-lg font-bold text-white">طراحی و ساخت زیرساخت</h3>
-                <span class="text-xs text-mut">(Core &amp; Infrastructure)</span>
-              </div>
-              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#22D3EE"></span><span>توسعه موتور اختصاصی چارت‌انجین و پروتکل‌های آن‌چین</span></li>
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#22D3EE"></span><span>استقرار قرارداد هوشمند خزانه‌داری (Treasury) و سیستم پیش‌عرضه سپرده‌محور</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="reveal tl-item">
-            <div class="tl-node">2</div>
-            <div class="tl-card hl">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="chip chip-vi">فاز ۲</span>
-                <h3 class="fdisp text-lg font-bold text-white">پیاده‌سازی و گسترش افقی</h3>
-                <span class="text-xs text-mut">(Horizontal Expansion)</span>
-              </div>
-              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#8B5CF6"></span><span>یکپارچه‌سازی مولتی‌چین (Multi-Chain Integration)</span></li>
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#8B5CF6"></span><span>اتصال به استخرهای نقدینگی، صرافی‌های غیرمتمرکز (DEXs) و ارائه API ویژه بات‌ها</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="reveal tl-item">
-            <div class="tl-node">3</div>
-            <div class="tl-card hl">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="chip chip-em">فاز ۳</span>
-                <h3 class="fdisp text-lg font-bold text-white">اجرا، رشد و چرخه اکوسیستم</h3>
-                <span class="text-xs text-mut">(Ecosystem &amp; Execution)</span>
-              </div>
-              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#10B981"></span><span>راه‌اندازی کامل داشبورد عمومی چارت‌انجین هوش مصنوعی</span></li>
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#10B981"></span><span>هدایت کارمزدهای حاصل از پلتفرم به خزانه جهت افزایش دائمی کف قیمت توکن</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="reveal tl-item">
-            <div class="tl-node todo">4</div>
-            <div class="tl-card hl">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="chip chip-amber">فاز ۴</span>
-                <h3 class="fdisp text-lg font-bold text-white">تحقیق، توسعه و سرمایه‌گذاری</h3>
-                <span class="text-xs text-mut">(R&amp;D &amp; Market Expansion)</span>
-              </div>
-              <ul class="mt-4 grid gap-2 text-sm leading-7" style="color:#C7D0DE">
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#FBBF24"></span><span>توسعه الگوریتم‌های هوش مصنوعی بازارشناسی</span></li>
-                <li class="flex gap-2"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background:#FBBF24"></span><span>تخصیص منابع خزانه به دارایی‌های دنیای واقعی (RWA) و بازارهای مالی سنتی</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ======================= TOKENOMICS ======================= -->
-    <section id="tokenomics" class="sec">
-      <div class="wrap">
-        <div class="reveal text-center">
-          <span class="eyebrow">Tokenomics</span>
-          <h2 class="h2s mt-4">توکنومیکس کلان و امنیت مالی</h2>
-          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">ساختار عرضه، سقف توکن و تضمین ریاضی قیمت کف در یک نگاه شفاف.</p>
-        </div>
-
-        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="reveal card hl lift p-5 text-center">
-            <p class="label">سقف کل عرضه (Max Supply)</p>
-            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="100">0</span>B</p>
-            <p class="mt-2 text-sm" style="color:#C7D0DE">۱۰۰ میلیارد توکن NAVIS</p>
-            <div class="meter mt-4"><i style="width:100%"></i></div>
-          </div>
-
-          <div class="reveal card hl lift p-5 text-center">
-            <p class="label">عرضه اولیه فاز طراحی</p>
-            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="1">0</span>B</p>
-            <p class="mt-2 text-sm" style="color:#C7D0DE">۱ میلیارد توکن (معادل ۱٪ کل عرضه)</p>
-            <div class="meter mt-4"><i style="width:1%"></i></div>
-          </div>
-
-          <div class="reveal card hl lift p-5 text-center">
-            <p class="label">NAV Floor Guarantee</p>
-            <p class="kpi kpi-em mt-3" style="font-size:2.1rem">≥ $<span class="counting" data-count="0.039" data-decimals="3">0</span></p>
-            <p class="mt-2 text-sm" style="color:#C7D0DE">قیمت کف تضمین‌شده و فقط صعودی</p>
-            <div class="meter mt-4"><i style="width:78%"></i></div>
-          </div>
-
-          <div class="reveal card hl lift p-5 text-center">
-            <p class="label">Reserve Ratio</p>
-            <p class="kpi mt-3" style="font-size:2.1rem"><span class="counting" data-count="100">0</span>%</p>
-            <p class="mt-2 text-sm" style="color:#C7D0DE">پشتیبانی کامل تتر در خزانه</p>
-            <div class="meter mt-4"><i style="width:100%"></i></div>
-          </div>
-        </div>
-        <div class="reveal card card-xl mt-6 p-6 sm:p-8">
-          <div class="flex flex-wrap items-center gap-3">
-            <span class="ico" style="width:3rem;height:3rem;border-radius:1rem;font-size:1.35rem">🛡️</span>
-            <div>
-              <h3 class="fdisp text-xl font-bold text-white">داشبورد شفافیت و امنیت مالی</h3>
-              <p class="text-xs text-mut">Transparency &amp; Financial Security Dashboard</p>
-            </div>
-          </div>
-
-          <p class="mt-5 text-base leading-8" style="color:#C7D0DE">
-            تمام وجوه ورودی از پیش‌عرضه مستقیماً وارد قرارداد هوشمند خزانه‌داری شفاف روی بلاکچین می‌شود. هر توکن دارای یک قیمت کف تضمین‌شده (<span class="fnum" style="color:#6EE7B7">$NAV_{Floor}$</span>) است که تنها با رشد خزانه افزایش می‌یابد و هرگز کاهش پیدا نمی‌کند. سرمایه‌گذاران در هر زمان پس از دوره قفل می‌توانند توکن خود را مستقیماً به خزانه تحویل داده و تتر دریافت کنند.
-          </p>
-
-          <div class="mt-6 grid gap-3 sm:grid-cols-3">
-            <div class="soft flex items-start gap-3 p-4">
-              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              <span class="text-sm leading-7" style="color:#C7D0DE">ورود مستقیم ۱۰۰٪ وجوه به قرارداد خزانه روی بلاکچین</span>
-            </div>
-            <div class="soft flex items-start gap-3 p-4">
-              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              <span class="text-sm leading-7" style="color:#C7D0DE">قفل هوشمند خزانه با قابلیت حسابرسی عمومی</span>
-            </div>
-            <div class="soft flex items-start gap-3 p-4">
-              <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:#34D399"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              <span class="text-sm leading-7" style="color:#C7D0DE">بازخرید تضمینی توکن با تتر پس از پایان دوره قفل</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
     <!-- ======================= PRESALE ======================= -->
     <section id="presale" class="sec">
       <div class="wrap">
         <div class="reveal text-center">
-          <span class="eyebrow">Presale · Phase 1</span>
-          <h2 class="h2s mt-4">جزئیات فاز اول پیش‌عرضه <span style="color:#8494A8">(Presale Structure)</span></h2>
+          <span class="eyebrow">Tokenomics · Phase 1</span>
+          <h2 class="h2s mt-4">توکنومیکس فاز اول <span style="color:#8494A8">(Phase 1 Tokenomics)</span></h2>
           <p class="soft mx-auto mt-4 max-w-3xl px-5 py-4 text-sm leading-8" style="color:#C7D0DE">
-            <strong style="color:#fff;font-weight:600">ساختار عرضه:</strong> پیش‌عرضه شامل فازهای اصلی و ریزفازهای متوالی (Sub-Phases) است.
+            <strong style="color:#fff;font-weight:600">ساختار عرضه:</strong> فاز اول پیش‌عرضه در چهار مرحلهٔ متوالی (Sub-Phases) اجرا می‌شود؛ در هر مرحله حجم عرضه و قیمت هر توکن به‌صورت پلکانی افزایش می‌یابد. قیمت هر مرحله و پیشرفت عرضه به‌صورت زنده از قرارداد <span class="fnum" style="color:#67E8F9">Presale</span> روی زنجیره خوانده می‌شود.
           </p>
         </div>
 
         <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div class="reveal card hl lift p-5">
             <div class="flex items-center justify-between gap-2">
-              <span class="chip chip-em">ریزفاز ۱</span>
-              <span class="text-[11px]" style="color:#6EE7B7">۷۴٪ تخفیف</span>
+              <span class="chip chip-em">مرحله ۱</span>
             </div>
-            <p class="fnum mt-4" style="font-size:1.6rem;font-weight:700;color:#fff">$0.010</p>
-            <p class="text-[11px] text-mut">قیمت هر توکن</p>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <span class="text-[11px] text-mut">قیمت هر توکن</span>
+              <span class="fnum" id="sp1Price" style="font-size:1.6rem;font-weight:700;color:#fff">$0.010</span>
+            </div>
             <div class="mt-3">
-              <div class="row"><span class="k">حجم ارائه‌شده</span><span class="v">400M</span></div>
-              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A">۱۲ ماه</span></div>
+              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A" id="sp1Lock">۱۲ ماه</span></div>
+              <div class="row"><span class="k">حجم عرضه در این مرحله</span><span class="v" id="sp1Supply">400M</span></div>
             </div>
-            <div class="meter mt-4"><i style="width:26%"></i></div>
+            <div class="meter mt-4"><i id="sp1Bar" style="width:26%"></i></div>
           </div>
 
           <div class="reveal card hl lift p-5">
             <div class="flex items-center justify-between gap-2">
-              <span class="chip chip-cy">ریزفاز ۲</span>
-              <span class="text-[11px]" style="color:#67E8F9">۶۲٪ تخفیف</span>
+              <span class="chip chip-cy">مرحله ۲</span>
             </div>
-            <p class="fnum mt-4" style="font-size:1.6rem;font-weight:700;color:#fff">$0.015</p>
-            <p class="text-[11px] text-mut">قیمت هر توکن</p>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <span class="text-[11px] text-mut">قیمت هر توکن</span>
+              <span class="fnum" id="sp2Price" style="font-size:1.6rem;font-weight:700;color:#fff">$0.015</span>
+            </div>
             <div class="mt-3">
-              <div class="row"><span class="k">حجم ارائه‌شده</span><span class="v">300M</span></div>
-              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A">۹ ماه</span></div>
+              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A" id="sp2Lock">۹ ماه</span></div>
+              <div class="row"><span class="k">حجم عرضه در این مرحله</span><span class="v" id="sp2Supply">300M</span></div>
             </div>
-            <div class="meter meter-cy mt-4"><i style="width:38%"></i></div>
+            <div class="meter meter-cy mt-4"><i id="sp2Bar" style="width:38%"></i></div>
           </div>
 
           <div class="reveal card hl lift p-5">
             <div class="flex items-center justify-between gap-2">
-              <span class="chip chip-vi">ریزفاز ۳</span>
-              <span class="text-[11px]" style="color:#DDD6FE">۴۴٪ تخفیف</span>
+              <span class="chip chip-vi">مرحله ۳</span>
             </div>
-            <p class="fnum mt-4" style="font-size:1.6rem;font-weight:700;color:#fff">$0.022</p>
-            <p class="text-[11px] text-mut">قیمت هر توکن</p>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <span class="text-[11px] text-mut">قیمت هر توکن</span>
+              <span class="fnum" id="sp3Price" style="font-size:1.6rem;font-weight:700;color:#fff">$0.022</span>
+            </div>
             <div class="mt-3">
-              <div class="row"><span class="k">حجم ارائه‌شده</span><span class="v">200M</span></div>
-              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A">۶ ماه</span></div>
+              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A" id="sp3Lock">۶ ماه</span></div>
+              <div class="row"><span class="k">حجم عرضه در این مرحله</span><span class="v" id="sp3Supply">200M</span></div>
             </div>
-            <div class="meter meter-vi mt-4"><i style="width:56%"></i></div>
+            <div class="meter meter-vi mt-4"><i id="sp3Bar" style="width:56%"></i></div>
           </div>
 
           <div class="reveal card hl lift p-5">
             <div class="flex items-center justify-between gap-2">
-              <span class="chip chip-amber">ریزفاز ۴</span>
-              <span class="text-[11px]" style="color:#FDE68A">۱۸٪ تخفیف</span>
+              <span class="chip chip-amber">مرحله ۴</span>
             </div>
-            <p class="fnum mt-4" style="font-size:1.6rem;font-weight:700;color:#fff">$0.032</p>
-            <p class="text-[11px] text-mut">قیمت هر توکن</p>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <span class="text-[11px] text-mut">قیمت هر توکن</span>
+              <span class="fnum" id="sp4Price" style="font-size:1.6rem;font-weight:700;color:#fff">$0.032</span>
+            </div>
             <div class="mt-3">
-              <div class="row"><span class="k">حجم ارائه‌شده</span><span class="v">100M</span></div>
-              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A">۳ ماه</span></div>
+              <div class="row"><span class="k">قفل بازخرید</span><span class="v" style="color:#FDE68A" id="sp4Lock">۳ ماه</span></div>
+              <div class="row"><span class="k">حجم عرضه در این مرحله</span><span class="v" id="sp4Supply">100M</span></div>
             </div>
-            <div class="meter meter-am mt-4"><i style="width:82%"></i></div>
+            <div class="meter meter-am mt-4"><i id="sp4Bar" style="width:82%"></i></div>
           </div>
         </div>
         <div class="mt-6 grid gap-4 lg:grid-cols-2">
@@ -1116,29 +1196,29 @@
               <h3 class="fdisp text-lg font-bold text-white">حجم و قیمت افزایشی</h3>
             </div>
             <p class="mt-4 text-sm leading-8" style="color:#C7D0DE">
-              در هر ریزفاز جدید، تعداد توکن‌های ارائه‌شده و قیمت خرید به صورت پلکانی نسبت به <span class="fnum" style="color:#6EE7B7">$NAV_{Floor}$</span> افزایش می‌یابد (خرید زودتر = قیمت مناسب‌تر).
+              در هر مرحلهٔ جدید، حجم عرضه و قیمت خرید به صورت پلکانی نسبت به <span class="fnum" style="color:#6EE7B7">$NAV_{Floor}$</span> افزایش می‌یابد (خرید زودتر = قیمت مناسب‌تر).
             </p>
             <div class="mt-5 overflow-x-auto rounded-2xl border border-white/10 bg-black/30 p-4">
               <code class="whitespace-nowrap fnum text-sm" style="color:#67E8F9">Price(n) = NAV_Floor × (1 + k · n)</code>
             </div>
             <div class="mt-5 grid gap-3">
               <div class="flex items-center gap-3 text-xs">
-                <span class="w-16 shrink-0 text-mut">ریزفاز ۱</span>
+                <span class="w-16 shrink-0 text-mut">مرحله ۱</span>
                 <span class="meter flex-1"><i style="width:26%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end" style="color:#C7D0DE">$0.010</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
-                <span class="w-16 shrink-0 text-mut">ریزفاز ۲</span>
+                <span class="w-16 shrink-0 text-mut">مرحله ۲</span>
                 <span class="meter meter-cy flex-1"><i style="width:38%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end" style="color:#C7D0DE">$0.015</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
-                <span class="w-16 shrink-0 text-mut">ریزفاز ۳</span>
+                <span class="w-16 shrink-0 text-mut">مرحله ۳</span>
                 <span class="meter meter-vi flex-1"><i style="width:56%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end" style="color:#C7D0DE">$0.022</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
-                <span class="w-16 shrink-0 text-mut">ریزفاز ۴</span>
+                <span class="w-16 shrink-0 text-mut">مرحله ۴</span>
                 <span class="meter meter-am flex-1"><i style="width:82%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end" style="color:#C7D0DE">$0.032</span>
               </div>
@@ -1153,26 +1233,26 @@
               <h3 class="fdisp text-lg font-bold text-white">قفل بازخرید کاهشی</h3>
             </div>
             <p class="mt-4 text-sm leading-8" style="color:#C7D0DE">
-              برای حفظ ثبات اکوسیستم، زمان قفل بازخرید از خزانه برای ریزفازهای اولیه طولانی‌تر است و در ریزفازهای بعدی به صورت کاهشی کم می‌شود.
+              برای حفظ ثبات اکوسیستم، زمان قفل بازخرید از خزانه برای مراحل اولیه طولانی‌تر است و در مراحل بعدی به صورت کاهشی کم می‌شود.
             </p>
             <div class="mt-5 grid gap-3">
               <div class="flex items-center gap-3">
-                <span class="w-16 shrink-0 text-xs text-mut">ریزفاز ۱</span>
+                <span class="w-16 shrink-0 text-xs text-mut">مرحله ۱</span>
                 <span class="meter meter-lg meter-am flex-1"><i style="width:100%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end text-xs" style="color:#FDE68A">۱۲ ماه</span>
               </div>
               <div class="flex items-center gap-3">
-                <span class="w-16 shrink-0 text-xs text-mut">ریزفاز ۲</span>
+                <span class="w-16 shrink-0 text-xs text-mut">مرحله ۲</span>
                 <span class="meter meter-lg meter-am flex-1"><i style="width:75%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end text-xs" style="color:#FDE68A">۹ ماه</span>
               </div>
               <div class="flex items-center gap-3">
-                <span class="w-16 shrink-0 text-xs text-mut">ریزفاز ۳</span>
+                <span class="w-16 shrink-0 text-xs text-mut">مرحله ۳</span>
                 <span class="meter meter-lg meter-am flex-1"><i style="width:50%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end text-xs" style="color:#FDE68A">۶ ماه</span>
               </div>
               <div class="flex items-center gap-3">
-                <span class="w-16 shrink-0 text-xs text-mut">ریزفاز ۴</span>
+                <span class="w-16 shrink-0 text-xs text-mut">مرحله ۴</span>
                 <span class="meter meter-lg meter-am flex-1"><i style="width:25%"></i></span>
                 <span class="fnum w-16 shrink-0 text-end text-xs" style="color:#FDE68A">۳ ماه</span>
               </div>
@@ -1226,11 +1306,11 @@
           <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div class="lg:col-span-7">
               <span class="eyebrow">Genesis Phase 1</span>
-              <h3 class="fdisp mt-3 text-xl font-bold text-white">مسیر مشارکت در ریزفاز ۱</h3>
-              <p class="mt-3 text-sm leading-8" style="color:#CBD5E1">اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود؛ سهمیهٔ ریزفاز جاری برای شما رزرو می‌شود و تسویه مستقیم با قرارداد هوشمند خزانه صورت می‌گیرد.</p>
+              <h3 class="fdisp mt-3 text-xl font-bold text-white">مسیر مشارکت در مرحلهٔ ۱</h3>
+              <p class="mt-3 text-sm leading-8" style="color:#CBD5E1">اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود؛ سهمیهٔ مرحلهٔ جاری برای شما رزرو می‌شود و تسویه مستقیم با قرارداد هوشمند خزانه صورت می‌گیرد.</p>
               <ol class="mt-5 grid gap-3 text-sm" style="color:#CBD5E1">
                 <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۱</span> اتصال کیف‌پول سازگار (MetaMask / WalletConnect) از دکمهٔ بالای صفحه</li>
-                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۲</span> تأیید شبکهٔ BSC Testnet و مشاهدهٔ قیمت لحظه‌ای ریزفاز</li>
+                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۲</span> تأیید شبکهٔ BSC Testnet و مشاهدهٔ قیمت لحظه‌ای مرحله</li>
                 <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۳</span> رزرو سهمیه از ویجت گِنیسِس و دریافت توکن پس از تسویهٔ خزانه</li>
               </ol>
             </div>
@@ -1238,13 +1318,13 @@
             <div class="lg:col-span-5">
               <div class="soft p-5">
                 <div class="flex items-center justify-between text-sm">
-                  <span style="color:#94A3B8">ریزفاز فعال</span>
-                  <span class="chip chip-gold">ریزفاز ۱</span>
+                  <span style="color:#94A3B8">مرحلهٔ فعال</span>
+                  <span class="chip chip-gold">مرحله ۱</span>
                 </div>
                 <ul class="mt-4 grid gap-2 text-sm">
                   <li class="flex items-center justify-between"><span style="color:#94A3B8">قیمت هر توکن</span><span class="fnum text-white">$0.010</span></li>
                   <li class="flex items-center justify-between"><span style="color:#94A3B8">حداقل خرید</span><span class="fnum text-white">۱۰۰ USDT</span></li>
-                  <li class="flex items-center justify-between"><span style="color:#94A3B8">تخصیص ریزفاز ۱</span><span class="fnum text-white">۴۰۰,۰۰۰,۰۰۰ NAVIS</span></li>
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">تخصیص مرحلهٔ ۱</span><span class="fnum text-white">۴۰۰,۰۰۰,۰۰۰ NAVIS</span></li>
                   <li class="flex items-center justify-between"><span style="color:#94A3B8">قفل بازخرید</span><span class="fnum" style="color:#FFC700">۱۲ ماه</span></li>
                   <li class="flex items-center justify-between"><span style="color:#94A3B8">قیمت کف تضمین‌شده</span><span class="fnum" style="color:#00F0FF">$0.03910</span></li>
                 </ul>
@@ -1253,86 +1333,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-    <!-- ======================= TREASURY ======================= -->
-    <section id="treasury" class="sec">
-      <div class="wrap">
-        <div class="reveal card card-xl p-6 sm:p-8">
-          <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <span class="live-dot" aria-hidden="true"></span>
-              <div>
-                <h2 class="h2s" style="font-size:clamp(1.2rem,2.4vw,1.6rem)">وضعیت زندهٔ خزانه آن‌چین</h2>
-                <p class="text-xs text-mut">Live On-Chain Treasury Status</p>
-              </div>
-            </div>
-            <div class="fnum flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px]" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#CBD5E1">
-              <span class="badge-dot"></span> Block <span id="tBlock" style="color:#67E8F9">#21,845,102</span>
-              <span style="color:#475569">·</span>
-              <span id="tClock">--:--:--</span>
-            </div>
-          </div>
-
-          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="soft p-5">
-              <p class="text-xs text-mut">موجودی خزانه (Treasury Balance)</p>
-              <p id="tTreasury" class="kpi kpi-em mt-2" style="font-size:1.5rem">$18,420,000</p>
-              <p class="mt-1 text-[11px] text-mut">پشتیبانی کامل با تتر (USDT)</p>
-            </div>
-            <div class="soft p-5">
-              <p class="text-xs text-mut">قیمت کف (NAV Floor)</p>
-              <p id="tFloor" class="kpi mt-2" style="font-size:1.5rem">$0.03910</p>
-              <p class="mt-1 text-[11px]" style="color:#6EE7B7">فقط صعودی · بدون کاهش</p>
-            </div>
-            <div class="soft p-5">
-              <p class="text-xs text-mut">نسبت ذخیره (Reserve Ratio)</p>
-              <p id="tRatio" class="kpi mt-2" style="font-size:1.5rem">100.0%</p>
-              <p class="mt-1 text-[11px] text-mut">پوشش کامل تعهدات بازخرید</p>
-            </div>
-            <div class="soft p-5">
-              <p class="text-xs text-mut">سرمایه‌گذاران و بازخرید</p>
-              <p id="tHolders" class="kpi mt-2" style="font-size:1.5rem">12,480</p>
-              <p class="mt-1 text-[11px] text-mut">بازخرید انجام‌شده: <span id="tRedeemed" class="fnum" style="color:#CBD5E1">0</span></p>
-            </div>
-          </div>
-
-          <div class="divider-soft mt-7"></div>
-
-          <div class="mt-6 grid gap-3 sm:grid-cols-3">
-            <div class="soft flex items-center gap-3 p-4">
-              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#6EE7B7">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="currentColor" stroke-width="1.8" /><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              </span>
-              <div>
-                <p class="text-sm font-semibold text-white">قرارداد تأییدشده</p>
-                <p class="text-[11px] text-mut">Verified Smart Contract</p>
-              </div>
-            </div>
-            <div class="soft flex items-center gap-3 p-4">
-              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#67E8F9">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
-              </span>
-              <div>
-                <p class="text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
-                <p class="text-[11px] text-mut">Smart Liquidity Lock</p>
-              </div>
-            </div>
-            <div class="soft flex items-center gap-3 p-4">
-              <span class="ico" style="width:2.5rem;height:2.5rem;border-radius:999px;color:#DDD6FE">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              </span>
-              <div>
-                <p class="text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
-                <p class="text-[11px] text-mut">Auditable Treasury</p>
-              </div>
-            </div>
-          </div>
-
-          <p class="mt-6 text-center text-xs text-mut">
-            اعداد این بخش نمایشی و به‌صورت زنده شبیه‌سازی شده‌اند؛ پس از انتشار قرارداد، مقادیر واقعی از بلاک‌چین خوانده می‌شوند.
-          </p>
         </div>
       </div>
     </section>
@@ -1483,7 +1483,7 @@
           </div>
 
           <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <a href="#presale" class="btn btn-1">رزرو سهمیه در ریزفاز اول</a>
+            <a href="#presale" class="btn btn-1">رزرو سهمیه در مرحلهٔ اول</a>
             <a href="#about" class="btn btn-2">دربارهٔ پروتکل</a>
           </div>
         </div>
@@ -1523,7 +1523,7 @@
             <li><a href="#about" style="transition:color .25s">دربارهٔ پروتکل</a></li>
             <li><a href="#roadmap" style="transition:color .25s">نقشه راه و فازها</a></li>
             <li><a href="#tokenomics" style="transition:color .25s">توکنومیکس و شفافیت</a></li>
-            <li><a href="#presale" style="transition:color .25s">فاز اول پیش‌عرضه</a></li>
+            <li><a href="#presale" style="transition:color .25s">توکنومیکس فاز اول</a></li>
             <li><a href="#treasury" style="transition:color .25s">وضعیت خزانهٔ آن‌چین</a></li>
             <li><a href="#genesis" style="transition:color .25s">حاکمیت گِنیسِس</a></li>
           </ul>
@@ -1556,7 +1556,9 @@
   </div>
   <!-- ======================= LIVE ON-CHAIN READER =======================
        Fills the #genesis section: wallet voting status, governance and
-       contract addresses, and the presale split flow (NAV floor vs premium).
+       contract addresses, the presale split flow (NAV floor vs premium) and
+       the phase-1 tokenomics cards (#presale): per-stage price, supply and
+       sale progress, read from the presale contract's sub-phases.
        Degrades to the page's demo values when there is no wallet, no
        deployment file or no reachable RPC. Uses the global `ethers` bundle.
        ==================================================================== -->
@@ -1618,7 +1620,12 @@
         presale: [
           "function owner() view returns (address)",
           "function treasuryVault() view returns (address)",
-          "function liquidityPool() view returns (address)"
+          "function liquidityPool() view returns (address)",
+          "function subPhaseCount() view returns (uint256)",
+          "function currentSubPhase() view returns (uint256)",
+          "function currentNavFloor() view returns (uint256)",
+          "function phasePrice(uint256 index) view returns (uint256)",
+          "function subPhases(uint256 index) view returns (uint256 tokenSupply, uint256 tokensSold, uint256 priceMultiplier, bool active, uint256 lockPeriod)"
         ],
         erc20: [
           "function balanceOf(address) view returns (uint256)",
@@ -1874,6 +1881,77 @@
         });
       }
 
+      /* ------------------- phase-1 sub-phase cards (tokenomics) ------------ */
+      /* The four cards of the #presale (tokenomics) block are positional: the
+         engine reads each configured sub-phase from the presale contract and
+         paints price (phasePrice), supply and sale progress (subPhases) and the
+         exclusive redemption lock. A card keeps its illustrative value when the
+         contract does not report that sub-phase. */
+      var SUBS = ["sp1", "sp2", "sp3", "sp4"];
+      function trim(value) {
+        return Number(value.toFixed(1)).toLocaleString("en-US");
+      }
+      function compact(tokens) {
+        if (!isFinite(tokens) || tokens <= 0) { return null; }
+        if (tokens >= 1e9) { return trim(tokens / 1e9) + "B"; }
+        if (tokens >= 1e6) { return trim(tokens / 1e6) + "M"; }
+        if (tokens >= 1e3) { return trim(tokens / 1e3) + "K"; }
+        return trim(tokens);
+      }
+      function lockLabel(seconds) {
+        var span = days(seconds);
+        if (!span) { return null; }
+        return span % 30 === 0
+          ? (span / 30).toLocaleString("fa-IR") + " \u0645\u0627\u0647"
+          : span.toLocaleString("fa-IR") + " \u0631\u0648\u0632";
+      }
+      function field(info, name, position) {
+        if (!info) { return null; }
+        return info[name] === undefined ? info[position] : info[name];
+      }
+      function paintSubPhase(index, price, info) {
+        var key = SUBS[index];
+        if (!key) { return; }
+        var priceEl = document.getElementById(key + "Price");
+        var supplyEl = document.getElementById(key + "Supply");
+        var lockEl = document.getElementById(key + "Lock");
+        var barEl = document.getElementById(key + "Bar");
+        if (priceEl) {
+          var value = amount(price, ctx.usdtDecimals);
+          priceEl.textContent = value > 0 ? usd(price, ctx.usdtDecimals, 3) : "\u2014";
+        }
+        if (!info) { return; }
+        var supply = amount(field(info, "tokenSupply", 0), 18);
+        var sold = amount(field(info, "tokensSold", 1), 18);
+        var size = compact(supply);
+        if (supplyEl && size) { supplyEl.textContent = size; }
+        if (barEl) {
+          var share = supply > 0 ? Math.min(100, Math.round((sold / supply) * 100)) : 0;
+          barEl.style.width = share + "%";
+          barEl.title = share + " \u066a";
+        }
+        var lock = lockLabel(field(info, "lockPeriod", 4));
+        if (lockEl && lock) { lockEl.textContent = lock; }
+      }
+      function paintSubPhases() {
+        if (!ctx.presale) { return Promise.resolve(null); }
+        return read(ctx.presale, "subPhaseCount", []).then(function (raw) {
+          var count = Number(raw || 0);
+          if (!count) { return null; }
+          var jobs = [];
+          for (var i = 0; i < SUBS.length && i < count; i += 1) {
+            jobs.push((function (index) {
+              return read(ctx.presale, "subPhases", [index]).then(function (info) {
+                return read(ctx.presale, "phasePrice", [index]).then(function (price) {
+                  paintSubPhase(index, price, info);
+                });
+              });
+            })(i));
+          }
+          return Promise.all(jobs);
+        }).catch(function () { return null; });
+      }
+
       /* ------------------------------ run loop ------------------------------ */
       function readAddresses(info) {
         var file = (info && info.addresses) || {};
@@ -1900,6 +1978,28 @@
         var barL = node("barL");
         if (barT) { barT.style.width = "78%"; }
         if (barL) { barL.style.width = "22%"; }
+        demoSubPhases();
+      }
+      /* The tokenomics cards fall back to their illustrative stage values. */
+      function demoSubPhases() {
+        var rows = [
+          { price: "$0.010", supply: "400M", lock: "۱۲ ماه", bar: "26%" },
+          { price: "$0.015", supply: "300M", lock: "۹ ماه", bar: "38%" },
+          { price: "$0.022", supply: "200M", lock: "۶ ماه", bar: "56%" },
+          { price: "$0.032", supply: "100M", lock: "۳ ماه", bar: "82%" }
+        ];
+        SUBS.forEach(function (key, index) {
+          var row = rows[index];
+          if (!row) { return; }
+          var priceEl = document.getElementById(key + "Price");
+          var supplyEl = document.getElementById(key + "Supply");
+          var lockEl = document.getElementById(key + "Lock");
+          var barEl = document.getElementById(key + "Bar");
+          if (priceEl) { priceEl.textContent = row.price; }
+          if (supplyEl) { supplyEl.textContent = row.supply; }
+          if (lockEl) { lockEl.textContent = row.lock; }
+          if (barEl) { barEl.style.width = row.bar; barEl.title = ""; }
+        });
       }
       function run(ethers) {
         if (!ethers) {
@@ -1956,7 +2056,8 @@
                 return Promise.all([
                   paintWallet(ctx.nav),
                   paintFlow(ethers),
-                  paintStats()
+                  paintStats(),
+                  paintSubPhases()
                 ]);
               });
             }).then(function () {
@@ -3515,6 +3616,7 @@
       var balanceEl = $("#walletBalance");
       var priceEl = $("#presalePrice");
       var networkEl = $("#networkStatus");
+      var phaseEl = $("#phaseNumber");
       var PHASE_PRICE = 0.01;
       var activePrice = PHASE_PRICE;
       var CHAIN = null; // filled by connectChain(); stays null in demo mode
@@ -3743,6 +3845,11 @@
         if (livePriceEl && snapshot.price > 0) livePriceEl.textContent = "$" + snapshot.price.toFixed(5);
         activePrice = snapshot.price > 0 ? snapshot.price : (snapshot.floor > 0 ? snapshot.floor : PHASE_PRICE);
         if (priceEl) priceEl.textContent = "$" + activePrice.toFixed(4);
+        /* the sub-phase number in the hero headline is a live parameter, not a hard-code:
+           it is the current sub-phase index reported by the presale contract (1-based). */
+        if (phaseEl && snapshot.subPhaseCount > 0 && snapshot.currentSubPhase < snapshot.subPhaseCount) {
+          phaseEl.textContent = Number(snapshot.currentSubPhase + 1).toLocaleString("fa-IR");
+        }
         updateEstimate();
       }
 
