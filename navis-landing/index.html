@@ -261,36 +261,9 @@
     /* the countdown and the Genesis presale cards sit directly on the page — no plate fill */
     #hero .no-plate{background:transparent}
 
-    /* ---------- terminal / chart ---------- */
-    .term{border-radius:1.25rem;overflow:hidden;background:var(--plate);border:1px solid var(--hair);box-shadow:none}
-    .term-bar{display:flex;align-items:center;gap:.55rem;padding:.7rem .95rem;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
-    .dot{width:.6rem;height:.6rem;border-radius:999px;display:inline-block}
-    .tab{font-family:var(--font-num);font-size:.72rem;padding:.3rem .72rem;border-radius:999px;color:#93A1B5;border:1px solid transparent;transition:color .25s,background .25s,border-color .25s}
-    .tab:hover{color:#fff}
-    .tab.on{color:#fff;background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.32)}
-    .grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:100% 25%,72px 100%}
-    .floor-line{position:absolute;inset-inline:0;border-top:1px dashed rgba(255,199,0,.45)}
-    .floor-tag{position:absolute;inset-inline-start:0;transform:translateY(-50%);background:rgba(255,199,0,.08);border:1px solid rgba(255,199,0,.34);color:#F2DC9B;font-family:var(--font-num);font-size:.62rem;padding:.1rem .5rem;border-radius:.4rem}
-    .axis{font-family:var(--font-num);font-size:.62rem;color:#64748B}
-    .candle{position:relative;flex:1 1 0;border-radius:3px;background:var(--c,#FFC700);box-shadow:0 0 16px -6px var(--c,#FFC700)}
-    .candle.down{--c:#FF4D6D}
-    .candle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:12px;background:var(--c,#FFC700);opacity:.7;transform:translateX(-50%)}
-    .live .candle{animation:grow .9s cubic-bezier(.2,.8,.2,1) backwards}
-    .live .candle:nth-child(even){animation-delay:.1s}
-    .live .candle:nth-child(3n){animation-delay:.24s}
-    @keyframes grow{from{transform:scaleY(.12);opacity:0}to{transform:scaleY(1);opacity:1}}
-    .depth{position:relative;display:flex;align-items:center;height:1.4rem;border-radius:.5rem;background:rgba(255,255,255,.035);overflow:hidden}
-    .depth>i{position:absolute;inset-block:0;inset-inline-end:0;border-radius:.5rem}
-    .depth.bid>i{background:linear-gradient(90deg,rgba(212,175,55,.34),rgba(212,175,55,.05))}
-    .depth.ask>i{background:linear-gradient(90deg,rgba(255,77,109,.3),rgba(255,77,109,.05))}
-    .depth>span{position:relative;z-index:1;padding-inline:.6rem;font-family:var(--font-num);font-size:.7rem;color:#D7DEEA}
-    .vol{display:flex;align-items:flex-end;gap:2px;height:2.25rem}
-    .vol i{flex:1 1 0;border-radius:2px;background:linear-gradient(180deg,rgba(173,206,255,.5),rgba(173,206,255,.06))}
-    .tick{font-family:var(--font-num);font-size:.68rem;color:#8494A8}
-    .pulse-line{stroke-dasharray:5 6;animation:dash 2.6s linear infinite}
-    @keyframes dash{to{stroke-dashoffset:-44}}
-    .pulse-node{animation:nodePulse 3.2s ease-in-out infinite}
-    @keyframes nodePulse{0%,100%{opacity:.45;r:9}50%{opacity:1;r:12}}
+    /* ---------- platform screenshot ---------- */
+    .shot-frame{display:block;border-radius:1.25rem;overflow:hidden;border:1px solid var(--hair);background:rgba(0,0,0,.45)}
+    .shot{display:block;width:100%;height:auto}
     /* ---------- roadmap timeline ---------- */
     .tl{position:relative;display:grid;gap:2.1rem}
     .tl-rail{position:absolute;top:.5rem;bottom:.5rem;inset-inline-start:1.25rem;width:2px;border-radius:999px;background:linear-gradient(180deg,rgba(255,199,0,.6),rgba(173,206,255,.35) 45%,rgba(255,255,255,.04))}
@@ -353,7 +326,7 @@
     .glow-ai{box-shadow:0 0 34px -18px rgba(173,206,255,.4)}
     @media(prefers-reduced-motion:reduce){
       .reveal{opacity:1;transform:none;transition:none}
-      .float,.tape-track,.live-dot::after,.tl-node::after,.pulse-line,.pulse-node,.live .candle{animation:none!important}
+      .float,.tape-track,.live-dot::after,.tl-node::after{animation:none!important}
     }
 
     /* ---------- responsive visibility (independent of the Tailwind CDN) ---------- */
@@ -361,9 +334,8 @@
     .menu-btn{display:grid}
     .lang-label{display:none}
     .net-badge{display:none}
-    .term-chips{display:none}
     .brand-sub{display:none}
-    @media(min-width:640px){.lang-label{display:inline}.term-chips{display:flex}.brand-sub{display:block}}
+    @media(min-width:640px){.lang-label{display:inline}.brand-sub{display:block}}
     @media(min-width:1024px){.nav-desk{display:flex}.menu-btn{display:none}#mobileMenu{display:none}}
     @media(min-width:1280px){.net-badge{display:inline-flex}}
 
@@ -937,165 +909,26 @@
       <div class="wrap">
         <div class="reveal text-center">
           <span class="eyebrow">Platform Preview</span>
-          <h2 class="h2s mt-4">محیط معاملهٔ هوشمند <span class="grad">NAVIS</span></h2>
+          <h2 class="h2s mt-4">پلتفرم ربات معامله‌گر <span class="grad">ناویس</span></h2>
           <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">
-            پیش‌نمایشی شبیه‌سازی‌شده از چارت‌انجین، گراف نودهای تحلیلی و جریان نقدینگی هوش مصنوعی.
+            چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
           </p>
         </div>
 
-        <div class="reveal term mt-9">
-          <div class="term-bar">
-            <span class="dot" style="background:#FB7185"></span>
-            <span class="dot" style="background:#FBBF24"></span>
-            <span class="dot" style="background:#34D399"></span>
-            <span class="fdisp ms-2 text-xs text-slate-300">NAVIS Terminal</span>
-            <div class="term-chips flex-wrap items-center gap-2" style="margin-inline-start:auto">
-              <span class="chip" style="font-size:.66rem;padding:.24rem .6rem">AI Engine · v2.4</span>
-              <span class="chip chip-em" style="font-size:.66rem;padding:.24rem .6rem"><span class="live-dot"></span> On-Chain</span>
-              <span class="chip chip-vi" style="font-size:.66rem;padding:.24rem .6rem">Multi-Chain</span>
-            </div>
-          </div>
-
-          <div class="grid gap-3 p-3 sm:p-4 lg:grid-cols-12">
-            <div class="lg:col-span-8">
-              <div class="soft p-3 sm:p-4">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div class="flex items-center gap-2.5">
-                    <span class="ico" style="width:2.1rem;height:2.1rem;border-radius:.65rem;border-color:rgba(52,211,153,.3)">
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l5-6 4 4 8-9" stroke="#34D399" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                    <div>
-                      <p class="text-sm font-semibold text-white">NAVIS<span class="text-mut">/USDT</span></p>
-                      <p class="text-[10px] text-mut">Chart Engine · 1m</p>
-                    </div>
-                    <div class="hidden items-center gap-1 sm:flex" style="margin-inline-start:.4rem">
-                      <span class="tab">1m</span><span class="tab">5m</span><span class="tab on">1h</span><span class="tab">1D</span>
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="chip chip-em" style="font-size:.68rem"><span class="live-dot"></span> TVL $18.4M</span>
-                    <span class="chip chip-cy" style="font-size:.68rem">RSI 61.2</span>
-                  </div>
-                </div>
-
-                <div class="relative mt-3 h-56 overflow-hidden rounded-xl border border-white/[.07] bg-black/30 sm:h-64">
-                  <div class="grid-lines"></div>
-                  <svg viewBox="0 0 600 220" preserveAspectRatio="none" class="relative h-full w-full" aria-hidden="true">
-                    <defs>
-                      <linearGradient id="termFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#22D3EE" stop-opacity=".22" />
-                        <stop offset="1" stop-color="#22D3EE" stop-opacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M0 172 30 158 60 166 90 142 120 150 150 126 180 134 210 112 240 120 270 98 300 106 330 84 360 92 390 72 420 80 450 62 480 70 510 52 540 60 570 44 600 50 V220 H0 Z" fill="url(#termFill)" />
-                    <polyline points="0,172 30,158 60,166 90,142 120,150 150,126 180,134 210,112 240,120 270,98 300,106 330,84 360,92 390,72 420,80 450,62 480,70 510,52 540,60 570,44 600,50" fill="none" stroke="#22D3EE" stroke-width="2.2" />
-                  </svg>
-                  <div class="floor-line" style="top:34%"><span class="floor-tag" style="top:0">NAV Floor $0.03910</span></div>
-                  <div class="live absolute inset-x-2 inset-y-0 flex items-end justify-between gap-[3px]">
-                    <span class="candle" style="height:42%"></span>
-                    <span class="candle down" style="height:35%"></span>
-                    <span class="candle" style="height:48%"></span>
-                    <span class="candle down" style="height:29%"></span>
-                    <span class="candle" style="height:54%"></span>
-                    <span class="candle" style="height:61%"></span>
-                    <span class="candle down" style="height:47%"></span>
-                    <span class="candle down" style="height:40%"></span>
-                    <span class="candle" style="height:58%"></span>
-                    <span class="candle" style="height:66%"></span>
-                    <span class="candle down" style="height:52%"></span>
-                    <span class="candle down" style="height:45%"></span>
-                    <span class="candle" style="height:63%"></span>
-                    <span class="candle" style="height:72%"></span>
-                    <span class="candle down" style="height:60%"></span>
-                    <span class="candle down" style="height:55%"></span>
-                    <span class="candle" style="height:70%"></span>
-                    <span class="candle" style="height:78%"></span>
-                    <span class="candle down" style="height:64%"></span>
-                    <span class="candle down" style="height:57%"></span>
-                    <span class="candle" style="height:74%"></span>
-                    <span class="candle" style="height:83%"></span>
-                  </div>
-                  <span class="axis" style="position:absolute;top:.45rem;inset-inline-end:.6rem">$0.0420</span>
-                  <span class="axis" style="position:absolute;bottom:.45rem;inset-inline-end:.6rem">$0.0391</span>
-                </div>
-
-                <div class="mt-3 grid grid-cols-3 gap-2">
-                  <div class="soft px-2.5 py-1.5"><span class="tick">Volume</span> <span class="fnum text-sm text-white">$8.4M</span></div>
-                  <div class="soft px-2.5 py-1.5"><span class="tick">RSI</span> <span class="fnum text-sm" style="color:#DDD6FE">61.2</span></div>
-                  <div class="soft px-2.5 py-1.5"><span class="tick">AI Signal</span> <span class="fnum text-sm" style="color:#6EE7B7">BUY</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="grid gap-3 lg:col-span-4">
-              <div class="soft p-4">
-                <div class="flex items-center justify-between">
-                  <p class="text-xs font-semibold" style="color:#DCE4F0">جریان هوشمند نقدینگی</p>
-                  <span class="tick">(24h)</span>
-                </div>
-                <p id="netInflow" class="kpi kpi-em mt-2" style="font-size:1.5rem">+$1,284,930</p>
-                <p class="text-[11px] text-mut">Net Inflow · AI routed</p>
-
-                <div class="mt-4 grid gap-3">
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] text-slate-300"><span>DEX Liquidity</span><span class="fnum text-mut">42%</span></div>
-                    <div class="meter mt-1.5"><i style="width:42%"></i></div>
-                  </div>
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] text-slate-300"><span>Treasury Reserve</span><span class="fnum text-mut">31%</span></div>
-                    <div class="meter meter-cy mt-1.5"><i style="width:31%"></i></div>
-                  </div>
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] text-slate-300"><span>Staking Yield</span><span class="fnum text-mut">18%</span></div>
-                    <div class="meter meter-vi mt-1.5"><i style="width:18%"></i></div>
-                  </div>
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] text-slate-300"><span>R&amp;D / RWA</span><span class="fnum text-mut">9%</span></div>
-                    <div class="meter meter-am mt-1.5"><i style="width:9%"></i></div>
-                  </div>
-                </div>
-
-                <div class="hair my-4"></div>
-                <div class="row"><span class="k">Keepers (Arbitrage)</span><span class="v" style="color:#6EE7B7">active</span></div>
-                <div class="row"><span class="k">Latency</span><span class="v">12ms</span></div>
-                <div class="row"><span class="k">Nodes</span><span class="v">1,248</span></div>
-                <div class="row"><span class="k">AI Signal</span><span class="v" style="color:#6EE7B7">BUY</span></div>
-              </div>
-
-              <div class="soft p-4">
-                <div class="flex items-center justify-between">
-                  <p class="text-xs font-semibold" style="color:#DCE4F0">گراف نودهای تحلیلی</p>
-                  <span class="badge-dot" aria-hidden="true"></span>
-                </div>
-                <svg viewBox="0 0 220 150" class="mt-2 h-36 w-full" role="img" aria-label="گراف نودهای هوش مصنوعی">
-                  <g stroke="#22D3EE" stroke-width="1.2" opacity=".45">
-                    <path class="pulse-line" d="M40 40 L110 75" />
-                    <path class="pulse-line" d="M40 120 L110 75" />
-                    <path class="pulse-line" d="M110 75 L180 40" />
-                    <path class="pulse-line" d="M110 75 L180 120" />
-                  </g>
-                  <g>
-                    <circle class="pulse-node" cx="40" cy="40" r="9" fill="#22D3EE" opacity=".9" />
-                    <circle class="pulse-node" cx="40" cy="120" r="9" fill="#10B981" opacity=".9" />
-                    <circle class="pulse-node" cx="110" cy="75" r="13" fill="#8B5CF6" opacity=".95" />
-                    <circle class="pulse-node" cx="180" cy="40" r="9" fill="#A855F7" opacity=".9" />
-                    <circle class="pulse-node" cx="180" cy="120" r="9" fill="#38BDF8" opacity=".9" />
-                  </g>
-                  <g fill="#CBD5E1" font-size="9" font-family="Vazirmatn, sans-serif">
-                    <text x="18" y="26">Data</text>
-                    <text x="14" y="141">Macro</text>
-                    <text x="86" y="68">AI Core</text>
-                    <text x="156" y="26">Signal</text>
-                    <text x="146" y="141">Treasury</text>
-                  </g>
-                </svg>
-                <div class="grid grid-cols-2 gap-2">
-                  <div class="soft px-2.5 py-1.5"><span class="tick">Latency</span> <span class="fnum text-sm" style="color:#6EE7B7">12ms</span></div>
-                  <div class="soft px-2.5 py-1.5"><span class="tick">Nodes</span> <span class="fnum text-sm" style="color:#DDD6FE">1,248</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <figure class="reveal mt-9">
+          <a class="shot-frame" href="./NAVISAITradingDashboard.png" target="_blank" rel="noopener"
+            title="مشاهدهٔ داشبورد در اندازهٔ کامل">
+            <img class="shot" src="./NAVISAITradingDashboard.png" width="1672" height="941"
+              loading="lazy" decoding="async"
+              alt="داشبورد پلتفرم ربات معامله‌گر ناویس: چارت‌انجین هوشمند، پنل ربات‌های معامله‌گر و مرکز داده‌های مالی" />
+          </a>
+          <figcaption class="mt-4 text-center text-xs" style="color:#8494A8">
+            داشبورد ناویس · چارت‌انجین هوشمند، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
+          </figcaption>
+          <!-- The preserved inline script still ticks the market feed on #netInflow; the preview is the
+               real dashboard screenshot now, so the counter stays in the DOM but out of sight. -->
+          <span id="netInflow" style="display:none" aria-hidden="true">+$1,284,930</span>
+        </figure>
       </div>
     </section>
     <!-- ======================= MARKET TAPE ======================= -->

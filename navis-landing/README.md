@@ -78,7 +78,10 @@ live shell. The redesign therefore keeps the original JS contract:
 - ids: `scrollProgress, langWrap, langToggle, langMenu, langCurrentLabel, menuToggle, mobileMenu,`
   `countdown, livePrice, netInflow, tTreasury, tFloor, tRatio, tHolders, tRedeemed, tBlock, tClock,`
   `connectWallet, walletStatus, usdtAmount, tokenEstimate, toast, toastText, year`,
-  `presalePrice, walletBalance, networkStatus, buyPresale` (the on-chain panel)
+  `presalePrice, walletBalance, networkStatus, buyPresale` (the on-chain panel). One id is
+  deliberately invisible: `#netInflow` stays in the DOM with `style="display:none"` inside
+  `#platform`, because that preview is the real dashboard screenshot now, not a simulated terminal —
+  the demo market feed still ticks it, so the script's contract holds without drawing a mock chart.
 - classes / data attributes: `.reveal` (+`in`), `.counting` (+`data-count`/`data-decimals`),
   `[data-unit="days|hours|minutes|seconds"]` (+`flip`), `.lang-btn` (+`data-lang`/`data-label`/`aria-pressed`/`.flag`),
   `.connected` on `#connectWallet`, `.show` on `#toast`, `.hidden` on `#langMenu`/`#mobileMenu`
@@ -102,7 +105,7 @@ it only ever touches ids/classes.
   key numbers, ice `#ADCEFF`/`#DDF0FF` for live on‑chain data. The tokens exist twice — in `@theme`
   (for Tailwind utilities) and in `:root` (plain CSS) — so the shell still renders correctly if the
   Tailwind CDN is unreachable.
-- **Flat surfaces (Pass A)** — `.card`/`.glass`/`.floor-hl`/`.term` are flat plates with a 1px hairline
+- **Flat surfaces (Pass A)** — `.card`/`.glass`/`.floor-hl`/`.shot-frame` are flat plates with a 1px hairline
   border (the hero plates drop even that hairline — see *Centred emblem hero*) and **no**
   `backdrop-filter` and no coloured drop shadows; the 92px grid (`.bg-lines`) and the grain overlay
   (`.bg-noise`) are retired (`display:none`; the divs stay in the markup), leaving a
@@ -135,7 +138,7 @@ it only ever touches ids/classes.
 - **CDN‑independent responsive visibility** — the shell's own `.hidden { display: none }` would
   otherwise out‑rank Tailwind's `lg:flex` / `sm:inline` (same specificity, later in the cascade), so
   the header uses explicit classes with their own media queries instead: `.nav-desk`, `.menu-btn`,
-  `.lang-label`, `.net-badge`, `.term-chips`, `.brand-sub`, plus `#mobileMenu { display: none }` at
+  `.lang-label`, `.net-badge`, `.brand-sub`, plus `#mobileMenu { display: none }` at
   `lg`. This is what keeps the desktop nav visible and the burger hidden at ≥1024 px.
 
 ## Validation
@@ -209,7 +212,7 @@ must never bind a port the panel/VPN uses, because that would take the tunnels d
 | Roadmap · **page 2** | `#roadmap` | `#about` anchor + `.lead` header subtitle (`آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار`), protocol narrative and 4 feature cards, then the 4‑phase timeline with its bullet items, laid out as two equal columns on wide screens — phases 1‑2 stacked down the right column and phases 3‑4 down the left — with a hairline connector linking the stacked phases of each column (full `.snap` page) |
 | Tokenomics · **page 3** | `#tokenomics` | 100B / 1B / ≥ $0.039 / 100% counters + transparency dashboard, then the live on‑chain treasury block folded in below (`#treasury`: `#tBlock`, `#tClock`, `#tTreasury`, `#tFloor`, `#tRatio`, `#tHolders`, `#tRedeemed`) |
 | Trust band | `#trust` | live `#livePrice` market card, verified / liquidity‑lock / treasury cards, RTL fact tape |
-| Platform preview | `#platform` | app chrome, node graph, candlestick chart, money‑flow panel, market ticker |
+| Platform preview | `#platform` | “پلتفرم ربات معامله‌گر ناویس” (+ subtitle “چارت‌انجین هوشمند نسل آینده، …”): the real `NAVISAITradingDashboard.png` dashboard screenshot in a hairline `.shot-frame` plate, linked to the full-size file, then the market ticker |
 | Phase‑1 tokenomics | `#presale` | “توکنومیکس فاز اول”: four stage cards (`#sp1…sp4` × `Price`/`Supply`/`Lock`/`Bar`) painted live from the presale contract’s `subPhases`/`phasePrice`, the increasing price‑and‑size card, the decreasing redemption‑lock card, staking, DEX/keepers and the participation summary |
 | Genesis governance | `#genesis` | Genesis governance summary + live on‑chain voting status |
 | Community | `#community` | summary copy + social icons (Telegram, X, Discord, GitHub, Medium) |
@@ -293,4 +296,6 @@ of the panel. The same values are restored whenever the reader falls back to dem
   (`[dir="rtl"] .tape-track { animation-direction: reverse; }`).
 - Numbers use `font-variant-numeric: tabular-nums` (`.tnum`) so digits do not jitter while ticking.
 - The page is informational and is **not** financial advice; anything the chain cannot be read for
-  falls back to a simulation (`#platform` is always simulated, `#treasury` only while offline).
+  falls back to a simulation (the `#livePrice` card, the hidden `#netInflow` counter and `#treasury`
+  only while offline). The `#platform` preview is the real `NAVISAITradingDashboard.png` dashboard
+  screenshot — the simulated terminal/chart markup is gone.
