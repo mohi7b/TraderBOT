@@ -101,8 +101,9 @@ it only ever touches ids/classes.
   (for Tailwind utilities) and in `:root` (plain CSS) — so the shell still renders correctly if the
   Tailwind CDN is unreachable.
 - **Flat surfaces (Pass A)** — `.card`/`.glass`/`.floor-hl`/`.term` are flat plates with a 1px hairline
-  border and **no** `backdrop-filter` and no coloured drop shadows; the 92px grid (`.bg-lines`) and the
-  grain overlay (`.bg-noise`) are retired (`display:none`; the divs stay in the markup), leaving a
+  border (the hero plates drop even that hairline — see *Centred emblem hero*) and **no**
+  `backdrop-filter` and no coloured drop shadows; the 92px grid (`.bg-lines`) and the grain overlay
+  (`.bg-noise`) are retired (`display:none`; the divs stay in the markup), leaving a
   single soft radial glow behind the hero. CTAs are pills (`border-radius: 999px`) with a translucent
   gold fill plus a 1px inset ring — no gradient sweep on hover.
 - **Floating capsule header (Pass A)** — `.hdr` is sticky with `padding-top:.7rem`, and `.hdr-in` is a
@@ -118,11 +119,14 @@ it only ever touches ids/classes.
   `navisprotocol.png` wordmark (`.hero-mark`, clamped width), the headline (`.hero-tag`, capped to the
   wordmark's own box so it never spills wider) and the protocol lead (`.hero-lead` — a finer, lighter
   face set apart from the display headline). Below the column come two centred rows about half the
-  plate wide (`.hero-half`): first the gold `#countdown` card, then the Genesis presale card (eyebrow,
-  `#phaseNumber`, phase bar). Under those, `.gx-grid` holds the two columns — the price/buy panel on
-  the right and the NAV‑Floor card on the left. The CTA pair that used to sit under the lead is gone;
-  the buy button inside the widget is the hero's only CTA. Every figure on the block still reads from
-  the contracts (`.bar-head`/`.bar-foot` for the allocation, percent and sold amount).
+  plate wide (`.hero-half`): first the gold `#countdown` card, then the Genesis presale card
+  (`#phaseNumber`, phase bar). Under those, `.gx-grid` holds two equal-height columns — the price/buy
+  panel on the right and the NAV‑Floor card on the left. The CTA pair that used to sit under the lead
+  is gone; the buy button inside the widget is the hero's only CTA. Every figure on the block still
+  reads from the contracts (`.bar-head`/`.bar-foot` for the allocation, percent and sold amount). This
+  is also the flattest block on the page: the `.hero-tag`/`.hero-lead` type is set small, the eyebrow
+  label is gone, the four cards drop their hairline frame entirely (`#hero .glass` + `#hero .floor-hl`
+  set `border: 0`) and the chip, countdown rule, input and buy button are border-less fills.
 - **CDN‑independent responsive visibility** — the shell's own `.hidden { display: none }` would
   otherwise out‑rank Tailwind's `lg:flex` / `sm:inline` (same specificity, later in the cascade), so
   the header uses explicit classes with their own media queries instead: `.nav-desk`, `.menu-btn`,

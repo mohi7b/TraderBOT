@@ -240,17 +240,28 @@
     @media(min-width:640px){.hero-tag{max-width:min(52vw,27rem)}}
     @media(min-width:1024px){.hero-tag{max-width:min(38vw,29rem)}}
     /* finer, lighter lead face — deliberately distinct from the display headline */
-    .hero-lead{font-family:"Readex Pro","Vazirmatn",ui-sans-serif,system-ui,sans-serif;font-weight:300;font-size:clamp(1rem,1.5vw,1.15rem);line-height:2.15;letter-spacing:.005em}
+    .hero-lead{font-family:"Readex Pro","Vazirmatn",ui-sans-serif,system-ui,sans-serif;font-weight:300;font-size:clamp(.5rem,.75vw,.575rem);line-height:2;letter-spacing:.005em}
     /* the countdown row and the Genesis row are centred and about half the plate wide */
     .hero-half{width:min(100%,40rem)}
-    .gx-grid{display:grid;gap:1.6rem;margin-top:1.6rem;width:min(100%,52rem);margin-inline:auto}
+    .gx-grid{display:grid;gap:1.2rem;margin-top:1.2rem;width:min(100%,52rem);margin-inline:auto}
     @media(min-width:1024px){
-      .gx-grid{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:2.5rem;align-items:start}
+      .gx-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;align-items:stretch}
     }
     .bar-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem .9rem;font-size:.75rem;color:var(--mut)}
     .bar-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:1.15rem;border-top:1px solid var(--hair);padding-top:1rem;text-align:center}
     .bar-foot .label{display:block;font-size:.68rem;line-height:1.7}
     .bar-foot .v{display:block;margin-top:.2rem;font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:clamp(.85rem,1.7vw,1.05rem);color:#EDF2FA}
+    /* ---------- hero · flat / borderless refinements ---------- */
+    #hero .cd-wrap{border-top:0;padding-top:0}
+    #hero .chip{border:0;background:rgba(255,255,255,.05);padding:.28rem .62rem}
+    #hero .chip-gold{background:rgba(255,199,0,.12);color:#F2DC9B}
+    #hero .num-field{border:0;background:rgba(255,255,255,.06)}
+    #hero .num-field:focus{background:rgba(255,199,0,.10);box-shadow:none}
+    #hero .btn-1{border:0;background:rgba(255,199,0,.16);box-shadow:none}
+    #hero .btn-1:hover{background:rgba(255,199,0,.24);color:#fff;box-shadow:none}
+    #hero .divider-glow{opacity:.55}
+    /* the hero cards carry no frame — the plate fill alone sets them apart */
+    #hero .glass,#hero .floor-hl{border:0}
 
     /* ---------- terminal / chart ---------- */
     .term{border-radius:1.25rem;overflow:hidden;background:var(--plate);border:1px solid var(--hair);box-shadow:none}
@@ -446,7 +457,7 @@
 
         <!-- ---------- headline + protocol description · centred ---------- -->
         <div class="mx-auto mt-7 max-w-3xl text-center">
-          <h1 class="reveal fdisp hero-tag text-white" style="--d:60ms;font-weight:500;font-size:clamp(1.02rem,1.95vw,1.5rem);line-height:1.75;letter-spacing:-.01em">
+          <h1 class="reveal fdisp hero-tag text-white" style="--d:60ms;font-weight:500;font-size:clamp(.51rem,.975vw,.75rem);line-height:1.6;letter-spacing:-.01em">
             آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار
           </h1>
           <p class="reveal lead hero-lead mx-auto mt-4 max-w-2xl" style="--d:120ms">
@@ -484,18 +495,17 @@
         </div>
 
         <!-- ---------- row 2 · Genesis presale · centred, about half the plate ---------- -->
-        <div class="reveal hero-half mx-auto glass gold-ring mt-6 p-5 sm:p-7" style="--d:200ms">
+        <div class="reveal hero-half mx-auto glass gold-ring mt-6 p-5 sm:p-6" style="--d:200ms">
 
           <div class="text-center">
-            <span class="eyebrow">Genesis Presale · NAVIS / USDT</span>
-            <h2 class="fdisp mt-3 text-white" style="font-weight:600;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.6">
+            <h2 class="fdisp text-white" style="font-weight:600;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.6">
               فروش توکن‌های جنیسیس · فاز <span id="phaseNumber" class="fnum">۱</span>
             </h2>
             <p class="mt-1 text-[11px]" style="color:#94A3B8">شمارهٔ فاز طبق قرارداد هوشمند پیش‌فروش · تسویه با USDT روی BSC Testnet (۹۷)</p>
           </div>
 
           <!-- phase progress: percent · final amount · sold amount -->
-          <div class="mt-6">
+          <div class="mt-5">
             <div class="bar-head">
               <span>تخصیص نهایی فاز · <b class="fnum" style="color:#fff">۴۰۰,۰۰۰,۰۰۰ NAVIS</b></span>
               <span class="fnum" style="color:#FFC700">۲۶٪ تکمیل</span>
@@ -529,8 +539,10 @@
                 <span style="color:#94A3B8">قیمت هر توکن</span>
                 <span id="presalePrice" class="fnum text-white">$0.010</span>
               </div>
-              <label class="mt-1 block text-xs" for="usdtAmount" style="color:#94A3B8">مبلغ تتر (USDT)</label>
-              <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-full rounded-xl px-3 py-3 text-white outline-none" style="border:1px solid var(--hair2);background:rgba(255,255,255,.03)" />
+              <div class="flex items-center justify-between gap-3">
+                <label class="text-xs" for="usdtAmount" style="color:#94A3B8">مبلغ تتر (USDT)</label>
+                <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-40 max-w-[58%] rounded-lg px-3 py-2 text-end text-sm text-white outline-none" style="border:0;background:rgba(255,255,255,.06)" />
+              </div>
               <div class="flex items-center justify-between text-sm">
                 <span style="color:#94A3B8">توکن تخمینی</span>
                 <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
@@ -542,8 +554,10 @@
             </div>
 
             <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید در پیش‌فروش</button>
-            <p id="walletStatus" class="mt-3 text-center text-xs" style="color:#94A3B8">کیف‌پولی متصل نیست</p>
-            <p id="networkStatus" class="mt-1 text-center text-[11px]" style="color:#94A3B8">شبکه: متصل نیست</p>
+            <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
+              <span id="walletStatus" class="chip">کیف‌پولی متصل نیست</span>
+              <span id="networkStatus" class="chip">شبکه: متصل نیست</span>
+            </div>
           </div>
 
           <!-- ---------- left · guaranteed treasury floor ---------- -->
@@ -560,7 +574,7 @@
                 <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">تخفیف نسبت به کف</span><span class="fnum">۷۴٪</span></li>
               </ul>
             </div>
-            <div class="divider-glow my-4"></div>
+            <div class="divider-glow my-3"></div>
             <p class="text-[11px] leading-6" style="color:#94A3B8">
               اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود · هر توکن خریداری‌شده تا لحظهٔ تسویه با ذخیرهٔ تتر خزانه و کف قیمت
               <span style="color:#ADCEFF">NAV Floor</span> پشتیبانی می‌شود. قرارداد پیش‌فروش برای
