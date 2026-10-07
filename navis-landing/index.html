@@ -4,39 +4,63 @@
   <!-- ============================================================
        NAVIS Protocol · UI/UX v2 (2026) — luxury-dark web3 theme
        The previous markup/CSS is kept inert inside a
-       &lt;template id="legacy-page"&gt; block at the end of this file so
-       the existing inline &lt;script&gt; stays byte-identical.
-       Run `python3 tools/strip-legacy.py` to drop that dead block.
+       &lt;template id="legacy-page"&gt; block at the end of this file while
+       the inline &lt;script&gt; below the template still executes.
+       The wallet panel additionally talks to the locally deployed
+       contracts (chain 31337) through MetaMask + Ethers v6.
+       Run `python3 tools/strip-legacy.py` to drop that dead block, and
+       `python3 tools/strip-legacy.py check --record` after editing the
+       inline script so its sha256 baseline stays in sync.
        ============================================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NAVIS Protocol | نسل جدید چارت‌انجین و مسیردهی هوشمند مالی</title>
   <meta name="description" content="NAVIS Protocol — ترکیب هوش مصنوعی، تحلیل داده‌های کلان و خزانه‌داری آن‌چین. پیش‌عرضه سپرده‌محور با بازخرید تضمینی و قیمت کف رشدکننده." />
-  <meta name="theme-color" content="#07090E" />
+  <meta name="theme-color" content="#05070B" />
   <meta name="color-scheme" content="dark" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="NAVIS Protocol | نسل جدید چارت‌انجین و مسیردهی هوشمند مالی" />
   <meta property="og:description" content="جایی که امنیت سرمایه‌گذاری با شفافیت ریاضی تضمین می‌شود." />
   <meta property="og:locale" content="fa_IR" />
   <meta name="twitter:card" content="summary_large_image" />
+  <!-- Brand emblem for link previews.
+       TODO at launch: make it absolute — https://<your-domain>/navislogo.png -->
+  <meta property="og:image" content="./navislogo.png" />
+  <meta property="og:image:alt" content="نشان ناویس پروتکل — NAVIS Protocol (قطب‌نمای طلایی و چشم سیبری)" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <!-- Favicon: inlined SVG (gold star medal) — no extra request, no /favicon.ico 404. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070B'/%3E%3Ccircle cx='32' cy='32' r='25' fill='none' stroke='%23D4AF37' stroke-width='3'/%3E%3Cpath d='M32 12 L36.5 25.9 L51 25.8 L39.2 34.4 L43.8 48.2 L32 39.6 L20.2 48.2 L24.8 34.4 L13 25.8 L27.5 25.9 Z' fill='%23FFC700'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Inter:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Ethers.js v6 (UMD) — powers the on-chain reads and the presale purchase.
+       When the CDN is unreachable the wallet panel keeps its demo behaviour. -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
   <style type="text/tailwindcss">
     @theme {
-      --color-ink: #E9EEF7;
-      --color-mut: #9AA4B2;
-      --color-obsidian: #07090E;
-      --color-abyss: #0B0F17;
-      --color-surface: #111827;
-      --color-linec: #1F2937;
-      --color-em: #10B981;
-      --color-em2: #34D399;
-      --color-cy: #06B6D4;
-      --color-cy2: #22D3EE;
-      --color-vi: #8B5CF6;
-      --color-rose: #F43F5E;
+      /* ---------- NAVIS · "quiet plate" identity (Pass A) ----------
+         Neutral near-black plate + one warm gold accent (CTA / key numbers)
+         and one cool "ice" accent for live, on-chain data. */
+      --color-ink: #EEF2FA;        /* ink */
+      --color-mut: #8B93A7;        /* dim slate */
+      --color-obsidian: #05070B;   /* void */
+      --color-abyss: #0B0F16;      /* raised plate */
+      --color-surface: #0D1219;
+      --color-linec: #1A2130;
+      --color-gold: #D4AF37;       /* brand accent */
+      --color-gold2: #FFC700;      /* accent light */
+      --color-cyber: #ADCEFF;      /* ice · live data */
+      --color-cyber2: #DDF0FF;     /* ice light */
+      --color-plat: #EEF2FA;
+      --color-plat2: #8B93A7;
+      --color-em: #D4AF37;
+      --color-em2: #FFC700;
+      --color-cy: #ADCEFF;
+      --color-cy2: #DDF0FF;
+      --color-vi: #7EA2F3;
+      --color-rose: #FF4D6D;
       --font-sans: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
       --font-num: "Inter", "Vazirmatn", ui-sans-serif, sans-serif;
       --font-display: "Plus Jakarta Sans", "Vazirmatn", ui-sans-serif, sans-serif;
@@ -47,167 +71,205 @@
        NAVIS · design system v2 — "luxury dark / web3 finance"
        ============================================================ */
     :root{
-      --bg:#07090E; --bg2:#0B0F17;
-      --surface:rgba(17,24,39,.62); --surface2:rgba(255,255,255,.035);
-      --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
-      --ink:#E9EEF7; --mut:#9AA4B2; --dim:#6B7280;
-      --em:#10B981; --em2:#34D399; --cy:#06B6D4; --cy2:#22D3EE;
-      --vi:#8B5CF6; --rose:#F43F5E; --amber:#FBBF24; --r:1.25rem;
+      /* Pass A — flat "quiet plate" surfaces: hairline borders, no glass, no glow */
+      --bg:#05070B; --bg2:#0B0F16;
+      --plate:#0B0F16; --plate2:#0D1219;
+      --surface:rgba(13,18,25,.72); --surface2:rgba(255,255,255,.03);
+      --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
+      --hair:rgba(255,255,255,.07); --hair2:rgba(173,206,255,.16);
+      --ink:#EEF2FA; --mut:#8B93A7; --dim:#6B7488;
+      --gold:#D4AF37; --gold2:#FFC700; --cy:#ADCEFF; --cy2:#DDF0FF;
+      --em:#D4AF37; --em2:#FFC700; --vi:#7EA2F3; --rose:#FF4D6D; --amber:#FFC700; --r:1rem;
+      --gold-line:rgba(255,199,0,.3); --gold-glow:rgba(255,199,0,.42);
     }
-    html{scroll-behavior:smooth;scroll-padding-top:5.5rem}
+    /* snap-scroll framework: the whole page is one vertical deck */
+    html{scroll-behavior:smooth;scroll-padding-top:6.2rem;scroll-snap-type:y mandatory}
     html,body{max-width:100%}
     body{background:var(--bg);color:var(--ink);font-family:"Vazirmatn",system-ui,sans-serif;font-size:15px;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    ::selection{background:rgba(16,185,129,.32);color:#fff}
+    ::selection{background:rgba(255,199,0,.26);color:#fff}
     ::-webkit-scrollbar{width:10px;height:10px}
-    ::-webkit-scrollbar-track{background:#07090E}
-    ::-webkit-scrollbar-thumb{background:#1F2937;border-radius:9px;border:2px solid #07090E}
-    ::-webkit-scrollbar-thumb:hover{background:#374151}
-    :focus-visible{outline:2px solid var(--cy2);outline-offset:3px;border-radius:.5rem}
+    ::-webkit-scrollbar-track{background:#05070B}
+    ::-webkit-scrollbar-thumb{background:#1B2434;border-radius:9px;border:2px solid #05070B}
+    ::-webkit-scrollbar-thumb:hover{background:#334155}
+    :focus-visible{outline:2px solid var(--cy);outline-offset:3px;border-radius:.5rem}
     .tnum{font-variant-numeric:tabular-nums}
     .fnum{font-family:var(--font-num);font-variant-numeric:tabular-nums}
     .fdisp{font-family:var(--font-display);letter-spacing:-.015em}
 
-    /* ---------- atmosphere ---------- */
+    /* ---------- atmosphere · ONE soft top glow, no grid, no grain (Pass A) ---------- */
     .bg-aurora{position:fixed;inset:0;z-index:-3;pointer-events:none;background:
-      radial-gradient(1200px 660px at 84% -12%,rgba(6,182,212,.16),transparent 62%),
-      radial-gradient(980px 560px at 2% 0%,rgba(16,185,129,.13),transparent 60%),
-      radial-gradient(950px 720px at 50% 114%,rgba(6,182,212,.09),transparent 62%),
-      linear-gradient(180deg,#07090E 0%,#0B0F17 46%,#07090E 100%)}
-    .bg-lines{position:fixed;inset:0;z-index:-2;pointer-events:none;
-      background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-      background-size:92px 92px;
-      -webkit-mask-image:radial-gradient(1100px 680px at 50% 0,#000 8%,transparent 76%);
-      mask-image:radial-gradient(1100px 680px at 50% 0,#000 8%,transparent 76%)}
-    .bg-noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.32;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+      radial-gradient(880px 440px at 50% -6%,rgba(255,199,0,.085),transparent 66%),
+      radial-gradient(720px 420px at 90% 6%,rgba(173,206,255,.05),transparent 70%),
+      linear-gradient(180deg,#05070B 0%,#070A11 50%,#05070B 100%)}
+    /* the 92px grid and the grain were retired in Pass A.
+       The two divs stay in the markup (hidden) so nothing else has to move. */
+    .bg-lines,.bg-noise{display:none}
 
     /* ---------- chrome misc ---------- */
     #scrollProgress{position:fixed;top:0;right:0;z-index:60;height:2px;width:0;border-radius:0 0 3px 3px;
-      background:linear-gradient(90deg,var(--em),var(--cy2) 60%,var(--vi));box-shadow:0 0 18px rgba(34,211,238,.7);transition:width .1s linear}
-    .skip{position:fixed;top:-100px;right:1rem;z-index:90;background:#0B0F17;border:1px solid var(--line2);color:var(--ink);padding:.6rem 1rem;border-radius:.75rem;font-size:.85rem;transition:top .25s}
+      background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .1s linear}
+    .skip{position:fixed;top:-100px;right:1rem;z-index:90;background:#0B0F16;border:1px solid var(--line2);color:var(--ink);padding:.6rem 1rem;border-radius:.75rem;font-size:.85rem;transition:top .25s}
     .skip:focus{top:.75rem}
 
     /* ---------- shell ---------- */
-    .wrap{margin-inline:auto;width:100%;max-width:80rem;padding-inline:1.15rem}
+    .wrap{margin-inline:auto;width:100%;max-width:78rem;padding-inline:1.15rem}
     @media(min-width:640px){.wrap{padding-inline:1.75rem}}
-    @media(min-width:1280px){.wrap{max-width:84rem}}
-    .sec{padding-block:4.25rem}
-    @media(min-width:640px){.sec{padding-block:6rem}}
-    .eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-num);font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#67E8F9}
-    .eyebrow::before{content:"";width:1.75rem;height:1px;background:linear-gradient(90deg,transparent,var(--cy2))}
-    .h2s{font-family:var(--font-display);font-weight:800;font-size:clamp(1.55rem,3.1vw,2.35rem);line-height:1.32;color:#fff}
-    .lead{color:#C7D0DE;font-size:clamp(.95rem,1.4vw,1.05rem);line-height:2.05}
-    .grad{background:linear-gradient(100deg,var(--em2),var(--cy2) 58%,#BAE6FD);-webkit-background-clip:text;background-clip:text;color:transparent}
+    @media(min-width:1280px){.wrap{max-width:82rem}}
+    .sec{padding-block:4.5rem}
+    @media(min-width:640px){.sec{padding-block:6.5rem}}
 
-    /* ---------- surfaces ---------- */
-    .card{position:relative;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 30px 70px -44px rgba(0,0,0,.95),inset 0 1px 0 0 rgba(255,255,255,.045)}
-    .card-xl{border-radius:1.75rem}
-    .soft{background:var(--surface2);border:1px solid rgba(255,255,255,.07);border-radius:1rem}
+    /* ---------- snap-scroll framework ---------- */
+    .snap{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+      padding-block:clamp(3.5rem,6vh,5rem)}
+    main > section{scroll-snap-align:start;scroll-snap-stop:normal}
+    /* iOS/short screens: proximity keeps long sections from trapping the scroll */
+    @media(max-width:1023.98px),(max-height:719.98px){html{scroll-snap-type:y proximity}}
+    @media(prefers-reduced-motion:reduce){html{scroll-snap-type:none;scroll-behavior:auto}}
+
+    .eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-num);font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+    .eyebrow::before{content:"";width:1.4rem;height:1px;background:rgba(255,255,255,.22)}
+    .h2s{font-family:var(--font-display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1.4;letter-spacing:-.015em;color:#fff}
+    .lead{color:#A9B3C4;font-size:clamp(.95rem,1.35vw,1.05rem);line-height:2.05}
+    .grad{background:linear-gradient(96deg,#A4AFC2,#EEF2FA 42%,#CFE0FA);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .grad-gold{background:linear-gradient(96deg,#D4AF37,#FFD76B 55%,#FFF0C2);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+    /* ---------- surfaces · flat hairline plates (Pass A) ---------- */
+    .card{position:relative;border-radius:var(--r);background:var(--plate);border:1px solid var(--hair);box-shadow:none}
+    .card-xl{border-radius:1.25rem}
+    .soft{background:var(--plate2);border:1px solid var(--hair);border-radius:.9rem}
     .lift{transition:transform .42s cubic-bezier(.2,.8,.2,1),border-color .42s,box-shadow .42s}
-    .lift:hover{transform:translateY(-5px);border-color:rgba(16,185,129,.3);box-shadow:0 42px 90px -46px rgba(16,185,129,.42)}
+    .lift:hover{transform:translateY(-3px);border-color:rgba(255,199,0,.26);box-shadow:0 34px 70px -50px rgba(0,0,0,.95)}
     .hl{transition:transform .42s cubic-bezier(.2,.8,.2,1),border-color .42s,box-shadow .42s}
-    .hl:hover{transform:translateY(-4px);border-color:rgba(6,182,212,.28);box-shadow:0 40px 90px -48px rgba(6,182,212,.45)}
-    .hair{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
-    .divider-glow{height:1px;background:linear-gradient(90deg,transparent,rgba(6,182,212,.45),rgba(16,185,129,.45),transparent)}
-    .ico{display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:.9rem;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.01))}
+    .hl:hover{transform:translateY(-3px);border-color:rgba(173,206,255,.24);box-shadow:0 34px 70px -50px rgba(0,0,0,.95)}
+    .hair{height:1px;background:var(--hair)}
+    .divider-glow{height:1px;background:var(--hair)}
+    .ico{display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:.85rem;border:1px solid var(--hair);background:var(--plate2)}
     .ico svg{width:1.35rem;height:1.35rem}
+
+    /* ---------- plates & emblems · flat, hairline (Pass A) ---------- */
+    .glass{position:relative;border-radius:1.25rem;border:1px solid var(--hair2);background:var(--plate)}
+    .gold-ring{border-color:rgba(255,199,0,.28)}
+    .gold-ring::before{content:none}
+    .medal{position:relative;display:grid;place-items:center;flex:none;width:2.75rem;height:2.75rem;border-radius:.9rem;overflow:hidden;
+      border:1px solid var(--hair2);background:var(--plate2)}
+    .medal img{width:100%;height:100%;object-fit:cover}
+    .medal-lg{width:3.1rem;height:3.1rem}
+    .floor-hl{position:relative;border-radius:1rem;border:1px solid var(--hair2);background:var(--plate)}
+    .cv-short{display:none}
+    @media(max-width:419.98px){.cv-full{display:none}.cv-short{display:inline}}
     /* ---------- chips, dots ---------- */
-    .chip{display:inline-flex;align-items:center;gap:.45rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:.36rem .78rem;font-size:.72rem;color:#CBD5E1;white-space:nowrap}
-    .chip b{color:#fff;font-weight:600}
-    .chip-em{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.09);color:#A7F3D0}
-    .chip-cy{border-color:rgba(6,182,212,.3);background:rgba(6,182,212,.09);color:#A5F3FC}
-    .chip-vi{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.1);color:#DDD6FE}
-    .chip-amber{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.09);color:#FDE68A}
-    .live-dot,.badge-dot{position:relative;display:inline-block;width:.5rem;height:.5rem;border-radius:999px;background:var(--em2);box-shadow:0 0 12px rgba(52,211,153,.9)}
-    .live-dot::after{content:"";position:absolute;inset:-4px;border-radius:999px;border:1px solid rgba(52,211,153,.55);animation:ping 2.2s ease-out infinite}
-    .badge-dot{background:var(--cy2);box-shadow:0 0 12px rgba(34,211,238,.9)}
+    .chip{display:inline-flex;align-items:center;gap:.45rem;border-radius:999px;border:1px solid var(--hair);background:transparent;padding:.32rem .72rem;font-size:.72rem;color:var(--mut);white-space:nowrap}
+    .chip b{color:var(--ink);font-weight:500}
+    .chip-em,.chip-gold,.chip-amber{border-color:rgba(255,199,0,.28);background:rgba(255,199,0,.06);color:#F2DC9B}
+    .chip-cy,.chip-vi{border-color:rgba(173,206,255,.24);background:rgba(173,206,255,.05);color:#CFE0FA}
+    .live-dot,.badge-dot{position:relative;display:inline-block;width:.45rem;height:.45rem;border-radius:999px;background:var(--gold2);box-shadow:none}
+    .live-dot::after{content:none}
+    .badge-dot{background:var(--cy)}
     @keyframes ping{0%{transform:scale(.6);opacity:.9}75%,100%{transform:scale(1.55);opacity:0}}
 
-    /* ---------- buttons ---------- */
-    .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:.85rem;padding:.78rem 1.3rem;font-size:.875rem;font-weight:600;line-height:1.2;overflow:hidden;white-space:nowrap;transition:transform .22s,box-shadow .32s,background .32s,border-color .32s}
-    .btn-1,.btn-primary{background:linear-gradient(135deg,#0EA47A,#06B6D4);color:#02120C;box-shadow:0 18px 42px -20px rgba(16,185,129,.75)}
-    .btn-1:hover,.btn-primary:hover{box-shadow:0 24px 60px -18px rgba(6,182,212,.8);transform:translateY(-2px)}
-    .btn-2,.btn-ghost{background:rgba(255,255,255,.04);border:1px solid var(--line2);color:#E4EAF5}
-    .btn-2:hover,.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}
-    .btn:active{transform:translateY(1px) scale(.995)}
-    .btn::after{content:"";position:absolute;inset:0;transform:translateX(-135%);background:linear-gradient(100deg,transparent 18%,rgba(255,255,255,.5) 50%,transparent 82%);transition:transform .78s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-    .btn:hover::after{transform:translateX(135%)}
-    .btn-sm{padding:.6rem 1.05rem;font-size:.8rem;border-radius:.75rem}
+    /* ---------- buttons · pill CTAs, no sheen sweep (Pass A) ---------- */
+    .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:999px;padding:.72rem 1.35rem;font-size:.875rem;font-weight:500;line-height:1.2;white-space:nowrap;transition:transform .22s,box-shadow .32s,background .32s,border-color .32s,color .32s}
+    .btn-1,.btn-primary{background:rgba(255,199,0,.13);border:1px solid rgba(255,199,0,.42);color:#FFF4D2;box-shadow:inset 0 1px 0 rgba(255,232,160,.14)}
+    .btn-1:hover,.btn-primary:hover{background:rgba(255,199,0,.2);border-color:rgba(255,199,0,.6);color:#fff;box-shadow:0 18px 40px -26px rgba(255,199,0,.65)}
+    .btn-2,.btn-ghost{background:transparent;border:1px solid var(--line2);color:#D6DEEB}
+    .btn-2:hover,.btn-ghost:hover{background:rgba(173,206,255,.06);border-color:rgba(173,206,255,.3);color:#fff}
+    .btn:active{transform:translateY(1px)}
+    .btn::after{content:none}
+    .btn-sm{padding:.5rem 1rem;font-size:.8rem;border-radius:999px}
+    .btn-lg{padding:.85rem 1.5rem;font-size:.95rem;border-radius:999px}
     .icon-btn-wide{width:auto;padding-inline:.72rem;gap:.5rem}
-    .divider-soft{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent)}
+    .divider-soft{height:1px;background:var(--hair)}
 
-    /* ---------- header ---------- */
-    .hdr{position:sticky;top:0;z-index:50}
-    .hdr-in{background:rgba(7,9,14,.74);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border-bottom:1px solid rgba(255,255,255,.06)}
-    .brand{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:#fff}
-    .logo{position:relative;display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:1rem;border:1px solid rgba(34,211,238,.3);background:linear-gradient(150deg,rgba(6,182,212,.2),rgba(16,185,129,.07));box-shadow:0 10px 32px -14px rgba(34,211,238,.75)}
-    .nav-l{position:relative;border-radius:.7rem;padding:.5rem .8rem;font-size:.86rem;color:#B9C3D2;transition:color .25s,background .25s}
-    .nav-l:hover{color:#fff;background:rgba(255,255,255,.05)}
-    .icon-btn{display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:.85rem;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#CBD5E1;transition:background .25s,border-color .25s,color .25s}
-    .icon-btn:hover{background:rgba(255,255,255,.09);color:#fff;border-color:var(--line2)}
+    /* ---------- header · floating capsule (Pass A) ---------- */
+    .hdr{position:sticky;top:0;z-index:50;padding-top:.7rem}
+    .hdr-in{width:min(100% - 1.5rem,82rem);margin-inline:auto;border-radius:1.75rem;
+      background:rgba(8,11,17,.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+      border:1px solid var(--line2);box-shadow:0 24px 60px -48px rgba(0,0,0,.95)}
+    .hdr-in .wrap{max-width:none;padding-inline:1rem}
+    @media(max-width:639.98px){.hdr-in{width:min(100% - 1rem,82rem);border-radius:1.5rem}}
+    .brand{font-family:var(--font-display);font-weight:700;font-size:1rem;letter-spacing:-.01em;color:#fff;line-height:1.1}
+    .logo{position:relative;display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:.9rem;border:1px solid var(--hair2);background:var(--plate2)}
+    .nav-l{position:relative;border-radius:999px;padding:.45rem .72rem;font-size:.84rem;color:var(--mut);transition:color .25s}
+    .nav-l:hover{color:#fff}
+    .icon-btn{display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:999px;border:1px solid var(--hair);background:transparent;color:var(--mut);transition:background .25s,border-color .25s,color .25s}
+    .icon-btn:hover{background:rgba(255,255,255,.06);color:#fff;border-color:var(--line2)}
     .flag{display:inline-grid;place-items:center;width:1.55rem;height:1.05rem;border-radius:.22rem;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.16)}
     .flag svg{width:100%;height:100%;display:block}
-    .lang-btn[aria-pressed="true"]{background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.32);color:#fff}
-    .menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:70;width:13.5rem;padding:.45rem;border-radius:1rem;background:rgba(11,15,23,.97);border:1px solid var(--line2);box-shadow:0 30px 70px -30px rgba(0,0,0,.95);backdrop-filter:blur(18px)}
+    .lang-btn[aria-pressed="true"]{background:rgba(173,206,255,.1);border-color:rgba(173,206,255,.28);color:#fff}
+    .menu{position:absolute;top:calc(100% + .6rem);inset-inline-end:0;z-index:70;width:13.5rem;padding:.45rem;border-radius:1rem;background:rgba(10,14,20,.98);border:1px solid var(--line2);box-shadow:0 30px 70px -30px rgba(0,0,0,.95);backdrop-filter:blur(18px)}
     .hidden{display:none}
-    #mobileMenu{background:rgba(7,9,14,.97);border-top:1px solid rgba(255,255,255,.07);backdrop-filter:blur(18px)}
-    #mobileMenu nav a{display:block;border-radius:.8rem;padding:.72rem .95rem;color:#C9D2E0;transition:background .25s,color .25s}
+    #mobileMenu{width:min(100% - 1.5rem,82rem);margin:.5rem auto 0;border-radius:1.25rem;border:1px solid var(--line2);background:rgba(8,11,17,.97);backdrop-filter:blur(20px)}
+    #mobileMenu nav a{display:block;border-radius:.8rem;padding:.72rem .95rem;color:#B9C3D4;transition:background .25s,color .25s}
     #mobileMenu nav a:hover{background:rgba(255,255,255,.05);color:#fff}
 
-    /* ---------- countdown ---------- */
-    .cd-wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
+    /* ---------- countdown · hairline ledger (Pass A) ---------- */
+    .cd-wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem;border-top:1px solid var(--hair);padding-top:1.1rem}
     @media(min-width:640px){.cd-wrap{gap:.9rem}}
-    .count-cell{position:relative;border-radius:1rem;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.012));padding:.85rem .25rem;text-align:center;overflow:hidden}
-    .count-cell::before{content:"";position:absolute;top:0;inset-inline:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.55),transparent)}
-    .cd-n{display:block;font-family:var(--font-num);font-weight:700;font-size:clamp(1.6rem,5vw,2.5rem);color:#fff;font-variant-numeric:tabular-nums;line-height:1.1}
+    .count-cell{position:relative;border:0;background:transparent;padding:0;text-align:center}
+    .count-cell::before{content:none}
+    .cd-n{display:block;font-family:var(--font-num);font-weight:500;font-size:clamp(1.5rem,4.6vw,2.15rem);line-height:1.15;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
     .cd-l{display:block;margin-top:.3rem;font-size:.68rem;color:var(--mut)}
     .cd-n.flip{animation:flip .58s cubic-bezier(.2,.8,.2,1)}
     @keyframes flip{0%{transform:translateY(-42%) rotateX(38deg);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
     /* ---------- data / KPI ---------- */
-    .kpi{font-family:var(--font-num);font-weight:700;font-variant-numeric:tabular-nums;font-size:clamp(1.25rem,2.4vw,1.7rem);color:#fff;line-height:1.25}
-    .kpi-em{color:#6EE7B7}
-    .kpi-cy{color:#67E8F9}
-    .kv{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:#E9EEF7}
+    .kpi{font-family:var(--font-num);font-weight:500;font-variant-numeric:tabular-nums;font-size:clamp(1.25rem,2.4vw,1.7rem);color:#fff;line-height:1.25;letter-spacing:-.01em}
+    .kpi-em{color:var(--gold2)}
+    .kpi-cy{color:var(--cy)}
+    .kv{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:#E2E8F0}
     .label{font-size:.72rem;color:var(--mut)}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.62rem 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.62rem 0;border-bottom:1px solid var(--hair)}
     .row:last-child{border-bottom:0}
     .row .k{color:var(--mut);font-size:.82rem}
     .row .v{font-family:var(--font-num);color:#E9EEF7;font-size:.85rem}
 
     /* ---------- meters ---------- */
-    .meter{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
-    .meter>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--em),var(--cy2));box-shadow:0 0 16px -2px rgba(16,185,129,.7)}
-    .meter-cy>i{background:linear-gradient(90deg,var(--cy),#38BDF8);box-shadow:0 0 16px -2px rgba(6,182,212,.7)}
-    .meter-vi>i{background:linear-gradient(90deg,var(--vi),#A855F7);box-shadow:0 0 16px -2px rgba(139,92,246,.7)}
-    .meter-am>i{background:linear-gradient(90deg,var(--amber),#F97316);box-shadow:0 0 16px -2px rgba(251,191,36,.55)}
+    .meter{height:6px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+    .meter>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+    .meter-cy>i{background:linear-gradient(90deg,var(--vi),var(--cy))}
+    .meter-vi>i{background:linear-gradient(90deg,var(--vi),#A9C4FF)}
+    .meter-am>i{background:linear-gradient(90deg,var(--gold),#FFE9A3)}
     .meter-sm{height:4px}
     .meter-lg{height:10px}
 
+    /* ---------- hero · centred mark + single-column Genesis presale ---------- */
+    .hero-mark{display:block;width:min(76vw,24rem);height:auto}
+    @media(min-width:640px){.hero-mark{width:min(52vw,27rem)}}
+    @media(min-width:1024px){.hero-mark{width:min(38vw,29rem)}}
+    .gx-grid{display:grid;gap:1.6rem;margin-top:1.6rem}
+    @media(min-width:1024px){
+      .gx-grid{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:2.5rem;align-items:start}
+      .gx-grid>*+*{border-inline-start:1px solid var(--hair);padding-inline-start:2.5rem}
+    }
+    .bar-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem .9rem;font-size:.75rem;color:var(--mut)}
+    .bar-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:1.15rem;border-top:1px solid var(--hair);padding-top:1rem;text-align:center}
+    .bar-foot .label{display:block;font-size:.68rem;line-height:1.7}
+    .bar-foot .v{display:block;margin-top:.2rem;font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:clamp(.85rem,1.7vw,1.05rem);color:#EDF2FA}
+
     /* ---------- terminal / chart ---------- */
-    .term{border-radius:1.5rem;overflow:hidden;background:linear-gradient(180deg,rgba(11,15,23,.94),rgba(7,9,14,.88));border:1px solid var(--line);box-shadow:0 55px 120px -65px rgba(0,0,0,1),inset 0 1px 0 rgba(255,255,255,.05)}
+    .term{border-radius:1.25rem;overflow:hidden;background:var(--plate);border:1px solid var(--hair);box-shadow:none}
     .term-bar{display:flex;align-items:center;gap:.55rem;padding:.7rem .95rem;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
     .dot{width:.6rem;height:.6rem;border-radius:999px;display:inline-block}
     .tab{font-family:var(--font-num);font-size:.72rem;padding:.3rem .72rem;border-radius:999px;color:#93A1B5;border:1px solid transparent;transition:color .25s,background .25s,border-color .25s}
     .tab:hover{color:#fff}
-    .tab.on{color:#fff;background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.3)}
+    .tab.on{color:#fff;background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.32)}
     .grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:100% 25%,72px 100%}
-    .floor-line{position:absolute;inset-inline:0;border-top:1px dashed rgba(52,211,153,.6);box-shadow:0 0 18px rgba(16,185,129,.3)}
-    .floor-tag{position:absolute;inset-inline-start:0;transform:translateY(-50%);background:rgba(4,47,36,.9);border:1px solid rgba(52,211,153,.4);color:#A7F3D0;font-family:var(--font-num);font-size:.62rem;padding:.1rem .5rem;border-radius:.4rem}
-    .axis{font-family:var(--font-num);font-size:.62rem;color:#6B7280}
-    .candle{position:relative;flex:1 1 0;border-radius:3px;background:var(--c,#10B981);box-shadow:0 0 16px -6px var(--c,#10B981)}
-    .candle.down{--c:#F43F5E}
-    .candle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:12px;background:var(--c,#10B981);opacity:.7;transform:translateX(-50%)}
+    .floor-line{position:absolute;inset-inline:0;border-top:1px dashed rgba(255,199,0,.45)}
+    .floor-tag{position:absolute;inset-inline-start:0;transform:translateY(-50%);background:rgba(255,199,0,.08);border:1px solid rgba(255,199,0,.34);color:#F2DC9B;font-family:var(--font-num);font-size:.62rem;padding:.1rem .5rem;border-radius:.4rem}
+    .axis{font-family:var(--font-num);font-size:.62rem;color:#64748B}
+    .candle{position:relative;flex:1 1 0;border-radius:3px;background:var(--c,#FFC700);box-shadow:0 0 16px -6px var(--c,#FFC700)}
+    .candle.down{--c:#FF4D6D}
+    .candle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:12px;background:var(--c,#FFC700);opacity:.7;transform:translateX(-50%)}
     .live .candle{animation:grow .9s cubic-bezier(.2,.8,.2,1) backwards}
     .live .candle:nth-child(even){animation-delay:.1s}
     .live .candle:nth-child(3n){animation-delay:.24s}
     @keyframes grow{from{transform:scaleY(.12);opacity:0}to{transform:scaleY(1);opacity:1}}
     .depth{position:relative;display:flex;align-items:center;height:1.4rem;border-radius:.5rem;background:rgba(255,255,255,.035);overflow:hidden}
     .depth>i{position:absolute;inset-block:0;inset-inline-end:0;border-radius:.5rem}
-    .depth.bid>i{background:linear-gradient(90deg,rgba(16,185,129,.34),rgba(16,185,129,.05))}
-    .depth.ask>i{background:linear-gradient(90deg,rgba(244,63,94,.3),rgba(244,63,94,.05))}
+    .depth.bid>i{background:linear-gradient(90deg,rgba(212,175,55,.34),rgba(212,175,55,.05))}
+    .depth.ask>i{background:linear-gradient(90deg,rgba(255,77,109,.3),rgba(255,77,109,.05))}
     .depth>span{position:relative;z-index:1;padding-inline:.6rem;font-family:var(--font-num);font-size:.7rem;color:#D7DEEA}
     .vol{display:flex;align-items:flex-end;gap:2px;height:2.25rem}
-    .vol i{flex:1 1 0;border-radius:2px;background:linear-gradient(180deg,rgba(34,211,238,.55),rgba(34,211,238,.06))}
+    .vol i{flex:1 1 0;border-radius:2px;background:linear-gradient(180deg,rgba(173,206,255,.5),rgba(173,206,255,.06))}
     .tick{font-family:var(--font-num);font-size:.68rem;color:#8494A8}
     .pulse-line{stroke-dasharray:5 6;animation:dash 2.6s linear infinite}
     @keyframes dash{to{stroke-dashoffset:-44}}
@@ -215,17 +277,17 @@
     @keyframes nodePulse{0%,100%{opacity:.45;r:9}50%{opacity:1;r:12}}
     /* ---------- roadmap timeline ---------- */
     .tl{position:relative;display:grid;gap:2.1rem}
-    .tl-rail{position:absolute;top:.5rem;bottom:.5rem;inset-inline-start:1.25rem;width:2px;border-radius:999px;background:linear-gradient(180deg,rgba(34,211,238,.7),rgba(16,185,129,.55) 45%,rgba(255,255,255,.05));box-shadow:0 0 26px rgba(6,182,212,.4)}
+    .tl-rail{position:absolute;top:.5rem;bottom:.5rem;inset-inline-start:1.25rem;width:2px;border-radius:999px;background:linear-gradient(180deg,rgba(255,199,0,.6),rgba(173,206,255,.35) 45%,rgba(255,255,255,.04))}
     .tl-item{position:relative;padding-inline-start:4.1rem}
     @media(min-width:768px){.tl-item{padding-inline-start:4.75rem}}
-    .tl-node{position:absolute;inset-inline-start:0;top:.3rem;display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:999px;font-family:var(--font-num);font-weight:700;font-size:.95rem;color:#04150F;background:linear-gradient(135deg,var(--em2),var(--cy2));box-shadow:0 0 0 6px rgba(6,182,212,.1),0 0 30px -2px rgba(16,185,129,.7)}
-    .tl-node::after{content:"";position:absolute;inset:-9px;border-radius:999px;border:1px solid rgba(34,211,238,.4);animation:ring 3.6s ease-out infinite}
+    .tl-node{position:absolute;inset-inline-start:0;top:.3rem;display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:999px;font-family:var(--font-num);font-weight:600;font-size:.95rem;color:#1A1204;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 0 5px rgba(255,199,0,.1)}
+    .tl-node::after{content:"";position:absolute;inset:-9px;border-radius:999px;border:1px solid rgba(255,199,0,.22)}
     .tl-node.todo{background:linear-gradient(135deg,#334155,#1E293B);color:#CBD5E1;box-shadow:0 0 0 6px rgba(148,163,184,.07)}
     .tl-node.todo::after{border-color:rgba(148,163,184,.28)}
     @keyframes ring{0%{transform:scale(.72);opacity:.9}70%,100%{transform:scale(1.32);opacity:0}}
 
     /* ---------- tape / ticker ---------- */
-    .tape{overflow:hidden;border-block:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.015);
+    .tape{overflow:hidden;border-block:1px solid var(--hair);background:rgba(255,255,255,.015);
       -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
       mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
     .tape-track{display:inline-flex;align-items:center;gap:2.25rem;white-space:nowrap;padding-block:.85rem;animation:tape 46s linear infinite}
@@ -233,21 +295,21 @@
     [dir="rtl"] .tape-track{animation-direction:reverse}
     @keyframes tape{to{transform:translateX(-50%)}}
     .tape-item{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-num);font-size:.78rem;color:#B7C2D2}
-    .up{color:#34D399}.down{color:#FB7185}
+    .up{color:#FFC700}.down{color:#FF6B81}
 
     /* ---------- socials / form ---------- */
     .social-btn{display:grid;place-items:center;width:2.85rem;height:2.85rem;border-radius:1rem;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#C7D2E0;transition:transform .3s,color .3s,border-color .3s,box-shadow .3s}
-    .social-btn:hover{transform:translateY(-3px);color:#fff;border-color:rgba(34,211,238,.4);box-shadow:0 18px 40px -20px rgba(34,211,238,.8)}
+    .social-btn:hover{transform:translateY(-2px);color:#fff;border-color:rgba(255,199,0,.34)}
     .num-field{font-family:var(--font-num);font-variant-numeric:tabular-nums}
-    .num-field:focus{border-color:rgba(16,185,129,.7);box-shadow:0 0 0 3px rgba(16,185,129,.14)}
-    .wallet-btn.connected{background:linear-gradient(135deg,#0EA47A,#0E7490);box-shadow:0 18px 42px -22px rgba(16,185,129,.6)}
+    .num-field:focus{border-color:rgba(212,175,55,.7);box-shadow:0 0 0 3px rgba(212,175,55,.16)}
+    .wallet-btn.connected{background:rgba(173,206,255,.16);border-color:rgba(173,206,255,.45);color:#EAF2FF;box-shadow:none}
 
     /* ---------- toast ---------- */
     #toast{position:fixed;bottom:1.25rem;left:50%;z-index:95;transform:translate(-50%,150%);
       display:flex;align-items:center;gap:.6rem;max-width:min(92vw,26rem);padding:.8rem 1.05rem;border-radius:1rem;
-      background:rgba(11,15,23,.96);border:1px solid var(--line2);backdrop-filter:blur(16px);color:#E9EEF7;font-size:.85rem;
+      background:rgba(11,15,22,.97);border:1px solid var(--hair2);backdrop-filter:blur(16px);color:var(--ink);font-size:.85rem;
       box-shadow:0 30px 70px -30px rgba(0,0,0,.95);opacity:0;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .35s}
-    #toast::before{content:"";flex:none;width:.5rem;height:.5rem;border-radius:999px;background:var(--em2);box-shadow:0 0 12px rgba(52,211,153,.9)}
+    #toast::before{content:"";flex:none;width:.5rem;height:.5rem;border-radius:999px;background:var(--gold2);box-shadow:0 0 12px rgba(255,199,0,.9)}
     #toast.show{transform:translate(-50%,0);opacity:1}
 
     /* ---------- motion ---------- */
@@ -255,11 +317,25 @@
     .reveal.in{opacity:1;transform:none}
     .float{animation:float 7.5s ease-in-out infinite}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    .glow-ai{box-shadow:0 0 44px -12px rgba(139,92,246,.65)}
+    .glow-ai{box-shadow:0 0 34px -18px rgba(173,206,255,.4)}
     @media(prefers-reduced-motion:reduce){
       .reveal{opacity:1;transform:none;transition:none}
       .float,.tape-track,.live-dot::after,.tl-node::after,.pulse-line,.pulse-node,.live .candle{animation:none!important}
     }
+
+    /* ---------- responsive visibility (independent of the Tailwind CDN) ---------- */
+    .nav-desk{display:none}
+    .menu-btn{display:grid}
+    .lang-label{display:none}
+    .net-badge{display:none}
+    .term-chips{display:none}
+    .brand-sub{display:none}
+    @media(min-width:640px){.lang-label{display:inline}.term-chips{display:flex}.brand-sub{display:block}}
+    @media(min-width:1024px){.nav-desk{display:flex}.menu-btn{display:none}#mobileMenu{display:none}}
+    @media(min-width:1280px){.net-badge{display:inline-flex}}
+
+    /* language toggle: one row (flag · label · chevron) that grows with its label */
+    .icon-btn.icon-btn-wide{display:inline-flex;align-items:center;gap:.5rem;width:auto;height:auto;min-height:2.5rem;padding-inline:.72rem;white-space:nowrap}
   </style>
   </head>
 <body class="relative min-h-screen antialiased">
@@ -272,30 +348,29 @@
   <header id="top" class="hdr">
     <div class="hdr-in">
       <div class="wrap flex h-16 items-center justify-between gap-3">
-        <a href="#top" class="flex items-center gap-3" aria-label="NAVIS Protocol">
-          <span class="logo">
-            <svg viewBox="0 0 48 48" class="h-6 w-6" fill="none" aria-hidden="true">
-              <path d="M24 3 42 13.5v21L24 45 6 34.5v-21z" stroke="#22D3EE" stroke-width="2.2" />
-              <circle cx="24" cy="24" r="4.2" fill="#8B5CF6" />
-              <circle cx="24" cy="10" r="2.4" fill="#22D3EE" />
-              <circle cx="38" cy="30" r="2.4" fill="#10B981" />
-              <circle cx="10" cy="30" r="2.4" fill="#A855F7" />
-            </svg>
+        <a href="#top" class="flex items-center gap-3" aria-label="ناویس پروتکل — NAVIS Protocol">
+          <span class="medal">
+            <img src="./navislogo.png" alt="نشان ناویس پروتکل" width="48" height="48" decoding="async" />
           </span>
-          <span class="brand">NAVIS <span class="grad">Protocol</span></span>
+          <span class="leading-tight">
+            <span class="brand block">NAVIS <span style="color:#8B93A7;font-weight:500">Protocol</span></span>
+            <span class="brand-sub block text-[10px]" style="color:#94A3B8">چارت‌انجین هوشمند · خزانهٔ آن‌چین</span>
+          </span>
         </a>
-        <nav class="hidden items-center gap-0.5 lg:flex" aria-label="ناوبری اصلی">
-          <a href="#about" class="nav-l">درباره</a>
+        <nav class="nav-desk items-center gap-0.5" aria-label="ناوبری اصلی">
+          <a href="#hero" class="nav-l">خانه</a>
+          <a href="#platform" class="nav-l">پلتفرم زنده</a>
           <a href="#roadmap" class="nav-l">نقشه راه</a>
           <a href="#tokenomics" class="nav-l">توکنومیکس</a>
           <a href="#presale" class="nav-l">پیش‌عرضه</a>
-          <a href="#treasury" class="nav-l">وضعیت خزانه</a>
+          <a href="#treasury" class="nav-l">خزانه</a>
+          <a href="#genesis" class="nav-l">حاکمیت</a>
         </nav>
         <div class="flex items-center gap-2">
           <div id="langWrap" class="relative">
             <button id="langToggle" type="button" class="icon-btn icon-btn-wide" aria-haspopup="true" aria-expanded="false" aria-label="انتخاب زبان">
               <span class="flag" aria-hidden="true"><svg viewBox="0 0 60 40" preserveAspectRatio="none" class="h-full w-full"><rect width="60" height="13.33" fill="#239F40"/><rect y="13.33" width="60" height="13.34" fill="#fff"/><rect y="26.67" width="60" height="13.33" fill="#DA0000"/><path d="M30 16.5c1.9 2.3 2.9 4.5 2.9 6.5 0 2.6-1.4 4.4-2.9 4.4s-2.9-1.8-2.9-4.4c0-2 1-4.2 2.9-6.5z" fill="#DA0000"/></svg></span>
-              <span id="langCurrentLabel" class="hidden text-xs text-slate-200 sm:inline">فارسی</span>
+              <span id="langCurrentLabel" class="lang-label text-xs text-slate-200">فارسی</span>
               <svg class="h-3.5 w-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
             </button>
             <div id="langMenu" class="menu hidden" role="menu" aria-label="انتخاب زبان">
@@ -321,146 +396,106 @@
               </button>
             </div>
           </div>
-          <a href="#presale" class="btn btn-1 btn-sm hidden sm:inline-flex">رزرو سهمیه</a>
-          <button id="menuToggle" type="button" class="icon-btn lg:hidden" aria-label="منو" aria-expanded="false" aria-controls="mobileMenu">
+          <span class="chip chip-cy net-badge" style="font-size:.68rem;padding:.3rem .65rem"><span class="badge-dot"></span> BSC Testnet · 97</span>
+          <button id="connectWallet" type="button" class="wallet-btn btn btn-1 btn-sm">
+            <span class="cv-full">اتصال کیف‌پول</span><span class="cv-short">اتصال</span>
+          </button>
+          <button id="menuToggle" type="button" class="icon-btn menu-btn" aria-label="منو" aria-expanded="false" aria-controls="mobileMenu">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
           </button>
         </div>
       </div>
     </div>
-    <div id="mobileMenu" class="hidden lg:hidden">
+    <div id="mobileMenu" class="hidden">
       <div class="wrap py-3">
         <nav class="grid gap-1" aria-label="ناوبری موبایل">
-          <a href="#about">دربارهٔ پروتکل</a>
+          <a href="#hero">خانه</a>
+          <a href="#trust">تضمین‌ها و بازار</a>
+          <a href="#platform">پلتفرم زنده</a>
           <a href="#roadmap">نقشه راه و فازها</a>
           <a href="#tokenomics">توکنومیکس و شفافیت</a>
-          <a href="#presale">فاز اول پیش‌عرضه</a>
-          <a href="#treasury">وضعیت خزانهٔ آن‌چین</a>
+          <a href="#presale">ریزفاز اول پیش‌عرضه</a>
+          <a href="#treasury">خزانهٔ آن‌چین</a>
+          <a href="#genesis">حاکمیت گِنیسِس و رأی‌دهی</a>
         </nav>
+        <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5" style="background:rgba(255,255,255,.02);border:1px solid var(--hair)">
+          <span class="chip chip-cy" style="font-size:.68rem;padding:.3rem .65rem"><span class="badge-dot"></span> BSC Testnet · 97</span>
+          <span class="text-[11px]" style="color:#94A3B8">پیش‌فروش گِنیسِس فعال است</span>
+        </div>
         <a href="#presale" class="btn btn-1 btn-sm mt-3 w-full">رزرو سهمیه در ریزفاز اول</a>
       </div>
     </div>
   </header>
   <main>
-    <!-- ======================= HERO ======================= -->
-    <section class="relative pt-12 pb-8 sm:pt-16">
-      <div class="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
-        <div class="lg:col-span-6">
-          <div class="reveal flex flex-wrap items-center gap-2">
-            <span class="chip chip-cy"><span class="badge-dot"></span> NAVIS Protocol</span>
-            <span class="chip chip-em"><span class="live-dot"></span> خزانهٔ آن‌چین فعال</span>
-            <span class="chip chip-vi">AI Chart Engine</span>
-          </div>
-
-          <h1 class="reveal fdisp mt-6 text-white" style="--d:60ms;font-weight:800;font-size:clamp(2.1rem,5.3vw,3.6rem);line-height:1.15">
-            NAVIS <span class="grad">Protocol</span>
-            <span class="mt-4 block" style="font-size:clamp(1.12rem,2.5vw,1.85rem);font-weight:700;line-height:1.55;color:#DCE4F0">نسل جدید چارت‌انجین و مسیردهی هوشمند مالی</span>
-          </h1>
-
-          <p class="reveal lead mt-6 max-w-xl" style="--d:120ms">
-            ترکیب هوش مصنوعی، تحلیل داده‌های کلان و خزانه‌داری آن‌چین؛ جایی که امنیت سرمایه‌گذاری با شفافیت ریاضی تضمین می‌شود.
-          </p>
-
-          <div class="reveal mt-8 flex flex-wrap items-center gap-3" style="--d:180ms">
-            <a href="#presale" class="btn btn-1 btn-lg">رزرو سهمیه در ریزفاز اول</a>
-            <a href="#platform" class="btn btn-2 btn-lg">مشاهدهٔ پلتفرم زنده</a>
-          </div>
-
-          <dl class="reveal mt-9 grid grid-cols-3 gap-3" style="--d:240ms">
-            <div class="soft px-3 py-3">
-              <dt class="label">قیمت کف تضمین‌شده</dt>
-              <dd class="kpi kpi-em mt-1" style="font-size:1.1rem">≥ $0.039</dd>
-            </div>
-            <div class="soft px-3 py-3">
-              <dt class="label">نسبت ذخیرهٔ خزانه</dt>
-              <dd class="kpi mt-1" style="font-size:1.1rem">100%</dd>
-            </div>
-            <div class="soft px-3 py-3">
-              <dt class="label">آستانهٔ ریزفاز ۱</dt>
-              <dd class="kpi kpi-cy mt-1" style="font-size:1.1rem">$0.010</dd>
-            </div>
-          </dl>
-        </div>
-
-        <div class="lg:col-span-6">
-          <div class="reveal card card-xl hl p-5 sm:p-6 float" style="--d:120ms">
-            <div class="flex items-center justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="logo" style="width:2.45rem;height:2.45rem;border-radius:.8rem">
-                  <svg viewBox="0 0 48 48" class="h-5 w-5" fill="none" aria-hidden="true">
-                    <path d="M24 3 42 13.5v21L24 45 6 34.5v-21z" stroke="#22D3EE" stroke-width="2.4" />
-                    <circle cx="24" cy="24" r="4.6" fill="#10B981" />
-                  </svg>
-                </span>
-                <div>
-                  <p class="fdisp text-sm font-bold text-white">NAVIS / USDT</p>
-                  <p class="text-[11px] text-mut">Treasury Pool · On-chain</p>
-                </div>
-              </div>
-              <span class="chip chip-em"><span class="live-dot"></span> زنده</span>
-            </div>
-
-            <div class="mt-5 flex items-end justify-between gap-4">
-              <div>
-                <p id="livePrice" class="fnum" style="font-size:clamp(1.9rem,4.6vw,2.5rem);font-weight:800;line-height:1;color:#fff">$0.04128</p>
-                <p class="mt-2 flex items-center gap-2 text-xs">
-                  <span class="fnum up">▲ 5.6%</span>
-                  <span class="text-mut">بالاتر از قیمت کف خزانه</span>
-                </p>
-              </div>
-              <div class="text-end">
-                <p class="label">NAV Floor</p>
-                <p class="fnum text-em2 text-sm font-semibold">$0.03910</p>
-                <p class="label mt-2">Reserve Ratio</p>
-                <p class="fnum text-cy2 text-sm font-semibold">100.0%</p>
-              </div>
-            </div>
-
-            <div class="relative mt-5 h-32 overflow-hidden rounded-xl border border-white/[.07] bg-black/25">
-              <div class="grid-lines" style="background-size:100% 33%,56px 100%"></div>
-              <svg viewBox="0 0 320 120" preserveAspectRatio="none" class="relative h-full w-full" aria-hidden="true">
-                <defs>
-                  <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#10B981" stop-opacity=".38" />
-                    <stop offset="1" stop-color="#10B981" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-                <line x1="0" y1="88" x2="320" y2="88" stroke="#34D399" stroke-dasharray="5 6" stroke-opacity=".5" />
-                <path d="M0 98 20 92 40 86 60 90 80 76 100 80 120 68 140 72 160 58 180 62 200 50 220 54 240 42 260 46 280 34 300 38 320 28 V120 H0 Z" fill="url(#heroFill)" />
-                <path d="M0 98 20 92 40 86 60 90 80 76 100 80 120 68 140 72 160 58 180 62 200 50 220 54 240 42 260 46 280 34 300 38 320 28" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" />
-                <circle cx="320" cy="28" r="3.4" fill="#34D399" />
-              </svg>
-              <span class="chip chip-em" style="position:absolute;bottom:.55rem;inset-inline-start:.55rem;font-size:.62rem;padding:.18rem .55rem">NAV Floor $0.03910</span>
-            </div>
-
-            <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-              <div class="soft px-2 py-2.5"><p class="label">خزانه</p><p class="fnum mt-0.5 text-sm text-white">$18.42M</p></div>
-              <div class="soft px-2 py-2.5"><p class="label">سرمایه‌گذاران</p><p class="fnum mt-0.5 text-sm text-white">12,480</p></div>
-              <div class="soft px-2 py-2.5"><p class="label">بازخرید</p><p class="fnum mt-0.5 text-sm text-white">تضمینی</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ======================= COUNTDOWN + TRUST ======================= -->
-    <section class="relative pb-2">
+    <!-- ======================= HERO · GENESIS PRESALE ======================= -->
+    <section id="hero" class="snap relative">
       <div class="wrap">
-        <div class="reveal card card-xl hl p-5 sm:p-7">
-          <div class="grid gap-7 lg:grid-cols-12 lg:items-center">
-            <div class="lg:col-span-5">
-              <span class="chip chip-amber"><span class="badge-dot"></span> Presale · Phase 1</span>
-              <h2 class="h2s mt-4" style="font-size:clamp(1.3rem,2.6vw,1.85rem)">شمارش معکوس تا بسته‌شدن ریزفاز ۱</h2>
-              <p class="lead mt-3" style="font-size:.92rem;line-height:1.95">
-                ریزفاز ۱ با ۷۴٪ تخفیف نسبت به قیمت کف خزانه و حجم محدود ۴۰۰ میلیون توکن در حال تخصیص است.
-              </p>
-              <div class="mt-5 flex flex-wrap items-center gap-3">
-                <a href="#presale" class="btn btn-1 btn-sm">رزرو سهمیه</a>
-                <span class="text-xs text-mut">رزرو بدون پرداخت · تسویه با قرارداد خزانه</span>
+
+        <!-- ---------- brand emblem · centred ---------- -->
+        <div class="reveal flex justify-center">
+          <img class="hero-mark" src="./navisprotocol.png" alt="ناویس پروتکل — NAVIS Protocol"
+               width="1942" height="809" decoding="async" fetchpriority="high" />
+        </div>
+
+        <!-- ---------- headline + protocol description · centred ---------- -->
+        <div class="mx-auto mt-7 max-w-3xl text-center">
+          <h1 class="reveal fdisp text-white" style="--d:60ms;font-weight:600;font-size:clamp(1.7rem,4.1vw,2.9rem);line-height:1.45;letter-spacing:-.02em">
+            آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار
+          </h1>
+          <p class="reveal lead mx-auto mt-5 max-w-2xl" style="--d:120ms">
+            ناویس پروتکل (NAVIS Protocol) زیرساخت نسل بعدی بازارهای مالی است: چارت‌انجین حرفه‌ای، مسیریابی هوشمند سفارش‌ها و
+            خزانهٔ شفاف آن‌چین با کف قیمت تضمین‌شده. هر عددی که در این صفحه می‌بینید از قراردادهای هوشمند خوانده می‌شود و
+            سرمایهٔ کاربران با ذخیرهٔ تتر روی زنجیره پشتیبانی می‌شود.
+          </p>
+        </div>
+
+        <!-- ---------- Genesis presale · single-column block ---------- -->
+        <div class="reveal glass gold-ring mt-9 p-5 sm:p-7" style="--d:180ms">
+
+          <div class="text-center">
+            <span class="eyebrow">Genesis Presale · NAVIS / USDT</span>
+            <h2 class="fdisp mt-3 text-white" style="font-weight:600;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.6">
+              فروش توکن‌های جنیسیس · فاز <span id="phaseNumber" class="fnum">۱</span>
+            </h2>
+            <p class="mt-1 text-[11px]" style="color:#94A3B8">شمارهٔ فاز طبق قرارداد هوشمند پیش‌فروش · تسویه با USDT روی BSC Testnet (۹۷)</p>
+          </div>
+
+          <!-- phase progress: percent · final amount · sold amount -->
+          <div class="mt-6">
+            <div class="bar-head">
+              <span>تخصیص نهایی فاز · <b class="fnum" style="color:#fff">۴۰۰,۰۰۰,۰۰۰ NAVIS</b></span>
+              <span class="fnum" style="color:#FFC700">۲۶٪ تکمیل</span>
+            </div>
+            <div class="meter meter-lg mt-3"><i style="width:26%"></i></div>
+            <div class="bar-foot">
+              <div>
+                <span class="label">درصد تکمیل‌شده</span>
+                <span class="v" style="color:#FFC700">۲۶٪</span>
+              </div>
+              <div>
+                <span class="label">مقدار نهایی توکن‌ها</span>
+                <span class="v">۴۰۰,۰۰۰,۰۰۰</span>
+              </div>
+              <div>
+                <span class="label">توکن‌های فروش‌رفته</span>
+                <span class="v">۱۰۴,۰۰۰,۰۰۰</span>
               </div>
             </div>
+          </div>
 
-            <div class="lg:col-span-7">
-              <div id="countdown" class="cd-wrap" role="timer" aria-live="off" aria-label="شمارش معکوس پیش‌عرضه">
+          <div class="divider-glow mt-6"></div>
+
+          <!-- buy · guaranteed treasury floor -->
+          <div class="gx-grid">
+
+            <!-- ---------- left · buy panel ---------- -->
+            <div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="label">زمان باقی‌مانده تا پایان فاز</span>
+                <span class="chip chip-gold"><span class="live-dot"></span> زنده</span>
+              </div>
+
+              <div id="countdown" class="cd-wrap mt-3" role="timer" aria-live="off" aria-label="شمارش معکوس پایان فاز پیش‌فروش">
                 <div class="count-cell">
                   <span class="cd-n" data-unit="days">18</span>
                   <span class="cd-l">روز</span>
@@ -479,44 +514,130 @@
                 </div>
               </div>
 
-              <div class="mt-5">
-                <div class="flex items-center justify-between text-[11px] text-mut">
-                  <span>۴۰۰,۰۰۰,۰۰۰ NAVIS تخصیص ریزفاز ۱</span>
-                  <span class="fnum">۲۶٪ تکمیل</span>
+              <div class="divider-glow mt-5"></div>
+
+              <div class="grid gap-2">
+                <div class="flex items-center justify-between text-sm">
+                  <span style="color:#94A3B8">قیمت هر توکن</span>
+                  <span id="presalePrice" class="fnum text-white">$0.010</span>
                 </div>
-                <div class="meter meter-lg mt-2"><i style="width:26%"></i></div>
+                <label class="mt-1 block text-xs" for="usdtAmount" style="color:#94A3B8">مبلغ تتر (USDT)</label>
+                <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-full rounded-xl px-3 py-3 text-white outline-none" style="border:1px solid var(--hair2);background:rgba(255,255,255,.03)" />
+                <div class="flex items-center justify-between text-sm">
+                  <span style="color:#94A3B8">توکن تخمینی</span>
+                  <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span style="color:#94A3B8">موجودی ناویس شما</span>
+                  <span id="walletBalance" class="fnum" style="color:#ADCEFF">0 NAVIS</span>
+                </div>
               </div>
+
+              <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید در پیش‌فروش</button>
+              <p id="walletStatus" class="mt-3 text-center text-xs" style="color:#94A3B8">کیف‌پولی متصل نیست</p>
+              <p id="networkStatus" class="mt-1 text-center text-[11px]" style="color:#94A3B8">شبکه: متصل نیست</p>
             </div>
+
+            <!-- ---------- right · guaranteed treasury floor ---------- -->
+            <div class="floor-hl p-5">
+              <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+                <div>
+                  <p class="label">قیمت کف تضمین‌شدهٔ خزانه · NAV Floor</p>
+                  <p class="kpi kpi-em mt-1" style="font-size:clamp(1.7rem,3.4vw,2.15rem)">≥ $0.039</p>
+                  <p class="mt-1 text-[11px]" style="color:#94A3B8">مسیر فقط صعودی · پشتیبانی ۱۰۰٪ با تتر</p>
+                </div>
+                <ul class="grid gap-1.5 text-xs" style="color:#CBD5E1">
+                  <li class="flex items-center justify-between gap-8"><span style="color:#8B93A7">نسبت ذخیره</span><span class="fnum" style="color:#ADCEFF">100%</span></li>
+                  <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">قیمت فاز جاری</span><span class="fnum" style="color:#FFC700">$0.010</span></li>
+                  <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">تخفیف نسبت به کف</span><span class="fnum">۷۴٪</span></li>
+                </ul>
+              </div>
+              <div class="divider-glow my-4"></div>
+              <p class="text-[11px] leading-6" style="color:#94A3B8">
+                اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود · هر توکن خریداری‌شده تا لحظهٔ تسویه با ذخیرهٔ تتر خزانه و کف قیمت
+                <span style="color:#ADCEFF">NAV Floor</span> پشتیبانی می‌شود. قرارداد پیش‌فروش برای
+                <span style="color:#ADCEFF">BSC Testnet (۹۷)</span> پیش‌بینی شده است.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ======================= TRUST BAND ======================= -->
+    <section id="trust" class="snap pb-6 pt-2">
+      <div class="wrap">
+        <div class="reveal text-center">
+          <span class="eyebrow">Verified · On-Chain · Auditable</span>
+          <h2 class="h2s mt-4">تضمین‌های قراردادی و <span class="grad-gold">امنیت سرمایه</span></h2>
+          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.95rem">
+            هر عددی که در این صفحه زنده است از قراردادهای آن‌چین و رابط‌های عمومی خوانده می‌شود؛ خزانه، کف قیمت و بازخرید همه قابل حسابرسی‌اند.
+          </p>
+        </div>
+
+        <div class="reveal tape mt-7" aria-hidden="true">
+          <div class="tape-track">
+            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
+            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
+            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
+            <span class="tape-item">ریزفاز ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · تخفیف ۷۴٪</span>
+            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
+            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
+            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
+            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
+            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
+            <span class="tape-item">ریزفاز ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · تخفیف ۷۴٪</span>
+            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
+            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
           </div>
         </div>
 
-        <div class="reveal mt-4 grid gap-3 sm:grid-cols-3">
-          <div class="soft flex items-center gap-3 px-4 py-3.5">
-            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#34D399" stroke-width="1.7" /><path d="m9 12 2 2 4-4" stroke="#34D399" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            </span>
-            <div>
-              <p class="text-sm font-semibold text-white">قرارداد تأییدشده</p>
-              <p class="text-[11px] text-mut">Verified Smart Contract</p>
+        <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="reveal soft lift p-4">
+            <div class="flex items-center justify-between gap-2">
+              <p class="label">بازار خزانه · NAVIS / USDT</p>
+              <span class="live-dot"></span>
             </div>
+            <p id="livePrice" class="fnum mt-2" style="font-size:clamp(1.45rem,3vw,1.85rem);font-weight:800;line-height:1.1;color:#fff">$0.04128</p>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <span class="fnum up text-xs">▲ 5.6%</span>
+              <span class="text-[10px]" style="color:#94A3B8">NAV Floor $0.03910</span>
+            </div>
+            <svg viewBox="0 0 320 56" preserveAspectRatio="none" class="mt-3 h-10 w-full" aria-hidden="true">
+              <defs>
+                <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#FFC700" stop-opacity=".36" />
+                  <stop offset="1" stop-color="#FFC700" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="42" x2="320" y2="42" stroke="#FFC700" stroke-dasharray="5 6" stroke-opacity=".45" />
+              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6 V56 H0 Z" fill="url(#sparkFill)" />
+              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6" fill="none" stroke="#FFC700" stroke-width="2" stroke-linecap="round" />
+            </svg>
           </div>
-          <div class="soft flex items-center gap-3 px-4 py-3.5">
+
+          <div class="reveal soft lift p-4">
             <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#22D3EE" stroke-width="1.7" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#22D3EE" stroke-width="1.7" stroke-linecap="round" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#FFC700" stroke-width="1.7" /><path d="m9 12 2 2 4-4" stroke="#FFC700" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
             </span>
-            <div>
-              <p class="text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
-              <p class="text-[11px] text-mut">Smart Liquidity Lock</p>
-            </div>
+            <p class="mt-3 text-sm font-semibold text-white">قرارداد تأییدشده</p>
+            <p class="text-[11px]" style="color:#94A3B8">Verified Smart Contract · BSC Testnet</p>
           </div>
-          <div class="soft flex items-center gap-3 px-4 py-3.5">
+
+          <div class="reveal soft lift p-4">
             <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="#A855F7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#00F0FF" stroke-width="1.7" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#00F0FF" stroke-width="1.7" stroke-linecap="round" /></svg>
             </span>
-            <div>
-              <p class="text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
-              <p class="text-[11px] text-mut">Auditable Treasury</p>
-            </div>
+            <p class="mt-3 text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
+            <p class="text-[11px]" style="color:#94A3B8">Smart Liquidity Lock · ۱۲ ماه</p>
+          </div>
+
+          <div class="reveal soft lift p-4">
+            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="#4D7CFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <p class="mt-3 text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
+            <p class="text-[11px]" style="color:#94A3B8">Auditable Treasury · ذخیرهٔ ۱۰۰٪ تتر</p>
           </div>
         </div>
       </div>
@@ -538,7 +659,7 @@
             <span class="dot" style="background:#FBBF24"></span>
             <span class="dot" style="background:#34D399"></span>
             <span class="fdisp ms-2 text-xs text-slate-300">NAVIS Terminal</span>
-            <div class="hidden flex-wrap items-center gap-2 sm:flex" style="margin-inline-start:auto">
+            <div class="term-chips flex-wrap items-center gap-2" style="margin-inline-start:auto">
               <span class="chip" style="font-size:.66rem;padding:.24rem .6rem">AI Engine · v2.4</span>
               <span class="chip chip-em" style="font-size:.66rem;padding:.24rem .6rem"><span class="live-dot"></span> On-Chain</span>
               <span class="chip chip-vi" style="font-size:.66rem;padding:.24rem .6rem">Multi-Chain</span>
@@ -1080,39 +1201,34 @@
             </div>
           </div>
         </div>
-        <div class="reveal card card-xl mt-6 p-6 sm:p-8">
+        <div class="reveal glass gold-ring mt-6 p-6 sm:p-8">
           <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div class="lg:col-span-7">
-              <h3 class="fdisp text-xl font-bold text-white">اتصال کیف‌پول و رزرو سهمیه</h3>
-              <p class="mt-3 text-sm leading-8" style="color:#C7D0DE">با اتصال کیف‌پول، سهمیهٔ ریزفاز جاری برای شما رزرو می‌شود و تسویه به‌صورت مستقیم با قرارداد هوشمند خزانه انجام می‌گیرد.</p>
-              <ol class="mt-5 grid gap-3 text-sm" style="color:#C7D0DE">
-                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#DDD6FE">1</span> اتصال کیف‌پول سازگار (MetaMask / WalletConnect)</li>
-                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#DDD6FE">2</span> تأیید شبکه و مشاهدهٔ قیمت لحظه‌ای ریزفاز</li>
-                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#DDD6FE">3</span> رزرو سهمیه و دریافت توکن پس از تسویهٔ خزانه</li>
+              <span class="eyebrow">Genesis Phase 1</span>
+              <h3 class="fdisp mt-3 text-xl font-bold text-white">مسیر مشارکت در ریزفاز ۱</h3>
+              <p class="mt-3 text-sm leading-8" style="color:#CBD5E1">اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود؛ سهمیهٔ ریزفاز جاری برای شما رزرو می‌شود و تسویه مستقیم با قرارداد هوشمند خزانه صورت می‌گیرد.</p>
+              <ol class="mt-5 grid gap-3 text-sm" style="color:#CBD5E1">
+                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۱</span> اتصال کیف‌پول سازگار (MetaMask / WalletConnect) از دکمهٔ بالای صفحه</li>
+                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۲</span> تأیید شبکهٔ BSC Testnet و مشاهدهٔ قیمت لحظه‌ای ریزفاز</li>
+                <li class="flex items-center gap-3"><span class="ico fnum" style="width:1.9rem;height:1.9rem;border-radius:999px;font-size:.78rem;color:#FFE9A3">۳</span> رزرو سهمیه از ویجت گِنیسِس و دریافت توکن پس از تسویهٔ خزانه</li>
               </ol>
             </div>
 
             <div class="lg:col-span-5">
               <div class="soft p-5">
                 <div class="flex items-center justify-between text-sm">
-                  <span class="text-mut">ریزفاز فعال</span>
-                  <span class="chip chip-em">ریزفاز ۱</span>
+                  <span style="color:#94A3B8">ریزفاز فعال</span>
+                  <span class="chip chip-gold">ریزفاز ۱</span>
                 </div>
-                <div class="mt-4 flex items-center justify-between text-sm">
-                  <span class="text-mut">قیمت هر توکن</span>
-                  <span class="fnum text-white">$0.010</span>
-                </div>
-
-                <label class="mt-5 block text-xs text-mut" for="usdtAmount">مبلغ تتر (USDT)</label>
-                <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-white outline-none" />
-
-                <div class="mt-3 flex items-center justify-between text-sm">
-                  <span class="text-mut">توکن تخمینی</span>
-                  <span id="tokenEstimate" class="fnum" style="color:#6EE7B7">100,000 NAVIS</span>
-                </div>
-
-                <button id="connectWallet" type="button" class="wallet-btn btn btn-1 mt-5 w-full">اتصال کیف‌پول</button>
-                <p id="walletStatus" class="mt-3 text-center text-xs text-mut">کیف‌پولی متصل نیست</p>
+                <ul class="mt-4 grid gap-2 text-sm">
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">قیمت هر توکن</span><span class="fnum text-white">$0.010</span></li>
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">حداقل خرید</span><span class="fnum text-white">۱۰۰ USDT</span></li>
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">تخصیص ریزفاز ۱</span><span class="fnum text-white">۴۰۰,۰۰۰,۰۰۰ NAVIS</span></li>
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">قفل بازخرید</span><span class="fnum" style="color:#FFC700">۱۲ ماه</span></li>
+                  <li class="flex items-center justify-between"><span style="color:#94A3B8">قیمت کف تضمین‌شده</span><span class="fnum" style="color:#00F0FF">$0.03910</span></li>
+                </ul>
+                <a href="#hero" class="btn btn-1 mt-5 w-full">رزرو سهمیه در ویجت گِنیسِس</a>
+                <p class="mt-3 text-center text-xs" style="color:#94A3B8">اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود</p>
               </div>
             </div>
           </div>
@@ -1199,6 +1315,117 @@
         </div>
       </div>
     </section>
+    <!-- ======================= GENESIS GOVERNANCE ======================= -->
+    <section id="genesis" class="sec">
+      <div class="wrap">
+        <div class="reveal card card-xl p-6 sm:p-8">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="live-dot" aria-hidden="true"></span>
+              <div>
+                <h2 class="h2s" style="font-size:clamp(1.2rem,2.4vw,1.6rem)">حاکمیت گِنیسِس و رأی‌دهی آن‌چین</h2>
+                <p class="text-xs text-mut">Genesis Governance &amp; On-Chain Voting</p>
+              </div>
+            </div>
+            <div class="fnum flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px]" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#CBD5E1">
+              <span class="badge-dot"></span>
+              <span id="gNetwork">زنجیره: نامشخص</span>
+              <span style="color:#475569">·</span>
+              <button id="gRefresh" type="button" class="btn btn-2 px-3 py-1 text-[11px]">به‌روزرسانی</button>
+            </div>
+          </div>
+
+          <p class="lead mt-5">
+            دارندگان گِنیسِس (خریداران دست‌اول پیش‌عرضه) سهمیهٔ رأی خود را مستقیماً از قرارداد
+            <span class="fnum">NAVToken</span> می‌خوانند: هر کیف‌پولی که هنوز توکن دست‌اول خود را جابه‌جا نکرده باشد،
+            رأی‌دهندهٔ گِنیسِس شناخته می‌شود.
+          </p>
+
+          <div class="mt-6 grid gap-4 lg:grid-cols-3">
+            <div class="soft p-5">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-mut">وضعیت رأی‌دهی کیف‌پول شما</span>
+                <span id="gStatus" class="chip">در حال خواندن…</span>
+              </div>
+              <p class="mt-4 text-xs text-mut">کیف‌پول</p>
+              <p id="gWallet" class="fnum mt-1 text-sm" style="color:#CBD5E1">کیف‌پولی متصل نیست</p>
+              <p class="mt-4 text-xs text-mut">موجودی NAVIS شما</p>
+              <p id="gBalance" class="kpi mt-1" style="font-size:1.35rem">— NAVIS</p>
+              <p class="mt-4 text-xs text-mut">سهمیهٔ گِنیسِس (دست‌اول)</p>
+              <p id="gEligible" class="fnum mt-1 text-sm" style="color:#DDD6FE">—</p>
+              <p class="mt-4 text-xs text-mut">پایان قفل بازخرید</p>
+              <p id="gUnlock" class="fnum mt-1 text-sm" style="color:#CBD5E1">—</p>
+            </div>
+
+            <div class="soft p-5">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-mut">ساختار حاکمیت</span>
+                <span class="chip chip-cy">Ownable</span>
+              </div>
+              <ul class="mt-4 grid gap-1">
+                <li class="row"><span class="k">مالک خزانه</span><a id="gOwner" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+                <li class="row"><span class="k">مالک پیش‌عرضه</span><a id="gPresaleOwner" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+                <li class="row"><span class="k">Timelock (ارتقا)</span><span id="gTimelock" class="v fnum">در انتظار استقرار</span></li>
+                <li class="row"><span class="k">Multisig (۵ از ۹)</span><span id="gMultisig" class="v fnum">در انتظار استقرار</span></li>
+              </ul>
+              <p class="mt-4 text-[11px] text-mut">تغییر پارامترهای خزانه و پیش‌عرضه تنها از راه مالکیت (Ownable) انجام می‌شود؛ پس از انتشار، مالکیت به Timelock و Multisig منتقل می‌گردد.</p>
+            </div>
+
+            <div class="soft p-5">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-mut">رأی‌گیری پیشنهادها</span>
+                <span class="chip chip-em">Snapshot</span>
+              </div>
+              <p class="mt-4 text-xs text-mut">۱ رأی = ۱ NAVIS گِنیسِس · آستانهٔ مشارکت ۵٪ عرضهٔ در گردش · اجرای پیشنهادها پس از Timelock.</p>
+              <a id="gSnapshot" href="https://snapshot.org/" target="_blank" rel="noopener" class="btn btn-1 mt-4 w-full">مشاهدهٔ فضای رأی‌گیری</a>
+              <p class="mt-3 text-[11px] text-mut">آدرس فضای گِنیسِس پس از انتشار اعلام می‌شود؛ رأی‌گیری روی کیف‌پول نگه‌دارندهٔ توکن دست‌اول انجام می‌گیرد.</p>
+            </div>
+          </div>
+
+          <div class="divider-soft mt-7"></div>
+
+          <h3 class="h2s mt-6" style="font-size:clamp(1.05rem,2vw,1.3rem)">جریان سرمایهٔ پیش‌عرضه: کف NAV در برابر مازاد</h3>
+          <p class="mt-2 text-xs text-mut">هر پرداخت تتر خودکار تقسیم می‌شود: بخش کف به خزانه می‌رود و مازاد (پریمیوم) به استخر نقدینگی و رشد.</p>
+
+          <div class="mt-5 grid gap-3 sm:grid-cols-3">
+            <div class="soft p-4">
+              <p class="text-xs text-mut">مجموع تتر در دو مقصد</p>
+              <p id="tFlowBuyers" class="kpi mt-2" style="font-size:1.35rem">$—</p>
+            </div>
+            <div class="soft p-4">
+              <p class="text-xs text-mut">سهم کف NAV → خزانه</p>
+              <p id="tFlowTreasury" class="kpi kpi-em mt-2" style="font-size:1.35rem">$—</p>
+            </div>
+            <div class="soft p-4">
+              <p class="text-xs text-mut">مازاد → استخر نقدینگی و رشد</p>
+              <p id="tFlowLiquidity" class="kpi mt-2" style="font-size:1.35rem;color:#DDD6FE">$—</p>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="flex h-2 w-full overflow-hidden rounded-full" style="background:rgba(255,255,255,.06)">
+              <span id="tFlowBarTreasury" style="width:0%;background:#10B981"></span>
+              <span id="tFlowBarLiquidity" style="width:0%;background:#8B5CF6"></span>
+            </div>
+            <p class="mt-2 text-[11px] text-mut">تقسیم فعلی: <span id="tFlowSplit" class="fnum">در حال خواندن…</span></p>
+          </div>
+          <div class="divider-soft mt-7"></div>
+
+          <h3 class="h2s mt-6" style="font-size:clamp(1.05rem,2vw,1.3rem)">قراردادها و اعداد زنده</h3>
+          <ul class="mt-4 grid gap-1 sm:grid-cols-2">
+            <li class="row"><span class="k">NAVIS Token</span><a id="cNav" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">Presale</span><a id="cPresale" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">Treasury</span><a id="cTreasury" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">USDT</span><a id="cUsdt" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">Liquidity &amp; Growth Pool</span><a id="cLp" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">MarketMaker</span><a id="cMarketMaker" class="v fnum" href="#" style="color:#67E8F9">—</a></li>
+            <li class="row"><span class="k">NAV Floor (زنده)</span><span id="tFloorLive" class="v fnum" style="color:#6EE7B7">—</span></li>
+            <li class="row"><span class="k">عرضهٔ کل NAVIS</span><span id="tSupplyLive" class="v fnum">—</span></li>
+          </ul>
+          <p id="liveDataStatus" class="mt-5 text-center text-xs text-mut">رابطهٔ زندهٔ آن‌چین: در حال بارگذاری…</p>
+        </div>
+      </div>
+    </section>
     <!-- ======================= COMMUNITY ======================= -->
     <section id="community" class="sec">
       <div class="wrap">
@@ -1277,6 +1504,7 @@
             <li><a href="#tokenomics" style="transition:color .25s">توکنومیکس و شفافیت</a></li>
             <li><a href="#presale" style="transition:color .25s">فاز اول پیش‌عرضه</a></li>
             <li><a href="#treasury" style="transition:color .25s">وضعیت خزانهٔ آن‌چین</a></li>
+            <li><a href="#genesis" style="transition:color .25s">حاکمیت گِنیسِس</a></li>
           </ul>
         </div>
 
@@ -1305,6 +1533,443 @@
   <div id="toast" role="status" aria-live="polite" class="pointer-events-none">
     <span id="toastText">—</span>
   </div>
+  <!-- ======================= LIVE ON-CHAIN READER =======================
+       Fills the #genesis section: wallet voting status, governance and
+       contract addresses, and the presale split flow (NAV floor vs premium).
+       Degrades to the page's demo values when there is no wallet, no
+       deployment file or no reachable RPC. Uses the global `ethers` bundle.
+       ==================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      var host = document.getElementById("liveDataStatus");
+      if (!host) { return; }
+
+      var ID = {
+        network: "gNetwork", status: "gStatus", wallet: "gWallet", balance: "gBalance",
+        eligible: "gEligible", unlock: "gUnlock", owner: "gOwner", presaleOwner: "gPresaleOwner",
+        timelock: "gTimelock", multisig: "gMultisig", snapshot: "gSnapshot", refresh: "gRefresh",
+        buyers: "tFlowBuyers", treasury: "tFlowTreasury", liquidity: "tFlowLiquidity",
+        split: "tFlowSplit", barT: "tFlowBarTreasury", barL: "tFlowBarLiquidity",
+        nav: "cNav", presale: "cPresale", treasuryAddr: "cTreasury", usdt: "cUsdt",
+        pool: "cLp", mm: "cMarketMaker", floor: "tFloorLive", supply: "tSupplyLive"
+      };
+
+      var ZERO = "0x0000000000000000000000000000000000000000";
+
+      var CHAINS = {
+        31337: {
+          short: "Localhost 31337", rpc: "http://127.0.0.1:8545", explorer: "",
+          json: ["deployments/localhost.json", "../navois-contracts/deployments/localhost.json"]
+        },
+        97: {
+          short: "BSC Testnet 97", rpc: "https://data-seed-prebsc-1-s1.binance.org:8545",
+          explorer: "https://testnet.bscscan.com/address/",
+          json: ["deployments/bscTestnet.json", "../navois-contracts/deployments/bscTestnet.json"]
+        },
+        56: {
+          short: "BSC Mainnet 56", rpc: "https://bsc-dataseed.binance.org",
+          explorer: "https://bscscan.com/address/",
+          json: ["deployments/bscMainnet.json", "../navois-contracts/deployments/bscMainnet.json"]
+        }
+      };
+      /* Human-readable ABI fragments: read by ethers v6 and v5 alike. */
+      var SNIPPETS = {
+        nav: [
+          "function balanceOf(address) view returns (uint256)",
+          "function totalSupply() view returns (uint256)",
+          "function firstHandEligibility(address) view returns (uint256)",
+          "function getGenesisBalance(address) view returns (uint256)",
+          "function isGenesisHolder(address) view returns (bool)",
+          "function redemptionLockExpiresAt(address) view returns (uint256)"
+        ],
+        treasury: [
+          "function navFloor() view returns (uint256)",
+          "function getNavFloorPrice() view returns (uint256)",
+          "function reserveBalance() view returns (uint256)",
+          "function getTotalReserve() view returns (uint256)",
+          "function owner() view returns (address)",
+          "function lockPeriod() view returns (uint256)",
+          "function navToken() view returns (address)",
+          "function usdt() view returns (address)"
+        ],
+        presale: [
+          "function owner() view returns (address)",
+          "function treasuryVault() view returns (address)",
+          "function liquidityPool() view returns (address)"
+        ],
+        erc20: [
+          "function balanceOf(address) view returns (uint256)",
+          "function decimals() view returns (uint8)"
+        ]
+      };
+
+      function node(key) { return document.getElementById(ID[key]); }
+      function text(key, value) { var el = node(key); if (el) { el.textContent = value; } }
+      function pill(key, value, cls) {
+        var el = node(key);
+        if (!el) { return; }
+        el.textContent = value;
+        el.className = cls || "chip";
+      }
+      function short(address) {
+        return typeof address === "string" && address.length === 42
+          ? address.slice(0, 6) + "\u2026" + address.slice(-4)
+          : "\u2014";
+      }
+      function known(address) {
+        return typeof address === "string" && address.length === 42 && address !== ZERO;
+      }
+      function link(key, address, explorer) {
+        var el = node(key);
+        if (!el) { return; }
+        el.textContent = known(address) ? short(address) : "\u2014";
+        if (known(address)) { el.title = address; }
+        if (el.tagName !== "A") { return; }
+        if (known(address)) {
+          el.href = (explorer || "") + address;
+          el.target = "_blank";
+          el.rel = "noopener";
+        } else if (typeof el.removeAttribute === "function") {
+          el.removeAttribute("href");
+        }
+      }
+      function lib() { return window.ethers || null; }
+      function amount(value, digits) {
+        var ethers = lib();
+        if (!ethers || value === null || value === undefined) { return 0; }
+        try { return Number(ethers.formatUnits(value, digits)); } catch (err) { return 0; }
+      }
+      function usd(value, digits, places) {
+        var total = amount(value, digits);
+        var body = total.toLocaleString("en-US", {
+          minimumFractionDigits: places || 0,
+          maximumFractionDigits: places || (Math.abs(total) >= 1000 ? 2 : 5)
+        });
+        return "$" + body;
+      }
+      function navis(value) {
+        return amount(value, 18).toLocaleString("en-US", { maximumFractionDigits: 2 });
+      }
+      function isZeroValue(value) {
+        if (value === null || value === undefined) { return true; }
+        var ethers = lib();
+        try {
+          if (ethers && ethers.BigNumber && ethers.BigNumber.isBigNumber(value)) {
+            return value.isZero();
+          }
+          return BigInt(value) === BigInt(0);
+        } catch (err) { return !value; }
+      }
+      function days(seconds) { return Math.round(Number(seconds || 0) / 86400); }
+      function lockDate(seconds) {
+        var value = Number(seconds || 0);
+        if (!value) { return "\u2014"; }
+        try { return new Date(value * 1000).toLocaleDateString("fa-IR"); } catch (err) { return "\u2014"; }
+      }
+      function note(message) { host.textContent = message; }
+      /* The ethers UMD bundle is a plain <script> in <head>; poll briefly in case
+         it is still in flight, then give up and keep the page's demo values. */
+      function whenEthers(done) {
+        var tries = 0;
+        (function poll() {
+          if (lib()) { done(lib()); return; }
+          if (++tries > 25) { done(null); return; }
+          var timer = window.setTimeout(poll, 200);
+          if (timer && typeof timer.unref === "function") { timer.unref(); }
+        })();
+      }
+      /* First deployment file that loads wins (landing copy, then contracts repo). */
+      function deployment(chain) {
+        return chain.json.reduce(function (chainOfPromises, path) {
+          return chainOfPromises.catch(function () {
+            return window.fetch(path, { cache: "no-store" }).then(function (res) {
+              if (!res.ok) { throw new Error(path + ": HTTP " + res.status); }
+              return res.json();
+            });
+          });
+        }, Promise.reject(new Error("no deployment json")));
+      }
+      /* ------------------------------ context ------------------------------ */
+      var ctx = {
+        chainId: 0, chain: null, provider: null, addresses: {},
+        treasury: null, nav: null, presale: null, usdtDecimals: 6
+      };
+
+      function chainId() {
+        var ethereum = window.ethereum;
+        if (ethereum && typeof ethereum.request === "function") {
+          return ethereum.request({ method: "eth_chainId" })
+            .then(function (hex) { return Number(hex); })
+            .catch(function () { return fallbackChainId(); });
+        }
+        return Promise.resolve(fallbackChainId());
+      }
+      function fallbackChainId() {
+        var where = window.location || {};
+        var match = /[?&]chain=(\d+)/.exec(where.search || "");
+        if (match) { return Number(match[1]); }
+        var hostname = where.hostname || "";
+        var local = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "" ||
+          where.protocol === "file:";
+        return local ? 31337 : 97;
+      }
+      /* Injected wallet when present (eth_accounts never prompts), else the RPC. */
+      function makeProvider(ethers) {
+        var ethereum = window.ethereum;
+        try {
+          if (ethereum && ethers.BrowserProvider) { return new ethers.BrowserProvider(ethereum); }
+          if (ethereum && ethers.providers && ethers.providers.Web3Provider) {
+            return new ethers.providers.Web3Provider(ethereum);
+          }
+          if (ctx.chain && ethers.JsonRpcProvider) { return new ethers.JsonRpcProvider(ctx.chain.rpc); }
+        } catch (err) { return null; }
+        return null;
+      }
+      function walletAccounts() {
+        var ethereum = window.ethereum;
+        if (ethereum && typeof ethereum.request === "function") {
+          return ethereum.request({ method: "eth_accounts" })
+            .then(function (list) { return list || []; })
+            .catch(function () { return []; });
+        }
+        return Promise.resolve([]);
+      }
+      function contract(ethers, address, abi) {
+        if (!known(address) || !ctx.provider) { return null; }
+        try { return new ethers.Contract(address, abi, ctx.provider); } catch (err) { return null; }
+      }
+      function read(target, method, args) {
+        if (!target || typeof target[method] !== "function") { return Promise.resolve(null); }
+        try {
+          return Promise.resolve(target[method].apply(target, args || []))
+            .catch(function () { return null; });
+        } catch (err) { return Promise.resolve(null); }
+      }
+      function money(value, places) {
+        var total = Number(value || 0);
+        var body = total.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: places || (Math.abs(total) >= 1000 ? 2 : 4)
+        });
+        return "$" + body;
+      }
+
+      /* --------------------------- static panels --------------------------- */
+      function paintAddresses() {
+        var explorer = ctx.chain.explorer;
+        link("nav", ctx.addresses.nav, explorer);
+        link("presale", ctx.addresses.presale, explorer);
+        link("treasuryAddr", ctx.addresses.treasury, explorer);
+        link("usdt", ctx.addresses.usdt, explorer);
+        link("pool", ctx.addresses.pool, explorer);
+        link("mm", ctx.addresses.marketMaker, explorer);
+      }
+      /* Optional governance block of the deployment file (filled after launch). */
+      function paintGovernance(info) {
+        var extra = (info && info.governance) || {};
+        if (extra.timelock) { text("timelock", short(extra.timelock)); }
+        if (extra.multisig) { text("multisig", short(extra.multisig)); }
+        if (known(extra.treasuryOwner)) { link("owner", extra.treasuryOwner, ctx.chain.explorer); }
+        if (known(extra.presaleOwner)) { link("presaleOwner", extra.presaleOwner, ctx.chain.explorer); }
+        var snapshot = node("snapshot");
+        if (snapshot && extra.snapshot) { snapshot.href = extra.snapshot; }
+      }
+      /* ------------------------- genesis voting card ------------------------ */
+      function paintWallet(nav) {
+        return walletAccounts().then(function (accounts) {
+          var wallet = accounts && accounts[0];
+          if (!known(wallet)) {
+            text("wallet", "کیف‌پولی متصل نیست");
+            pill("status", "کیف‌پول متصل نیست");
+            return null;
+          }
+          text("wallet", short(wallet));
+          return Promise.all([
+            read(nav, "balanceOf", [wallet]),
+            read(nav, "getGenesisBalance", [wallet]),
+            read(nav, "firstHandEligibility", [wallet]),
+            read(nav, "redemptionLockExpiresAt", [wallet]),
+            read(ctx.treasury, "lockPeriod", [])
+          ]).then(function (values) {
+            text("balance", navis(values[0]) + " NAVIS");
+            var quota = values[1] !== null ? values[1] : values[2];
+            var holder = !isZeroValue(quota);
+            text("eligible", holder ? navis(quota) + " NAVIS (دست‌اول)" : "بدون سهمیهٔ گِنیسِس");
+            pill("status", holder ? "رأی‌دهندهٔ گِنیسِس" : "توکن دست‌اول جابه‌جا شده");
+            var lock = Number(values[3] || 0);
+            text("unlock", lock ? lockDate(lock)
+              : (Number(values[4] || 0) ? "پس از " + days(values[4]) + " روز از آخرین صدور" : "—"));
+          });
+        }).catch(function () { return null; });
+      }
+
+      /* --------------------- presale split (flow) card ---------------------- */
+      function paintFlow(ethers) {
+        var usdt = contract(ethers, ctx.addresses.usdt, SNIPPETS.erc20);
+        var vault = contract(ethers, ctx.addresses.treasury, SNIPPETS.erc20);
+        var pool = contract(ethers, ctx.addresses.pool, SNIPPETS.erc20);
+        if (!usdt || !vault || !pool) {
+          text("split", "مقصدهای پرداخت روی این شبکه در دسترس نیست");
+          return Promise.resolve(null);
+        }
+        return read(usdt, "decimals", []).then(function (digits) {
+          var scale = digits === null ? ctx.usdtDecimals : Number(digits);
+          return Promise.all([
+            read(usdt, "balanceOf", [ctx.addresses.treasury]),
+            read(usdt, "balanceOf", [ctx.addresses.pool])
+          ]).then(function (values) {
+            var floorPart = amount(values[0], scale);
+            var premium = amount(values[1], scale);
+            var total = floorPart + premium;
+            var share = total > 0 ? Math.round((floorPart / total) * 100) : 50;
+            text("buyers", money(total));
+            text("treasury", money(floorPart));
+            text("liquidity", money(premium));
+            text("split", share + "٪ کف NAV · " + (100 - share) + "٪ مازاد");
+            var barT = node("barT");
+            var barL = node("barL");
+            if (barT) { barT.style.width = share + "%"; }
+            if (barL) { barL.style.width = (100 - share) + "%"; }
+          });
+        });
+      }
+
+      /* --------------------- live floor / supply / owners ------------------- */
+      function paintStats() {
+        return Promise.all([
+          read(ctx.treasury, "getNavFloorPrice", []).then(function (value) {
+            return value === null ? read(ctx.treasury, "navFloor", []) : value;
+          }),
+          read(ctx.nav, "totalSupply", []),
+          read(ctx.treasury, "owner", []),
+          read(ctx.presale, "owner", [])
+        ]).then(function (values) {
+          if (values[0] !== null) { text("floor", usd(values[0], ctx.usdtDecimals, 5)); }
+          if (values[1] !== null) { text("supply", navis(values[1]) + " NAVIS"); }
+          if (known(values[2])) { link("owner", values[2], ctx.chain.explorer); }
+          if (known(values[3])) { link("presaleOwner", values[3], ctx.chain.explorer); }
+        });
+      }
+
+      /* ------------------------------ run loop ------------------------------ */
+      function readAddresses(info) {
+        var file = (info && info.addresses) || {};
+        return {
+          nav: file.navToken, presale: file.presale, treasury: file.treasury,
+          usdt: file.usdtToken, pool: file.liquidityPool || file.marketMaker,
+          marketMaker: file.marketMaker
+        };
+      }
+      /* Illustrative numbers used until the contracts are live on this network. */
+      function demo() {
+        text("wallet", "کیف‌پولی متصل نیست");
+        pill("status", "پیش‌نمایش (پیش از انتشار)");
+        text("balance", "12,500 NAVIS");
+        text("eligible", "12,500 NAVIS (دست‌اول)");
+        text("unlock", "پس از ۱۸۰ روز از آخرین صدور");
+        text("buyers", "$230,000");
+        text("treasury", "$180,000");
+        text("liquidity", "$50,000");
+        text("split", "۷۸٪ کف NAV · ۲۲٪ مازاد");
+        text("floor", "$0.03900");
+        text("supply", "1,000,000 NAVIS");
+        var barT = node("barT");
+        var barL = node("barL");
+        if (barT) { barT.style.width = "78%"; }
+        if (barL) { barL.style.width = "22%"; }
+      }
+      function run(ethers) {
+        if (!ethers) {
+          note("کتابخانهٔ ethers بارگذاری نشد — مقادیر نمایشی تا اتصال دوباره.");
+          demo();
+          return;
+        }
+        chainId().then(function (id) {
+          ctx.chainId = id;
+          ctx.chain = CHAINS[id] || { short: "زنجیرهٔ " + id, rpc: "", explorer: "", json: [] };
+          text("network", ctx.chain.short);
+          if (!ctx.chain.rpc && !ctx.chain.explorer) {
+            note("زنجیرهٔ " + id + " پشتیبانی نمی‌شود — مقادیر نمایشی.");
+            demo();
+            return;
+          }
+          ctx.provider = makeProvider(ethers);
+          return deployment(ctx.chain).then(function (info) {
+            ctx.addresses = readAddresses(info);
+            paintAddresses();
+            paintGovernance(info);
+            if (info && info.pending) {
+              note("قراردادها هنوز روی " + ctx.chain.short + " مستقر نشده‌اند — مقادیر نمایشی.");
+              demo();
+              return;
+            }
+            if (!ctx.provider) {
+              note("RPC در دسترس نیست — مقادیر نمایشی.");
+              demo();
+              return;
+            }
+            ctx.treasury = contract(ethers, ctx.addresses.treasury, SNIPPETS.treasury);
+            ctx.nav = contract(ethers, ctx.addresses.nav, SNIPPETS.nav);
+            ctx.presale = contract(ethers, ctx.addresses.presale, SNIPPETS.presale);
+            /* Derive whatever the deployment file omits straight from the chain. */
+            return Promise.all([
+              read(ctx.treasury, "navToken", []),
+              read(ctx.treasury, "usdt", []),
+              read(ctx.presale, "liquidityPool", []),
+              read(ctx.presale, "treasuryVault", [])
+            ]).then(function (values) {
+              if (!known(ctx.addresses.nav)) { ctx.addresses.nav = values[0]; }
+              if (!known(ctx.addresses.usdt)) { ctx.addresses.usdt = values[1]; }
+              if (!known(ctx.addresses.pool)) { ctx.addresses.pool = values[2]; }
+              if (!known(ctx.addresses.treasury)) { ctx.addresses.treasury = values[3]; }
+              ctx.treasury = contract(ethers, ctx.addresses.treasury, SNIPPETS.treasury);
+              ctx.nav = contract(ethers, ctx.addresses.nav, SNIPPETS.nav);
+              ctx.presale = contract(ethers, ctx.addresses.presale, SNIPPETS.presale);
+              paintAddresses();
+              /* USDT base units decide how every USDT figure is rendered. */
+              var usdt = contract(ethers, ctx.addresses.usdt, SNIPPETS.erc20);
+              return read(usdt, "decimals", []).then(function (digits) {
+                ctx.usdtDecimals = digits === null ? 6 : Number(digits);
+                return Promise.all([
+                  paintWallet(ctx.nav),
+                  paintFlow(ethers),
+                  paintStats()
+                ]);
+              });
+            }).then(function () {
+              note("خوانده‌شده از " + ctx.chain.short + " · " + new Date().toLocaleTimeString("fa-IR"));
+            });
+          }).catch(function () {
+            note("اطلاعات استقرار برای " + ctx.chain.short + " در دسترس نیست — مقادیر نمایشی.");
+            demo();
+          });
+        }).catch(function () {
+          note("رابطهٔ زندهٔ آن‌چین در دسترس نیست — مقادیر نمایشی.");
+          demo();
+        });
+      }
+      function boot() {
+        note("رابطهٔ زندهٔ آن‌چین: در حال بارگذاری…");
+        whenEthers(run);
+      }
+
+      var refreshButton = node("refresh");
+      if (refreshButton) {
+        refreshButton.addEventListener("click", function () { boot(); });
+      }
+      var injected = window.ethereum;
+      if (injected && typeof injected.on === "function") {
+        try {
+          injected.on("chainChanged", function () { boot(); });
+          injected.on("accountsChanged", function () { boot(); });
+        } catch (err) { /* wallet without event support: ignore */ }
+      }
+      boot();
+
+    })();
+  </script>
   <!-- ======================= /LIVE SHELL ======================= -->
 <template id="legacy-page" data-legacy-inert>
   <meta charset="UTF-8" />
@@ -2780,7 +3445,7 @@
       var blockState = tBlockEl ? (parseAmount(tBlockEl.textContent) || 21845102) : 21845102;
 
       function tickMarket() {
-        if (livePriceEl) {
+        if (livePriceEl && !chainLive) {
           priceState = Math.max(0.0391, priceState + (Math.random() - 0.42) * 0.00013);
           livePriceEl.textContent = "$" + priceState.toFixed(5);
         }
@@ -2791,11 +3456,13 @@
       }
 
       function tickTreasury() {
-        treasuryState += Math.random() * 4200 + 700;
-        if (tTreasuryEl) tTreasuryEl.textContent = "$" + formatNumber(treasuryState, 0);
+        if (!chainLive) {
+          treasuryState += Math.random() * 4200 + 700;
+          if (tTreasuryEl) tTreasuryEl.textContent = "$" + formatNumber(treasuryState, 0);
 
-        floorState = Math.max(floorState, floorState * (1 + Math.random() * 0.0000045));
-        if (tFloorEl) tFloorEl.textContent = "$" + floorState.toFixed(5);
+          floorState = Math.max(floorState, floorState * (1 + Math.random() * 0.0000045));
+          if (tFloorEl) tFloorEl.textContent = "$" + floorState.toFixed(5);
+        }
 
         if (tRatioEl) tRatioEl.textContent = (100 + (Math.random() - 0.5) * 0.6).toFixed(1) + "%";
 
@@ -2823,12 +3490,18 @@
       var walletStatus = $("#walletStatus");
       var amountInput = $("#usdtAmount");
       var tokenEstimate = $("#tokenEstimate");
+      var buyBtn = $("#buyPresale");
+      var balanceEl = $("#walletBalance");
+      var priceEl = $("#presalePrice");
+      var networkEl = $("#networkStatus");
       var PHASE_PRICE = 0.01;
+      var activePrice = PHASE_PRICE;
+      var CHAIN = null; // filled by connectChain(); stays null in demo mode
 
       function updateEstimate() {
         if (!amountInput || !tokenEstimate) return;
         var amount = Math.max(0, parseFloat(amountInput.value || "0") || 0);
-        tokenEstimate.textContent = formatNumber(Math.round(amount / PHASE_PRICE), 0) + " NAVIS";
+        tokenEstimate.textContent = formatNumber(Math.round(amount / activePrice), 0) + " NAVIS";
       }
       if (amountInput) amountInput.addEventListener("input", updateEstimate);
       updateEstimate();
@@ -2846,24 +3519,315 @@
         showToast(message);
       }
 
+      /* ============================================================
+         NAVIS on-chain layer — Ethers v6 + MetaMask (chain 31337)
+         ------------------------------------------------------------
+         Everything below is progressive enhancement: when Ethers, an
+         injected wallet or the local RPC is unavailable the panel keeps
+         its fully self-contained demo behaviour.
+         ============================================================ */
+      var TARGET_CHAIN = {
+        id: 31337,
+        hexId: "0x7a69",
+        name: "NAVIS Localhost — Hardhat 31337",
+        symbol: "ETH",
+        rpcByHost: "http://127.0.0.1:8545",
+        rpcFallback: "http://195.248.240.102:8545"
+      };
+
+      /* Deployment descriptor written by navois-contracts/scripts/deploy.js.
+         It is fetched at runtime so the addresses never drift; the values
+         below are the fallback used when that fetch is unavailable. */
+      var DEPLOYMENT = {
+        chainId: 31337,
+        addresses: {
+          navToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          presale: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+          treasury: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+          marketMaker: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+          usdtToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        }
+      };
+
+      var DEPLOYMENT_SOURCES = [
+        "deployments/localhost.json",
+        "../navois-contracts/deployments/localhost.json",
+        "../navis-contracts/deployments/localhost.json"
+      ];
+
+      var ABI = {
+        presale: [
+          "function usdt() view returns (address)",
+          "function currentNavFloor() view returns (uint256)",
+          "function currentSubPhase() view returns (uint256)",
+          "function subPhaseCount() view returns (uint256)",
+          "function phasePrice(uint256 index) view returns (uint256)",
+          "function buyTokens(uint256 usdtAmount) returns (uint256 tokensMinted)"
+        ],
+        treasury: [
+          "function reserveBalance() view returns (uint256)",
+          "function navFloor() view returns (uint256)"
+        ],
+        erc20: [
+          "function symbol() view returns (string)",
+          "function decimals() view returns (uint8)",
+          "function totalSupply() view returns (uint256)",
+          "function balanceOf(address account) view returns (uint256)",
+          "function allowance(address owner, address spender) view returns (uint256)",
+          "function approve(address spender, uint256 amount) returns (bool)"
+        ]
+      };
+
+      var ethersLib = (window.ethers && typeof window.ethers.Contract === "function") ? window.ethers : null;
+
+      function rpcCandidates() {
+        var urls = [];
+        var host = window.location && window.location.hostname;
+        if (host && host !== "127.0.0.1" && host !== "localhost") {
+          urls.push("http://" + host + ":8545");
+        }
+        urls.push(TARGET_CHAIN.rpcByHost, TARGET_CHAIN.rpcFallback);
+        return urls.filter(function (url, index) { return urls.indexOf(url) === index; });
+      }
+
+      function unitsToNumber(value, decimals) {
+        if (ethersLib && typeof ethersLib.formatUnits === "function") {
+          return Number(ethersLib.formatUnits(value, decimals));
+        }
+        return Number(value) / Math.pow(10, decimals);
+      }
+
+      function amountToUnits(value, decimals) {
+        if (ethersLib && typeof ethersLib.parseUnits === "function") {
+          return ethersLib.parseUnits(String(value), decimals);
+        }
+        return BigInt(Math.round(Number(value) * Math.pow(10, decimals)));
+      }
+
+      function ensureTargetChain() {
+        var ethereum = window.ethereum;
+        if (!ethereum || typeof ethereum.request !== "function") {
+          return Promise.resolve();
+        }
+        return ethereum.request({ method: "eth_chainId" }).then(function (current) {
+          if (current && Number(current) === TARGET_CHAIN.id) return false;
+          return ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: TARGET_CHAIN.hexId }]
+          }).catch(function (err) {
+            var code = err && (err.code || (err.data && err.data.code));
+            if (code !== 4902 && code !== -32603) throw err;
+            return ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: TARGET_CHAIN.hexId,
+                chainName: TARGET_CHAIN.name,
+                nativeCurrency: { name: "Ether", symbol: TARGET_CHAIN.symbol, decimals: 18 },
+                rpcUrls: [TARGET_CHAIN.rpcByHost]
+              }]
+            });
+          }).then(function () { return true; });
+        }).then(function (switched) {
+          if (switched) showToast("شبکه به نود محلی NAVIS (31337) سوییچ شد.");
+        });
+      }
+
+      async function loadDeployment() {
+        if (typeof window.fetch !== "function") return;
+        for (var i = 0; i < DEPLOYMENT_SOURCES.length; i += 1) {
+          try {
+            var response = await window.fetch(DEPLOYMENT_SOURCES[i], { cache: "no-store" });
+            if (!response || !response.ok) continue;
+            var data = await response.json();
+            if (data && data.addresses && data.addresses.presale) {
+              if (data.chainId) DEPLOYMENT.chainId = Number(data.chainId);
+              DEPLOYMENT.addresses = data.addresses;
+              return;
+            }
+          } catch (err) { /* the descriptor is optional */ }
+        }
+      }
+
+      async function findRpcProvider() {
+        if (!ethersLib) return null;
+        var urls = rpcCandidates();
+        for (var i = 0; i < urls.length; i += 1) {
+          try {
+            var provider = new ethersLib.JsonRpcProvider(urls[i], DEPLOYMENT.chainId, { staticNetwork: true });
+            var network = await provider.getNetwork();
+            if (Number(network.chainId) === DEPLOYMENT.chainId) {
+              return { provider: provider, url: urls[i] };
+            }
+          } catch (err) { /* try the next endpoint */ }
+        }
+        return null;
+      }
+
+      async function loadContracts(provider) {
+        var contracts = {
+          presale: new ethersLib.Contract(DEPLOYMENT.addresses.presale, ABI.presale, provider),
+          treasury: new ethersLib.Contract(DEPLOYMENT.addresses.treasury, ABI.treasury, provider),
+          nav: new ethersLib.Contract(DEPLOYMENT.addresses.navToken, ABI.erc20, provider),
+          usdt: new ethersLib.Contract(DEPLOYMENT.addresses.usdtToken, ABI.erc20, provider),
+          usdtDecimals: 6,
+          navDecimals: 18,
+          navSymbol: "NAVIS"
+        };
+        try {
+          var meta = await Promise.all([
+            contracts.usdt.decimals(),
+            contracts.usdt.symbol(),
+            contracts.nav.decimals(),
+            contracts.nav.symbol()
+          ]);
+          contracts.usdtDecimals = Number(meta[0]);
+          contracts.navDecimals = Number(meta[2]);
+          contracts.navSymbol = String(meta[3] || "NAVIS");
+        } catch (err) { /* keep the USDT/NAVIS defaults */ }
+        return contracts;
+      }
+
+      var chainLive = false;
+      var chainBusy = false;
+
+      async function readSnapshot(provider) {
+        var contracts = await loadContracts(provider);
+        var raw = await Promise.all([
+          contracts.treasury.reserveBalance(),
+          contracts.treasury.navFloor(),
+          contracts.presale.currentNavFloor(),
+          contracts.presale.subPhaseCount(),
+          contracts.presale.currentSubPhase()
+        ]);
+        var snapshot = {
+          contracts: contracts,
+          reserve: unitsToNumber(raw[0], contracts.usdtDecimals),
+          floor: unitsToNumber(raw[1], contracts.usdtDecimals),
+          presaleFloor: unitsToNumber(raw[2], contracts.usdtDecimals),
+          subPhaseCount: Number(raw[3]),
+          currentSubPhase: Number(raw[4]),
+          price: 0
+        };
+        if (snapshot.subPhaseCount > 0 && snapshot.currentSubPhase < snapshot.subPhaseCount) {
+          var rawPrice = await contracts.presale.phasePrice(snapshot.currentSubPhase);
+          snapshot.price = unitsToNumber(rawPrice, contracts.usdtDecimals);
+        }
+        return snapshot;
+      }
+
+      function renderChain(snapshot) {
+        chainLive = true;
+        if (tTreasuryEl) tTreasuryEl.textContent = "$" + formatNumber(Math.round(snapshot.reserve), 0);
+        if (tFloorEl) tFloorEl.textContent = "$" + snapshot.floor.toFixed(5);
+        if (livePriceEl && snapshot.price > 0) livePriceEl.textContent = "$" + snapshot.price.toFixed(5);
+        activePrice = snapshot.price > 0 ? snapshot.price : (snapshot.floor > 0 ? snapshot.floor : PHASE_PRICE);
+        if (priceEl) priceEl.textContent = "$" + activePrice.toFixed(4);
+        updateEstimate();
+      }
+
+      async function renderWallet(snapshot, account) {
+        var contracts = snapshot.contracts;
+        var raw = await Promise.all([
+          contracts.nav.balanceOf(account),
+          contracts.usdt.balanceOf(account),
+          contracts.usdt.allowance(account, DEPLOYMENT.addresses.presale)
+        ]);
+        var navBalance = unitsToNumber(raw[0], contracts.navDecimals);
+        var usdtBalance = unitsToNumber(raw[1], contracts.usdtDecimals);
+        if (balanceEl) balanceEl.textContent = formatNumber(navBalance, 2) + " " + contracts.navSymbol;
+        if (walletStatus) walletStatus.textContent = "کیف‌پول متصل · " + formatNumber(usdtBalance, 2) + " USDT";
+      }
+
+      async function refreshChain() {
+        if (chainBusy) return false;
+        chainBusy = true;
+        try {
+          var found = await findRpcProvider();
+          if (!found) return false;
+          var snapshot = await readSnapshot(found.provider);
+          CHAIN = CHAIN || { account: null, wallet: null, contracts: null, rpc: null };
+          CHAIN.rpc = found.url;
+          CHAIN.contracts = snapshot.contracts;
+          renderChain(snapshot);
+          if (CHAIN.account) await renderWallet(snapshot, CHAIN.account);
+          return true;
+        } finally {
+          chainBusy = false;
+        }
+      }
+
+      async function connectWallet() {
+        if (walletStatus) walletStatus.textContent = "در حال اتصال به MetaMask…";
+        await ensureTargetChain();
+        await loadDeployment();
+        var accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        var account = Array.isArray(accounts) ? accounts[0] : null;
+        if (!account) throw new Error("no-account");
+        CHAIN = {
+          account: account,
+          wallet: ethersLib ? new ethersLib.BrowserProvider(window.ethereum, DEPLOYMENT.chainId) : null,
+          contracts: null,
+          rpc: null
+        };
+        markConnected(
+          shortAddress(account),
+          "کیف‌پول متصل شد · در حال خواندن نود محلی…",
+          "کیف‌پول متصل شد: " + shortAddress(account)
+        );
+        var live = await refreshChain();
+        if (networkEl) {
+          networkEl.textContent = live
+            ? "شبکه: نود محلی 31337 · " + shortAddress(account)
+            : "شبکه: کیف‌پول متصل است اما نود 31337 پاسخ نمی‌دهد";
+        }
+        return account;
+      }
+
+      async function buyWithWallet(amount) {
+        var account = CHAIN.account;
+        var contracts = CHAIN.contracts;
+        if (!CHAIN.wallet || !contracts) throw new Error("presale-unavailable");
+        var signer = await CHAIN.wallet.getSigner(account);
+        var usdtWrite = contracts.usdt.connect(signer);
+        var presaleWrite = contracts.presale.connect(signer);
+        var decimals = contracts.usdtDecimals;
+        var amountUnits = amountToUnits(amount, decimals);
+
+        var gate = await Promise.all([
+          contracts.usdt.balanceOf(account),
+          contracts.usdt.allowance(account, DEPLOYMENT.addresses.presale)
+        ]);
+        if (gate[0] < amountUnits) {
+          throw new Error(
+            "موجودی تتر کافی نیست (" + formatNumber(unitsToNumber(gate[0], decimals), 2) + " USDT)"
+          );
+        }
+        if (gate[1] < amountUnits) {
+          showToast("تأیید مصرف تتر (approve)…");
+          var approval = await usdtWrite.approve(DEPLOYMENT.addresses.presale, amountUnits);
+          await approval.wait();
+        }
+        showToast("در حال خرید در پیش‌فروش…");
+        var purchase = await presaleWrite.buyTokens(amountUnits);
+        if (walletStatus) walletStatus.textContent = "تراکنش در انتظار تأیید…";
+        await purchase.wait();
+        showToast("خرید ثبت شد · " + formatNumber(amount, 2) + " USDT");
+        if (networkEl) networkEl.textContent = "آخرین تراکنش: " + purchase.hash.slice(0, 12) + "…";
+        await refreshChain();
+      }
+
       if (connectBtn) {
         connectBtn.addEventListener("click", function () {
           if (connectBtn.classList.contains("connected")) {
             showToast("کیف‌پول از قبل متصل است.");
             return;
           }
-          var provider = window.ethereum;
-          if (provider && typeof provider.request === "function") {
-            provider.request({ method: "eth_requestAccounts" }).then(function (accounts) {
-              var address = Array.isArray(accounts) ? accounts[0] : null;
-              if (!address) throw new Error("no-account");
-              markConnected(
-                shortAddress(address),
-                "کیف‌پول متصل شد · سهمیهٔ ریزفاز ۱ رزرو شد",
-                "کیف‌پول با موفقیت متصل شد: " + shortAddress(address)
-              );
-            }).catch(function () {
-              showToast("اتصال کیف‌پول لغو یا ناموفق بود.");
+          if (window.ethereum && typeof window.ethereum.request === "function") {
+            // Real wallet: switch to chain 31337, then read the live protocol.
+            connectWallet().catch(function (err) {
+              var reason = (err && (err.shortMessage || err.message)) || "نامشخص";
+              if (walletStatus) walletStatus.textContent = "اتصال کیف‌پول ناموفق بود";
+              showToast("اتصال کیف‌پول لغو یا ناموفق بود: " + reason);
             });
             return;
           }
@@ -2874,6 +3838,51 @@
             "حالت نمایشی: کیف‌پول آزمایشی متصل شد."
           );
         });
+      }
+
+      /* ---------- Presale buy ---------- */
+      function presaleAmount() {
+        if (!amountInput) return 0;
+        return Math.max(0, parseFloat(amountInput.value || "0") || 0);
+      }
+
+      if (buyBtn) {
+        buyBtn.addEventListener("click", function () {
+          var amount = presaleAmount();
+          if (!(amount > 0)) {
+            showToast("مبلغ تتر را وارد کنید.");
+            return;
+          }
+          if (CHAIN && CHAIN.account && CHAIN.contracts && CHAIN.wallet) {
+            buyWithWallet(amount).catch(function (err) {
+              var reason = (err && (err.shortMessage || err.message)) || "نامشخص";
+              if (walletStatus) walletStatus.textContent = "خرید انجام نشد";
+              showToast("خرید ناموفق بود: " + reason);
+            });
+            return;
+          }
+          if (window.ethereum && typeof window.ethereum.request === "function") {
+            showToast("ابتدا کیف‌پول را متصل کنید.");
+            return;
+          }
+          // Demo mode: no wallet, no node — keep the flow inspectable.
+          showToast(
+            "حالت نمایشی: " + formatNumber(amount, 0) + " USDT معادل " +
+            formatNumber(Math.round(amount / activePrice), 0) + " NAVIS رزرو شد."
+          );
+        });
+      }
+
+      /* ---------- Boot: hydrate real numbers when a node is reachable ---------- */
+      if (ethersLib && typeof window.setTimeout === "function") {
+        window.setTimeout(function () {
+          loadDeployment().then(function () { return refreshChain(); }).catch(function () {});
+        }, 400);
+        window.setInterval(function () {
+          if (CHAIN && CHAIN.account && !chainBusy) {
+            refreshChain().catch(function () {});
+          }
+        }, 15000);
       }
     })();
   </script>

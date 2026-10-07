@@ -465,6 +465,19 @@ async function main() {
   check("connect raises the toast again", $("#toast").classes.has("show"));
   await sleep(3500);
   check("the toast auto-hides after 3.4s", !$("#toast").classes.has("show"));
+
+  /* ---------- on-chain panel (no wallet / no node => demo fallback) ---------- */
+  const panel = ["#presalePrice", "#walletBalance", "#networkStatus", "#buyPresale"];
+  check("the wallet panel exposes every on-chain hook", panel.every((sel) => $(sel) !== null), panel.filter((sel) => $(sel) === null).join(","));
+  check("#presalePrice keeps a phase price", /^\$0\.\d{3,4}$/.test(txt("#presalePrice")), txt("#presalePrice"));
+  check("#walletBalance starts with no tokens", txt("#walletBalance") === "0 NAVIS", txt("#walletBalance"));
+  check("#networkStatus starts disconnected", txt("#networkStatus") === "شبکه: متصل نیست", txt("#networkStatus"));
+  check("#buyPresale keeps the estimate in step", txt("#tokenEstimate") === "250,000 NAVIS", txt("#tokenEstimate"));
+  click($("#buyPresale"));
+  await sleep(60);
+  check("#buyPresale falls back to the demo reservation", txt("#toastText").includes("حالت نمایشی") && txt("#toastText").includes("250,000 NAVIS"), txt("#toastText"));
+  check("#buyPresale leaves the wallet balance alone", txt("#walletBalance") === "0 NAVIS", txt("#walletBalance"));
+  check("#networkStatus is untouched by the demo buy", txt("#networkStatus") === "شبکه: متصل نیست", txt("#networkStatus"));
   check("no uncaught runtime errors", errors.length === 0, errors.join(" | "));
 }
 

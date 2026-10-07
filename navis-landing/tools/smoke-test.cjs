@@ -155,13 +155,26 @@ async function run() {
       el.value = "2500";
       el.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    check("estimate recalculates from the USDT input", (await text("#tokenEstimate")) === "250,000 NAVIS", await text("#tokenEstimate"));
+    /* #tokenEstimate must track whatever price the panel shows: 0.01 in demo
+     * mode, the live presale/floor price when the chain 31337 node is reachable. */
+    const shownPrice = Number((await text("#presalePrice")).replace(/[^0-9.]/g, ""));
+    const expectedEstimate = new Intl.NumberFormat("en-US").format(Math.round(2500 / shownPrice)) + " NAVIS";
+    check("estimate recalculates from the USDT input", (await text("#tokenEstimate")) === expectedEstimate, `${await text("#tokenEstimate")} vs ${expectedEstimate}`);
     check("#connectWallet starts disconnected", !(await hasClass("#connectWallet", "connected")));
     await page.click("#connectWallet");
     await sleep(400);
     check("#connectWallet enters the connected state", await hasClass("#connectWallet", "connected"));
     check("#walletStatus reports the demo wallet", (await text("#walletStatus")).includes("نمایشی"), await text("#walletStatus"));
     check("connect raises the toast again", await hasClass("#toast", "show"));
+
+    /* ---------- on-chain panel (no injected wallet => demo fallback) ---------- */
+    const panel = ["#presalePrice", "#walletBalance", "#networkStatus", "#buyPresale"];
+    check("the wallet panel exposes every on-chain hook", (await page.$$eval(panel.join(","), (els) => els.length)) === panel.length);
+    await page.click("#buyPresale");
+    await sleep(250);
+    check("#buyPresale falls back to the demo reservation", (await text("#toastText")).includes("حالت نمایشی"), await text("#toastText"));
+    check("#buyPresale leaves #walletBalance unchanged", (await text("#walletBalance")).trim().endsWith("NAVIS"), await text("#walletBalance"));
+    check("#networkStatus stays readable", (await text("#networkStatus")).length > 1, await text("#networkStatus"));
 
     await sleep(3800);
     check("toast auto-hides after its timeout", !(await hasClass("#toast", "show")));

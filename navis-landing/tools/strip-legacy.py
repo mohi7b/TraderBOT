@@ -15,7 +15,8 @@ Usage::
   * the legacy template block is balanced and closes before the inline script;
   * every DOM hook the inline script relies on exists exactly once in the live shell;
   * the live shell has balanced tags;
-  * the inline script matches the recorded checksum baseline (when present).
+  * the inline script matches the recorded checksum baseline (when present);
+    ``check --record`` refreshes that baseline after an intentional edit.
 """
 
 from __future__ import annotations
@@ -49,6 +50,8 @@ REQUIRED_IDS = [
     "langCurrentLabel", "countdown", "livePrice", "netInflow",
     "tTreasury", "tFloor", "tRatio", "tHolders", "tRedeemed", "tBlock",
     "tClock", "connectWallet", "walletStatus", "usdtAmount", "tokenEstimate",
+    # on-chain (Ethers v6 + MetaMask) wallet panel
+    "presalePrice", "walletBalance", "networkStatus", "buyPresale",
 ]
 REQUIRED_UNITS = ["days", "hours", "minutes", "seconds"]
 REQUIRED_CLASSES = ["reveal", "counting", "lang-btn", "social-btn"]
@@ -198,19 +201,19 @@ def cmd_check(args) -> int:
         print(f"[ok] every $(.class) the script queries ({len(derived_classes)}) exists in the live shell")
 
     digest = hashlib.sha256(script.encode("utf-8")).hexdigest()
-    if BASELINE.exists():
+    if args.record:
+        BASELINE.write_text(
+            json.dumps({"sha256": digest, "bytes": len(script)}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(f"[ok] baseline recorded -> {BASELINE.relative_to(ROOT)} ({digest[:16]}…)")
+    elif BASELINE.exists():
         recorded = json.loads(BASELINE.read_text(encoding="utf-8"))["sha256"]
         if recorded == digest:
             print(f"[ok] inline script matches baseline sha256 {digest[:16]}…")
         else:
             print(f"[FAIL] inline script changed: {digest[:16]}… != {recorded[:16]}…")
             ok = False
-    elif args.record:
-        BASELINE.write_text(
-            json.dumps({"sha256": digest, "bytes": len(script)}, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        print(f"[ok] baseline recorded -> {BASELINE.relative_to(ROOT)} ({digest[:16]}…)")
     else:
         print(f"[warn] no baseline recorded; current sha256 {digest[:16]}… (use --record)")
 
