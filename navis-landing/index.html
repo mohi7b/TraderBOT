@@ -33,7 +33,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070B'/%3E%3Ccircle cx='32' cy='32' r='25' fill='none' stroke='%23D4AF37' stroke-width='3'/%3E%3Cpath d='M32 12 L36.5 25.9 L51 25.8 L39.2 34.4 L43.8 48.2 L32 39.6 L20.2 48.2 L24.8 34.4 L13 25.8 L27.5 25.9 Z' fill='%23FFC700'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Inter:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Inter:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&family=Readex+Pro:wght@200..700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <!-- Ethers.js v6 (UMD) — powers the on-chain reads and the presale purchase.
        When the CDN is unreachable the wallet panel keeps its demo behaviour. -->
@@ -231,14 +231,21 @@
     .meter-sm{height:4px}
     .meter-lg{height:10px}
 
-    /* ---------- hero · centred mark + single-column Genesis presale ---------- */
+    /* ---------- hero · centred wordmark · tagline · lead · presale rows ---------- */
     .hero-mark{display:block;width:min(76vw,24rem);height:auto}
     @media(min-width:640px){.hero-mark{width:min(52vw,27rem)}}
     @media(min-width:1024px){.hero-mark{width:min(38vw,29rem)}}
-    .gx-grid{display:grid;gap:1.6rem;margin-top:1.6rem}
+    /* the tagline is capped to the same box as the wordmark so it never spills wider */
+    .hero-tag{max-width:min(76vw,24rem);margin-inline:auto}
+    @media(min-width:640px){.hero-tag{max-width:min(52vw,27rem)}}
+    @media(min-width:1024px){.hero-tag{max-width:min(38vw,29rem)}}
+    /* finer, lighter lead face — deliberately distinct from the display headline */
+    .hero-lead{font-family:"Readex Pro","Vazirmatn",ui-sans-serif,system-ui,sans-serif;font-weight:300;font-size:clamp(1rem,1.5vw,1.15rem);line-height:2.15;letter-spacing:.005em}
+    /* the countdown row and the Genesis row are centred and about half the plate wide */
+    .hero-half{width:min(100%,40rem)}
+    .gx-grid{display:grid;gap:1.6rem;margin-top:1.6rem;width:min(100%,52rem);margin-inline:auto}
     @media(min-width:1024px){
       .gx-grid{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:2.5rem;align-items:start}
-      .gx-grid>*+*{border-inline-start:1px solid var(--hair);padding-inline-start:2.5rem}
     }
     .bar-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem .9rem;font-size:.75rem;color:var(--mut)}
     .bar-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:1.15rem;border-top:1px solid var(--hair);padding-top:1rem;text-align:center}
@@ -439,18 +446,45 @@
 
         <!-- ---------- headline + protocol description · centred ---------- -->
         <div class="mx-auto mt-7 max-w-3xl text-center">
-          <h1 class="reveal fdisp text-white" style="--d:60ms;font-weight:600;font-size:clamp(1.7rem,4.1vw,2.9rem);line-height:1.45;letter-spacing:-.02em">
+          <h1 class="reveal fdisp hero-tag text-white" style="--d:60ms;font-weight:500;font-size:clamp(1.02rem,1.95vw,1.5rem);line-height:1.75;letter-spacing:-.01em">
             آیندهٔ چارت‌های مالی و مسیریابی هوشمند بازار
           </h1>
-          <p class="reveal lead mx-auto mt-5 max-w-2xl" style="--d:120ms">
-            ناویس پروتکل (NAVIS Protocol) زیرساخت نسل بعدی بازارهای مالی است: چارت‌انجین حرفه‌ای، مسیریابی هوشمند سفارش‌ها و
-            خزانهٔ شفاف آن‌چین با کف قیمت تضمین‌شده. هر عددی که در این صفحه می‌بینید از قراردادهای هوشمند خوانده می‌شود و
-            سرمایهٔ کاربران با ذخیرهٔ تتر روی زنجیره پشتیبانی می‌شود.
+          <p class="reveal lead hero-lead mx-auto mt-4 max-w-2xl" style="--d:120ms">
+            پلتفرم ناویس، چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی با پشتیبانی توکن NAVIS بر پایه ارزش کاملاً شفاف از قیمت کف آن‌چین را در بر می‌گیرد.
           </p>
         </div>
 
-        <!-- ---------- Genesis presale · single-column block ---------- -->
-        <div class="reveal glass gold-ring mt-9 p-5 sm:p-7" style="--d:180ms">
+        <!-- ---------- row 1 · countdown · centred, about half the plate ---------- -->
+        <div class="reveal hero-half mx-auto mt-9" style="--d:150ms">
+          <div class="glass gold-ring p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-3">
+              <span class="label">زمان باقی‌مانده تا پایان فاز</span>
+              <span class="chip chip-gold"><span class="live-dot"></span> زنده</span>
+            </div>
+
+            <div id="countdown" class="cd-wrap mt-3" role="timer" aria-live="off" aria-label="شمارش معکوس پایان فاز پیش‌فروش">
+              <div class="count-cell">
+                <span class="cd-n" data-unit="days">18</span>
+                <span class="cd-l">روز</span>
+              </div>
+              <div class="count-cell">
+                <span class="cd-n" data-unit="hours">00</span>
+                <span class="cd-l">ساعت</span>
+              </div>
+              <div class="count-cell">
+                <span class="cd-n" data-unit="minutes">00</span>
+                <span class="cd-l">دقیقه</span>
+              </div>
+              <div class="count-cell">
+                <span class="cd-n" data-unit="seconds">00</span>
+                <span class="cd-l">ثانیه</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- row 2 · Genesis presale · centred, about half the plate ---------- -->
+        <div class="reveal hero-half mx-auto glass gold-ring mt-6 p-5 sm:p-7" style="--d:200ms">
 
           <div class="text-center">
             <span class="eyebrow">Genesis Presale · NAVIS / USDT</span>
@@ -483,84 +517,57 @@
             </div>
           </div>
 
-          <div class="divider-glow mt-6"></div>
+        </div>
 
-          <!-- buy · guaranteed treasury floor -->
-          <div class="gx-grid">
+        <!-- ---------- two columns · buy (right) · guaranteed floor (left) ---------- -->
+        <div class="reveal gx-grid" style="--d:250ms">
 
-            <!-- ---------- left · buy panel ---------- -->
-            <div>
-              <div class="flex items-center justify-between gap-3">
-                <span class="label">زمان باقی‌مانده تا پایان فاز</span>
-                <span class="chip chip-gold"><span class="live-dot"></span> زنده</span>
+          <!-- ---------- right · price per token + buy ---------- -->
+          <div class="glass gold-ring p-5 sm:p-6">
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between text-sm">
+                <span style="color:#94A3B8">قیمت هر توکن</span>
+                <span id="presalePrice" class="fnum text-white">$0.010</span>
               </div>
-
-              <div id="countdown" class="cd-wrap mt-3" role="timer" aria-live="off" aria-label="شمارش معکوس پایان فاز پیش‌فروش">
-                <div class="count-cell">
-                  <span class="cd-n" data-unit="days">18</span>
-                  <span class="cd-l">روز</span>
-                </div>
-                <div class="count-cell">
-                  <span class="cd-n" data-unit="hours">00</span>
-                  <span class="cd-l">ساعت</span>
-                </div>
-                <div class="count-cell">
-                  <span class="cd-n" data-unit="minutes">00</span>
-                  <span class="cd-l">دقیقه</span>
-                </div>
-                <div class="count-cell">
-                  <span class="cd-n" data-unit="seconds">00</span>
-                  <span class="cd-l">ثانیه</span>
-                </div>
+              <label class="mt-1 block text-xs" for="usdtAmount" style="color:#94A3B8">مبلغ تتر (USDT)</label>
+              <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-full rounded-xl px-3 py-3 text-white outline-none" style="border:1px solid var(--hair2);background:rgba(255,255,255,.03)" />
+              <div class="flex items-center justify-between text-sm">
+                <span style="color:#94A3B8">توکن تخمینی</span>
+                <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
               </div>
-
-              <div class="divider-glow mt-5"></div>
-
-              <div class="grid gap-2">
-                <div class="flex items-center justify-between text-sm">
-                  <span style="color:#94A3B8">قیمت هر توکن</span>
-                  <span id="presalePrice" class="fnum text-white">$0.010</span>
-                </div>
-                <label class="mt-1 block text-xs" for="usdtAmount" style="color:#94A3B8">مبلغ تتر (USDT)</label>
-                <input id="usdtAmount" type="number" min="0" step="10" value="1000" class="num-field w-full rounded-xl px-3 py-3 text-white outline-none" style="border:1px solid var(--hair2);background:rgba(255,255,255,.03)" />
-                <div class="flex items-center justify-between text-sm">
-                  <span style="color:#94A3B8">توکن تخمینی</span>
-                  <span id="tokenEstimate" class="fnum" style="color:#FFC700">100,000 NAVIS</span>
-                </div>
-                <div class="flex items-center justify-between text-sm">
-                  <span style="color:#94A3B8">موجودی ناویس شما</span>
-                  <span id="walletBalance" class="fnum" style="color:#ADCEFF">0 NAVIS</span>
-                </div>
+              <div class="flex items-center justify-between text-sm">
+                <span style="color:#94A3B8">موجودی ناویس شما</span>
+                <span id="walletBalance" class="fnum" style="color:#ADCEFF">0 NAVIS</span>
               </div>
-
-              <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید در پیش‌فروش</button>
-              <p id="walletStatus" class="mt-3 text-center text-xs" style="color:#94A3B8">کیف‌پولی متصل نیست</p>
-              <p id="networkStatus" class="mt-1 text-center text-[11px]" style="color:#94A3B8">شبکه: متصل نیست</p>
             </div>
 
-            <!-- ---------- right · guaranteed treasury floor ---------- -->
-            <div class="floor-hl p-5">
-              <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-                <div>
-                  <p class="label">قیمت کف تضمین‌شدهٔ خزانه · NAV Floor</p>
-                  <p class="kpi kpi-em mt-1" style="font-size:clamp(1.7rem,3.4vw,2.15rem)">≥ $0.039</p>
-                  <p class="mt-1 text-[11px]" style="color:#94A3B8">مسیر فقط صعودی · پشتیبانی ۱۰۰٪ با تتر</p>
-                </div>
-                <ul class="grid gap-1.5 text-xs" style="color:#CBD5E1">
-                  <li class="flex items-center justify-between gap-8"><span style="color:#8B93A7">نسبت ذخیره</span><span class="fnum" style="color:#ADCEFF">100%</span></li>
-                  <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">قیمت فاز جاری</span><span class="fnum" style="color:#FFC700">$0.010</span></li>
-                  <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">تخفیف نسبت به کف</span><span class="fnum">۷۴٪</span></li>
-                </ul>
-              </div>
-              <div class="divider-glow my-4"></div>
-              <p class="text-[11px] leading-6" style="color:#94A3B8">
-                اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود · هر توکن خریداری‌شده تا لحظهٔ تسویه با ذخیرهٔ تتر خزانه و کف قیمت
-                <span style="color:#ADCEFF">NAV Floor</span> پشتیبانی می‌شود. قرارداد پیش‌فروش برای
-                <span style="color:#ADCEFF">BSC Testnet (۹۷)</span> پیش‌بینی شده است.
-              </p>
-            </div>
-
+            <button id="buyPresale" type="button" class="btn btn-1 mt-5 w-full">خرید در پیش‌فروش</button>
+            <p id="walletStatus" class="mt-3 text-center text-xs" style="color:#94A3B8">کیف‌پولی متصل نیست</p>
+            <p id="networkStatus" class="mt-1 text-center text-[11px]" style="color:#94A3B8">شبکه: متصل نیست</p>
           </div>
+
+          <!-- ---------- left · guaranteed treasury floor ---------- -->
+          <div class="floor-hl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+              <div>
+                <p class="label">قیمت کف تضمین‌شدهٔ خزانه · NAV Floor</p>
+                <p class="kpi kpi-em mt-1" style="font-size:clamp(1.7rem,3.4vw,2.15rem)">≥ $0.039</p>
+                <p class="mt-1 text-[11px]" style="color:#94A3B8">مسیر فقط صعودی · پشتیبانی ۱۰۰٪ با تتر</p>
+              </div>
+              <ul class="grid gap-1.5 text-xs" style="color:#CBD5E1">
+                <li class="flex items-center justify-between gap-8"><span style="color:#8B93A7">نسبت ذخیره</span><span class="fnum" style="color:#ADCEFF">100%</span></li>
+                <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">قیمت فاز جاری</span><span class="fnum" style="color:#FFC700">$0.010</span></li>
+                <li class="flex items-center justify-between gap-8"><span style="color:#94A3B8">تخفیف نسبت به کف</span><span class="fnum">۷۴٪</span></li>
+              </ul>
+            </div>
+            <div class="divider-glow my-4"></div>
+            <p class="text-[11px] leading-6" style="color:#94A3B8">
+              اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود · هر توکن خریداری‌شده تا لحظهٔ تسویه با ذخیرهٔ تتر خزانه و کف قیمت
+              <span style="color:#ADCEFF">NAV Floor</span> پشتیبانی می‌شود. قرارداد پیش‌فروش برای
+              <span style="color:#ADCEFF">BSC Testnet (۹۷)</span> پیش‌بینی شده است.
+            </p>
+          </div>
+
         </div>
       </div>
     </section>

@@ -115,11 +115,14 @@ it only ever touches ids/classes.
   keeps a read‑only phase summary that links back to the widget, which is why every hook still
   appears **exactly once** in the live shell.
 - **Centred emblem hero** — the hero's two‑column intro was replaced by one centred column: the
-  `navisprotocol.png` wordmark (`.hero-mark`, clamped width), the headline and the protocol lead,
-  followed by the Genesis presale block as a single full‑width `glass gold-ring` card — phase bar →
-  `.gx-grid` (countdown + buy panel · NAV‑Floor column). The CTA pair that used to sit under the lead
-  is gone; the buy button inside the card is the hero's only CTA. Every figure on the block still reads
-  from the contracts (`.bar-head`/`.bar-foot` for the allocation, percent and sold amount).
+  `navisprotocol.png` wordmark (`.hero-mark`, clamped width), the headline (`.hero-tag`, capped to the
+  wordmark's own box so it never spills wider) and the protocol lead (`.hero-lead` — a finer, lighter
+  face set apart from the display headline). Below the column come two centred rows about half the
+  plate wide (`.hero-half`): first the gold `#countdown` card, then the Genesis presale card (eyebrow,
+  `#phaseNumber`, phase bar). Under those, `.gx-grid` holds the two columns — the price/buy panel on
+  the right and the NAV‑Floor card on the left. The CTA pair that used to sit under the lead is gone;
+  the buy button inside the widget is the hero's only CTA. Every figure on the block still reads from
+  the contracts (`.bar-head`/`.bar-foot` for the allocation, percent and sold amount).
 - **CDN‑independent responsive visibility** — the shell's own `.hidden { display: none }` would
   otherwise out‑rank Tailwind's `lg:flex` / `sm:inline` (same specificity, later in the cascade), so
   the header uses explicit classes with their own media queries instead: `.nav-desk`, `.menu-btn`,
@@ -193,7 +196,7 @@ must never bind a port the panel/VPN uses, because that would take the tunnels d
 | Section | Anchor | Content |
 | --- | --- | --- |
 | Header (sticky) | `#top` | `navislogo.png` medal + brand, desktop nav, `BSC Testnet · 97` badge, language switcher (FA/EN/DE/AR/TR), **`#connectWallet`**, mobile menu |
-| Hero | `#hero` | centred `navisprotocol.png` wordmark, centred headline + protocol lead, then the **Genesis presale block** (`#phaseNumber`, phase bar, `#countdown`) laid out by `.gx-grid` beside the gold NAV‑Floor column — `#presalePrice`, `#usdtAmount`, `#tokenEstimate`, `#walletBalance`, `#buyPresale`, `#walletStatus`, `#networkStatus` |
+| Hero | `#hero` | centred `navisprotocol.png` wordmark, `.hero-tag` headline + `.hero-lead` protocol lead, then two centred `.hero-half` rows — the gold `#countdown` card and the Genesis presale card (`#phaseNumber`, phase bar) — above the `.gx-grid` pair: the price/buy panel (`#presalePrice`, `#usdtAmount`, `#tokenEstimate`, `#walletBalance`, `#buyPresale`, `#walletStatus`, `#networkStatus`) on the right and the gold NAV‑Floor column on the left |
 | Trust band | `#trust` | live `#livePrice` market card, verified / liquidity‑lock / treasury cards, RTL fact tape |
 | Platform preview | `#platform` | app chrome, node graph, candlestick chart, money‑flow panel, market ticker |
 | About | `#about` | protocol summary + 4 feature cards |
