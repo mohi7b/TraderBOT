@@ -280,3 +280,388 @@ async function theWorkspaceComesFromTheTokenNeverFromTheWire() {
     eq(gateway.stats().byCode["tenant-mismatch"], 2, "and the door counts them the same way twice");
 }
 
+/* ------------------------------------------------------------
+ * Two readers, because these three layers speak two shapes and one chain
+ * ---------------------------------------------------------- */
+
+/** A refusal, or `null` — the shape identity, the vault and the wire all speak. */
+const refusal = (result) => (result.ok ? null : result);
+
+/** A trail as `action:outcome` strings — the one way this part reads a chain. */
+const linesOf = (entries) => entries.map((entry) => `${entry.action}:${entry.outcome}`);
+
+/* ------------------------------------------------------------
+ * C. one permission table, asked at one door
+ * ---------------------------------------------------------- */
+
+async function onePermissionTableAskedAtOneDoor() {
+    const { gateway, vault, identity } = harness();
+    const owner = await enter(gateway, OWNER);
+
+    /* The owner keeps a venue key. It goes in through the door, and identity's
+     * table is asked twice on the way: once by the door for the route, once by
+     * the vault for the act itself. */
+    const stored = await call(gateway, {
+        method: "PUT",
+        url: "/secrets/binance",
+        headers: auth(owner.access),
+        body: { label: LABEL, value: SECRET_VALUE }
+    });
+    eq(stored.statusCode, 200, "the owner may store a venue key, because the table says so");
+    eq(stored.json().secret.provider, "binance", "and what comes back is the vault's own answer");
+    eq(vault.stats().decisions.allowed, 1, "one act reached the vault, and the vault asked the table before it acted");
+
+    /* A second person: an account of their own first, then a seat at the desk's
+     * table — the seat is what makes them a colleague. */
+    const operator = await enter(gateway, OPERATOR);
+    ok(operator.workspaceId !== owner.workspaceId, "an account registers into a workspace of its own before it is anyone's colleague");
+
+    const invited = await call(gateway, {
+        method: "POST",
+        url: `/workspaces/${owner.workspaceId}/invite`,
+        headers: auth(owner.access),
+        body: { email: OPERATOR.email, role: "operator" }
+    });
+    eq(invited.statusCode, 200, "the owner invites them into the desk's workspace");
+    eq(invited.json().member.role, "operator", "with the role that runs bots and never reads a key");
+    ok(!invited.json().member.permissions.includes(PERMISSIONS.SECRETS_READ), "and the membership row says that out loud");
+
+    const seated = await call(gateway, {
+        method: "POST",
+        url: "/auth/login",
+        body: { email: OPERATOR.email, password: OPERATOR.password, workspaceId: owner.workspaceId }
+    });
+    const asOperator = seated.json();
+    eq(seated.statusCode, 200, "the operator signs in, naming the desk's workspace");
+    eq(asOperator.workspace.id, owner.workspaceId, "and lands in that workspace rather than in the one they registered with");
+    eq(asOperator.role, "operator", "with the role the roster holds there");
+    ok(!asOperator.permissions.includes(PERMISSIONS.SECRETS_READ), "and the permissions the token came with say the same");
+
+    /* The same route, the same key, a token that is real: refused by the table. */
+    const reveal = await call(gateway, {
+        method: "POST",
+        url: "/secrets/binance/reveal",
+        headers: auth(asOperator.access),
+        body: { label: LABEL }
+    });
+    const why = reveal.json();
+    eq(reveal.statusCode, 403, "the operator reaches the same route and is refused");
+    eq(why.code, "forbidden", "with identity's code for a role that does not carry the permission");
+    ok(/secrets:read/.test(why.message), "and identity's own words, which name the permission rather than the door");
+    ok(!("value" in why), "never the value — this door never had one to give");
+
+    /* The proof that the refusal belongs to identity: the vault's own counter did
+     * not move, because the vault was never reached. */
+    eq(vault.stats().decisions.denied, 0, "the vault refused nothing, because the vault was never asked");
+    eq(vault.stats().decisions.allowed, 1, "and the one act that reached it is still the owner's");
+
+    /* The same table, asked at the vault's own door: no HTTP, no route, and the
+     * same answer — one table, two doors, one vocabulary. */
+    const direct = refusal(vault.put(operator.userId, owner.workspaceId, { provider: "binance", value: SECRET_VALUE }));
+    ok(direct !== null, "the vault refuses the operator directly, with no request anywhere");
+    eq(direct.code, "forbidden", "with the same code, because it is the same question");
+    eq(vault.stats().decisions.denied, 1, "and this time the vault did ask — and counted the no");
+
+    /* Both refusals are the one kind of no a reviewer must be able to find. */
+    const trail = identity.trail(owner.userId, { workspaceId: owner.workspaceId });
+    const forbiddens = trail.entries.filter((entry) => entry.code === "forbidden");
+    eq(forbiddens.length, 2, "both refusals are in the workspace's chain, because `forbidden` is a code worth finding later");
+    ok(forbiddens.every((entry) => entry.outcome === "deny" && entry.actorUserId === operator.userId),
+        "each one a denial, each one attributed to the operator who asked");
+    eq(gateway.stats().byCode.forbidden, 1, "and the door counted only the one it answered itself");
+
+    /* The operator may read the trail of the workspace they work in: that is in
+     * the table too, and it is how a colleague audits a colleague. */
+    const readTheTrail = await call(gateway, { url: "/audit", headers: auth(asOperator.access) });
+    eq(readTheTrail.statusCode, 200, "the operator may read the trail, because the same table grants audit:read");
+    ok(readTheTrail.json().entries.every((entry) => entry.workspaceId === owner.workspaceId),
+        "and the trail it reads is the workspace the token is for");
+    ok(readTheTrail.json().entries.some((entry) => entry.code === "forbidden"),
+        "which includes the lines about their own refused reach");
+}
+
+/* ------------------------------------------------------------
+ * D. a key goes in sealed and comes back through one route
+ * ---------------------------------------------------------- */
+
+async function aKeyGoesInSealedAndComesBackThroughOneRoute() {
+    const { gateway, vault, db, identity } = harness();
+    const owner = await enter(gateway, OWNER);
+
+    /* In: the value is handed over exactly once, on the way in — and the answer
+     * to the write carries no part of it back. */
+    const stored = await call(gateway, {
+        method: "PUT",
+        url: "/secrets/binance",
+        headers: auth(owner.access),
+        body: { label: LABEL, value: SECRET_VALUE }
+    });
+    eq(stored.statusCode, 200, "the key is stored");
+    eq(stored.json().created, true, "for the first time, and the vault says so");
+    ok(!JSON.stringify(stored.json()).includes(SECRET_VALUE), "and the answer to the write carries no part of the value back");
+
+    /* Sealed at rest: the row, the whole table, and the chain that recorded it. */
+    const row = vault.stores.secrets.rawByKey(owner.workspaceId, "binance", LABEL);
+    ok(/^v1\$/.test(row.ciphertext) && !row.ciphertext.includes(SECRET_VALUE),
+        "at rest it is the vault's sealed format, not the key");
+    ok(!dump(db, "secrets").includes(SECRET_VALUE), "and the plaintext is nowhere in the table it was typed at");
+    ok(!dump(db, "audit").includes(SECRET_VALUE), "nor anywhere in the chain that recorded the write");
+
+    /* The inventory names what exists and never what it says. */
+    const listed = await call(gateway, { url: "/secrets", headers: auth(owner.access) });
+    eq(listed.statusCode, 200, "the owner may list what exists");
+    eq(listed.json().secrets.length, 1, "one key");
+    eq(listed.json().counts.active, 1, "active, and not revoked");
+    ok(!JSON.stringify(listed.json()).includes(SECRET_VALUE), "and the inventory carries no value at all");
+    ok(!("ciphertext" in listed.json().secrets[0]), "not even the sealed text: the inventory is metadata and only metadata");
+
+    /* One route hands a value back, and this is it. */
+    const revealed = await call(gateway, {
+        method: "POST",
+        url: "/secrets/binance/reveal",
+        headers: auth(owner.access),
+        body: { label: LABEL }
+    });
+    eq(revealed.statusCode, 200, "the one route that hands a value back answers");
+    eq(revealed.json().value, SECRET_VALUE, "with exactly the value that went in");
+    eq(revealed.json().label, LABEL, "against the label it was stored under");
+    eq(revealed.json().secret.useCount, 1, "and the row records that it was handed out once");
+
+    /* Out: revocation closes the door and keeps the row. A key pulled after a
+     * leak must not become a key that never existed. */
+    const revoked = await call(gateway, {
+        method: "POST",
+        url: "/secrets/binance/revoke",
+        headers: auth(owner.access),
+        body: { label: LABEL, reason: "rotated after a leak" }
+    });
+    eq(revoked.statusCode, 200, "the owner may revoke");
+    eq(revoked.json().secret.revoked, true, "and the row says revoked");
+
+    const again = await call(gateway, {
+        method: "POST",
+        url: "/secrets/binance/reveal",
+        headers: auth(owner.access),
+        body: { label: LABEL }
+    });
+    eq(again.statusCode, 409, "the route that returned the value is now closed");
+    eq(again.json().code, "secret-revoked", "as a revocation, not as a key that is missing");
+    eq(again.json().reason, "rotated after a leak", "carrying the reason the revocation was recorded with, so an operator can read why");
+    ok(!("value" in again.json()), "and no value, ever");
+    eq(vault.stores.secrets.rawByKey(owner.workspaceId, "binance", LABEL).use_count, 1,
+        "the refused reach did not touch the row either");
+
+    const stillThere = await call(gateway, { url: "/secrets", headers: auth(owner.access) });
+    eq(stillThere.json().secrets.length, 1, "the row is still there: revocation is not deletion");
+    eq(stillThere.json().counts.revoked, 1, "counted as revoked");
+    eq(stillThere.json().counts.active, 0, "so nothing in this workspace is active");
+    ok(stillThere.json().secrets[0].revokedAt !== null && stillThere.json().secrets[0].revokedReason === "rotated after a leak",
+        "with the time and the reason of the revocation kept on the record");
+
+    /* The chain holds the whole story of the key, and none of its value. */
+    const trail = identity.trail(owner.userId, { workspaceId: owner.workspaceId });
+    const about = trail.entries.filter((entry) => entry.target === `binance:${LABEL}`);
+    const lines = linesOf(about);
+    ok(lines.includes("secret-put:allow"), "the write is in the chain");
+    ok(lines.includes("secret-get:allow"), "the reveal is in the chain");
+    ok(lines.includes("secret-get:deny"), "and the reach that met the revocation is a denial, not a silence");
+    ok(lines.includes("secret-revoke:allow"), "the revocation is in the chain too");
+    ok(about.every((entry) => !JSON.stringify(entry.meta || {}).includes(SECRET_VALUE)),
+        "and every line of it is metadata, never the value");
+    ok(about.every((entry) => entry.workspaceId === owner.workspaceId && entry.actorUserId === owner.userId),
+        "each one attributed to the workspace and the person who asked for it");
+}
+
+/* ------------------------------------------------------------
+ * E. the engine's door is a seam, not a route
+ * ---------------------------------------------------------- */
+
+async function theEnginesDoorIsASeamNotARoute() {
+    const { gateway, vault, identity } = harness();
+    const owner = await enter(gateway, OWNER);
+    const other = await enter(gateway, OPERATOR);
+
+    await call(gateway, {
+        method: "PUT",
+        url: "/secrets/binance",
+        headers: auth(owner.access),
+        body: { label: LABEL, value: SECRET_VALUE }
+    });
+
+    /* No spelling of the engine's door is a route — a caller may try every one. */
+    const spellings = ["/material", "/material/binance", "/engine/material",
+        "/secrets/binance/material", "/secrets/binance/reveal/material"];
+    for (const url of spellings) {
+        const res = await call(gateway, { url, headers: auth(owner.access) });
+        eq(res.statusCode, 404, `there is no route at ${url}`);
+        eq(res.json().code, "no-route", "and the refusal says so in those words");
+        eq(res.json().path, url, "echoing the path it was asked for, and nothing about what might live there");
+    }
+
+    /* The nearest spelling is the vault's list of venues and not the engine's
+     * door: `material` is not a provider, so the write is refused as a venue
+     * this API does not hold — a 400 about the caller's own typo. */
+    const guessed = await call(gateway, {
+        method: "PUT",
+        url: "/secrets/material",
+        headers: auth(owner.access),
+        body: { label: LABEL, value: SECRET_VALUE }
+    });
+    eq(guessed.statusCode, 400, "the one path grammar that matched is a key write");
+    eq(guessed.json().code, "provider-unknown", "judged as an unknown venue, never as a second door");
+
+    /* And no request reached the seam, because none is routed to it. */
+    const routed = identity.stores.audit.trail({ limit: 1000 });
+    ok(!routed.some((entry) => entry.action === "secret-inject"), "no request in this process ever reached the injection seam");
+    ok(gateway.table().every((entry) => !/material|inject/i.test(entry.path)), "and the route table this API publishes names no path like it");
+    eq(gateway.stats().routes, gateway.table().length, "the door publishes exactly the routes it serves, and no more");
+
+    /* The seam itself: a workspace, no person, and the plaintext — in-process. */
+    const injected = vault.material(owner.workspaceId, "binance", { label: LABEL });
+    ok(injected.ok === true, "the engine's door opens for a workspace alone, with no token and no person");
+    eq(injected.value, SECRET_VALUE, "and hands the plaintext over at the seam, inside this process");
+    ok(!("actorUserId" in injected), "with no caller attributed, because an engine is not a person");
+
+    /* The seam meets the same revocation a person meets, and the same absence:
+     * there is no second reading of a revoked key just because nobody asked. */
+    await call(gateway, {
+        method: "POST",
+        url: "/secrets/binance/revoke",
+        headers: auth(owner.access),
+        body: { label: LABEL }
+    });
+    eq(refusal(vault.material(owner.workspaceId, "binance", { label: LABEL })).code, "secret-revoked",
+        "a revoked key stays revoked at the engine's door, exactly as it does at the reveal route");
+    eq(refusal(vault.material(other.workspaceId, "binance", { label: LABEL })).code, "secret-not-found",
+        "another workspace's key is simply not there, because the workspace id is the whole question");
+    eq(refusal(vault.material(null, "binance", { label: LABEL })).code, "secret-not-found",
+        "and a workspace that was never named reaches nothing at all");
+
+    /* The engine's own reads are in the same chain, attributed to a workspace and
+     * to no person — which is the whole point of the seam. */
+    const after = identity.stores.audit.trail({ limit: 1000 });
+    const injects = after.filter((entry) => entry.action === "secret-inject");
+    eq(injects.length, 3, "three injections were recorded: one that worked and two that did not");
+    ok(injects.some((entry) => entry.outcome === "allow"), "the one that worked is in the chain");
+    ok(injects.some((entry) => entry.outcome === "deny" && entry.code === "secret-revoked"), "and the one that met the revocation names its code");
+    ok(injects.every((entry) => entry.actorUserId === null), "no injection line has a person on it");
+    eq(injects.filter((entry) => entry.workspaceId !== null).length, 2, "the two that named a workspace are attributed to it");
+    ok(injects.some((entry) => entry.workspaceId === null), "and the one that named none is recorded as belonging to none");
+    eq(identity.verifyAudit().audit.ok, true, "the chain still verifies with the engine's own reads folded into it");
+}
+
+/* ------------------------------------------------------------
+ * F. one chain holds every layer's decision, and it can be walked
+ * ---------------------------------------------------------- */
+
+/** The stored columns of an entry, so a test can put one back exactly as it was. */
+const columnsOf = (entry) => ({
+    seq: entry.seq,
+    at: entry.at,
+    workspaceId: entry.workspaceId,
+    actorUserId: entry.actorUserId,
+    action: entry.action,
+    outcome: entry.outcome,
+    code: entry.code,
+    target: entry.target,
+    meta: entry.meta,
+    prevHash: entry.prevHash,
+    hash: entry.hash
+});
+
+async function oneChainHoldsEveryLayersDecision() {
+    const { gateway, identity, audit, db } = harness();
+    const owner = await enter(gateway, OWNER);
+
+    /* One ordinary morning at the desk, exercising all three layers: a key in, a
+     * key out, a workspace named that is not the token's, and a password typed
+     * wrong — which is the one line nobody should be able to erase. */
+    await call(gateway, { method: "PUT", url: "/secrets/binance", headers: auth(owner.access), body: { label: LABEL, value: SECRET_VALUE } });
+    await call(gateway, { method: "POST", url: "/secrets/binance/reveal", headers: auth(owner.access), body: { label: LABEL } });
+    await call(gateway, { url: `/workspaces/${ELSEWHERE}/members`, headers: auth(owner.access) });
+    await call(gateway, { method: "POST", url: "/auth/login", body: { email: OWNER.email, password: "Not-The-Password-1" } });
+
+    const whole = audit.trail({ limit: 1000 });
+    const lines = linesOf(whole);
+
+    /* Three writers, one ledger: identity's decisions, the vault's, and the
+     * door's own refusals that identity is never told about. */
+    ok(lines.includes("register:allow") && lines.includes("login:allow"), "identity's decisions are in it");
+    ok(lines.includes("secret-put:allow") && lines.includes("secret-get:allow"), "the vault's decisions are in it too");
+    ok(lines.includes("gateway-tenant:deny"), "and the door's own refusal, which identity never saw");
+    ok(lines.includes("login:deny"), "and a refused login, which is the other kind of line entirely");
+
+    eq(audit.counts().entries, whole.length, "the counts are the table's own, not a second ledger");
+    const page = identity.trail(owner.userId, { workspaceId: owner.workspaceId });
+    eq(page.entries.length, whole.length, "and this workspace's page holds every line of the morning, because every line belongs to it");
+    eq(page.counts.entries, audit.counts().entries, "the counts that come back with a page are the table's, the same number again");
+    eq(gateway.stats().byCode["tenant-mismatch"], 1, "the door counted its own refusal once");
+    eq(gateway.stats().audited, 1, "and says it wrote one line — the one it made without identity");
+
+    /* One chain means one verifier, and it says yes. */
+    const walked = audit.verify();
+    eq(walked.ok, true, "the whole chain verifies as one hash-chained trail");
+    eq(walked.checked, whole.length, "every row of it was walked, not a sample");
+    eq(walked.head, whole[0].hash, "and it ends on the hash of the newest row");
+    eq(identity.verifyAudit().audit.head, walked.head, "identity's own verifier agrees, because it is the same chain and not a copy");
+
+    /* The claim the layer makes is that the chain is append-only. A test that
+     * only read it back would prove nothing, so it is broken on purpose — and
+     * put back, and broken the other way. */
+    const restore = db.prepare(`INSERT INTO audit
+        (seq, at, workspace_id, actor_user_id, action, outcome, code, target, meta, prev_hash, hash)
+        VALUES (@seq, @at, @workspaceId, @actorUserId, @action, @outcome, @code, @target, @meta, @prevHash, @hash)`);
+
+    const middle = whole[Math.floor(whole.length / 2)];
+    db.prepare("DELETE FROM audit WHERE seq = ?").run(middle.seq);
+    const holed = audit.verify();
+    eq(holed.ok, false, "a line dropped out of the middle breaks the chain");
+    eq(holed.brokenAt, middle.seq + 1, "and it is named at the row that no longer follows the one before it");
+
+    restore.run(columnsOf(middle));
+    eq(audit.verify().ok, true, "putting the line back, byte for byte, closes the hole again");
+
+    const rewritten = whole.find((entry) => entry.action === "secret-put");
+    db.prepare("UPDATE audit SET outcome = 'deny' WHERE seq = ?").run(rewritten.seq);
+    const edited = audit.verify();
+    eq(edited.ok, false, "a rewritten outcome is as visible as a missing line");
+    eq(edited.brokenAt, rewritten.seq, "and this time it is the rewritten row itself that is named");
+    ok(edited.checked < whole.length, "with how far it walked before the first row that did not fit");
+}
+
+/* ------------------------------------------------------------
+ * The run — each part on its own database, so none can explain another away
+ * ---------------------------------------------------------- */
+
+const PARTS = [
+    ["a person arrives and the chain says so", aPersonArrivesAndTheChainSaysSo],
+    ["the workspace comes from the token, never from the wire", theWorkspaceComesFromTheTokenNeverFromTheWire],
+    ["one permission table, asked at one door", onePermissionTableAskedAtOneDoor],
+    ["a key goes in sealed and comes back through one route", aKeyGoesInSealedAndComesBackThroughOneRoute],
+    ["the engine's door is a seam, not a route", theEnginesDoorIsASeamNotARoute],
+    ["one chain holds every layer's decision, and it can be walked", oneChainHoldsEveryLayersDecision]
+];
+
+async function main() {
+    let failed = 0;
+
+    for (const [name, part] of PARTS) {
+        const before = checks;
+        try {
+            await part();
+            process.stdout.write(`  ok    ${name}  (${checks - before} checks)\n`);
+        } catch (error) {
+            failed += 1;
+            process.exitCode = 1;
+            process.stdout.write(`  FAIL  ${name}\n        ${error && error.message}\n`);
+        }
+    }
+
+    const tail = failed === 0
+        ? `D1 seam: ${checks} checks passed across ${PARTS.length} parts\n`
+        : `D1 seam: ${failed} of ${PARTS.length} parts failed after ${checks} checks\n`;
+    process.stdout.write(tail);
+}
+
+main();
+
