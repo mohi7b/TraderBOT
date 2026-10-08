@@ -1,7 +1,7 @@
 {
-  "name": "nav-ecosystem-token",
+  "name": "navis-protocol-contracts",
   "version": "1.0.0",
-  "description": "NAV Ecosystem Token (NAV) - ERC20 token with first-hand eligibility / redemption quota tracking",
+  "description": "NAVIS Protocol Token (NAVIS) - ERC20 token with first-hand eligibility / redemption quota tracking, presale, treasury, market maker and vesting custody",
   "license": "MIT",
   "scripts": {
     "compile": "hardhat compile",

@@ -6,6 +6,8 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import {ProtocolPausable} from "./ProtocolPausable.sol";
+
 /**
  * @dev Minimal view of the NAVIS token. Besides the standard ERC20 surface, the
  *      presale needs {mintDirectWithLock}, which issues freshly purchased tokens
@@ -54,6 +56,11 @@ interface INAVToken is IERC20 {
  *         sub-phases involved. The record lives in the NAVIS token and is what
  *         the treasury checks before paying out a redemption.
  *
+ *         The presale is pausable ({ProtocolPausable}): while it is paused no
+ *         purchase can be settled, while every administrative entry point and
+ *         the treasury keep working. Sales resume exactly where they stopped -
+ *         the sub-phase pointer and the sold counters are untouched.
+ *
  * @dev    Amount conventions:
  *           - USDT amounts are expressed in the token's own base units (6 for
  *             the real USDT);
@@ -61,7 +68,7 @@ interface INAVToken is IERC20 {
  *         The formulas below are decimal-agnostic for USDT because the NAV
  *         floor is already expressed in USDT base units.
  */
-contract Presale is Ownable, ReentrancyGuard {
+contract Presale is ProtocolPausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     /// @notice Denominator used for {SubPhase-priceMultiplier} (1.000000 == 1e6).
@@ -277,6 +284,7 @@ contract Presale is Ownable, ReentrancyGuard {
     function buyTokens(uint256 usdtAmount)
         external
         nonReentrant
+        whenNotPaused
         returns (uint256 tokensMinted)
     {
         require(usdtAmount > 0, "Presale: amount must be greater than zero");

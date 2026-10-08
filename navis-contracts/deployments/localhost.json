@@ -1,0 +1,109 @@
+{
+  "network": "localhost",
+  "chainId": 31337,
+  "rpcUrl": "http://127.0.0.1:8545",
+  "recordedAt": "2026-10-08T17:47:22.559Z",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "pending": false,
+  "mode": "mocks",
+  "addresses": {
+    "navToken": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
+    "presale": "0x851356ae760d987E095750cCeb3bC6014560891C",
+    "treasury": "0xf5059a5D33d5853360D16C683c16e67980206f36",
+    "vesting": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
+    "marketMaker": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+    "usdtToken": "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB",
+    "router": "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8",
+    "liquidityPool": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+    "keeper": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "vestingKeeper": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+  },
+  "bootstrap": {
+    "supplyNavis": "0",
+    "seedReserveUsdt": "0",
+    "seedFloatUsdt": "0"
+  },
+  "vesting": {
+    "minted": "250000000",
+    "campaignReserve": "5000000",
+    "schedules": [
+      {
+        "role": "team",
+        "beneficiary": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "amount": "150000000",
+        "cliffDays": 365,
+        "durationDays": 1095,
+        "sharePercent": 15,
+        "revocable": false
+      },
+      {
+        "role": "marketing",
+        "beneficiary": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "amount": "100000000",
+        "cliffDays": 90,
+        "durationDays": 730,
+        "sharePercent": 10,
+        "revocable": true
+      }
+    ]
+  },
+  "governance": {
+    "navTokenOwner": "0x851356ae760d987E095750cCeb3bC6014560891C",
+    "presaleOwner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "treasuryOwner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "vestingOwner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "pauser": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+  },
+  "deployedCode": {
+    "navToken": {
+      "address": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
+      "deployed": true,
+      "codeBytes": 5090
+    },
+    "presale": {
+      "address": "0x851356ae760d987E095750cCeb3bC6014560891C",
+      "deployed": true,
+      "codeBytes": 6914
+    },
+    "treasury": {
+      "address": "0xf5059a5D33d5853360D16C683c16e67980206f36",
+      "deployed": true,
+      "codeBytes": 6851
+    },
+    "vesting": {
+      "address": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
+      "deployed": true,
+      "codeBytes": 19910
+    },
+    "marketMaker": {
+      "address": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+      "deployed": true,
+      "codeBytes": 11313
+    },
+    "usdtToken": {
+      "address": "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB",
+      "deployed": true,
+      "codeBytes": 1925
+    },
+    "router": {
+      "address": "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8",
+      "deployed": true,
+      "codeBytes": 6235
+    },
+    "liquidityPool": {
+      "address": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+      "deployed": true,
+      "codeBytes": 11313
+    },
+    "keeper": {
+      "address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployed": false,
+      "codeBytes": 0
+    },
+    "vestingKeeper": {
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "deployed": false,
+      "codeBytes": 0
+    }
+  }
+}

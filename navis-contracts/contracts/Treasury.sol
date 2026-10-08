@@ -6,6 +6,8 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import {ProtocolPausable} from "./ProtocolPausable.sol";
+
 /**
  * @dev Minimal view of the NAVIS token needed by the treasury: the standard
  *      ERC20 surface plus the first-hand accounting, the redemption lock
@@ -76,8 +78,15 @@ interface IFlashLoanReceiver {
  *           - USDT amounts are expressed in the token's own base units (6 for
  *             the real USDT);
  *           - NAVIS amounts are expressed in 1e18 base units (18 decimals).
+ *
+ *         The treasury is pausable ({ProtocolPausable}): while it is paused the
+ *         reserve stops paying redemptions and stops issuing flash loans, so an
+ *         incident can be contained before the reserve is drained. Nothing else
+ *         changes - a redemption is priced from the live floor at call time, so
+ *         unpausing simply restores the previous behaviour without touching any
+ *         balance, lock or quota.
  */
-contract Treasury is Ownable, ReentrancyGuard {
+contract Treasury is ProtocolPausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     /// @notice Fixed scale of a whole NAVIS token (18 decimals).
@@ -190,6 +199,24 @@ contract Treasury is Ownable, ReentrancyGuard {
     }
 
     /**
+     * @notice Alias of {navFloor} with an explicit name for off-chain readers
+     *         (dashboards, indexers, lending integrations): the USDT value of a
+     *         whole NAVIS token, expressed in USDT base units.
+     */
+    function getNavFloorPrice() external view returns (uint256) {
+        return navFloor();
+    }
+
+    /**
+     * @notice Alias of {reserveBalance} with an explicit name for off-chain
+     *         readers: the whole USDT reserve backing the NAV Floor, expressed
+     *         in USDT base units.
+     */
+    function getTotalReserve() external view returns (uint256) {
+        return reserveBalance();
+    }
+
+    /**
      * @notice Timestamp from which `user` may redeem its first-hand tokens.
      * @dev    The lock recorded at issuance time wins: a purchase through the
      *         presale stored `purchase timestamp + lock period of the sub-phase`
@@ -247,7 +274,7 @@ contract Treasury is Ownable, ReentrancyGuard {
      *
      * @param  tokenAmount Amount of NAVIS to redeem (1e18 base units).
      */
-    function redeem(uint256 tokenAmount) external nonReentrant {
+    function redeem(uint256 tokenAmount) external nonReentrant whenNotPaused {
         require(tokenAmount > 0, "Treasury: amount must be greater than zero");
         require(isLockElapsed(msg.sender), "Treasury: lock period not elapsed");
         require(
@@ -314,7 +341,7 @@ contract Treasury is Ownable, ReentrancyGuard {
         uint256 amount,
         address receiver,
         bytes calldata data
-    ) external nonReentrant {
+    ) external nonReentrant whenNotPaused {
         require(amount > 0, "Treasury: amount must be greater than zero");
         require(isWhitelisted[receiver], "Treasury: receiver is not whitelisted");
         require(receiver.code.length > 0, "Treasury: receiver is not a contract");

@@ -4,10 +4,12 @@ pragma solidity ^0.8.20;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
+import {ProtocolPausable} from "./ProtocolPausable.sol";
+
 /**
  * @title  NAVToken
  * @author NAV Ecosystem
- * @notice NAV Ecosystem Token (symbol: NAV) - an ERC20 token with a fixed
+ * @notice NAVIS Protocol Token (symbol: NAVIS) - an ERC20 token with a fixed
  *         maximum supply of 100,000,000,000 (100 billion) tokens (18 decimals).
  *
  *         Tokens are never minted in the constructor. Instead, the owner
@@ -27,8 +29,15 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
  *         circulating supply only through burns, which may be performed by the
  *         owner, by the holder itself, or by an address registered as a burner
  *         through {setBurner} (typically the treasury contract).
+ *
+ *         The token is pausable ({ProtocolPausable}): while it is paused every
+ *         mint, transfer and burn reverts, which freezes the whole economy
+ *         without touching a single balance. Ownership of the token is handed
+ *         over to the presale at deployment time, so the emergency stop is
+ *         driven by the pauser role ({setPauser}) that the deployment grants to
+ *         the operator wallet.
  */
-contract NAVToken is ERC20, Ownable {
+contract NAVToken is ERC20, ProtocolPausable {
     /// @notice Hard cap on the total supply: 100,000,000,000 tokens * 1e18.
     uint256 public constant MAX_SUPPLY = 100_000_000_000 * 10 ** 18;
 
@@ -96,9 +105,38 @@ contract NAVToken is ERC20, Ownable {
      *                     It is the only address allowed to call {mintDirect}.
      */
     constructor(address initialOwner)
-        ERC20("NAV Ecosystem Token", "NAV")
+        ERC20("NAVIS Protocol", "NAVIS")
         Ownable(initialOwner)
     {}
+
+    /* --------------------------------------------------------------------- */
+    /*                          GENESIS (FIRST-HAND)                         */
+    /* --------------------------------------------------------------------- */
+
+    /**
+     * @notice Whether `account` still counts as a genesis holder, i.e. it holds
+     *         (part of) the first-hand quota it received directly from the
+     *         owner and has not moved those tokens out.
+     * @dev    Convenience view for governance tooling: the genesis set is
+     *         exactly the set of wallets with a non-zero
+     *         {firstHandEligibility} - the quota is reduced proportionally as
+     *         soon as the wallet transfers tokens away.
+     * @param  account Wallet to inspect.
+     */
+    function isGenesisHolder(address account) external view returns (bool) {
+        return firstHandEligibility[account] != 0;
+    }
+
+    /**
+     * @notice Remaining first-hand ("genesis") quota of `account`.
+     * @dev    The very number {Treasury-redeem} checks, exposed under an
+     *         explicit name so off-chain dashboards can read the genesis
+     *         balance without knowing the internal accounting.
+     * @param  account Wallet to inspect.
+     */
+    function getGenesisBalance(address account) external view returns (uint256) {
+        return firstHandEligibility[account];
+    }
 
     /**
      * @notice Issue `amount` brand new tokens directly to `to` and record the
@@ -220,12 +258,16 @@ contract NAVToken is ERC20, Ownable {
      *
      *      Minting (`from == address(0)`) leaves the sender untouched, so the
      *      quota granted by {mintDirect} is preserved.
+     *
+     *      Every mint, transfer and burn of the token runs through here, so the
+     *      `whenNotPaused` guard of {ProtocolPausable} stops the whole economy
+     *      with a single transaction.
      */
     function _update(
         address from,
         address to,
         uint256 value
-    ) internal virtual override {
+    ) internal virtual override whenNotPaused {
         if (from != address(0)) {
             uint256 eligibility = firstHandEligibility[from];
             if (eligibility > 0) {
