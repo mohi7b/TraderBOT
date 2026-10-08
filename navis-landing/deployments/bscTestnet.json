@@ -1,0 +1,102 @@
+{
+  "network": "bscTestnet",
+  "chainId": 97,
+  "rpcUrl": "https://data-seed-prebsc-1-s1.binance.org:8545",
+  "recordedAt": "2026-10-08T11:09:04.167Z",
+  "deployer": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+  "pending": false,
+  "mode": "mocks",
+  "addresses": {
+    "navToken": "0x58Ba8155610D1c24aBa123B184cD0e4Fb96d6568",
+    "presale": "0x8041B11B72d2B32f0286171E8841fDBe04A05F17",
+    "treasury": "0x8652cD186CB5e1Bb743318670e25b364ee2607b3",
+    "vesting": "0x397Ae72B89dba4796198a11A458a41CE45965109",
+    "marketMaker": "0xBCf74082FAbE008E333e116e457Ae3e751F5ea82",
+    "usdtToken": "0x0E07c366d5EF55C53dbeBfF59739ADB1bEf7f5c7",
+    "router": "0x5f7b43156deB9B689c63aCc101b34616E5c1A3b6",
+    "liquidityPool": "0xBCf74082FAbE008E333e116e457Ae3e751F5ea82",
+    "keeper": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff"
+  },
+  "bootstrap": {
+    "supplyNavis": "750000000",
+    "seedReserveUsdt": "10000000",
+    "seedFloatUsdt": "50000"
+  },
+  "vesting": {
+    "minted": "250000000",
+    "schedules": [
+      {
+        "role": "team",
+        "beneficiary": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+        "amount": "150000000",
+        "cliffDays": 365,
+        "durationDays": 1095,
+        "sharePercent": 15,
+        "revocable": false
+      },
+      {
+        "role": "marketing",
+        "beneficiary": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+        "amount": "100000000",
+        "cliffDays": 90,
+        "durationDays": 730,
+        "sharePercent": 10,
+        "revocable": true
+      }
+    ]
+  },
+  "governance": {
+    "navTokenOwner": "0x8041B11B72d2B32f0286171E8841fDBe04A05F17",
+    "presaleOwner": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+    "treasuryOwner": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+    "vestingOwner": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+    "pauser": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff"
+  },
+  "deployedCode": {
+    "navToken": {
+      "address": "0x58Ba8155610D1c24aBa123B184cD0e4Fb96d6568",
+      "deployed": true,
+      "codeBytes": 5090
+    },
+    "presale": {
+      "address": "0x8041B11B72d2B32f0286171E8841fDBe04A05F17",
+      "deployed": true,
+      "codeBytes": 6914
+    },
+    "treasury": {
+      "address": "0x8652cD186CB5e1Bb743318670e25b364ee2607b3",
+      "deployed": true,
+      "codeBytes": 6851
+    },
+    "vesting": {
+      "address": "0x397Ae72B89dba4796198a11A458a41CE45965109",
+      "deployed": true,
+      "codeBytes": 9367
+    },
+    "marketMaker": {
+      "address": "0xBCf74082FAbE008E333e116e457Ae3e751F5ea82",
+      "deployed": true,
+      "codeBytes": 11313
+    },
+    "usdtToken": {
+      "address": "0x0E07c366d5EF55C53dbeBfF59739ADB1bEf7f5c7",
+      "deployed": true,
+      "codeBytes": 1925
+    },
+    "router": {
+      "address": "0x5f7b43156deB9B689c63aCc101b34616E5c1A3b6",
+      "deployed": true,
+      "codeBytes": 6235
+    },
+    "liquidityPool": {
+      "address": "0xBCf74082FAbE008E333e116e457Ae3e751F5ea82",
+      "deployed": true,
+      "codeBytes": 11313
+    },
+    "keeper": {
+      "address": "0x23f7b4FAF4Fa8a3A44B21569B7Ef3BA6f7f1Bdff",
+      "deployed": false,
+      "codeBytes": 0
+    }
+  }
+}

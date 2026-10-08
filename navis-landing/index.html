@@ -341,6 +341,47 @@
 
     /* language toggle: one row (flag · label · chevron) that grows with its label */
     .icon-btn.icon-btn-wide{display:inline-flex;align-items:center;gap:.5rem;width:auto;height:auto;min-height:2.5rem;padding-inline:.72rem;white-space:nowrap}
+
+    /* ---------- owner admin panel (self-contained skin) ---------- */
+    #admin .adm-panel{border-radius:1.35rem;border:1px solid rgba(255,199,0,.22);background:var(--plate);box-shadow:0 40px 90px -55px rgba(0,0,0,.95)}
+    /* the console stays hidden even if the Tailwind CDN is unavailable */
+    #admin.hidden,#admin .hidden{display:none}
+    #admin .adm-lock{display:grid;place-items:center;width:3rem;height:3rem;border-radius:1rem;border:1px solid rgba(255,199,0,.3);background:rgba(255,199,0,.08);color:var(--gold2);flex:none}
+    #admin .adm-lock.is-open{border-color:rgba(110,231,183,.36);background:rgba(110,231,183,.1);color:#6EE7B7}
+    #admin .adm-gate{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;padding:.75rem .9rem;border-radius:.85rem;border:1px solid var(--hair);background:rgba(255,255,255,.03);font-size:.78rem;line-height:1.95;color:#C7D2E0}
+    #admin .adm-gate b{color:#fff;font-weight:500}
+    #admin .adm-gate.is-err{border-color:rgba(255,140,140,.32);background:rgba(255,90,90,.07);color:#FFCFCF}
+    #admin .adm-gate.is-ok{border-color:rgba(110,231,183,.3);background:rgba(110,231,183,.07);color:#C6F6E4}
+    #admin .adm-block{border-radius:1.1rem;border:1px solid var(--hair);background:var(--plate2);padding:1.1rem}
+    #admin .adm-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+    #admin .adm-grid>div.adm-block{margin-top:0}
+    #admin .adm-block+.adm-block,#admin .adm-grid+.adm-block,#admin .adm-grid+.adm-grid,#admin .adm-block+.adm-grid,#admin .adm-gate+.adm-hint{margin-top:.9rem}
+    #admin .adm-block>h3{font-family:var(--font-display);font-weight:600;font-size:.95rem;line-height:1.7;color:#fff}
+    #admin .adm-dl{display:grid;gap:.3rem;margin-top:.7rem}
+    #admin .adm-kv{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;font-size:.75rem;color:#94A3B8;line-height:1.9}
+    #admin .adm-kv b{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:500;color:#EAF2FF;text-align:end}
+    #admin .adm-form{display:grid;gap:.35rem;align-content:start}
+    #admin .adm-lbl{display:block;margin-top:.4rem;font-size:.68rem;color:#8494A8;line-height:1.9}
+    #admin .adm-in{font-family:var(--font-num);font-variant-numeric:tabular-nums;width:100%;border-radius:.7rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);padding:.48rem .7rem;font-size:.78rem;color:#fff;outline:none;transition:border-color .25s,box-shadow .25s}
+    #admin .adm-in:focus{border-color:rgba(212,175,55,.7);box-shadow:0 0 0 3px rgba(212,175,55,.16)}
+    #admin .adm-in::placeholder{color:#5C6779}
+    #admin .adm-check{display:flex;align-items:center;gap:.5rem;margin-top:.5rem;font-size:.72rem;color:#94A3B8;line-height:1.9}
+    #admin .adm-check input{width:.95rem;height:.95rem;accent-color:#D4AF37;flex:none}
+    #admin .adm-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
+    #admin .adm-hint{font-size:.69rem;line-height:1.95;color:#7A8699}
+    #admin .adm-table{width:100%;border-collapse:collapse;font-size:.74rem}
+    #admin .adm-table th{padding:.45rem .5rem;border-bottom:1px solid var(--hair);font-weight:500;color:#8494A8;text-align:start;white-space:nowrap}
+    #admin .adm-table td{padding:.5rem;border-bottom:1px solid rgba(255,255,255,.05);color:#C7D2E0;white-space:nowrap;font-family:var(--font-num);font-variant-numeric:tabular-nums}
+    #admin .adm-table tr:last-child td{border-bottom:0}
+    #admin .adm-scroll{overflow-x:auto;margin-top:.6rem}
+    #admin .adm-pick{cursor:pointer;border:1px solid var(--hair2);border-radius:999px;background:transparent;color:#ADCEFF;font-size:.66rem;padding:.16rem .55rem;font-family:var(--font-num)}
+    #admin .adm-pick:hover{background:rgba(173,206,255,.14)}
+    #admin .adm-meter{position:relative;height:.3rem;min-width:3.25rem;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+    #admin .adm-meter i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+    #admin .adm-tag{display:inline-flex;align-items:center;gap:.3rem;border-radius:999px;border:1px solid var(--hair2);padding:.14rem .55rem;font-size:.64rem;color:#8494A8;white-space:nowrap}
+    #admin .adm-tag.is-own{border-color:rgba(255,199,0,.4);background:rgba(255,199,0,.08);color:#F2DC9B}
+    #admin .adm-tag.is-on{border-color:rgba(110,231,183,.4);background:rgba(110,231,183,.08);color:#6EE7B7}
+    #admin [disabled]{opacity:.45;cursor:not-allowed}
   </style>
   </head>
 <body class="relative min-h-screen antialiased">
@@ -1323,6 +1364,483 @@
         </div>
       </div>
     </section>
+
+  <!-- ======================= ADMIN PANEL (owner-gated) =======================
+       Owner console for the deployed Presale / Treasury / NAVToken contracts.
+       Everything inside #admBody stays locked until the connected wallet turns
+       out to be owner() of one of them; every write is additionally enforced
+       on-chain by onlyOwner. Entry points: the always-visible footer link
+       (#admin anchor) and a silent probe of an already-authorised account.
+       Reads fall back to a public RPC, so the treasury/NAV figures are live
+       even before a wallet is connected.
+       ====================================================================== -->
+  <section id="admin" class="sec hidden" aria-labelledby="admTitle">
+    <div class="wrap">
+      <div class="adm-panel p-6 sm:p-8">
+
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="adm-lock" id="admLockIcon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6"><rect x="4.5" y="10" width="15" height="10.5" rx="2.4" stroke="currentColor" stroke-width="1.6" /><path d="M8.4 10V7.6a3.6 3.6 0 0 1 7.2 0V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /><circle cx="12" cy="15.2" r="1.5" fill="currentColor" /></svg>
+            </span>
+            <div>
+              <span class="eyebrow">Owner Console</span>
+              <h2 id="admTitle" class="h2s mt-3" style="font-size:clamp(1.35rem,2.6vw,1.9rem)">پنل مدیریت قراردادها</h2>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="chip chip-cy" id="admChainChip"><span class="badge-dot"></span><b id="admChainLabel">شبکه نامشخص</b></span>
+            <span class="chip" id="admAccountChip">کیف‌پول متصل نیست</span>
+            <button id="admConnect" type="button" class="btn btn-1 btn-sm">اتصال کیف‌پول مالک</button>
+            <button id="admRefresh" type="button" class="btn btn-2 btn-sm">به‌روزرسانی</button>
+            <button id="admSwitch" type="button" class="btn btn-2 btn-sm hidden">سوییچ شبکه</button>
+          </div>
+        </div>
+
+        <p class="adm-gate mt-4" id="admGate" role="status">
+          <b>پنل قفل است.</b> کیف‌پول مالک را متصل کنید تا تنظیمات وستینگ، تخصیص و فازهای پیش‌فروش باز شود.
+        </p>
+        <p class="adm-hint" id="admSource">منبع تنظیمات: در حال بارگذاری فایل‌های deployments…</p>
+
+        <div id="admBody" class="mt-6 hidden">
+          <!-- live treasury / NAV / presale readouts (owner-gated writes, public reads) -->
+          <div class="adm-grid">
+            <div class="adm-block">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3>خزانه · زنده</h3>
+                <span class="adm-tag" id="admOwnTreasury">Treasury</span>
+              </div>
+              <div class="adm-dl">
+                <div class="adm-kv"><span>موجودی ذخیرهٔ تتر</span><b id="admReserve">—</b></div>
+                <div class="adm-kv"><span>کل ذخیره (شامل شناور)</span><b id="admTotalReserve">—</b></div>
+                <div class="adm-kv"><span>قیمت کف (NAV Floor)</span><b id="admFloor">—</b></div>
+                <div class="adm-kv"><span>کف اعلامی قرارداد</span><b id="admNavFloor">—</b></div>
+                <div class="adm-kv"><span>موجودی تتر خزانه</span><b id="admUsdtBalance">—</b></div>
+                <div class="adm-kv"><span>حداقل قفل بازخرید</span><b id="admTreasuryLockPeriod">—</b></div>
+                <div class="adm-kv"><span>قرارداد تتر</span><b id="admUsdtAddress">—</b></div>
+              </div>
+            </div>
+            <div class="adm-block">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3>توکن · زنده</h3>
+                <span class="adm-tag" id="admOwnNavToken">NAVToken</span>
+              </div>
+              <div class="adm-dl">
+                <div class="adm-kv"><span>عرضهٔ در گردش</span><b id="admSupply">—</b></div>
+                <div class="adm-kv"><span>سقف عرضه</span><b id="admSupplyCap">—</b></div>
+                <div class="adm-kv"><span>درصد از سقف</span><b id="admSupplyPct">—</b></div>
+                <div class="adm-kv"><span>واحد توکن</span><b id="admNavSymbol">—</b></div>
+                <div class="adm-kv"><span>تخصیص مستقیم (خارج از پیش‌فروش)</span><b id="admGenesisPool">—</b></div>
+                <div class="adm-kv"><span>قیمت کف جاری (از پیش‌فروش)</span><b id="admCurrentFloor">—</b></div>
+                <div class="adm-kv"><span>نشان توکن</span><b id="admNavAddress">—</b></div>
+              </div>
+            </div>
+            <div class="adm-block">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3>پیش‌فروش · زنده</h3>
+                <span class="adm-tag" id="admOwnPresale">Presale</span>
+              </div>
+              <div class="adm-dl">
+                <div class="adm-kv"><span>زیرفاز جاری</span><b id="admCurrent">—</b></div>
+                <div class="adm-kv"><span>تعداد زیرفازها</span><b id="admPhaseCountLive">—</b></div>
+                <div class="adm-kv"><span>قیمت زیرفاز جاری</span><b id="admPhasePrice">—</b></div>
+                <div class="adm-kv"><span>قفل پیش‌فرض زیرفاز</span><b id="admDefaultLock">—</b></div>
+                <div class="adm-kv"><span>مقصد کف خریدها</span><b id="admVault">—</b></div>
+                <div class="adm-kv"><span>مقصد پرمیوم خریدها</span><b id="admPool">—</b></div>
+                <div class="adm-kv"><span>قرارداد پیش‌فروش</span><b id="admPresaleAddress">—</b></div>
+              </div>
+            </div>
+          </div>
+          <!-- emergency stop: pause/resume of the three pausable contracts -->
+          <div class="adm-block">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3>توقف اضطراری پروتکل (Pause / Resume)</h3>
+              <span class="adm-hint" id="admPauseHint">در حال خواندن وضعیت…</span>
+            </div>
+            <div class="adm-grid mt-3">
+              <div class="adm-block">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3>توکن NAVIS</h3>
+                  <span class="adm-tag" id="admPauseStateNav">—</span>
+                </div>
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="button" id="admPauseNav">توقف توکن</button>
+                  <button class="btn btn-1 btn-sm" type="button" id="admResumeNav">ازسرگیری</button>
+                </div>
+                <p class="adm-hint">
+                  قفل توکن، صدور و انتقال و سوزاندن را متوقف می‌کند؛ آزادسازی وستینگ هم به همین دلیل متوقف می‌شود
+                  (<span class="fnum">pause()</span> روی قرارداد توکن).
+                </p>
+              </div>
+              <div class="adm-block">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3>پیش‌فروش</h3>
+                  <span class="adm-tag" id="admPauseStatePresale">—</span>
+                </div>
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="button" id="admPausePresale">توقف فروش</button>
+                  <button class="btn btn-1 btn-sm" type="button" id="admResumePresale">ازسرگیری</button>
+                </div>
+                <p class="adm-hint">
+                  با توقف، هیچ خریدی تسویه نمی‌شود؛ اشاره‌گر زیرفاز و شمارندهٔ فروش دست‌نخورده می‌ماند
+                  (<span class="fnum">pause()</span> روی قرارداد پیش‌فروش).
+                </p>
+              </div>
+              <div class="adm-block">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3>خزانه</h3>
+                  <span class="adm-tag" id="admPauseStateTreasury">—</span>
+                </div>
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="button" id="admPauseTreasury">توقف خزانه</button>
+                  <button class="btn btn-1 btn-sm" type="button" id="admResumeTreasury">ازسرگیری</button>
+                </div>
+                <p class="adm-hint">
+                  بازخرید و فلش‌لون تتر متوقف می‌شود، اما ذخیره جابه‌جا نمی‌شود
+                  (<span class="fnum">pause()</span> روی قرارداد خزانه).
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- sub-phase inventory: supply / sold / progress / multiplier / price / lock -->
+          <div class="adm-block">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3>زیرفازهای پیش‌فروش</h3>
+              <span class="adm-hint" id="admPhaseHint">در حال خواندن قرارداد…</span>
+            </div>
+            <div class="adm-scroll">
+              <table class="adm-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>عرضه (NAVIS)</th>
+                    <th>فروش‌رفته</th>
+                    <th>پیشرفت</th>
+                    <th>ضریب (× کف)</th>
+                    <th>قیمت توکن</th>
+                    <th>قفل (روز)</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="admPhaseRows">
+                  <tr><td colspan="9" class="adm-hint">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="adm-hint mt-3">
+              ضریب، مضربی از قیمت کف خزانه است (۱٫۰۰ = دقیقاً کف) و با مقیاس <span class="fnum">1e6</span> ذخیره می‌شود؛
+              «انتخاب» اعداد زیرفاز را در فرم ویرایش می‌ریزد.
+            </p>
+          </div>
+          <!-- phase management: append / reconfigure / re-lock / move the pointer -->
+          <div class="adm-grid">
+            <form class="adm-block adm-form" id="admFormAdd" novalidate>
+              <h3>افزودن زیرفاز</h3>
+              <label class="adm-lbl" for="admAddSupply">عرضهٔ قابل فروش (NAVIS)</label>
+              <input class="adm-in" id="admAddSupply" type="text" inputmode="decimal" placeholder="400000000" autocomplete="off" />
+              <label class="adm-lbl" for="admAddMultiplier">ضریب قیمت نسبت به کف</label>
+              <input class="adm-in" id="admAddMultiplier" type="text" inputmode="decimal" value="1.0" autocomplete="off" />
+              <label class="adm-lbl" for="admAddLockDays">قفل بازخرید (روز) — خالی = قفل پیش‌فرض ۱۸۰ روزه</label>
+              <input class="adm-in" id="admAddLockDays" type="text" inputmode="numeric" placeholder="180" autocomplete="off" />
+              <label class="adm-check"><input id="admAddActive" type="checkbox" checked /> <span>از ابتدا فعال باشد</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">افزودن زیرفاز</button>
+              </div>
+              <p class="adm-hint">با قفل دلخواه، تابع <span class="fnum">addSubPhaseWithLock</span> صدا زده می‌شود.</p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormEdit" novalidate>
+              <h3>ویرایش زیرفاز</h3>
+              <label class="adm-lbl" for="admEditIndex">شمارهٔ زیرفاز</label>
+              <input class="adm-in" id="admEditIndex" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+              <label class="adm-lbl" for="admEditSupply">عرضهٔ کل (NAVIS) — نمی‌تواند از فروش‌رفته کمتر شود</label>
+              <input class="adm-in" id="admEditSupply" type="text" inputmode="decimal" placeholder="400000000" autocomplete="off" />
+              <label class="adm-lbl" for="admEditMultiplier">ضریب قیمت نسبت به کف</label>
+              <input class="adm-in" id="admEditMultiplier" type="text" inputmode="decimal" placeholder="1.11" autocomplete="off" />
+              <label class="adm-check"><input id="admEditActive" type="checkbox" checked /> <span>فعال بماند</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">ذخیرهٔ ویرایش</button>
+              </div>
+              <p class="adm-hint">تابع <span class="fnum">setSubPhase(index, supply, multiplier, active)</span></p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormLock" novalidate>
+              <h3>قفل بازخرید زیرفاز</h3>
+              <label class="adm-lbl" for="admLockIndex">شمارهٔ زیرفاز</label>
+              <input class="adm-in" id="admLockIndex" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+              <label class="adm-lbl" for="admLockDays">قفل جدید (روز)</label>
+              <input class="adm-in" id="admLockDays" type="text" inputmode="numeric" placeholder="180" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">اعمال قفل</button>
+              </div>
+              <p class="adm-hint">
+                تنها تا زمانی که زیرفاز در حال فروش است قابل تغییر است
+                (<span class="fnum">setSubPhaseLockPeriod</span>) و قفل ثبت‌شدهٔ خریدهای قبلی دست‌نخورده می‌ماند.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormCurrent" novalidate>
+              <h3>زیرفاز جاری</h3>
+              <label class="adm-lbl" for="admCurrentIndex">شمارهٔ زیرفازی که خرید بعدی از آن شروع می‌شود</label>
+              <input class="adm-in" id="admCurrentIndex" type="text" inputmode="numeric" placeholder="1" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">انتقال اشاره‌گر</button>
+                <button class="btn btn-2 btn-sm" id="admEndPresale" type="button">پایان پیش‌فروش</button>
+              </div>
+              <p class="adm-hint">
+                مقدار برابر با «تعداد زیرفازها» یعنی پیش‌فروش تمام‌شده:
+                <span class="fnum">setCurrentSubPhase(count)</span>
+              </p>
+            </form>
+          </div>
+          <!-- vesting & allocation: direct issuance (with redemption lock), burns, burners, wallet lookup -->
+          <div class="adm-grid">
+            <form class="adm-block adm-form" id="admFormMint" novalidate>
+              <h3>تخصیص مستقیم (وستینگ)</h3>
+              <label class="adm-lbl" for="admMintTo">کیف‌پول دریافت‌کننده</label>
+              <input class="adm-in" id="admMintTo" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-lbl" for="admMintAmount">مقدار (NAVIS کامل، بدون جداکننده)</label>
+              <input class="adm-in" id="admMintAmount" type="text" inputmode="decimal" placeholder="1000000" autocomplete="off" />
+              <label class="adm-lbl" for="admMintLockDays">قفل بازخرید (روز) — خالی = بدون قفل اختصاصی</label>
+              <input class="adm-in" id="admMintLockDays" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">صدور توکن</button>
+              </div>
+              <p class="adm-hint">
+                با قفل، <span class="fnum">mintDirectWithLock</span> و بدون آن <span class="fnum">mintDirect</span> صدا زده می‌شود؛
+                سهمیهٔ دست‌اول (<span class="fnum">firstHandEligibility</span>) و قفل بازخرید همان لحظه برای این کیف‌پول ثبت می‌شود.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormBurn" novalidate>
+              <h3>سوزاندن موجودی</h3>
+              <label class="adm-lbl" for="admBurnFrom">کیف‌پول مبدأ</label>
+              <input class="adm-in" id="admBurnFrom" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-lbl" for="admBurnAmount">مقدار (NAVIS کامل)</label>
+              <input class="adm-in" id="admBurnAmount" type="text" inputmode="decimal" placeholder="50000" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">سوزاندن</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">burnDirect(from, amount)</span> موجودی را کم و سهمیهٔ دست‌اول را به همان اندازه کاهش می‌دهد؛
+                عرضهٔ کمتر یعنی کف بالاتر برای باقی دارندگان.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormBurner" novalidate>
+              <h3>دسترسی سوزاندن (Burner)</h3>
+              <label class="adm-lbl" for="admBurnerAccount">آدرس قرارداد یا کیف‌پول</label>
+              <input class="adm-in" id="admBurnerAccount" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-check"><input id="admBurnerStatus" type="checkbox" checked /> <span>مجاز به سوزاندن توکن دیگران</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">ثبت دسترسی</button>
+              </div>
+              <p class="adm-hint">خزانه برای بازخرید به این دسترسی نیاز دارد: <span class="fnum">setBurner(account, status)</span></p>
+            </form>
+
+            <div class="adm-block adm-form">
+              <h3>بررسی کیف‌پول</h3>
+              <label class="adm-lbl" for="admLookupAddr">آدرس کیف‌پول یا خریدار</label>
+              <input class="adm-in" id="admLookupAddr" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <div class="adm-actions">
+                <button class="btn btn-2 btn-sm" id="admLookupBtn" type="button">خواندن وضعیت</button>
+              </div>
+              <div class="adm-dl">
+                <div class="adm-kv"><span>موجودی NAVIS</span><b id="admLookupBalance">—</b></div>
+                <div class="adm-kv"><span>سهمیهٔ دست‌اول</span><b id="admLookupQuota">—</b></div>
+                <div class="adm-kv"><span>قفل بازخرید تا</span><b id="admLookupLock">—</b></div>
+                <div class="adm-kv"><span>آخرین صدور مستقیم</span><b id="admLookupMint">—</b></div>
+                <div class="adm-kv"><span>وضعیت</span><b id="admLookupFlags">—</b></div>
+              </div>
+              <p class="adm-hint">همهٔ اعداد از <span class="fnum">getGenesisBalance</span>، <span class="fnum">redemptionLockExpiresAt</span> و <span class="fnum">lastDirectMintAt</span> خوانده می‌شوند.</p>
+            </div>
+          </div>
+          <!-- treasury controls: fallback redemption lock, flash-loan whitelist, routing of floor/premium -->
+          <div class="adm-grid">
+            <form class="adm-block adm-form" id="admFormTreasuryLock" novalidate>
+              <h3>قفل پیش‌فرض خزانه</h3>
+              <label class="adm-lbl" for="admTreasuryDays">مدت (روز) — جایگزین پیش‌فرض ۹۰ روز</label>
+              <input class="adm-in" id="admTreasuryDays" type="text" inputmode="numeric" placeholder="90" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">اعمال مدت قفل</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">setLockPeriod(seconds)</span> فقط برای کیف‌پول‌هایی است که قفل زمان خرید ندارند؛
+                قفل ثبت‌شدهٔ خریداران پیش‌فروش هرگز کوتاه و بلند نمی‌شود.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormWhitelist" novalidate>
+              <h3>وایت‌لیست فلش‌لون</h3>
+              <label class="adm-lbl" for="admWhitelistAccount">آدرس قرارداد آربیتراژ</label>
+              <input class="adm-in" id="admWhitelistAccount" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-check"><input id="admWhitelistStatus" type="checkbox" checked /> <span>مجاز به دریافت فلش‌لون تتر</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">ثبت وایت‌لیست</button>
+              </div>
+              <label class="adm-lbl" for="admWhitelistBatch">چند آدرس با کاما یا خط جدید (متد دسته‌ای)</label>
+              <input class="adm-in" id="admWhitelistBatch" type="text" placeholder="0xabc…, 0xdef…" autocomplete="off" spellcheck="false" />
+              <label class="adm-check"><input id="admWhitelistBatchStatus" type="checkbox" checked /> <span>وضعیت دسته‌ای</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-2 btn-sm" id="admWhitelistBatchBtn" type="button">اعمال دسته‌ای</button>
+              </div>
+              <p class="adm-hint"><span class="fnum">setWhitelisted</span> و <span class="fnum">setWhitelistedBatch</span></p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormVault" novalidate>
+              <h3>مقصد بخش کف</h3>
+              <label class="adm-lbl" for="admVaultInput">آدرس دریافت‌کنندهٔ ارزش کف خریدها</label>
+              <input class="adm-in" id="admVaultInput" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">به‌روزرسانی مقصد کف</button>
+              </div>
+              <p class="adm-hint"><span class="fnum">treasuryVault</span> همان آدرسی است که <span class="fnum">currentNavFloor</span> را تغذیه می‌کند.</p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormPool" novalidate>
+              <h3>مقصد پرمیوم</h3>
+              <label class="adm-lbl" for="admPoolInput">آدرس دریافت‌کنندهٔ پرمیوم (بالای کف)</label>
+              <input class="adm-in" id="admPoolInput" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <div class="adm-actions">
+                <button class="btn btn-2 btn-sm" type="submit">به‌روزرسانی مقصد پرمیوم</button>
+              </div>
+              <p class="adm-hint"><span class="fnum">liquidityPool</span> بودجهٔ بازخرید زیر کف را تأمین می‌کند.</p>
+            </form>
+          </div>
+          <!-- vesting module: cliff/duration schedules of the team & marketing buckets -->
+          <div class="adm-block">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3>وستینگ و تخصیص سهم‌ها</h3>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="adm-tag" id="admOwnVesting">Vesting</span>
+                <span class="adm-hint" id="admVestingHint">در حال خواندن قرارداد وستینگ…</span>
+              </div>
+            </div>
+            <div class="adm-dl">
+              <div class="adm-kv"><span>قرارداد وستینگ</span><b id="admVestingAddress">—</b></div>
+              <div class="adm-kv"><span>موجودی امانی (کل)</span><b id="admVestingBalance">—</b></div>
+              <div class="adm-kv"><span>تخصیص‌یافتهٔ تعهدشده</span><b id="admVestingAllocated">—</b></div>
+              <div class="adm-kv"><span>آزادشده تا امروز</span><b id="admVestingReleased">—</b></div>
+              <div class="adm-kv"><span>آزاد نشده (قابل تخصیص مجدد)</span><b id="admVestingFree">—</b></div>
+              <div class="adm-kv"><span>مجموع سهم‌های ثبت‌شده</span><b id="admVestingRoleTotal">—</b></div>
+              <div class="adm-kv"><span>سهم‌ها (نقش = درصد از عرضه)</span><b id="admVestingRoles">—</b></div>
+            </div>
+            <p class="adm-hint mt-3">
+              منحنی هر برنامه از <span class="fnum">start</span> خطی است و تا پایان Cliff صفر می‌ماند
+              (<span class="fnum">mintDirect</span> به آدرس وستینگ + <span class="fnum">createSchedule</span>).
+              بودجهٔ وستینگ را با فرم «تخصیص مستقیم» به آدرس همین قرارداد واریز کنید؛ سپس ساخت برنامه‌ها فعال می‌شود.
+            </p>
+          </div>
+          <!-- schedule inventory: id / role / beneficiary / total / released / vesting curve -->
+          <div class="adm-block">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3>برنامه‌های وستینگ</h3>
+              <span class="adm-hint" id="admScheduleHint">در حال خواندن برنامه‌ها…</span>
+            </div>
+            <div class="adm-scroll">
+              <table class="adm-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>نقش</th>
+                    <th>ذی‌نفع</th>
+                    <th>کل (NAVIS)</th>
+                    <th>آزادشده</th>
+                    <th>قابل آزادسازی</th>
+                    <th>پیشرفت</th>
+                    <th>Cliff (روز)</th>
+                    <th>مدت (روز)</th>
+                    <th>شروع</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="admScheduleRows">
+                  <tr><td colspan="12" class="adm-hint">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- schedule management: create / release / revoke, role ledger, sweep -->
+          <div class="adm-grid">
+            <form class="adm-block adm-form" id="admFormSchedule" novalidate>
+              <h3>ایجاد برنامه وستینگ</h3>
+              <label class="adm-lbl" for="admScheduleBeneficiary">کیف‌پول ذی‌نفع</label>
+              <input class="adm-in" id="admScheduleBeneficiary" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-lbl" for="admScheduleRole">نقش (سهم توکنومیکس)</label>
+              <input class="adm-in" id="admScheduleRole" type="text" value="team" autocomplete="off" />
+              <label class="adm-lbl" for="admScheduleAmount">مقدار کل (NAVIS کامل)</label>
+              <input class="adm-in" id="admScheduleAmount" type="text" inputmode="decimal" placeholder="150000000" autocomplete="off" />
+              <label class="adm-lbl" for="admScheduleStartDays">شروع (روز از حالا) — خالی = همین حالا</label>
+              <input class="adm-in" id="admScheduleStartDays" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+              <label class="adm-lbl" for="admScheduleCliffDays">Cliff (روز) — پیش از آن هیچ آزادسازی نیست</label>
+              <input class="adm-in" id="admScheduleCliffDays" type="text" inputmode="numeric" placeholder="365" autocomplete="off" />
+              <label class="adm-lbl" for="admScheduleDurationDays">مدت وستینگ (روز) — پایان منحنی خطی</label>
+              <input class="adm-in" id="admScheduleDurationDays" type="text" inputmode="numeric" placeholder="1095" autocomplete="off" />
+              <label class="adm-check"><input id="admScheduleRevocable" type="checkbox" /> <span>قابل فسخ (Revocable) باشد</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">ایجاد برنامه</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">createSchedule(beneficiary, role, total, start, cliff, duration, revocable)</span>؛
+                Cliff نمی‌تواند از مدت بیشتر باشد و مقدار برنامه باید از موجودی آزاد قرارداد وستینگ کمتر باشد.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormScheduleAction" novalidate>
+              <h3>آزادسازی / فسخ برنامه</h3>
+              <label class="adm-lbl" for="admScheduleId">شمارهٔ برنامه (ستون #)</label>
+              <input class="adm-in" id="admScheduleId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">آزادسازی سهم وست‌شده</button>
+                <button class="btn btn-2 btn-sm" type="button" id="admRevokeSchedule">فسخ برنامه</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">release(id)</span> هر کسی می‌تواند صدا بزند و فقط به ذی‌نفع ثبت‌شده پرداخت می‌کند؛
+                <span class="fnum">revoke(id)</span> تنها برای برنامه‌های Revocable است و سهم وست‌شده را پیش از بازگرداندن باقی‌مانده پرداخت می‌کند.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormRoleShare" novalidate>
+              <h3>ثبت سهم نقش‌ها</h3>
+              <label class="adm-lbl" for="admRoleName">نقش (team / marketing / presale / liquidity)</label>
+              <input class="adm-in" id="admRoleName" type="text" placeholder="marketing" autocomplete="off" />
+              <label class="adm-lbl" for="admRoleSharePercent">سهم از عرضه (درصد)</label>
+              <input class="adm-in" id="admRoleSharePercent" type="text" inputmode="decimal" placeholder="10" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">ثبت سهم</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">setRoleShare(role, bps)</span> فقط دفتر ثبت شفافیت است و توکنی جابه‌جا نمی‌کند؛
+                مجموع سهم‌ها هرگز از ۱۰۰٪ بیشتر نمی‌شود.
+              </p>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormVestingSweep" novalidate>
+              <h3>برداشت موجودی آزاد</h3>
+              <label class="adm-lbl" for="admVestingSweepTo">کیف‌پول مقصد</label>
+              <input class="adm-in" id="admVestingSweepTo" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-lbl" for="admVestingSweepAmount">مقدار (NAVIS کامل)</label>
+              <input class="adm-in" id="admVestingSweepAmount" type="text" inputmode="decimal" placeholder="1000000" autocomplete="off" />
+              <div class="adm-actions">
+                <button class="btn btn-2 btn-sm" type="submit">برداشت آزاد</button>
+              </div>
+              <p class="adm-hint">
+                <span class="fnum">sweepUnallocated(to, amount)</span> تنها بخشی از موجودی را بیرون می‌برد که پشت هیچ برنامه‌ای نیست،
+                پس تعهد ذی‌نفعان دست‌نخورده می‌ماند.
+              </p>
+            </form>
+          </div>
+        </div>
+
+        <p class="adm-hint mt-5">
+          نوشتن روی زنجیره فقط با کیف‌پول مالک امکان‌پذیر است و جدا از این پنل، توسط <b>onlyOwner</b> قراردادها کنترل می‌شود.
+          تمام اعداد زنده از RPC و فایل <span class="fnum">deployments</span> خوانده می‌شوند.
+        </p>
+      </div>
+    </div>
+  </section>
   </main>
   <!-- ======================= FOOTER ======================= -->
   <footer class="relative border-t border-white/[.07]" style="background:rgba(7,9,14,.72)">
@@ -1360,6 +1878,7 @@
             <li><a href="#presale" style="transition:color .25s">توکنومیکس فاز اول</a></li>
             <li><a href="#treasury" style="transition:color .25s">وضعیت خزانهٔ آن‌چین</a></li>
             <li><a href="#genesis" style="transition:color .25s">حاکمیت گِنیسِس</a></li>
+            <li><a href="#admin" data-admin-entry="1" style="transition:color .25s">پنل مدیریت مالک</a></li>
           </ul>
         </div>
 
@@ -1924,6 +2443,1572 @@
       }
       boot();
 
+    })();
+  </script>
+
+  <script>
+    /* ==================================================================
+       NAVIS OWNER CONSOLE
+       ------------------------------------------------------------------
+       Reads (treasury reserve, NAV floor, supply, sub-phase inventory)
+       are public and are served from the RPC recorded in
+       deployments/*.json, so the numbers are live before a wallet is
+       even connected. Every write is gated twice: the panel only reveals
+       its forms when the connected account is owner() of one of the
+       three contracts, and the contracts themselves enforce onlyOwner.
+       Rendering is defensive — a missing element never breaks the rest
+       of the page.
+       ================================================================== */
+    (function () {
+      "use strict";
+
+      var SECTION = document.getElementById("admin");
+      var BODY = document.getElementById("admBody");
+      var GATE = document.getElementById("admGate");
+      if (!SECTION || !GATE) { return; }
+
+      /* ------------------------- DOM helpers ------------------------- */
+      function $id(id) { return document.getElementById(id); }
+      function paint(id, text) { var node = $id(id); if (node) { node.textContent = text; } }
+      function val(id) { var node = $id(id); return node ? String(node.value == null ? "" : node.value).trim() : ""; }
+      function isChecked(id) { var node = $id(id); return !!(node && node.checked); }
+      function cls(node, name, on) {
+        if (!node || !node.classList) { return; }
+        if (on) { node.classList.add(name); } else { node.classList.remove(name); }
+      }
+
+      var ZERO = "0x0000000000000000000000000000000000000000";
+
+      /* --------------------- toast (shell owns #toast) ---------------- */
+      var toastTimer = null;
+      function notify(message) {
+        var toast = $id("toast"), text = $id("toastText");
+        if (!toast || !text) { return; }
+        text.textContent = message;
+        cls(toast, "show", true);
+        if (typeof window.clearTimeout === "function") { window.clearTimeout(toastTimer); }
+        toastTimer = window.setTimeout(function () { cls(toast, "show", false); }, 3400);
+      }
+
+      /* -------------------------- formatting ------------------------- */
+      function esc(text) {
+        return String(text == null ? "" : text).replace(/[&<>"]/g, function (ch) {
+          if (ch === "&") { return "&amp;"; }
+          if (ch === "<") { return "&lt;"; }
+          if (ch === ">") { return "&gt;"; }
+          return "&quot;";
+        });
+      }
+      function short(address) {
+        var text = String(address == null ? "" : address);
+        return text.length > 12 ? text.slice(0, 6) + "…" + text.slice(-4) : text;
+      }
+      function isZero(address) { return !address || String(address).toLowerCase() === ZERO; }
+      function isAddress(text) { return /^0x[0-9a-fA-F]{40}$/.test(String(text == null ? "" : text)); }
+      function addressList(text) {
+        return String(text == null ? "" : text).split(/[\s,;]+/).filter(isAddress);
+      }
+      function units(raw, decimals, digits) {
+        if (raw === null || raw === undefined) { return "—"; }
+        var value = Number(String(raw)) / Math.pow(10, decimals);
+        if (!isFinite(value)) { return "—"; }
+        return value.toLocaleString("en-US", {
+          minimumFractionDigits: digits || 0, maximumFractionDigits: digits || 0
+        });
+      }
+      function plain(raw, decimals) {
+        var text = String(raw === null || raw === undefined ? "0" : raw);
+        if (!/^\d+$/.test(text)) { return "0"; }
+        while (text.length <= decimals) { text = "0" + text; }
+        var whole = text.slice(0, text.length - decimals) || "0";
+        var frac = decimals ? text.slice(text.length - decimals).replace(/0+$/, "") : "";
+        return frac ? whole + "." + frac : whole;
+      }
+      function usd(raw, decimals, digits) {
+        if (raw === null || raw === undefined) { return "—"; }
+        var value = Number(String(raw)) / Math.pow(10, decimals);
+        if (!isFinite(value) || value === 0) { return "—"; }
+        return "$" + value.toFixed(digits === undefined ? 5 : digits);
+      }
+      function dayLabel(seconds) {
+        if (seconds === null || seconds === undefined) { return "—"; }
+        var days = Number(String(seconds)) / 86400;
+        if (!isFinite(days) || days <= 0) { return "—"; }
+        return (days % 1 === 0 ? days.toFixed(0) : days.toFixed(2)) + " روز";
+      }
+      function stamp(seconds) {
+        var value = Number(String(seconds === null || seconds === undefined ? 0 : seconds));
+        if (!isFinite(value) || value <= 0) { return "—"; }
+        var date = new Date(value * 1000);
+        var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+        var left = Math.ceil((date.getTime() - Date.now()) / 86400000);
+        return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate()) +
+          (left > 0 ? " · " + left + " روز مانده" : " · پایان‌یافته");
+      }
+      function ethersLib() {
+        return (window.ethers && typeof window.ethers.Contract === "function") ? window.ethers : null;
+      }
+      function safe(promise) {
+        return Promise.resolve(promise).then(function (value) { return value; }, function () { return null; });
+      }
+      function reasonOf(err) {
+        return String((err && (err.shortMessage || err.message)) || "دلیل نامشخص").slice(0, 160);
+      }
+      function toUnits(text, decimals) {
+        var ethers = ethersLib();
+        var clean = String(text == null ? "" : text).replace(/[,\s_]/g, "");
+        if (!clean || clean === "." || !/^\d*\.?\d*$/.test(clean)) { return null; }
+        if (ethers && typeof ethers.parseUnits === "function") {
+          try { return ethers.parseUnits(clean, decimals); } catch (err) { return null; }
+        }
+        var parts = clean.split(".");
+        var frac = (parts[1] || "").slice(0, decimals);
+        while (frac.length < decimals) { frac += "0"; }
+        return BigInt((parts[0] || "0") + frac);
+      }
+      function daysToSeconds(text) {
+        var clean = String(text == null ? "" : text).replace(/[,\s_]/g, "");
+        if (!clean || clean === "." || !/^\d*\.?\d*$/.test(clean)) { return null; }
+        var days = Number(clean);
+        if (!isFinite(days) || days <= 0) { return null; }
+        return BigInt(Math.round(days * 86400));
+      }
+      /* ---------------------------- ABIs ----------------------------- */
+      var ABI = {
+        presale: [
+          "function owner() view returns (address)",
+          "function treasuryVault() view returns (address)",
+          "function liquidityPool() view returns (address)",
+          "function currentNavFloor() view returns (uint256)",
+          "function subPhaseCount() view returns (uint256)",
+          "function currentSubPhase() view returns (uint256)",
+          "function subPhases(uint256 index) view returns (uint256 tokenSupply, uint256 tokensSold, uint256 priceMultiplier, bool active, uint256 lockPeriod)",
+          "function phasePrice(uint256 index) view returns (uint256)",
+          "function addSubPhase(uint256 tokenSupply, uint256 priceMultiplier, bool active)",
+          "function addSubPhaseWithLock(uint256 tokenSupply, uint256 priceMultiplier, bool active, uint256 lockPeriod)",
+          "function setSubPhase(uint256 index, uint256 tokenSupply, uint256 priceMultiplier, bool active)",
+          "function setSubPhaseLockPeriod(uint256 index, uint256 newLockPeriod)",
+          "function setCurrentSubPhase(uint256 index)",
+          "function setTreasuryVault(address newTreasuryVault)",
+          "function setLiquidityPool(address newLiquidityPool)",
+          "function DEFAULT_LOCK_PERIOD() view returns (uint256)"
+        ],
+        treasury: [
+          "function owner() view returns (address)",
+          "function usdt() view returns (address)",
+          "function navToken() view returns (address)",
+          "function reserveBalance() view returns (uint256)",
+          "function getTotalReserve() view returns (uint256)",
+          "function navFloor() view returns (uint256)",
+          "function getNavFloorPrice() view returns (uint256)",
+          "function lockPeriod() view returns (uint256)",
+          "function setLockPeriod(uint256 newLockPeriod)",
+          "function setWhitelisted(address account, bool status)",
+          "function setWhitelistedBatch(address[] accounts, bool status)"
+        ],
+        nav: [
+          "function owner() view returns (address)",
+          "function symbol() view returns (string)",
+          "function decimals() view returns (uint8)",
+          "function totalSupply() view returns (uint256)",
+          "function MAX_SUPPLY() view returns (uint256)",
+          "function balanceOf(address account) view returns (uint256)",
+          "function getGenesisBalance(address account) view returns (uint256)",
+          "function isGenesisHolder(address account) view returns (bool)",
+          "function redemptionLockExpiresAt(address account) view returns (uint256)",
+          "function lastDirectMintAt(address account) view returns (uint256)",
+          "function isBurner(address account) view returns (bool)",
+          "function mintDirect(address to, uint256 amount)",
+          "function mintDirectWithLock(address to, uint256 amount, uint256 lockPeriod)",
+          "function burnDirect(address from, uint256 amount)",
+          "function setBurner(address account, bool status)"
+        ],
+        erc20: [
+          "function symbol() view returns (string)",
+          "function decimals() view returns (uint8)",
+          "function balanceOf(address account) view returns (uint256)"
+        ]
+      };
+
+      /* Emergency stop: the surface every pausable contract shares through
+         ProtocolPausable, merged into the three ABI entries that own it. */
+      var PAUSABLE_ABI = [
+        "function paused() view returns (bool)",
+        "function pause()",
+        "function unpause()",
+        "function isPauser(address account) view returns (bool)",
+        "function setPauser(address account, bool status)"
+      ];
+      ABI.nav = ABI.nav.concat(PAUSABLE_ABI);
+      ABI.presale = ABI.presale.concat(PAUSABLE_ABI);
+      ABI.treasury = ABI.treasury.concat(PAUSABLE_ABI);
+
+      /* Vesting module: team / marketing custody with cliff and duration. */
+      ABI.vesting = [
+        "function owner() view returns (address)",
+        "function scheduleCount() view returns (uint256)",
+        "function getSchedule(uint256 id) view returns (address beneficiary, string role, uint256 total, uint256 released, uint64 start, uint64 cliff, uint64 duration, bool revocable, bool revoked)",
+        "function vestedAmount(uint256 id) view returns (uint256)",
+        "function releasableAmount(uint256 id) view returns (uint256)",
+        "function vestingBalance() view returns (uint256)",
+        "function freeBalance() view returns (uint256)",
+        "function totalAllocated() view returns (uint256)",
+        "function totalReleased() view returns (uint256)",
+        "function roleCount() view returns (uint256)",
+        "function roleLabelAt(uint256 index) view returns (string)",
+        "function roleShare(string role) view returns (uint16)",
+        "function roleAllocated(string role) view returns (uint256)",
+        "function roleShareTotalBps() view returns (uint256)",
+        "function setRoleShare(string role, uint16 shareBps)",
+        "function createSchedule(address beneficiary, string role, uint256 total, uint64 start, uint64 cliffPeriod, uint64 vestingPeriod, bool revocable)",
+        "function release(uint256 id)",
+        "function revoke(uint256 id)",
+        "function sweepUnallocated(address to, uint256 amount)"
+      ];
+
+      /* ------------------ deployment descriptors --------------------- */
+      var CANDIDATES = [
+        "deployments/bscMainnet.json",
+        "../navis-contracts/deployments/bscMainnet.json",
+        "deployments/bscTestnet.json",
+        "../navis-contracts/deployments/bscTestnet.json",
+        "deployments/localhost.json",
+        "../navis-contracts/deployments/localhost.json"
+      ];
+      var CHAINS = {
+        56: { label: "BSC Mainnet · 56", rpc: "https://bsc-dataseed.binance.org" },
+        97: { label: "BSC Testnet · 97", rpc: "https://data-seed-prebsc-1-s1.binance.org:8545" },
+        31337: { label: "Localhost · 31337", rpc: "http://127.0.0.1:8545" }
+      };
+      /* Parameters for wallet_switchEthereumChain / wallet_addEthereumChain: the
+         console can move a wallet that is parked on a chain without a live
+         deployment onto the chain the recorded deployment lives on. */
+      var WALLET_CHAINS = {
+        56: {
+          chainId: "0x38", chainName: "BNB Smart Chain",
+          nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+          rpcUrls: ["https://bsc-dataseed.binance.org"], blockExplorerUrls: ["https://bscscan.com"]
+        },
+        97: {
+          chainId: "0x61", chainName: "BNB Smart Chain Testnet",
+          nativeCurrency: { name: "tBNB", symbol: "tBNB", decimals: 18 },
+          rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
+          blockExplorerUrls: ["https://testnet.bscscan.com"]
+        },
+        31337: {
+          chainId: "0x7a69", chainName: "Hardhat Localhost 31337",
+          nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+          rpcUrls: ["http://127.0.0.1:8545"], blockExplorerUrls: []
+        }
+      };
+
+      var state = {
+        deployments: [],
+        deployment: null,
+        chainId: 0,
+        walletChain: 0,
+        read: null,
+        account: null,
+        owners: { presale: null, treasury: null, nav: null, vesting: null },
+        phases: [],
+        phaseCount: 0,
+        currentPhase: 0,
+        schedules: [],
+        scheduleCount: 0,
+        vesting: null,
+        usdtDecimals: 6,
+        navDecimals: 18,
+        navSymbol: "NAVIS",
+        unlocked: false,
+        busy: false,
+        sending: false
+      };
+      /* ------------------------ gate & status ------------------------ */
+      var OWN_TAGS = {
+        presale: "admOwnPresale",
+        treasury: "admOwnTreasury",
+        nav: "admOwnNavToken",
+        vesting: "admOwnVesting"
+      };
+
+      function gateState(kind, html) {
+        GATE.className = "adm-gate mt-4" + (kind ? " is-" + kind : "");
+        GATE.innerHTML = html;
+      }
+      function revealConsole() {
+        cls(SECTION, "hidden", false);
+        cls(BODY, "hidden", !state.unlocked);
+      }
+      /* the hash entry reveals the locked shell on purpose: a non-owner sees
+         the gate message and nothing else. */
+      function hostOf(url) {
+        return String(url || "").replace(/^[a-z]+:\/\//i, "").split("/")[0];
+      }
+      function ownerMatch(key) {
+        var owner = state.owners[key];
+        return !!(owner && state.account && String(owner).toLowerCase() === String(state.account).toLowerCase());
+      }
+
+      /* ------------------- deployment descriptor --------------------- */
+      function fetchJson(path) {
+        if (typeof window.fetch !== "function") { return Promise.resolve(null); }
+        return window.fetch(path, { cache: "no-store" }).then(function (res) {
+          return res && res.ok ? res.json() : null;
+        }).catch(function () { return null; });
+      }
+      function usable(data) {
+        var addresses = (data && data.addresses) || {};
+        return !!(data && data.pending !== true && addresses.presale && addresses.treasury && addresses.navToken);
+      }
+      function loadDeployments() {
+        return Promise.all(CANDIDATES.map(fetchJson)).then(function (all) {
+          var found = [];
+          all.forEach(function (data) {
+            if (!usable(data)) { return; }
+            var chain = Number(data.chainId);
+            var dupe = found.some(function (entry) { return Number(entry.chainId) === chain; });
+            if (!dupe) { found.push(data); }
+          });
+          return found;
+        });
+      }
+      function walletChainId() {
+        var injected = window.ethereum;
+        if (!injected || typeof injected.request !== "function") { return Promise.resolve(0); }
+        return Promise.resolve(injected.request({ method: "eth_chainId" })).then(function (hex) {
+          var value = parseInt(hex, 16);
+          state.walletChain = isFinite(value) ? value : 0;
+          return state.walletChain;
+        }, function () { return 0; });
+      }
+      /* Whether the chain the wallet sits on can answer a call at all. The local
+         dev chain only counts while its node is up: an older build force-switched
+         wallets to 31337, and a wallet parked there with nothing listening must
+         not pin the console to the localhost descriptor (every owner read would
+         fail and the gate would blame the wallet). */
+      function walletChainIsAlive() {
+        var injected = window.ethereum;
+        if (!injected || typeof injected.request !== "function") { return Promise.resolve(false); }
+        return Promise.resolve(injected.request({ method: "eth_blockNumber", params: [] }))
+          .then(function () { return true; }, function () { return false; });
+      }
+      function chooseDeployment() {
+        return loadDeployments().then(function (list) {
+          state.deployments = list;
+          if (!list.length) { state.deployment = null; return null; }
+          return walletChainId().then(function (chain) {
+            if (Number(chain) !== 31337) { return chain; }
+            return walletChainIsAlive().then(function (alive) { return alive ? chain : 0; });
+          }).then(function (chain) {
+            var match = list.filter(function (entry) { return Number(entry.chainId) === chain; })[0];
+            state.deployment = match || list[0];
+            state.chainId = Number(state.deployment.chainId) || 0;
+            return state.deployment;
+          });
+        });
+      }
+      function paintDeploymentMeta() {
+        var deployment = state.deployment;
+        if (!deployment) {
+          paint("admChainLabel", "شبکه نامشخص");
+          paint("admSource", "منبع: هیچ فایل deployments با آدرس قراردادهای کامل پیدا نشد.");
+          return;
+        }
+        var addresses = deployment.addresses;
+        paint("admChainLabel", CHAINS[state.chainId] ? CHAINS[state.chainId].label : "Chain " + state.chainId);
+        paint("admPresaleAddress", short(addresses.presale));
+        paint("admUsdtAddress", short(addresses.usdtToken));
+        paint("admNavAddress", short(addresses.navToken));
+        paint("admVestingAddress", isAddress(addresses.vesting) ? short(addresses.vesting) : "ثبت نشده");
+      }
+
+      /* --------------------------- providers ------------------------- */
+      function rpcUrls() {
+        var deployment = state.deployment || {};
+        var urls = [];
+        var host = window.location && window.location.hostname;
+        if (host && host !== "127.0.0.1" && host !== "localhost") {
+          urls.push("http://" + host + ":8545");
+        }
+        urls.push(deployment.rpcUrl, deployment.fallbackRpcUrl);
+        var known = CHAINS[state.chainId];
+        if (known && known.rpc) { urls.push(known.rpc); }
+        return urls.filter(function (url, index) {
+          return !!url && urls.indexOf(url) === index;
+        });
+      }
+      function tryRpc(ethers, urls, index) {
+        if (index >= urls.length) { return Promise.resolve(null); }
+        var provider;
+        try {
+          provider = new ethers.JsonRpcProvider(urls[index], state.chainId || undefined, { staticNetwork: true });
+        } catch (err) {
+          return tryRpc(ethers, urls, index + 1);
+        }
+        return Promise.resolve(provider.getNetwork()).then(function (network) {
+          if (Number(network.chainId) === Number(state.chainId)) {
+            return { provider: provider, url: urls[index] };
+          }
+          return tryRpc(ethers, urls, index + 1);
+        }, function () { return tryRpc(ethers, urls, index + 1); });
+      }
+      function tryInjected(ethers) {
+        /* the wallet is always a usable read endpoint: when every public RPC of
+           the deployment chain is blocked or rate-limited the panel keeps
+           working (writes already go through the wallet). */
+        var injected = window.ethereum;
+        if (!injected || typeof injected.request !== "function" || !ethers.BrowserProvider) {
+          return Promise.resolve(null);
+        }
+        var provider;
+        try { provider = new ethers.BrowserProvider(injected); } catch (err) { return Promise.resolve(null); }
+        if (!provider || typeof provider.getNetwork !== "function") { return Promise.resolve(null); }
+        return Promise.resolve(provider.getNetwork()).then(function (network) {
+          return network && Number(network.chainId) === Number(state.chainId)
+            ? { provider: provider, url: "wallet" }
+            : null;
+        }, function () { return null; });
+      }
+      function ensureReader() {
+        if (state.read) { return Promise.resolve(state.read); }
+        var ethers = ethersLib();
+        if (!ethers || !state.deployment) { return Promise.resolve(null); }
+        return tryRpc(ethers, rpcUrls(), 0).then(function (found) {
+          if (found) { state.read = found; return found; }
+          return tryInjected(ethers).then(function (walletRead) {
+            if (walletRead) { state.read = walletRead; }
+            return walletRead;
+          });
+        });
+      }
+      function buildContracts(provider, signer) {
+        var ethers = ethersLib();
+        var addresses = state.deployment.addresses;
+        var runner = signer || provider;
+        var contracts = {
+          presale: new ethers.Contract(addresses.presale, ABI.presale, runner),
+          treasury: new ethers.Contract(addresses.treasury, ABI.treasury, runner),
+          nav: new ethers.Contract(addresses.navToken, ABI.nav, runner),
+          usdt: new ethers.Contract(addresses.usdtToken, ABI.erc20, runner)
+        };
+        /* A descriptor written before the vesting module existed carries no
+           address: the panel then reports "not deployed" instead of failing. */
+        var vesting = vestingAddress();
+        contracts.vesting = vesting ? new ethers.Contract(vesting, ABI.vesting, runner) : null;
+        return contracts;
+      }
+      /* Address of the vesting module of the recorded deployment (null when the
+         descriptor predates it). */
+      function vestingAddress() {
+        var addresses = (state.deployment && state.deployment.addresses) || {};
+        return isAddress(addresses.vesting) ? addresses.vesting : null;
+      }
+      /* --------------------- snapshot read + render ------------------ */
+      function decimalsOf(value, fallback) {
+        var number = Number(value);
+        return isFinite(number) && number >= 0 && number <= 36 ? number : fallback;
+      }
+      function readSnapshot() {
+        var contracts = buildContracts(state.read.provider);
+        var addresses = state.deployment.addresses;
+        /* `isPauser` needs an address: probe with the connected wallet, falling
+           back to the zero address (which never holds the role). */
+        var pauserProbe = state.account || ZERO;
+        var calls = [
+          contracts.usdt.decimals(), contracts.usdt.symbol(),
+          contracts.nav.decimals(), contracts.nav.symbol(),
+          contracts.presale.subPhaseCount(), contracts.presale.currentSubPhase(),
+          contracts.treasury.reserveBalance(), contracts.treasury.getTotalReserve(),
+          contracts.treasury.getNavFloorPrice(), contracts.treasury.navFloor(),
+          contracts.nav.totalSupply(), contracts.nav.MAX_SUPPLY(),
+          contracts.presale.currentNavFloor(), contracts.treasury.lockPeriod(),
+          contracts.presale.treasuryVault(), contracts.presale.liquidityPool(),
+          contracts.presale.owner(), contracts.treasury.owner(), contracts.nav.owner(),
+          contracts.usdt.balanceOf(addresses.treasury), contracts.presale.DEFAULT_LOCK_PERIOD(),
+          contracts.nav.paused(), contracts.presale.paused(), contracts.treasury.paused(),
+          contracts.nav.isPauser(pauserProbe), contracts.presale.isPauser(pauserProbe),
+          contracts.treasury.isPauser(pauserProbe)
+        ];
+        return Promise.all(calls.map(safe)).then(function (raw) {
+          return {
+            usdtDecimals: decimalsOf(raw[0], 6),
+            usdtSymbol: raw[1] ? String(raw[1]) : "USDT",
+            navDecimals: decimalsOf(raw[2], 18),
+            navSymbol: raw[3] ? String(raw[3]) : "NAVIS",
+            phaseCount: raw[4] === null ? 0 : Number(raw[4]),
+            current: raw[5] === null ? 0 : Number(raw[5]),
+            reserve: raw[6], totalReserve: raw[7], floor: raw[8], navFloor: raw[9],
+            supply: raw[10], cap: raw[11], presaleFloor: raw[12],
+            lockPeriod: raw[13], vault: raw[14], pool: raw[15],
+            ownerPresale: raw[16], ownerTreasury: raw[17], ownerNav: raw[18],
+            treasuryUsdt: raw[19], defaultLock: raw[20],
+            pausedNav: raw[21] === true,
+            pausedPresale: raw[22] === true,
+            pausedTreasury: raw[23] === true,
+            pauserNav: raw[24] === true,
+            pauserPresale: raw[25] === true,
+            pauserTreasury: raw[26] === true
+          };
+        });
+      }
+      function readPhases(count) {
+        /* the phase inventory has to be read before renderSnapshot() lands in
+           state.phaseCount, so the caller passes the count it just read. */
+        var total = typeof count === "number" ? count : state.phaseCount;
+        var contracts = buildContracts(state.read.provider);
+        var calls = [];
+        for (var index = 0; index < total; index += 1) {
+          calls.push(contracts.presale.subPhases(index));
+          calls.push(contracts.presale.phasePrice(index));
+        }
+        if (!calls.length) { return Promise.resolve([]); }
+        return Promise.all(calls.map(safe)).then(function (raw) {
+          var phases = [];
+          for (var i = 0; i < total; i += 1) {
+            var phase = raw[i * 2];
+            if (!phase) { phases.push({ index: i, missing: true }); continue; }
+            phases.push({
+              index: i,
+              supply: phase[0], sold: phase[1], multiplier: phase[2],
+              active: !!phase[3], lockPeriod: phase[4], price: raw[i * 2 + 1]
+            });
+          }
+          return phases;
+        });
+      }
+      /* --------------------------- vesting --------------------------- */
+      /* Reads the vesting module: balances, the role register and every
+         schedule with its curve. Resolves to null when the descriptor carries
+         no vesting address (an older deployment), which the renderer shows as
+         "not deployed" instead of an error. */
+      function readVesting() {
+        var contracts = buildContracts(state.read.provider);
+        if (!contracts.vesting) { return Promise.resolve(null); }
+        var vesting = contracts.vesting;
+        var head = [
+          vesting.owner(), vesting.scheduleCount(), vesting.vestingBalance(),
+          vesting.totalAllocated(), vesting.totalReleased(), vesting.freeBalance(),
+          vesting.roleShareTotalBps(), vesting.roleCount()
+        ];
+        return Promise.all(head.map(safe)).then(function (raw) {
+          var snapshot = {
+            owner: raw[0],
+            count: raw[1] === null ? 0 : Number(raw[1]),
+            balance: raw[2],
+            allocated: raw[3],
+            released: raw[4],
+            free: raw[5],
+            roleTotalBps: raw[6],
+            roleCount: raw[7] === null ? 0 : Number(raw[7]),
+            roles: [],
+            schedules: []
+          };
+
+          var calls = [];
+          for (var index = 0; index < snapshot.count; index += 1) {
+            calls.push(vesting.getSchedule(index));
+            calls.push(vesting.vestedAmount(index));
+            calls.push(vesting.releasableAmount(index));
+          }
+          for (var role = 0; role < snapshot.roleCount; role += 1) {
+            calls.push(vesting.roleLabelAt(role));
+          }
+          if (!calls.length) { return snapshot; }
+
+          return Promise.all(calls.map(safe)).then(function (rows) {
+            for (var index = 0; index < snapshot.count; index += 1) {
+              var schedule = rows[index * 3];
+              if (!schedule) { snapshot.schedules.push({ id: index, missing: true }); continue; }
+              snapshot.schedules.push({
+                id: index,
+                beneficiary: schedule[0],
+                role: String(schedule[1] || ""),
+                total: schedule[2],
+                released: schedule[3],
+                start: schedule[4],
+                cliff: schedule[5],
+                duration: schedule[6],
+                revocable: !!schedule[7],
+                revoked: !!schedule[8],
+                vested: rows[index * 3 + 1],
+                releasable: rows[index * 3 + 2]
+              });
+            }
+
+            /* Bucket labels first, their declared shares afterwards. */
+            var base = snapshot.count * 3;
+            var labels = [];
+            for (var role = 0; role < snapshot.roleCount; role += 1) {
+              var label = rows[base + role];
+              if (label !== null && label !== undefined) {
+                labels.push({ label: String(label) });
+              }
+            }
+            return Promise.all(labels.map(function (entry) {
+              return safe(vesting.roleShare(entry.label)).then(function (bps) {
+                entry.bps = bps;
+                return entry;
+              });
+            })).then(function (resolved) {
+              snapshot.roles = resolved.filter(Boolean);
+              return snapshot;
+            });
+          });
+        });
+      }
+      /* ------------------------ table rendering ---------------------- */
+      function tdText(text, className) {
+        var cell = document.createElement("td");
+        if (className) { cell.className = className; }
+        cell.textContent = text;
+        return cell;
+      }
+      function tdMeter(percent) {
+        var cell = document.createElement("td");
+        cell.className = "adm-num";
+        var meter = document.createElement("span");
+        meter.className = "adm-meter";
+        var fill = document.createElement("i");
+        fill.style.width = Math.max(0, Math.min(100, percent)).toFixed(1) + "%";
+        meter.appendChild(fill);
+        var caption = document.createElement("span");
+        caption.className = "adm-meter-tag";
+        caption.textContent = percent.toFixed(1) + "٪";
+        cell.appendChild(meter);
+        cell.appendChild(caption);
+        return cell;
+      }
+      function tdTag(text, on) {
+        var cell = document.createElement("td");
+        var tag = document.createElement("span");
+        tag.className = "adm-tag" + (on ? " is-on" : "");
+        tag.textContent = text;
+        cell.appendChild(tag);
+        return cell;
+      }
+      function pickNode(index) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "adm-pick";
+        button.setAttribute("data-phase", String(index));
+        button.textContent = "انتخاب";
+        return button;
+      }
+      function phaseRow(phase) {
+        var row = document.createElement("tr");
+        if (phase.index === state.currentPhase) {
+          row.className = "is-current";
+          row.setAttribute("aria-current", "true");
+        }
+        if (phase.missing) {
+          row.appendChild(tdText(String(phase.index), "adm-num"));
+          var miss = tdText("خواندن این زیرفاز از RPC ناموفق بود.", "adm-hint");
+          miss.setAttribute("colspan", "8");
+          row.appendChild(miss);
+          return row;
+        }
+        var progress = Number(phase.supply) > 0 ? (Number(phase.sold) / Number(phase.supply)) * 100 : 0;
+        row.appendChild(tdText(String(phase.index), "adm-num"));
+        row.appendChild(tdText(units(phase.supply, state.navDecimals, 0), "adm-num"));
+        row.appendChild(tdText(units(phase.sold, state.navDecimals, 0), "adm-num"));
+        row.appendChild(tdMeter(progress));
+        row.appendChild(tdText(plain(phase.multiplier, 6) + "×", "adm-num"));
+        row.appendChild(tdText(usd(phase.price, state.usdtDecimals, 6), "adm-num"));
+        row.appendChild(tdText(Number(String(phase.lockPeriod)) > 0
+          ? (Number(String(phase.lockPeriod)) / 86400).toFixed(0) : "—", "adm-num"));
+        var label = phase.index === state.currentPhase ? "جاری" : (phase.active ? "فعال" : "غیرفعال");
+        row.appendChild(tdTag(label, phase.index === state.currentPhase || phase.active));
+        var actions = document.createElement("td");
+        actions.appendChild(pickNode(phase.index));
+        row.appendChild(actions);
+        return row;
+      }
+      function renderPhases() {
+        var host = $id("admPhaseRows");
+        if (!host) { return; }
+        while (host.firstChild) { host.removeChild(host.firstChild); }
+        if (!state.phases.length) {
+          var empty = document.createElement("tr");
+          var cell = tdText("هیچ زیرفازی ثبت نشده است — قرارداد پیش‌فروش هنوز فازبندی نشده.", "adm-hint");
+          cell.setAttribute("colspan", "9");
+          empty.appendChild(cell);
+          host.appendChild(empty);
+          paint("admPhaseHint", "زیرفازی ثبت نشده است؛ از فرم «افزودن زیرفاز» شروع کنید.");
+          return;
+        }
+        state.phases.forEach(function (phase) { host.appendChild(phaseRow(phase)); });
+        paint("admPhaseHint", state.phases.length + " زیرفاز ثبت شده است · اشاره‌گر روی شمارهٔ " +
+          (state.currentPhase >= state.phases.length ? "— (پیش‌فروش تمام‌شده)" : String(state.currentPhase)));
+      }
+      /* event delegation: every row carries its index on the «انتخاب» button */
+      function bindPhaseRows() {
+        var host = $id("admPhaseRows");
+        if (!host || typeof host.addEventListener !== "function") { return; }
+        host.addEventListener("click", function (event) {
+          var node = event.target;
+          while (node && node !== host) {
+            if (typeof node.getAttribute === "function" && node.getAttribute("data-phase") !== null) {
+              fillPhaseForms(Number(node.getAttribute("data-phase")));
+              return;
+            }
+            node = node.parentNode;
+          }
+        });
+      }
+      /* ------------------- emergency stop handlers ------------------- */
+      /* One pause / resume pair per pausable contract. Both entry points accept
+         the owner and the registered pauser, so the on-chain guard is what
+         decides; the console only routes the call. */
+      function bindPauseControls() {
+        var controls = [
+          { pause: "admPauseNav", resume: "admResumeNav", abiKey: "nav", label: "توکن NAVIS" },
+          { pause: "admPausePresale", resume: "admResumePresale", abiKey: "presale", label: "پیش‌فروش" },
+          { pause: "admPauseTreasury", resume: "admResumeTreasury", abiKey: "treasury", label: "خزانه" }
+        ];
+        controls.forEach(function (control) {
+          var pauseButton = $id(control.pause);
+          if (pauseButton) {
+            pauseButton.addEventListener("click", function () {
+              write("توقف " + control.label, control.abiKey, "pause", []);
+            });
+          }
+          var resumeButton = $id(control.resume);
+          if (resumeButton) {
+            resumeButton.addEventListener("click", function () {
+              write("ازسرگیری " + control.label, control.abiKey, "unpause", []);
+            });
+          }
+        });
+      }
+      /* ------------------- schedule row handlers --------------------- */
+      function bindScheduleRows() {
+        var host = $id("admScheduleRows");
+        if (!host || typeof host.addEventListener !== "function") { return; }
+        host.addEventListener("click", function (event) {
+          var node = event.target;
+          while (node && node !== host) {
+            if (typeof node.getAttribute === "function" && node.getAttribute("data-schedule") !== null) {
+              var id = String(node.getAttribute("data-schedule"));
+              setValue("admScheduleId", id);
+              notify("برنامهٔ " + id + " در فرم آزادسازی و فسخ نشست.");
+              return;
+            }
+            node = node.parentNode;
+          }
+        });
+      }
+      /* Schedule id of the action form (null when the input is not usable). */
+      function scheduleIdInput() {
+        var text = val("admScheduleId");
+        if (!/^\d+$/.test(text)) { notify("شمارهٔ برنامه باید عددی صحیح از صفر به بالا باشد."); return null; }
+        var id = Number(text);
+        if (state.vesting && state.vesting.count > 0 && id >= state.vesting.count) {
+          notify("شمارهٔ برنامه باید کمتر از " + state.vesting.count + " باشد.");
+          return null;
+        }
+        return id;
+      }
+      /* Optional day amount: empty or zero means "none" and returns 0n. */
+      function optionalDays(text) {
+        var clean = String(text == null ? "" : text).replace(/[,\s_]/g, "");
+        if (!clean || Number(clean) === 0) { return 0n; }
+        return daysToSeconds(clean);
+      }
+      /* ---------------------- readout painting ----------------------- */
+      function renderSnapshot(snap) {
+        state.usdtDecimals = snap.usdtDecimals;
+        state.navDecimals = snap.navDecimals;
+        state.navSymbol = snap.navSymbol;
+        state.phaseCount = snap.phaseCount;
+        state.currentPhase = snap.current;
+        state.owners = {
+          presale: snap.ownerPresale,
+          treasury: snap.ownerTreasury,
+          nav: snap.ownerNav,
+          vesting: state.owners.vesting
+        };
+
+        var usdt = snap.usdtDecimals, nav = snap.navDecimals, symbol = snap.usdtSymbol;
+        paint("admReserve", units(snap.reserve, usdt, 2) + " " + symbol);
+        paint("admTotalReserve", units(snap.totalReserve, usdt, 2) + " " + symbol);
+        paint("admFloor", usd(snap.floor, usdt, 5));
+        paint("admNavFloor", usd(snap.navFloor, usdt, 5));
+        paint("admUsdtBalance", units(snap.treasuryUsdt, usdt, 2) + " " + symbol);
+        paint("admTreasuryLockPeriod", dayLabel(snap.lockPeriod));
+        paint("admSupply", units(snap.supply, nav, 0) + " " + snap.navSymbol);
+        paint("admSupplyCap", units(snap.cap, nav, 0) + " " + snap.navSymbol);
+
+        var shareOfCap = (snap.supply !== null && snap.cap !== null && Number(snap.cap) > 0)
+          ? (Number(String(snap.supply)) / Number(String(snap.cap))) * 100 : null;
+        paint("admSupplyPct", shareOfCap === null ? "—" : shareOfCap.toFixed(2) + "٪");
+        paint("admNavSymbol", snap.navSymbol);
+
+        var sold = state.phases.reduce(function (sum, phase) {
+          return sum + (phase.sold === undefined ? 0 : Number(String(phase.sold)));
+        }, 0);
+        if (snap.supply === null) {
+          paint("admGenesisPool", "—");
+        } else {
+          var direct = Number(String(snap.supply)) - sold;
+          var directShare = (snap.cap !== null && Number(String(snap.cap)) > 0)
+            ? (direct / Number(String(snap.cap))) * 100 : null;
+          paint("admGenesisPool", units(direct, nav, 0) + " " + snap.navSymbol +
+            (directShare === null ? "" : " · " + directShare.toFixed(2) + "٪ از سقف"));
+        }
+
+        paint("admCurrentFloor", usd(snap.presaleFloor, usdt, 6));
+        var finished = snap.phaseCount > 0 && snap.current >= snap.phaseCount;
+        paint("admCurrent", snap.phaseCount === 0 ? "بدون زیرفاز"
+          : (finished ? "تمام‌شده" : String(snap.current) + " از " + String(snap.phaseCount - 1)));
+        paint("admPhaseCountLive", String(snap.phaseCount));
+        var active = state.phases[snap.current];
+        paint("admPhasePrice", active && active.price !== undefined && active.price !== null
+          ? usd(active.price, usdt, 6) : "—");
+        paint("admDefaultLock", dayLabel(snap.defaultLock));
+        paint("admVault", isZero(snap.vault) ? "تنظیم‌نشده" : short(snap.vault));
+        paint("admPool", isZero(snap.pool) ? "تنظیم‌نشده" : short(snap.pool));
+        renderPause(snap);
+        renderPhases();
+        updateChips();
+      }
+
+      /* --------------------- emergency stop render ------------------- */
+      function pauseTag(id, paused) {
+        var node = $id(id);
+        if (!node) { return; }
+        node.textContent = paused ? "متوقف" : "فعال";
+        cls(node, "is-on", !paused);
+      }
+      function renderPause(snap) {
+        pauseTag("admPauseStateNav", snap.pausedNav);
+        pauseTag("admPauseStatePresale", snap.pausedPresale);
+        pauseTag("admPauseStateTreasury", snap.pausedTreasury);
+        var granted = 0;
+        if (snap.pauserNav) { granted += 1; }
+        if (snap.pauserPresale) { granted += 1; }
+        if (snap.pauserTreasury) { granted += 1; }
+        var who = state.account ? short(state.account) : "کیف‌پول متصل";
+        paint("admPauseHint", (granted === 3
+          ? "دسترسی Pause/Resume برای " + who + " روی هر سه قرارداد ثبت است."
+          : "دسترسی Pause/Resume برای " + who + " تنها روی " + granted + " از ۳ قرارداد ثبت است.")
+          + (snap.pausedNav || snap.pausedPresale || snap.pausedTreasury
+            ? " · پروتکل در حال حاضر متوقف است." : ""));
+      }
+
+      /* ----------------------- vesting render ------------------------ */
+      function renderVesting(vesting) {
+        state.vesting = vesting || null;
+        var address = vestingAddress();
+        if (!address) {
+          paint("admVestingAddress", "ثبت نشده");
+          paint("admVestingBalance", "—");
+          paint("admVestingAllocated", "—");
+          paint("admVestingReleased", "—");
+          paint("admVestingFree", "—");
+          paint("admVestingRoleTotal", "—");
+          paint("admVestingRoles", "—");
+          paint("admVestingHint", "این نسخهٔ deployments آدرس قرارداد وستینگ را ندارد.");
+          paint("admScheduleHint", "قرارداد وستینگ در این دپلوی ثبت نشده است.");
+          renderSchedules();
+          return;
+        }
+        paint("admVestingAddress", short(address));
+        if (!vesting) {
+          paint("admVestingHint", "خواندن قرارداد وستینگ از RPC ناموفق بود.");
+          renderSchedules();
+          return;
+        }
+        var nav = state.navDecimals;
+        paint("admVestingBalance", units(vesting.balance, nav, 0) + " " + state.navSymbol);
+        paint("admVestingAllocated", units(vesting.allocated, nav, 0) + " " + state.navSymbol);
+        paint("admVestingReleased", units(vesting.released, nav, 0) + " " + state.navSymbol);
+        paint("admVestingFree", units(vesting.free, nav, 0) + " " + state.navSymbol);
+        paint("admVestingRoleTotal", (vesting.roleTotalBps === null || vesting.roleTotalBps === undefined)
+          ? "—" : plain(vesting.roleTotalBps, 2) + "٪");
+        paint("admVestingRoles", vesting.roles.length
+          ? vesting.roles.map(function (entry) {
+            return entry.label + " " + plain(entry.bps, 2) + "٪";
+          }).join(" · ")
+          : "ثبت نشده");
+        paint("admVestingHint", vesting.count + " برنامه · " + vesting.roles.length + " نقش ثبت‌شده");
+        renderSchedules();
+      }
+      function daysOf(seconds) {
+        var value = Number(String(seconds === null || seconds === undefined ? 0 : seconds));
+        return isFinite(value) && value > 0 ? (value / 86400).toFixed(0) : "—";
+      }
+      function schedulePick(id) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "adm-pick";
+        button.setAttribute("data-schedule", String(id));
+        button.textContent = "انتخاب";
+        return button;
+      }
+      function scheduleRow(schedule) {
+        var row = document.createElement("tr");
+        if (schedule.missing) {
+          row.appendChild(tdText(String(schedule.id), "adm-num"));
+          var miss = tdText("خواندن این برنامه از RPC ناموفق بود.", "adm-hint");
+          miss.setAttribute("colspan", "11");
+          row.appendChild(miss);
+          return row;
+        }
+        var nav = state.navDecimals;
+        var total = Number(String(schedule.total));
+        var progress = total > 0 ? (Number(String(schedule.vested)) / total) * 100 : 0;
+        row.setAttribute("data-schedule", String(schedule.id));
+        row.appendChild(tdText(String(schedule.id), "adm-num"));
+        row.appendChild(tdText(schedule.role || "—"));
+        row.appendChild(tdText(short(schedule.beneficiary)));
+        row.appendChild(tdText(units(schedule.total, nav, 0), "adm-num"));
+        row.appendChild(tdText(units(schedule.released, nav, 0), "adm-num"));
+        row.appendChild(tdText(units(schedule.releasable, nav, 0), "adm-num"));
+        row.appendChild(tdMeter(progress));
+        row.appendChild(tdText(daysOf(schedule.cliff), "adm-num"));
+        row.appendChild(tdText(daysOf(schedule.duration), "adm-num"));
+        row.appendChild(tdText(String(stamp(schedule.start)).split(" · ")[0], "adm-num"));
+        row.appendChild(tdTag(schedule.revoked ? "فسخ‌شده"
+          : (schedule.revocable ? "قابل فسخ" : "قطعی"), !schedule.revoked));
+        var actions = document.createElement("td");
+        actions.appendChild(schedulePick(schedule.id));
+        row.appendChild(actions);
+        return row;
+      }
+      function renderSchedules() {
+        var host = $id("admScheduleRows");
+        if (!host) { return; }
+        while (host.firstChild) { host.removeChild(host.firstChild); }
+        var schedules = (state.vesting && state.vesting.schedules) || [];
+        if (!schedules.length) {
+          var empty = document.createElement("tr");
+          var cell = tdText("هیچ برنامهٔ وستینگی ثبت نشده است — قرارداد وستینگ هنوز بودجه‌ای نگرفته.", "adm-hint");
+          cell.setAttribute("colspan", "12");
+          empty.appendChild(cell);
+          host.appendChild(empty);
+          return;
+        }
+        schedules.forEach(function (schedule) { host.appendChild(scheduleRow(schedule)); });
+      }
+
+      /* --------------------------- gating ---------------------------- */
+      function updateChips() {
+        paint("admAccountChip", state.account ? "کیف‌پول: " + short(state.account) : "کیف‌پول متصل نیست");
+        var button = $id("admConnect");
+        if (button) {
+          button.textContent = state.unlocked ? "کیف‌پول مالک متصل است"
+            : (state.account ? "تغییر کیف‌پول" : "اتصال کیف‌پول مالک");
+        }
+      }
+      /* What the console actually read: without it "not the owner" hides a wallet
+         that is merely on a chain nobody serves, or a node that is not running. */
+      function ownerHint() {
+        var found = [];
+        ["presale", "treasury", "nav", "vesting"].forEach(function (key) {
+          if (state.owners[key]) { found.push(String(state.owners[key])); }
+        });
+        var deployment = state.deployment || {};
+        var label = deployment.network || ("chain " + String(state.chainId));
+        if (!found.length) {
+          return " خواندن قراردادهای " + esc(label) +
+            " نتیجه نداد (RPC پاسخ نمی‌دهد یا کیف‌پول روی شبکهٔ دیگری است).";
+        }
+        return " منبع " + esc(label) + " · مالک روی زنجیره: " + esc(found.join(" · "));
+      }
+      function applyGate() {
+        var owned = [];
+        ["presale", "treasury", "nav", "vesting"].forEach(function (key) {
+          var match = ownerMatch(key);
+          cls($id(OWN_TAGS[key]), "is-own", match);
+          if (match) { owned.push(key === "nav" ? "NAVToken" : key.charAt(0).toUpperCase() + key.slice(1)); }
+        });
+        state.unlocked = owned.length > 0;
+        cls($id("admLockIcon"), "is-open", state.unlocked);
+        cls(BODY, "hidden", !state.unlocked);
+        updateChips();
+        paintSwitch();
+        var mismatch = state.walletChain && state.chainId && state.walletChain !== state.chainId
+          ? " کیف‌پول روی زنجیرهٔ " + String(state.walletChain) + " است و پنل روی " + String(state.chainId) + "."
+          : "";
+        /* a wallet chain without a recorded deployment can never own anything:
+           name it, otherwise the gate looks like a plain "not the owner". */
+        var recorded = (state.deployments || []).some(function (entry) {
+          return Number(entry.chainId) === Number(state.walletChain);
+        });
+        if (state.walletChain && !recorded) {
+          mismatch += " هیچ فایل deployments برای زنجیرهٔ " + String(state.walletChain) +
+            " ثبت نشده است؛ کیف‌پول را روی شبکهٔ همین دپلوی بگذارید.";
+        }
+        var switchTarget = suggestedChain();
+        if (switchTarget) {
+          var targetLabel = CHAINS[switchTarget] ? CHAINS[switchTarget].label : "chain " + switchTarget;
+          mismatch += " با دکمهٔ «سوییچ به " + targetLabel + "» کیف‌پول را به شبکهٔ دپلوی زنده ببرید.";
+        }
+        if (state.unlocked) {
+          gateState("ok", "<b>دسترسی مالک تأیید شد.</b> " + esc(short(state.account)) + " مالک " +
+            esc(owned.join(" · ")) + " است؛ فرم‌های نوشتن فعال‌اند." + esc(mismatch));
+          revealConsole();
+        } else if (state.account) {
+          gateState("err", "<b>این کیف‌پول مالک نیست.</b> " + esc(short(state.account)) +
+            " مالک هیچ‌یک از قراردادهای این زنجیره نیست؛ فقط آدرس‌ها و مقادیر عمومی نمایش داده می‌شوند." +
+            esc(mismatch) + ownerHint());
+        } else {
+          gateState("", "<b>پنل قفل است.</b> کیف‌پول مالک را متصل کنید تا تنظیمات وستینگ، تخصیص و فازهای پیش‌فروش باز شود." +
+            esc(mismatch) + ownerHint());
+        }
+      }
+      function setValue(id, text) { var node = $id(id); if (node) { node.value = text; } }
+      function setChecked(id, on) { var node = $id(id); if (node) { node.checked = !!on; } }
+      function fillPhaseForms(index) {
+        var phase = state.phases[index];
+        if (!phase || phase.missing) { notify("اطلاعات این زیرفاز در دسترس نیست."); return; }
+        setValue("admEditIndex", String(index));
+        setValue("admEditSupply", plain(phase.supply, state.navDecimals));
+        setValue("admEditMultiplier", plain(phase.multiplier, 6));
+        setChecked("admEditActive", !!phase.active);
+        setValue("admLockIndex", String(index));
+        var lockSeconds = Number(String(phase.lockPeriod));
+        setValue("admLockDays", lockSeconds > 0 ? (lockSeconds / 86400).toFixed(0) : "");
+        setValue("admCurrentIndex", String(index));
+        notify("زیرفاز " + index + " در فرم‌های ویرایش، قفل و اشاره‌گر نشست.");
+      }
+      /* --------------------------- refresh --------------------------- */
+      /* A wallet that has just authorized the site can still answer eth_accounts
+         with an empty list for one round. `keep` protects the account the presale
+         panel handed over (eth_requestAccounts) from being dropped; the polling
+         path stays strict, so a real disconnect still locks the console. */
+      function refreshAccount(keep) {
+        var injected = window.ethereum;
+        if (!injected || typeof injected.request !== "function") {
+          state.account = null;
+          return Promise.resolve(null);
+        }
+        return Promise.resolve(injected.request({ method: "eth_accounts" })).then(function (accounts) {
+          var live = (accounts && accounts[0]) || null;
+          if (!live && keep && state.account) { return state.account; }
+          state.account = live;
+          return state.account;
+        }, function () { return state.account; });
+      }
+      function paintSource(reader) {
+        var deployment = state.deployment || {};
+        var addresses = deployment.addresses || {};
+        if (!reader) {
+          paint("admSource", "منبع: " + (deployment.network || "chain " + state.chainId) +
+            " · RPC قطع · presale " + short(addresses.presale) + " · treasury " + short(addresses.treasury) +
+            " · navToken " + short(addresses.navToken));
+          return;
+        }
+        paint("admSource", "منبع: " + (deployment.network || "chain " + state.chainId) +
+          " · RPC " + hostOf(reader.url) + " · presale " + short(addresses.presale) +
+          " · treasury " + short(addresses.treasury) + " · navToken " + short(addresses.navToken));
+      }
+      /* A manual network switch inside the wallet must re-resolve the descriptor
+         instead of reading the contracts of the previous chain. */
+      function syncWalletChain() {
+        return walletChainId().then(function (chain) {
+          if (chain && state.chainId && Number(chain) !== Number(state.chainId)) {
+            state.deployment = null;
+            state.read = null;
+          }
+          return chain;
+        });
+      }
+      /* --------------------- wallet network -------------------------- */
+      /* The chain the wallet should move to, or 0 when there is nothing to fix.
+         A wallet parked on another chain than the one the console reads (a stale
+         31337 with no node behind it, a network without a descriptor) cannot sign
+         a useful transaction for this deployment: writing would be broadcast on
+         the wrong network, or on a node that is not there. */
+      function suggestedChain() {
+        var current = Number(state.walletChain) || 0;
+        var panel = Number(state.chainId) || 0;
+        if (!current || !panel || current === panel) { return 0; }
+        /* without switch parameters the button could not keep its promise */
+        return WALLET_CHAINS[panel] ? panel : 0;
+      }
+      function paintSwitch() {
+        var button = $id("admSwitch");
+        if (!button) { return; }
+        var target = suggestedChain();
+        cls(button, "hidden", !target);
+        if (target) {
+          button.textContent = "سوییچ به " + (CHAINS[target] ? CHAINS[target].label : "chain " + target);
+        }
+      }
+      function switchWalletTo(chainId) {
+        var injected = window.ethereum;
+        var plan = WALLET_CHAINS[Number(chainId)];
+        if (!injected || typeof injected.request !== "function") {
+          notify("کیف‌پول تزریقی پیدا نشد."); return Promise.resolve(false);
+        }
+        if (!plan) {
+          notify("اطلاعات شبکهٔ " + Number(chainId) + " در دسترس نیست.");
+          return Promise.resolve(false);
+        }
+        function applied() {
+          notify("کیف‌پول به " + plan.chainName + " سوییچ شد.");
+          state.read = null;
+          state.deployment = null;
+          return refresh().then(function () { return true; });
+        }
+        return Promise.resolve(injected.request({
+          method: "wallet_switchEthereumChain", params: [{ chainId: plan.chainId }]
+        })).then(applied, function (err) {
+          var code = err && (err.code || (err.data && err.data.code));
+          /* 4902: the wallet does not know this network yet - add it, then retry */
+          if (code !== 4902) {
+            notify("سوییچ شبکه انجام نشد" + (code ? " (" + code + ")" : "") + ".");
+            return false;
+          }
+          return Promise.resolve(injected.request({
+            method: "wallet_addEthereumChain", params: [plan]
+          })).then(applied, function (addErr) {
+            notify("افزودن شبکه انجام نشد: " +
+              String((addErr && (addErr.message || addErr.code)) || "نامشخص"));
+            return false;
+          });
+        });
+      }
+      function refresh(options) {
+        var keep = !!(options && options.keepAccount);
+        if (state.busy) { return Promise.resolve(); }
+        state.busy = true;
+        return Promise.resolve()
+          .then(function () { return syncWalletChain(); })
+          .then(function () { return state.deployment || chooseDeployment(); })
+          .then(function (deployment) {
+            if (!deployment) {
+              paintDeploymentMeta();
+              renderVesting(null);
+              gateState("err", "<b>فایل تنظیمات پیدا نشد.</b> هیچ‌یک از مسیرهای deployments آدرس‌های کامل presale، treasury و navToken را نداشت.");
+              return "missing";
+            }
+            paintDeploymentMeta();
+            return ensureReader();
+          })
+          .then(function (reader) {
+            if (reader === "missing") { return null; }
+            if (!reader) {
+              paintSource(null);
+              renderVesting(null);
+              gateState("err", "<b>اتصال RPC برقرار نشد.</b> نود محلی یا RPC زنجیره پاسخ نداد؛ تا زمان برگشت اتصال فقط فرم‌ها بدون اعداد زنده در دسترس‌اند.");
+              return null;
+            }
+            paintSource(reader);
+            return refreshAccount(keep).then(readSnapshot).then(function (snap) {
+              return readPhases(snap.phaseCount).then(function (phases) {
+                state.phases = phases;
+                renderSnapshot(snap);
+                return readVesting().then(function (vesting) {
+                  state.owners.vesting = vesting ? String(vesting.owner || "") : null;
+                  renderVesting(vesting);
+                  applyGate();
+                  return snap;
+                });
+              });
+            });
+          })
+          .catch(function (err) {
+            gateState("err", "<b>خواندن زنجیره ناموفق بود.</b> " + esc(reasonOf(err)));
+          })
+          .then(function () { state.busy = false; }, function () { state.busy = false; });
+      }
+      /* ---------------------- wallet plumbing ------------------------ */
+      function connect() {
+        var injected = window.ethereum;
+        if (!injected || typeof injected.request !== "function") {
+          gateState("err", "<b>کیف‌پول تزریقی پیدا نشد.</b> برای باز کردن پنل مالک، MetaMask (یا کیف‌پول EIP-1193) را نصب یا فعال کنید.");
+          revealConsole();
+          return Promise.resolve();
+        }
+        gateState("", "در حال درخواست دسترسی از کیف‌پول…");
+        return Promise.resolve(injected.request({ method: "eth_requestAccounts" })).then(function (accounts) {
+          state.account = (accounts && accounts[0]) || null;
+          if (!state.account) { throw new Error("حسابی از کیف‌پول دریافت نشد"); }
+          state.read = null;
+          state.deployment = null;
+          return chooseDeployment();
+        }).then(function () {
+          revealConsole();
+          return refresh({ keepAccount: !!state.account });
+        }).catch(function (err) {
+          gateState("err", "<b>اتصال کیف‌پول ناموفق بود.</b> " + esc(reasonOf(err)));
+          revealConsole();
+        });
+      }
+      function watchWallet() {
+        /* The presale panel calls this the moment a wallet connects, so the
+           owner gate is re-evaluated immediately instead of on the next poll. */
+        window.navisWalletConnected = function (account) {
+          if (account) { state.account = account; }
+          state.read = null;
+          return refresh({ keepAccount: !!account });
+        };
+        if (typeof window.addEventListener === "function") {
+          window.addEventListener("navis:wallet-connected", function () {
+            state.read = null;
+            refresh();
+          });
+        }
+        var injected = window.ethereum;
+        if (!injected || typeof injected.on !== "function") { return; }
+        try {
+          injected.on("accountsChanged", function (accounts) {
+            state.account = (accounts && accounts[0]) || null;
+            state.read = null;
+            refresh();
+          });
+          injected.on("chainChanged", function () {
+            state.read = null;
+            state.deployment = null;
+            refresh();
+          });
+        } catch (err) { /* wallets without event support stay on the polling path */ }
+      }
+
+      /* ------------------------ wallet lookup ------------------------ */
+      function lookup() {
+        var address = val("admLookupAddr");
+        if (!isAddress(address)) { notify("آدرس کیف‌پول معتبر نیست."); return Promise.resolve(); }
+        return Promise.resolve(state.read || ensureReader()).then(function (reader) {
+          if (!reader) { notify("اتصال RPC برقرار نیست."); return null; }
+          state.read = reader;
+          var contracts = buildContracts(reader.provider);
+          var calls = [
+            contracts.nav.balanceOf(address),
+            contracts.nav.getGenesisBalance(address),
+            contracts.nav.redemptionLockExpiresAt(address),
+            contracts.nav.lastDirectMintAt(address),
+            contracts.nav.isGenesisHolder(address),
+            contracts.nav.isBurner(address)
+          ];
+          return Promise.all(calls.map(safe)).then(function (raw) {
+            var flags = [];
+            if (raw[4] === true) { flags.push("دارندهٔ جنسیس"); }
+            if (raw[5] === true) { flags.push("Burner"); }
+            paint("admLookupBalance", units(raw[0], state.navDecimals, 2) + " " + state.navSymbol);
+            paint("admLookupQuota", units(raw[1], state.navDecimals, 0) + " " + state.navSymbol);
+            paint("admLookupLock", stamp(raw[2]));
+            paint("admLookupMint", stamp(raw[3]));
+            paint("admLookupFlags", flags.length ? flags.join(" · ") : "بدون نقش ویژه");
+          });
+        }).catch(function (err) {
+          notify("خواندن وضعیت کیف‌پول ناموفق بود: " + reasonOf(err));
+        });
+      }
+      /* --------------------------- writes ---------------------------- */
+      var ADDRESS_KEYS = {
+        presale: "presale",
+        treasury: "treasury",
+        nav: "navToken",
+        vesting: "vesting"
+      };
+      function write(label, abiKey, method, args) {
+        if (!state.unlocked) { notify("دسترسی مالک لازم است."); return Promise.resolve(false); }
+        if (state.sending) { notify("یک تراکنش دیگر در جریان است؛ تا تأیید آن صبر کنید."); return Promise.resolve(false); }
+        var ethers = ethersLib();
+        var injected = window.ethereum;
+        if (!ethers || !injected || typeof injected.request !== "function") {
+          notify("کیف‌پول تزریقی برای ارسال تراکنش پیدا نشد.");
+          return Promise.resolve(false);
+        }
+        state.sending = true;
+        gateState("", "در حال ارسال <b>" + esc(method) + "</b> — تأیید را در کیف‌پول بزنید…");
+        return Promise.resolve()
+          .then(function () {
+            return new ethers.BrowserProvider(injected, state.chainId || undefined).getSigner();
+          })
+          .then(function (signer) {
+            var target = state.deployment.addresses[ADDRESS_KEYS[abiKey]];
+            var contract = new ethers.Contract(target, ABI[abiKey], signer);
+            return contract[method].apply(contract, args);
+          })
+          .then(function (tx) {
+            notify("تراکنش " + label + " ارسال شد · " + short(tx.hash));
+            return tx.wait();
+          })
+          .then(function () {
+            notify(label + " ثبت شد؛ اعداد زنده تازه‌سازی شد.");
+            return true;
+          }, function (err) {
+            notify(label + " ناموفق بود: " + reasonOf(err));
+            return false;
+          })
+          .then(function (done) {
+            state.sending = false;
+            return refresh().then(function () { return done; });
+          });
+      }
+      /* --------------------- phase form handlers --------------------- */
+      function onSubmit(formId, handler) {
+        var form = $id(formId);
+        if (!form || typeof form.addEventListener !== "function") { return; }
+        form.addEventListener("submit", function (event) {
+          if (event && typeof event.preventDefault === "function") { event.preventDefault(); }
+          handler();
+        });
+      }
+      function phaseIndexInput(id, label) {
+        var text = val(id);
+        if (!/^\d+$/.test(text)) { notify(label + " باید عددی صحیح از صفر به بالا باشد."); return null; }
+        var index = Number(text);
+        if (state.phaseCount > 0 && index >= state.phaseCount) {
+          notify(label + " باید کمتر از " + state.phaseCount + " باشد.");
+          return null;
+        }
+        return index;
+      }
+      function bindPhaseForms() {
+        onSubmit("admFormAdd", function () {
+          var supply = toUnits(val("admAddSupply"), state.navDecimals);
+          if (supply === null || supply <= 0n) { notify("عرضهٔ زیرفاز را درست وارد کنید."); return; }
+          var multiplier = toUnits(val("admAddMultiplier"), 6);
+          if (multiplier === null || multiplier < 1000000n) {
+            notify("ضریب باید عددی مساوی یا بزرگ‌تر از ۱٫۰۰ باشد.");
+            return;
+          }
+          var active = isChecked("admAddActive");
+          var lockText = val("admAddLockDays");
+          if (!lockText) {
+            write("افزودن زیرفاز", "presale", "addSubPhase", [supply, multiplier, active]);
+            return;
+          }
+          var seconds = daysToSeconds(lockText);
+          if (seconds === null) { notify("قفل باید عددی بزرگ‌تر از صفر و بر حسب روز باشد."); return; }
+          write("افزودن زیرفاز با قفل", "presale", "addSubPhaseWithLock", [supply, multiplier, active, seconds]);
+        });
+
+        onSubmit("admFormEdit", function () {
+          var index = phaseIndexInput("admEditIndex", "شمارهٔ زیرفاز");
+          if (index === null) { return; }
+          var supply = toUnits(val("admEditSupply"), state.navDecimals);
+          if (supply === null || supply <= 0n) { notify("عرضهٔ کل زیرفاز را درست وارد کنید."); return; }
+          var multiplier = toUnits(val("admEditMultiplier"), 6);
+          if (multiplier === null || multiplier < 1000000n) {
+            notify("ضریب باید عددی مساوی یا بزرگ‌تر از ۱٫۰۰ باشد.");
+            return;
+          }
+          write("ویرایش زیرفاز " + index, "presale", "setSubPhase",
+            [index, supply, multiplier, isChecked("admEditActive")]);
+        });
+
+        onSubmit("admFormLock", function () {
+          var index = phaseIndexInput("admLockIndex", "شمارهٔ زیرفاز");
+          if (index === null) { return; }
+          var seconds = daysToSeconds(val("admLockDays"));
+          if (seconds === null) { notify("قفل باید عددی بزرگ‌تر از صفر و بر حسب روز باشد."); return; }
+          write("قفل زیرفاز " + index, "presale", "setSubPhaseLockPeriod", [index, seconds]);
+        });
+
+        onSubmit("admFormCurrent", function () {
+          var text = val("admCurrentIndex");
+          if (!/^\d+$/.test(text) || (state.phaseCount > 0 && Number(text) > state.phaseCount)) {
+            notify("شمارهٔ زیرفاز باید عددی بین ۰ و " + state.phaseCount + " باشد.");
+            return;
+          }
+          write("انتقال اشاره‌گر به زیرفاز " + text, "presale", "setCurrentSubPhase", [Number(text)]);
+        });
+
+        var endButton = $id("admEndPresale");
+        if (endButton) {
+          endButton.addEventListener("click", function () {
+            if (!state.phaseCount) { notify("زیرفازی ثبت نشده است."); return; }
+            write("پایان پیش‌فروش", "presale", "setCurrentSubPhase", [state.phaseCount]);
+          });
+        }
+      }
+      /* ------------------- vesting / allocation forms ---------------- */
+      function bindVestingForms() {
+        onSubmit("admFormMint", function () {
+          var to = val("admMintTo");
+          if (!isAddress(to)) { notify("آدرس دریافت‌کننده معتبر نیست."); return; }
+          var amount = toUnits(val("admMintAmount"), state.navDecimals);
+          if (amount === null || amount <= 0n) { notify("مقدار تخصیص را درست وارد کنید."); return; }
+          var lockText = val("admMintLockDays");
+          if (!lockText) {
+            write("صدور مستقیم", "nav", "mintDirect", [to, amount]);
+            return;
+          }
+          var seconds = daysToSeconds(lockText);
+          if (seconds === null) { notify("قفل باید عددی بزرگ‌تر از صفر و بر حسب روز باشد."); return; }
+          write("صدور مستقیم با قفل", "nav", "mintDirectWithLock", [to, amount, seconds]);
+        });
+
+        onSubmit("admFormBurn", function () {
+          var from = val("admBurnFrom");
+          if (!isAddress(from)) { notify("آدرس مبدأ معتبر نیست."); return; }
+          var amount = toUnits(val("admBurnAmount"), state.navDecimals);
+          if (amount === null || amount <= 0n) { notify("مقدار سوزاندن را درست وارد کنید."); return; }
+          write("سوزاندن موجودی", "nav", "burnDirect", [from, amount]);
+        });
+
+        onSubmit("admFormBurner", function () {
+          var account = val("admBurnerAccount");
+          if (!isAddress(account)) { notify("آدرس Burner معتبر نیست."); return; }
+          write("ثبت دسترسی Burner", "nav", "setBurner", [account, isChecked("admBurnerStatus")]);
+        });
+
+        var lookupButton = $id("admLookupBtn");
+        if (lookupButton) { lookupButton.addEventListener("click", lookup); }
+      }
+
+      /* -------------------------- treasury --------------------------- */
+      function bindTreasuryForms() {
+        onSubmit("admFormTreasuryLock", function () {
+          var seconds = daysToSeconds(val("admTreasuryDays"));
+          if (seconds === null) { notify("مدت قفل باید عددی بزرگ‌تر از صفر و بر حسب روز باشد."); return; }
+          write("قفل پیش‌فرض خزانه", "treasury", "setLockPeriod", [seconds]);
+        });
+
+        onSubmit("admFormWhitelist", function () {
+          var account = val("admWhitelistAccount");
+          if (!isAddress(account)) { notify("آدرس وایت‌لیست معتبر نیست."); return; }
+          write("ثبت وایت‌لیست فلش‌لون", "treasury", "setWhitelisted",
+            [account, isChecked("admWhitelistStatus")]);
+        });
+
+        var batchButton = $id("admWhitelistBatchBtn");
+        if (batchButton) {
+          batchButton.addEventListener("click", function () {
+            var accounts = addressList(val("admWhitelistBatch"));
+            if (!accounts.length) { notify("حداقل یک آدرس معتبر در فهرست دسته‌ای لازم است."); return; }
+            write("وایت‌لیست دسته‌ای (" + accounts.length + " آدرس)", "treasury",
+              "setWhitelistedBatch", [accounts, isChecked("admWhitelistBatchStatus")]);
+          });
+        }
+
+        onSubmit("admFormVault", function () {
+          var address = val("admVaultInput");
+          if (!isAddress(address)) { notify("آدرس مقصد کف معتبر نیست."); return; }
+          write("مقصد بخش کف", "presale", "setTreasuryVault", [address]);
+        });
+
+        onSubmit("admFormPool", function () {
+          var address = val("admPoolInput");
+          if (!isAddress(address)) { notify("آدرس مقصد پرمیوم معتبر نیست."); return; }
+          write("مقصد پرمیوم", "presale", "setLiquidityPool", [address]);
+        });
+      }
+      /* -------------------- vesting module handlers ------------------ */
+      /* The vesting contract works on its own balance: the console funds it with
+         the direct-issuance form (mint to the vesting address) and then turns
+         parts of that pool into cliff/duration schedules. */
+      function bindVestingModule() {
+        onSubmit("admFormSchedule", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var beneficiary = val("admScheduleBeneficiary");
+          if (!isAddress(beneficiary)) { notify("آدرس ذی‌نفع معتبر نیست."); return; }
+          var amount = toUnits(val("admScheduleAmount"), state.navDecimals);
+          if (amount === null || amount <= 0n) { notify("مقدار کل برنامه را درست وارد کنید."); return; }
+          var duration = daysToSeconds(val("admScheduleDurationDays"));
+          if (duration === null) { notify("مدت وستینگ باید عددی بزرگ‌تر از صفر و بر حسب روز باشد."); return; }
+          var cliff = optionalDays(val("admScheduleCliffDays"));
+          if (cliff === null) { notify("Cliff باید عددی نامنفی و بر حسب روز باشد."); return; }
+          if (cliff > duration) { notify("Cliff نمی‌تواند از مدت وستینگ بیشتر باشد."); return; }
+          var startText = val("admScheduleStartDays");
+          var start = 0n; /* zero means "now" on chain */
+          if (startText && Number(String(startText).replace(/[,\s_]/g, "")) > 0) {
+            var offset = daysToSeconds(startText);
+            if (offset === null) { notify("شروع باید عددی نامنفی و بر حسب روز باشد."); return; }
+            start = BigInt(Math.floor(Date.now() / 1000)) + offset;
+          }
+          write("ایجاد برنامه وستینگ", "vesting", "createSchedule", [
+            beneficiary,
+            val("admScheduleRole") || "team",
+            amount,
+            start,
+            cliff,
+            duration,
+            isChecked("admScheduleRevocable")
+          ]);
+        });
+
+        onSubmit("admFormScheduleAction", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = scheduleIdInput();
+          if (id === null) { return; }
+          write("آزادسازی برنامهٔ " + id, "vesting", "release", [id]);
+        });
+
+        var revokeButton = $id("admRevokeSchedule");
+        if (revokeButton) {
+          revokeButton.addEventListener("click", function () {
+            if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+            var id = scheduleIdInput();
+            if (id === null) { return; }
+            write("فسخ برنامهٔ " + id, "vesting", "revoke", [id]);
+          });
+        }
+
+        onSubmit("admFormRoleShare", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var role = val("admRoleName");
+          if (!role) { notify("برچسب نقش را وارد کنید (مثلاً team یا marketing)."); return; }
+          var share = toUnits(val("admRoleSharePercent"), 2);
+          if (share === null || share < 0n || share > 10000n) {
+            notify("سهم نقش باید درصدی بین ۰ و ۱۰۰ باشد.");
+            return;
+          }
+          write("ثبت سهم «" + role + "»", "vesting", "setRoleShare", [role, share]);
+        });
+
+        onSubmit("admFormVestingSweep", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var to = val("admVestingSweepTo");
+          if (!isAddress(to)) { notify("آدرس مقصد برداشت معتبر نیست."); return; }
+          var amount = toUnits(val("admVestingSweepAmount"), state.navDecimals);
+          if (amount === null || amount <= 0n) { notify("مقدار برداشت را درست وارد کنید."); return; }
+          write("برداشت موجودی آزاد وستینگ", "vesting", "sweepUnallocated", [to, amount]);
+        });
+      }
+      /* ---------------------------- shell ---------------------------- */
+      function bindShell() {
+        var connectButton = $id("admConnect");
+        if (connectButton) { connectButton.addEventListener("click", connect); }
+        var refreshButton = $id("admRefresh");
+        if (refreshButton) {
+          refreshButton.addEventListener("click", function () {
+            state.read = null;
+            state.deployment = null;
+            refresh();
+          });
+        }
+        var switchButton = $id("admSwitch");
+        if (switchButton) {
+          switchButton.addEventListener("click", function () {
+            var target = suggestedChain();
+            if (target) { switchWalletTo(target); }
+          });
+        }
+        var links = document.querySelectorAll('a[href="#admin"]');
+        Array.prototype.slice.call(links || []).forEach(function (link) {
+          link.addEventListener("click", revealConsole);
+        });
+        window.addEventListener("hashchange", function () {
+          if (window.location && window.location.hash === "#admin") { revealConsole(); }
+        });
+      }
+      function boot() {
+        bindShell();
+        bindPhaseRows();
+        bindPhaseForms();
+        bindVestingForms();
+        bindVestingModule();
+        bindPauseControls();
+        bindScheduleRows();
+        bindTreasuryForms();
+        watchWallet();
+        if (window.location && window.location.hash === "#admin") { revealConsole(); }
+        refresh();
+        if (typeof window.setInterval === "function") {
+          window.setInterval(function () {
+            if (!state.busy && !state.sending) { refresh(); }
+          }, 15000);
+        }
+      }
+      boot();
+      /* __ADM_JS__ */
     })();
   </script>
   <!-- ======================= /LIVE SHELL ======================= -->
@@ -3483,20 +5568,30 @@
          injected wallet or the local RPC is unavailable the panel keeps
          its fully self-contained demo behaviour.
          ============================================================ */
-      var TARGET_CHAIN = {
-        id: 31337,
-        hexId: "0x7a69",
-        name: "NAVIS Localhost — Hardhat 31337",
-        symbol: "ETH",
-        rpcByHost: "http://127.0.0.1:8545",
-        rpcFallback: "http://195.248.240.102:8545"
+      /* Every chain the page can talk to. `rpc` is the public endpoint used for
+         read-only calls; writes always go through the injected wallet. The
+         wallet itself decides the network — see ensureTargetChain(). */
+      var CHAIN_META = {
+        56: { hexId: "0x38", name: "BNB Smart Chain", symbol: "BNB", rpc: "https://bsc-dataseed.binance.org" },
+        97: { hexId: "0x61", name: "BNB Smart Chain Testnet", symbol: "tBNB", rpc: "https://data-seed-prebsc-1-s1.binance.org:8545" },
+        31337: { hexId: "0x7a69", name: "NAVIS Localhost — Hardhat 31337", symbol: "ETH", rpc: "http://127.0.0.1:8545" }
       };
+      var CHAIN_RPCS = {
+        56: ["https://bsc-dataseed.binance.org", "https://bsc-dataseed1.defibit.io"],
+        97: ["https://data-seed-prebsc-1-s1.binance.org:8545", "https://data-seed-prebsc-2-s1.binance.org:8545"],
+        31337: ["http://127.0.0.1:8545", "http://195.248.240.102:8545"]
+      };
+      function chainMeta(id) {
+        return CHAIN_META[Number(id)] || CHAIN_META[31337];
+      }
 
-      /* Deployment descriptor written by navois-contracts/scripts/deploy.js.
-         It is fetched at runtime so the addresses never drift; the values
-         below are the fallback used when that fetch is unavailable. */
+      /* Deployment descriptor written by navis-contracts/scripts/deploy.js.
+         It is fetched at runtime so the addresses never drift; the object below
+         is the fallback used when every fetch is unavailable (local hardhat). */
       var DEPLOYMENT = {
         chainId: 31337,
+        rpcUrl: "http://127.0.0.1:8545",
+        network: "localhost",
         addresses: {
           navToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
           presale: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
@@ -3506,9 +5601,15 @@
         }
       };
 
+      /* Every descriptor is fetched from the landing page *and* the contracts
+         repository; loadDeployment() keeps the one matching the wallet chain
+         (testnet first, so a hosted page without a wallet shows the testnet). */
       var DEPLOYMENT_SOURCES = [
+        "deployments/bscTestnet.json",
+        "../navis-contracts/deployments/bscTestnet.json",
+        "deployments/bscMainnet.json",
+        "../navis-contracts/deployments/bscMainnet.json",
         "deployments/localhost.json",
-        "../navois-contracts/deployments/localhost.json",
         "../navis-contracts/deployments/localhost.json"
       ];
 
@@ -3538,13 +5639,16 @@
       var ethersLib = (window.ethers && typeof window.ethers.Contract === "function") ? window.ethers : null;
 
       function rpcCandidates() {
+        var chain = Number(DEPLOYMENT.chainId) || 31337;
         var urls = [];
         var host = window.location && window.location.hostname;
-        if (host && host !== "127.0.0.1" && host !== "localhost") {
+        if (chain === 31337 && host && host !== "127.0.0.1" && host !== "localhost") {
           urls.push("http://" + host + ":8545");
         }
-        urls.push(TARGET_CHAIN.rpcByHost, TARGET_CHAIN.rpcFallback);
-        return urls.filter(function (url, index) { return urls.indexOf(url) === index; });
+        urls.push(DEPLOYMENT.rpcUrl);
+        var known = CHAIN_RPCS[chain];
+        if (known) { urls = urls.concat(known); }
+        return urls.filter(function (url, index) { return !!url && urls.indexOf(url) === index; });
       }
 
       function unitsToNumber(value, decimals) {
@@ -3566,43 +5670,132 @@
         if (!ethereum || typeof ethereum.request !== "function") {
           return Promise.resolve();
         }
+        /* the target is the chain of the resolved deployment, never a constant:
+           on BSC testnet the page must not drag the wallet back to 31337. */
+        var target = Number(DEPLOYMENT.chainId) || 31337;
+        var meta = chainMeta(target);
         return ethereum.request({ method: "eth_chainId" }).then(function (current) {
-          if (current && Number(current) === TARGET_CHAIN.id) return false;
+          if (current && parseInt(current, 16) === target) return false;
           return ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: TARGET_CHAIN.hexId }]
+            params: [{ chainId: meta.hexId }]
           }).catch(function (err) {
             var code = err && (err.code || (err.data && err.data.code));
             if (code !== 4902 && code !== -32603) throw err;
             return ethereum.request({
               method: "wallet_addEthereumChain",
               params: [{
-                chainId: TARGET_CHAIN.hexId,
-                chainName: TARGET_CHAIN.name,
-                nativeCurrency: { name: "Ether", symbol: TARGET_CHAIN.symbol, decimals: 18 },
-                rpcUrls: [TARGET_CHAIN.rpcByHost]
+                chainId: meta.hexId,
+                chainName: meta.name,
+                nativeCurrency: { name: meta.name, symbol: meta.symbol, decimals: 18 },
+                rpcUrls: [meta.rpc]
               }]
             });
           }).then(function () { return true; });
         }).then(function (switched) {
-          if (switched) showToast("شبکه به نود محلی NAVIS (31337) سوییچ شد.");
+          if (switched) showToast("شبکه به " + meta.name + " (" + target + ") سوییچ شد.");
         });
       }
 
+      /* Chain the injected wallet currently sits on (0 when there is none). */
+      function walletChain() {
+        var ethereum = window.ethereum;
+        if (!ethereum || typeof ethereum.request !== "function") { return Promise.resolve(0); }
+        return Promise.resolve(ethereum.request({ method: "eth_chainId" })).then(function (hex) {
+          var id = parseInt(hex, 16);
+          return isFinite(id) ? id : 0;
+        }, function () { return 0; });
+      }
+      var LOCAL_CHAIN_ID = 31337;
+      /* Whether the chain the wallet sits on can answer a call at all. The local
+         dev chain only counts while its node is up: an older build force-switched
+         wallets to 31337, and a wallet parked on a dead 31337 must not win the
+         descriptor match and hide every live deployment. */
+      function walletChainAlive() {
+        var ethereum = window.ethereum;
+        if (!ethereum || typeof ethereum.request !== "function") { return Promise.resolve(false); }
+        return Promise.resolve(ethereum.request({ method: "eth_blockNumber", params: [] }))
+          .then(function () { return true; }, function () { return false; });
+      }
+      function usableDeployment(data) {
+        var addresses = (data && data.addresses) || {};
+        return !!(data && data.pending !== true && addresses.presale && addresses.treasury && addresses.navToken);
+      }
+      /* The descriptor of the wallet chain wins; otherwise the caller decides. */
+      function pickDeployment(list, chain) {
+        if (!chain) { return null; }
+        return list.filter(function (entry) { return Number(entry.chainId) === chain; })[0] || null;
+      }
+      function localHost() {
+        var where = window.location || {};
+        var host = where.hostname;
+        return !host || host === "127.0.0.1" || host === "localhost" || where.protocol === "file:";
+      }
+      /* A hardhat node answers eth_chainId on 127.0.0.1:8545 with 31337. Probing
+         it beats guessing: a locally served page may belong to the hardhat
+         deployment *or* to the testnet one. */
+      function localNodeAlive() {
+        if (typeof window.fetch !== "function") { return Promise.resolve(false); }
+        return window.fetch("http://127.0.0.1:8545", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_chainId", params: [] })
+        }).then(function (response) {
+          return response && response.ok ? response.json() : null;
+        }, function () { return null; }).then(function (data) {
+          return !!(data && data.result && parseInt(data.result, 16) === 31337);
+        }, function () { return false; });
+      }
+      function fallbackDeployment(list, chain, options) {
+        var hardhat = list.filter(function (entry) { return Number(entry.chainId) === 31337; })[0];
+        /* The wallet sat on the local chain with nothing behind it: the local
+           preview is exactly the one thing that cannot serve, so a recorded live
+           network wins over it. */
+        if (options && options.skipLocal) {
+          var remote = list.filter(function (entry) { return Number(entry.chainId) !== 31337; })[0];
+          if (remote) { return Promise.resolve(remote); }
+        }
+        /* no wallet at all: a local page previews the hardhat deployment */
+        if (localHost() && !chain && hardhat) { return Promise.resolve(hardhat); }
+        if (localHost() && hardhat) {
+          return localNodeAlive().then(function (alive) { return alive ? hardhat : list[0]; });
+        }
+        return Promise.resolve(list[0]);
+      }
+
+      /* Explains a deployment that was *not* picked by the wallet chain (empty in
+         the normal case) so the panel can tell the user why. */
+      var chainNote = "";
+
       async function loadDeployment() {
         if (typeof window.fetch !== "function") return;
+        chainNote = "";
+        var chain = await walletChain();
+        /* a wallet on a chain nobody is serving cannot decide the deployment:
+           follow the recorded one and let ensureTargetChain() move the wallet. */
+        if (Number(chain) === LOCAL_CHAIN_ID && !(await walletChainAlive())) {
+          chain = 0;
+          chainNote = "wallet-chain-dead";
+        }
+        var list = [];
         for (var i = 0; i < DEPLOYMENT_SOURCES.length; i += 1) {
           try {
             var response = await window.fetch(DEPLOYMENT_SOURCES[i], { cache: "no-store" });
             if (!response || !response.ok) continue;
             var data = await response.json();
-            if (data && data.addresses && data.addresses.presale) {
-              if (data.chainId) DEPLOYMENT.chainId = Number(data.chainId);
-              DEPLOYMENT.addresses = data.addresses;
-              return;
-            }
+            if (!usableDeployment(data)) continue;
+            var id = Number(data.chainId);
+            var dupe = list.filter(function (entry) { return Number(entry.chainId) === id; }).length > 0;
+            if (!dupe) { list.push(data); }
           } catch (err) { /* the descriptor is optional */ }
         }
+        if (!list.length) return;
+        var chosen = pickDeployment(list, chain) ||
+          await fallbackDeployment(list, chain, { skipLocal: chainNote === "wallet-chain-dead" });
+        DEPLOYMENT.chainId = Number(chosen.chainId) || DEPLOYMENT.chainId;
+        DEPLOYMENT.addresses = chosen.addresses || DEPLOYMENT.addresses;
+        DEPLOYMENT.network = chosen.network || "";
+        DEPLOYMENT.rpcUrl = chosen.rpcUrl || chainMeta(DEPLOYMENT.chainId).rpc;
       }
 
       async function findRpcProvider() {
@@ -3718,38 +5911,78 @@
         }
       }
 
+      /* The owner console lives in the live shell and re-checks the gate on this
+         hook, so connecting here unlocks the admin panel immediately instead of
+         waiting for its poll. */
+      function announceWallet(account) {
+        if (typeof window.navisWalletConnected === "function") {
+          try { window.navisWalletConnected(account); return; } catch (err) { /* fall through */ }
+        }
+        try {
+          if (typeof window.dispatchEvent === "function" && typeof window.Event === "function") {
+            window.dispatchEvent(new window.Event("navis:wallet-connected"));
+          }
+        } catch (err) { /* engines without Event construction stay on the polling path */ }
+      }
+
       async function connectWallet() {
         if (walletStatus) walletStatus.textContent = "در حال اتصال به MetaMask…";
-        await ensureTargetChain();
         await loadDeployment();
+        /* a wallet parked on the local chain with no node behind it was moved to
+           the recorded deployment: remember it so the user learns why. */
+        var wasParked = chainNote === "wallet-chain-dead";
+        await ensureTargetChain();
+        /* the switch (or a manual network change) may have picked another
+           descriptor, so the addresses are resolved twice on purpose. */
+        await loadDeployment();
+        var meta = chainMeta(DEPLOYMENT.chainId);
         var accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
         var account = Array.isArray(accounts) ? accounts[0] : null;
         if (!account) throw new Error("no-account");
         CHAIN = {
           account: account,
-          wallet: ethersLib ? new ethersLib.BrowserProvider(window.ethereum, DEPLOYMENT.chainId) : null,
+          wallet: ethersLib ? new ethersLib.BrowserProvider(window.ethereum) : null,
           contracts: null,
           rpc: null
         };
         markConnected(
           shortAddress(account),
-          "کیف‌پول متصل شد · در حال خواندن نود محلی…",
+          "کیف‌پول متصل شد · در حال خواندن " + meta.name + "…",
           "کیف‌پول متصل شد: " + shortAddress(account)
         );
         var live = await refreshChain();
         if (networkEl) {
           networkEl.textContent = live
-            ? "شبکه: نود محلی 31337 · " + shortAddress(account)
-            : "شبکه: کیف‌پول متصل است اما نود 31337 پاسخ نمی‌دهد";
+            ? "شبکه: " + meta.name + " · " + shortAddress(account)
+            : "شبکه: " + meta.name + " · RPC عمومی پاسخ نمی‌دهد؛ خواندن از کیف‌پول انجام می‌شود";
         }
+        if (wasParked) {
+          showToast("کیف‌پول روی زنجیرهٔ ۳۱۳۳۷ بود ولی نودی روی آن پاسخ نمی‌داد؛ دپلوی زندهٔ " +
+            meta.name + " انتخاب شد.");
+        }
+        announceWallet(account);
         return account;
       }
 
       async function buyWithWallet(amount) {
-        var account = CHAIN.account;
+        var account = CHAIN && CHAIN.account;
+        if (!account) throw new Error("کیف‌پول متصل نیست");
+        var addresses = DEPLOYMENT.addresses || {};
+        if (!addresses.presale || !addresses.usdtToken) {
+          throw new Error("آدرس قراردادهای این زنجیره در دسترس نیست (فایل deployments خوانده نشد)");
+        }
+        var wallet = CHAIN.wallet ||
+          (ethersLib && window.ethereum ? new ethersLib.BrowserProvider(window.ethereum) : null);
+        if (!wallet) throw new Error("کتابخانهٔ ethers یا کیف‌پول تزریقی در دسترس نیست");
+        /* the read-only RPC only fills CHAIN.contracts; when it is unreachable
+           the contracts are rebuilt on the injected provider, so a purchase
+           still works with no public endpoint. */
         var contracts = CHAIN.contracts;
-        if (!CHAIN.wallet || !contracts) throw new Error("presale-unavailable");
-        var signer = await CHAIN.wallet.getSigner(account);
+        if (!contracts) {
+          contracts = await loadContracts(wallet);
+          CHAIN.contracts = contracts;
+        }
+        var signer = await wallet.getSigner(account);
         var usdtWrite = contracts.usdt.connect(signer);
         var presaleWrite = contracts.presale.connect(signer);
         var decimals = contracts.usdtDecimals;
@@ -3757,7 +5990,7 @@
 
         var gate = await Promise.all([
           contracts.usdt.balanceOf(account),
-          contracts.usdt.allowance(account, DEPLOYMENT.addresses.presale)
+          contracts.usdt.allowance(account, addresses.presale)
         ]);
         if (gate[0] < amountUnits) {
           throw new Error(
@@ -3766,7 +5999,7 @@
         }
         if (gate[1] < amountUnits) {
           showToast("تأیید مصرف تتر (approve)…");
-          var approval = await usdtWrite.approve(DEPLOYMENT.addresses.presale, amountUnits);
+          var approval = await usdtWrite.approve(addresses.presale, amountUnits);
           await approval.wait();
         }
         showToast("در حال خرید در پیش‌فروش…");
@@ -3815,7 +6048,10 @@
             showToast("مبلغ تتر را وارد کنید.");
             return;
           }
-          if (CHAIN && CHAIN.account && CHAIN.contracts && CHAIN.wallet) {
+          /* a connected wallet is enough: buyWithWallet() rebuilds the contracts
+             on the injected provider when the public RPC is unreachable, so the
+             "connect your wallet" hint is only shown when it is really absent. */
+          if (CHAIN && CHAIN.account) {
             buyWithWallet(amount).catch(function (err) {
               var reason = (err && (err.shortMessage || err.message)) || "نامشخص";
               if (walletStatus) walletStatus.textContent = "خرید انجام نشد";

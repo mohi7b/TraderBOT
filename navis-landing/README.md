@@ -146,6 +146,8 @@ it only ever touches ids/classes.
 ```bash
 python3 tools/strip-legacy.py check                      # static contract (no deps)
 node tools/runtime-test.cjs                              # runtime contract (no deps, ~11s)
+node tools/presale-harness.cjs                           # wallet/buy contract (no deps, ~1s)
+node tools/adm-console-harness.cjs                       # owner console contract (no deps, ~2s)
 python3 tools/strip-legacy.py script --out /tmp/navis.js && node --check /tmp/navis.js
 node tools/smoke-test.cjs                                # optional: real headless Chromium
 python3 tools/strip-legacy.py strip --dry-run            # report what a cleanup would remove
@@ -155,12 +157,14 @@ python3 tools/strip-legacy.py strip --dry-run            # report what a cleanup
 | --- | --- |
 | `strip-legacy.py check` | tag balance of the live shell and of the inert block, the `</template> → <script> → </body> → </html>` tail shape, and that **every** id/class the script queries (`$("#…")`, `$$(".…")`, `[data-unit]`) exists exactly once in the live shell — including the four on-chain wallet hooks (`#presalePrice`, `#walletBalance`, `#networkStatus`, `#buyPresale`) |
 | `runtime-test.cjs` | parses the live shell, **executes the shipped script bytes** in a dependency-free DOM sandbox and asserts the observable behaviour: countdown ticks, reveal + counters, market/treasury feed, toast lifecycle, mobile menu, language switch (`lang`/`dir`/flag/label), wallet connect, the estimate calculator and the on-chain panel's demo fallback (52 checks) |
+| `presale-harness.cjs` | boots the presale script with a mocked `window.ethereum`/`window.ethers`/`window.fetch` and drives the wallet/buy paths per network: BSC testnet connect + buy, the wallet-only fallback when the public RPC is dead, a wallet on the *wrong* network (asked for the deployment chain, never for a hard-coded one), a live hardhat node on a locally served page, a wallet parked on `31337` with **no node behind it** (it follows the recorded live deployment and says why), and the demo reservation with no wallet (27 checks) |
+| `adm-console-harness.cjs` | boots the owner console and asserts the read + write paths of every admin form, the owner gate (owner / stranger / no wallet / dead RPC / missing descriptor / missing vesting module / reverted + hanging writes), the RPC-failure gate, the `navisWalletConnected` bridge from the presale panel, and the wallet-network handling: a dead `31337` wallet follows the live deployment, a chain with no descriptor still reads a live one, and the switch button (reject `4001`, unknown chain `4902` → add) (182 checks) |
 | `smoke-test.cjs` | the same flows inside real headless Chromium via the repo's `puppeteer`; exits `2` with install hints when the browser libraries are missing (use `NAVIS_CHROME=/path/to/chrome` to point at another build) |
 | `phase1-shots.cjs` | desktop + mobile viewport shots of the phase‑1 anchors (`#trust`, `#presale`, `#treasury`, `#genesis`) into `preview/`; on this host run it with `LD_LIBRARY_PATH=$HOME/navis-libs/root/usr/lib/x86_64-linux-gnu` |
 
 `check` also compares the injected script against the checksum baseline in
 `tools/legacy-script.sha256.json`, which is how the "inline script stays byte-identical" guarantee
-is enforced — the file currently hashes to `35bfdfc34a60b873…`. Re-record it whenever the script
+is enforced — the file currently hashes to `d185d5a50207ecd3…`. Re-record it whenever the script
 is intentionally edited (`check --record`, which always rewrites the baseline).
 
 When the reference copy is no longer needed:
@@ -234,24 +238,30 @@ The original script is preserved and still runs; the on-chain layer from
 - **Market + treasury feed** — demo data ticked every ~2.6 s / ~3.2 s. Both tickers stop writing as
   soon as a real read succeeds (`chainLive`), so live reserve/floor/price values are never
   overwritten by the simulation; when no node answers, the simulation keeps the panel alive.
-- **Wallet connect** — with an injected EIP‑1194 provider (`window.ethereum`) it switches to chain
-  31337 and reads the protocol on-chain; without one it shows a demo address and the USDT input
-  still recalculates the estimate (sub‑phase price `$0.010`).
+- **Wallet connect** — with an injected EIP‑1194 provider (`window.ethereum`) it resolves the
+  deployment recorded for the wallet's chain, switches the wallet to *that* chain (never to a
+  hard-coded one; `wallet_addEthereumChain` when the chain is unknown) and reads the protocol
+  on-chain; without one it shows a demo address and the USDT input still recalculates the estimate
+  (sub‑phase price `$0.010`).
 
 ## On-chain layer (Ethers v6 + MetaMask)
 
-`deployments/localhost.json` pins the local stack (`chainId` 31337 / `0x7a69`, RPC + fallback and
-every contract address: `navToken`, `presale`, `treasury`, `marketMaker`, `usdtToken`, `router`).
-The page fetches it at runtime — `deployments/localhost.json` first, then
-`../navois-contracts/deployments/localhost.json` — and falls back to the addresses inlined in the
-script when neither is reachable (e.g. opening the file over `file://`, where `fetch` is blocked).
-Reads go through a plain `JsonRpcProvider` (no wallet required, so the panel hydrates on load and
-re-reads every 15 s once a wallet is connected); writes go through
-`ethers.BrowserProvider(window.ethereum)`.
+`deployments/<network>.json` records a deployment (`chainId`, RPC + fallback and every contract
+address: `navToken`, `presale`, `treasury`, `vesting`, `marketMaker`, `usdtToken`, `router`). At
+runtime the page looks for `bscTestnet`, `bscMainnet` and `localhost` under both `deployments/`
+and `../navis-contracts/deployments/` (the first file per chain id wins) and picks the descriptor
+of the **connected wallet's chain**, so the page follows the wallet instead of a hard-coded
+network. A wallet parked on `31337` by an older build is only trusted while something actually
+answers there (`eth_blockNumber`); otherwise the recorded live deployment wins and the toast says
+why. When no descriptor is reachable at all (e.g. opening the file over `file://`, where `fetch`
+is blocked) the addresses inlined in the script are used. Reads go through a plain
+`JsonRpcProvider` (no wallet required, so the panel hydrates on load and re-reads every 15 s once a
+wallet is connected), falling back to the injected provider when the public RPCs are blocked;
+writes go through `ethers.BrowserProvider(window.ethereum)`.
 
 | Action | What happens |
 | --- | --- |
-| `#connectWallet` | `eth_requestAccounts` → `wallet_switchEthereumChain` (only when the wallet is on another chain; `wallet_addEthereumChain` if the chain is unknown) → live Treasury reserve / NAV floor / presale price, ERC‑20 symbol+decimals |
+| `#connectWallet` | `eth_requestAccounts` → the deployment of the wallet chain is resolved → `wallet_switchEthereumChain` (only when the wallet sits on another chain; `wallet_addEthereumChain` if the chain is unknown) → live Treasury reserve / NAV floor / presale price, ERC‑20 symbol+decimals |
 | `#buyPresale` | readable USDT amount → `approve(presale, amount)` when the allowance is short → `presale.buyTokens(amount)` → balance + reserve refresh, tx hash in `#networkStatus` |
 | no wallet / no Ethers / RPC down | every branch above is skipped, the buttons keep their original demo behaviour and the panel shows *شبکه: متصل نیست* |
 
