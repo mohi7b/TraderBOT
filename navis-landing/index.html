@@ -362,12 +362,13 @@
             <span class="brand-sub block text-[10px]" style="color:#94A3B8">چارت‌انجین هوشمند · خزانهٔ آن‌چین</span>
           </span>
         </a>
+        <!-- nav order mirrors the page order: 1 خانه · 2 پلتفرم · 3 نقشه راه · 4 توکنومیکس (خزانه) · 7 حاکمیت -->
         <nav class="nav-desk items-center gap-0.5" aria-label="ناوبری اصلی">
           <a href="#hero" class="nav-l">خانه</a>
+          <a href="#platform" class="nav-l">پلتفرم زنده</a>
           <a href="#roadmap" class="nav-l">نقشه راه</a>
           <a href="#tokenomics" class="nav-l">توکنومیکس</a>
           <a href="#treasury" class="nav-l">خزانه</a>
-          <a href="#platform" class="nav-l">پلتفرم زنده</a>
           <a href="#genesis" class="nav-l">حاکمیت</a>
         </nav>
         <div class="flex items-center gap-2">
@@ -412,13 +413,13 @@
     </div>
     <div id="mobileMenu" class="hidden">
       <div class="wrap py-3">
+        <!-- mobile menu mirrors the desktop nav (page order); #presale، #trust و #community عمداً اینجا نیستند -->
         <nav class="grid gap-1" aria-label="ناوبری موبایل">
           <a href="#hero">خانه</a>
+          <a href="#platform">پلتفرم زنده</a>
           <a href="#roadmap">نقشه راه و فازها</a>
           <a href="#tokenomics">توکنومیکس و شفافیت</a>
           <a href="#treasury">خزانهٔ آن‌چین</a>
-          <a href="#trust">تضمین‌ها و بازار</a>
-          <a href="#platform">پلتفرم زنده</a>
           <a href="#genesis">حاکمیت گِنیسِس و رأی‌دهی</a>
         </nav>
         <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5" style="background:rgba(255,255,255,.02);border:1px solid var(--hair)">
@@ -560,6 +561,50 @@
         </div>
       </div>
     </section>
+    <!-- ======================= PLATFORM PREVIEW ======================= -->
+    <section id="platform" class="sec">
+      <div class="wrap">
+        <div class="reveal text-center">
+          <span class="eyebrow">Platform Preview</span>
+          <h2 class="h2s mt-4">پلتفرم ربات معامله‌گر <span class="grad">ناویس</span></h2>
+          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">
+            چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
+          </p>
+        </div>
+
+        <figure class="reveal mt-9">
+          <a class="shot-frame" href="./NAVISAITradingDashboard.png" target="_blank" rel="noopener"
+            title="مشاهدهٔ داشبورد در اندازهٔ کامل">
+            <img class="shot" src="./NAVISAITradingDashboard.png" width="1672" height="941"
+              loading="lazy" decoding="async"
+              alt="داشبورد پلتفرم ربات معامله‌گر ناویس: چارت‌انجین هوشمند، پنل ربات‌های معامله‌گر و مرکز داده‌های مالی" />
+          </a>
+          <figcaption class="mt-4 text-center text-xs" style="color:#8494A8">
+            داشبورد ناویس · چارت‌انجین هوشمند، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
+          </figcaption>
+          <!-- The preserved inline script still ticks the market feed on #netInflow; the preview is the
+               real dashboard screenshot now, so the counter stays in the DOM but out of sight. -->
+          <span id="netInflow" style="display:none" aria-hidden="true">+$1,284,930</span>
+        </figure>
+      </div>
+    </section>
+    <!-- ======================= MARKET TAPE ======================= -->
+    <div class="tape my-12 sm:my-16" aria-hidden="true">
+      <div class="tape-track">
+        <span class="tape-item">NAVIS/USDT $0.04128 <b class="up">▲ 12.84%</b></span>
+        <span class="tape-item">BTC/USDT $64,218 <b class="down">▼ 0.42%</b></span>
+        <span class="tape-item">ETH/USDT $3,146 <b class="up">▲ 1.07%</b></span>
+        <span class="tape-item">SOL/USDT $148.20 <b class="up">▲ 3.51%</b></span>
+        <span class="tape-item">Treasury TVL $18.4M <b class="down">▼ 0.11%</b></span>
+        <span class="tape-item">NAV Floor $0.03910 <b class="up">▲ stable</b></span>
+        <span class="tape-item">NAVIS/USDT $0.04128 <b class="up">▲ 12.84%</b></span>
+        <span class="tape-item">BTC/USDT $64,218 <b class="down">▼ 0.42%</b></span>
+        <span class="tape-item">ETH/USDT $3,146 <b class="up">▲ 1.07%</b></span>
+        <span class="tape-item">SOL/USDT $148.20 <b class="up">▲ 3.51%</b></span>
+        <span class="tape-item">Treasury TVL $18.4M <b class="down">▼ 0.11%</b></span>
+        <span class="tape-item">NAV Floor $0.03910 <b class="up">▲ stable</b></span>
+      </div>
+    </div>
     <!-- ======================= ABOUT + ROADMAP · one merged page ======================= -->
     <section id="roadmap" class="snap">
       <span id="about"></span>
@@ -826,128 +871,6 @@
         </div>
       </div>
     </section>
-    <!-- ======================= TRUST BAND ======================= -->
-    <section id="trust" class="snap pb-6 pt-2">
-      <div class="wrap">
-        <div class="reveal text-center">
-          <span class="eyebrow">Verified · On-Chain · Auditable</span>
-          <h2 class="h2s mt-4">تضمین‌های قراردادی و <span class="grad-gold">امنیت سرمایه</span></h2>
-          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.95rem">
-            هر عددی که در این صفحه زنده است از قراردادهای آن‌چین و رابط‌های عمومی خوانده می‌شود؛ خزانه، کف قیمت و بازخرید همه قابل حسابرسی‌اند.
-          </p>
-        </div>
-
-        <div class="reveal tape mt-7" aria-hidden="true">
-          <div class="tape-track">
-            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
-            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
-            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
-            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
-            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
-            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
-            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
-            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
-            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
-            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
-            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
-            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
-          </div>
-        </div>
-
-        <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="reveal soft lift p-4">
-            <div class="flex items-center justify-between gap-2">
-              <p class="label">بازار خزانه · NAVIS / USDT</p>
-              <span class="live-dot"></span>
-            </div>
-            <p id="livePrice" class="fnum mt-2" style="font-size:clamp(1.45rem,3vw,1.85rem);font-weight:800;line-height:1.1;color:#fff">$0.04128</p>
-            <div class="mt-2 flex items-center justify-between gap-2">
-              <span class="fnum up text-xs">▲ 5.6%</span>
-              <span class="text-[10px]" style="color:#94A3B8">NAV Floor $0.03910</span>
-            </div>
-            <svg viewBox="0 0 320 56" preserveAspectRatio="none" class="mt-3 h-10 w-full" aria-hidden="true">
-              <defs>
-                <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#FFC700" stop-opacity=".36" />
-                  <stop offset="1" stop-color="#FFC700" stop-opacity="0" />
-                </linearGradient>
-              </defs>
-              <line x1="0" y1="42" x2="320" y2="42" stroke="#FFC700" stroke-dasharray="5 6" stroke-opacity=".45" />
-              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6 V56 H0 Z" fill="url(#sparkFill)" />
-              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6" fill="none" stroke="#FFC700" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </div>
-
-          <div class="reveal soft lift p-4">
-            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#FFC700" stroke-width="1.7" /><path d="m9 12 2 2 4-4" stroke="#FFC700" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            </span>
-            <p class="mt-3 text-sm font-semibold text-white">قرارداد تأییدشده</p>
-            <p class="text-[11px]" style="color:#94A3B8">Verified Smart Contract · BSC Testnet</p>
-          </div>
-
-          <div class="reveal soft lift p-4">
-            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#00F0FF" stroke-width="1.7" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#00F0FF" stroke-width="1.7" stroke-linecap="round" /></svg>
-            </span>
-            <p class="mt-3 text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
-            <p class="text-[11px]" style="color:#94A3B8">Smart Liquidity Lock · ۱۲ ماه</p>
-          </div>
-
-          <div class="reveal soft lift p-4">
-            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="#4D7CFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            </span>
-            <p class="mt-3 text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
-            <p class="text-[11px]" style="color:#94A3B8">Auditable Treasury · ذخیرهٔ ۱۰۰٪ تتر</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ======================= PLATFORM PREVIEW ======================= -->
-    <section id="platform" class="sec">
-      <div class="wrap">
-        <div class="reveal text-center">
-          <span class="eyebrow">Platform Preview</span>
-          <h2 class="h2s mt-4">پلتفرم ربات معامله‌گر <span class="grad">ناویس</span></h2>
-          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.98rem">
-            چارت‌انجین هوشمند نسل آینده، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
-          </p>
-        </div>
-
-        <figure class="reveal mt-9">
-          <a class="shot-frame" href="./NAVISAITradingDashboard.png" target="_blank" rel="noopener"
-            title="مشاهدهٔ داشبورد در اندازهٔ کامل">
-            <img class="shot" src="./NAVISAITradingDashboard.png" width="1672" height="941"
-              loading="lazy" decoding="async"
-              alt="داشبورد پلتفرم ربات معامله‌گر ناویس: چارت‌انجین هوشمند، پنل ربات‌های معامله‌گر و مرکز داده‌های مالی" />
-          </a>
-          <figcaption class="mt-4 text-center text-xs" style="color:#8494A8">
-            داشبورد ناویس · چارت‌انجین هوشمند، ربات‌های معامله‌گر توسعه‌پذیر و مرکز داده‌های مالی
-          </figcaption>
-          <!-- The preserved inline script still ticks the market feed on #netInflow; the preview is the
-               real dashboard screenshot now, so the counter stays in the DOM but out of sight. -->
-          <span id="netInflow" style="display:none" aria-hidden="true">+$1,284,930</span>
-        </figure>
-      </div>
-    </section>
-    <!-- ======================= MARKET TAPE ======================= -->
-    <div class="tape my-12 sm:my-16" aria-hidden="true">
-      <div class="tape-track">
-        <span class="tape-item">NAVIS/USDT $0.04128 <b class="up">▲ 12.84%</b></span>
-        <span class="tape-item">BTC/USDT $64,218 <b class="down">▼ 0.42%</b></span>
-        <span class="tape-item">ETH/USDT $3,146 <b class="up">▲ 1.07%</b></span>
-        <span class="tape-item">SOL/USDT $148.20 <b class="up">▲ 3.51%</b></span>
-        <span class="tape-item">Treasury TVL $18.4M <b class="down">▼ 0.11%</b></span>
-        <span class="tape-item">NAV Floor $0.03910 <b class="up">▲ stable</b></span>
-        <span class="tape-item">NAVIS/USDT $0.04128 <b class="up">▲ 12.84%</b></span>
-        <span class="tape-item">BTC/USDT $64,218 <b class="down">▼ 0.42%</b></span>
-        <span class="tape-item">ETH/USDT $3,146 <b class="up">▲ 1.07%</b></span>
-        <span class="tape-item">SOL/USDT $148.20 <b class="up">▲ 3.51%</b></span>
-        <span class="tape-item">Treasury TVL $18.4M <b class="down">▼ 0.11%</b></span>
-        <span class="tape-item">NAV Floor $0.03910 <b class="up">▲ stable</b></span>
-      </div>
-    </div>
     <!-- ======================= PRESALE ======================= -->
     <section id="presale" class="sec">
       <div class="wrap">
@@ -1165,6 +1088,84 @@
                 <p class="mt-3 text-center text-xs" style="color:#94A3B8">اتصال کیف‌پول از نوار بالای صفحه انجام می‌شود</p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ======================= TRUST BAND ======================= -->
+    <section id="trust" class="snap pb-6 pt-2">
+      <div class="wrap">
+        <div class="reveal text-center">
+          <span class="eyebrow">Verified · On-Chain · Auditable</span>
+          <h2 class="h2s mt-4">تضمین‌های قراردادی و <span class="grad-gold">امنیت سرمایه</span></h2>
+          <p class="lead mx-auto mt-3 max-w-2xl" style="font-size:.95rem">
+            هر عددی که در این صفحه زنده است از قراردادهای آن‌چین و رابط‌های عمومی خوانده می‌شود؛ خزانه، کف قیمت و بازخرید همه قابل حسابرسی‌اند.
+          </p>
+        </div>
+
+        <div class="reveal tape mt-7" aria-hidden="true">
+          <div class="tape-track">
+            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
+            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
+            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
+            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
+            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
+            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
+            <span class="tape-item">کف تضمین‌شدهٔ خزانه <b class="fnum" style="color:#FFC700">$0.03910</b></span>
+            <span class="tape-item">نسبت ذخیره <b class="fnum" style="color:#00F0FF">100.0%</b></span>
+            <span class="tape-item">ارزش خزانه <b class="fnum">$18.42M</b></span>
+            <span class="tape-item">مرحله ۱ · <b class="fnum" style="color:#FFC700">۴۰۰M NAVIS</b> · قیمت پلکانی</span>
+            <span class="tape-item">شبکه <b class="fnum" style="color:#00F0FF">BSC Testnet · 97</b></span>
+            <span class="tape-item">بازخرید تضمینی · بدون هزینهٔ پنهان</span>
+          </div>
+        </div>
+
+        <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="reveal soft lift p-4">
+            <div class="flex items-center justify-between gap-2">
+              <p class="label">بازار خزانه · NAVIS / USDT</p>
+              <span class="live-dot"></span>
+            </div>
+            <p id="livePrice" class="fnum mt-2" style="font-size:clamp(1.45rem,3vw,1.85rem);font-weight:800;line-height:1.1;color:#fff">$0.04128</p>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <span class="fnum up text-xs">▲ 5.6%</span>
+              <span class="text-[10px]" style="color:#94A3B8">NAV Floor $0.03910</span>
+            </div>
+            <svg viewBox="0 0 320 56" preserveAspectRatio="none" class="mt-3 h-10 w-full" aria-hidden="true">
+              <defs>
+                <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#FFC700" stop-opacity=".36" />
+                  <stop offset="1" stop-color="#FFC700" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="42" x2="320" y2="42" stroke="#FFC700" stroke-dasharray="5 6" stroke-opacity=".45" />
+              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6 V56 H0 Z" fill="url(#sparkFill)" />
+              <path d="M0 46 26 40 52 34 78 38 104 27 130 30 156 20 182 24 208 14 234 18 260 10 286 14 320 6" fill="none" stroke="#FFC700" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <div class="reveal soft lift p-4">
+            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z" stroke="#FFC700" stroke-width="1.7" /><path d="m9 12 2 2 4-4" stroke="#FFC700" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <p class="mt-3 text-sm font-semibold text-white">قرارداد تأییدشده</p>
+            <p class="text-[11px]" style="color:#94A3B8">Verified Smart Contract · BSC Testnet</p>
+          </div>
+
+          <div class="reveal soft lift p-4">
+            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5" stroke="#00F0FF" stroke-width="1.7" /><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#00F0FF" stroke-width="1.7" stroke-linecap="round" /></svg>
+            </span>
+            <p class="mt-3 text-sm font-semibold text-white">قفل هوشمند نقدینگی</p>
+            <p class="text-[11px]" style="color:#94A3B8">Smart Liquidity Lock · ۱۲ ماه</p>
+          </div>
+
+          <div class="reveal soft lift p-4">
+            <span class="ico" style="width:2.4rem;height:2.4rem;border-radius:.8rem">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 9l7-6 7 6M5 15l7 6 7-6" stroke="#4D7CFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <p class="mt-3 text-sm font-semibold text-white">خزانهٔ قابل حسابرسی</p>
+            <p class="text-[11px]" style="color:#94A3B8">Auditable Treasury · ذخیرهٔ ۱۰۰٪ تتر</p>
           </div>
         </div>
       </div>
