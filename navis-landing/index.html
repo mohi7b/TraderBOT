@@ -376,6 +376,15 @@
     #admin .adm-scroll{overflow-x:auto;margin-top:.6rem}
     #admin .adm-pick{cursor:pointer;border:1px solid var(--hair2);border-radius:999px;background:transparent;color:#ADCEFF;font-size:.66rem;padding:.16rem .55rem;font-family:var(--font-num)}
     #admin .adm-pick:hover{background:rgba(173,206,255,.14)}
+    #admin .adm-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0 .1rem}
+    #admin .adm-tab{cursor:pointer;border:1px solid var(--hair);border-radius:999px;background:transparent;color:#94A3B8;font-size:.72rem;padding:.34rem .85rem;transition:color .25s,border-color .25s,background .25s}
+    #admin .adm-tab:hover{color:#EAF2FF}
+    #admin .adm-tab.is-active{border-color:rgba(212,175,55,.45);background:rgba(212,175,55,.1);color:#F2DC9B}
+    #admin .adm-pane[hidden]{display:none}
+    #admin .adm-note{margin-top:.6rem;border-radius:.85rem;border:1px dashed var(--hair2);padding:.6rem .7rem;font-size:.69rem;line-height:1.95;color:#94A3B8}
+    #admin .adm-area{font-family:var(--font-num);font-variant-numeric:tabular-nums;width:100%;border-radius:.7rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);padding:.5rem .7rem;font-size:.74rem;line-height:1.9;color:#fff;outline:none;resize:vertical}
+    #admin .adm-area:focus{border-color:rgba(212,175,55,.7);box-shadow:0 0 0 3px rgba(212,175,55,.16)}
+    #admin .adm-area::placeholder{color:#5C6779}
     #admin .adm-meter{position:relative;height:.3rem;min-width:3.25rem;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
     #admin .adm-meter i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
     #admin .adm-tag{display:inline-flex;align-items:center;gap:.3rem;border-radius:999px;border:1px solid var(--hair2);padding:.14rem .55rem;font-size:.64rem;color:#8494A8;white-space:nowrap}
@@ -1832,6 +1841,251 @@
               </p>
             </form>
           </div>
+
+          <!-- two distribution paths: one batch of manual schedules, or Merkle claim campaigns -->
+          <div class="adm-block">
+            <h3>ثبت گروهی برنامه‌ها و کمپین‌های مرکل</h3>
+            <p class="adm-hint">
+              مسیر <b>دستی</b>: یک برگهٔ ذی‌نفعان با Cliff و مدت هر کدام در یک تراکنش ثبت می‌شود.
+              مسیر <b>خودکار</b>: کمپین مرکل باز می‌شود و هر کیف‌پول سهم خود را با اثبات درخت برمی‌دارد
+              (<span class="fnum">claim</span>) یا نگهبان با <span class="fnum">claimFor</span> آن را برایش واریز می‌کند.
+            </p>
+            <div class="adm-tabs" role="tablist">
+              <button class="adm-tab is-active" id="admTabManual" type="button" role="tab" aria-selected="true">برگهٔ دستی برنامه‌ها</button>
+              <button class="adm-tab" id="admTabAuto" type="button" role="tab" aria-selected="false">کمپین مرکل (خودکار)</button>
+            </div>
+
+            <div class="adm-grid adm-pane" id="admPaneManual" role="tabpanel">
+              <form class="adm-block adm-form" id="admFormBatch" novalidate>
+                <h3>برگهٔ گروهی برنامه‌ها</h3>
+                <label class="adm-lbl" for="admBatchSheet">هر خط: آدرس, مقدار, نقش, Cliff (روز), مدت (روز), قابل‌فسخ</label>
+                <textarea class="adm-area" id="admBatchSheet" rows="6" spellcheck="false" placeholder="0xAbc…, 150000000, team, 365, 1095, false"></textarea>
+                <label class="adm-lbl" for="admBatchStartDays">شروع همهٔ برنامه‌ها (روز از حالا) — خالی = همین حالا</label>
+                <input class="adm-in" id="admBatchStartDays" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <div class="adm-actions">
+                  <button class="btn btn-1 btn-sm" type="submit">ثبت گروهی برنامه‌ها</button>
+                </div>
+                <p class="adm-hint" id="admBatchHint">
+                  ستون خالی پیش‌فرض می‌گیرد: نقش <span class="fnum">team</span> · Cliff صفر · مدت ۱۰۹۵ روز ·
+                  فسخ‌ناپذیر. شمارهٔ برنامه‌ها به ترتیب خطوط برگه صادر می‌شود.
+                </p>
+              </form>
+
+              <div class="adm-block">
+                <h3>پیش‌نمایش برگه</h3>
+                <p class="adm-hint" id="admBatchPreview">
+                  برگه را بچسبانید؛ تعداد برنامه‌ها و مجموع مقدار اینجا نشان داده می‌شود.
+                </p>
+                <p class="adm-hint">
+                  <span class="fnum">createSchedulesBatch(requests)</span> کل برگه را یک‌جا می‌نویسد: اگر یک خط ایراد
+                  داشته باشد هیچ برنامه‌ای ثبت نمی‌شود. سقف مجموع، موجودی آزاد قرارداد وستینگ است.
+                </p>
+              </div>
+            </div>
+            <div class="adm-grid adm-pane" id="admPaneAuto" role="tabpanel" hidden>
+              <div class="adm-block">
+                <h3>۱. برگهٔ کمپین و ساخت درخت</h3>
+                <label class="adm-lbl" for="admCampaignSheet">هر خط: آدرس, مقدار[, برچسب]</label>
+                <textarea class="adm-area" id="admCampaignSheet" rows="6" spellcheck="false" placeholder="0xAbc…, 1200, community"></textarea>
+                <label class="adm-lbl" for="admCampaignId">شمارهٔ کمپین — خالی = شمارهٔ بعدی روی زنجیره</label>
+                <input class="adm-in" id="admCampaignId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="button" id="admCampaignPlan">ساخت درخت و ریشه</button>
+                </div>
+                <p class="adm-hint" id="admCampaignPlanOut">
+                  برگه را بچسبانید و «ساخت درخت و ریشه» را بزنید؛ همان ریشه در
+                  <span class="fnum">createCampaign</span> ثبت می‌شود.
+                </p>
+                <p class="adm-hint" id="admCampaignSheetOut"></p>
+              </div>
+
+              <div class="adm-block">
+                <h3>۲. دست‌به‌دست فایل اثبات</h3>
+                <label class="adm-lbl" for="admCampaignProofFile">فایل JSON خروجی <span class="fnum">campaign.js plan</span></label>
+                <input class="adm-in" id="admCampaignProofFile" type="file" accept=".json,application/json" />
+                <label class="adm-lbl" for="admCampaignProofJson">یا محتوای فایل را بچسبانید</label>
+                <textarea class="adm-area" id="admCampaignProofJson" rows="4" spellcheck="false" placeholder='{"campaignId":0,"root":"0x…","members":[{"account":"0x…","amount":"1200","proof":["0x…"]}]}'></textarea>
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="button" id="admCampaignApplyProof">خواندن فایل اثبات</button>
+                </div>
+                <p class="adm-hint" id="admCampaignProofHint">
+                  فایل اثبات، ریشه و بودجه و اثبات هر عضو را در همین نشست می‌نشاند تا پرداخت
+                  <span class="fnum">claimFor</span> بدون بازسازی درخت ممکن باشد.
+                </p>
+              </div>
+              <form class="adm-block adm-form" id="admFormCampaignCreate" novalidate>
+                <h3>۳. باز کردن کمپین</h3>
+                <label class="adm-lbl" for="admCampaignName">نام کمپین</label>
+                <input class="adm-in" id="admCampaignName" type="text" placeholder="Community Airdrop" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignRole">نقش (برچسب توکنومیکس)</label>
+                <input class="adm-in" id="admCampaignRole" type="text" value="community" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignRoot">ریشهٔ مرکل (bytes32)</label>
+                <input class="adm-in" id="admCampaignRoot" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+                <label class="adm-lbl" for="admCampaignBudget">بودجه (NAVIS کامل) — نباید از مجموع برگه کمتر باشد</label>
+                <input class="adm-in" id="admCampaignBudget" type="text" inputmode="decimal" placeholder="5000000" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignStartDays">شروع (روز از حالا) — خالی = همین حالا</label>
+                <input class="adm-in" id="admCampaignStartDays" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignEndDays">پایان (روز از حالا) — خالی = بدون پایان</label>
+                <input class="adm-in" id="admCampaignEndDays" type="text" inputmode="numeric" placeholder="30" autocomplete="off" />
+                <div class="adm-actions">
+                  <button class="btn btn-1 btn-sm" type="submit">ایجاد کمپین</button>
+                </div>
+                <p class="adm-hint">
+                  بودجه از موجودی آزاد وستینگ (<span class="fnum">freeBalance</span>) رزرو می‌شود و تا پرداخت یا فسخ
+                  کنار می‌ماند؛ پس کمپین و برنامه‌های دستی سهم یکدیگر را نمی‌خورند.
+                </p>
+              </form>
+
+              <form class="adm-block adm-form" id="admFormCampaignWindow" novalidate>
+                <h3>بازهٔ زمانی کمپین</h3>
+                <label class="adm-lbl" for="admCampaignWindowId">شمارهٔ کمپین (ستون #)</label>
+                <input class="adm-in" id="admCampaignWindowId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignWindowStart">شروع (روز از حالا) — خالی = همین حالا</label>
+                <input class="adm-in" id="admCampaignWindowStart" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignWindowEnd">پایان (روز از حالا) — خالی = بدون پایان</label>
+                <input class="adm-in" id="admCampaignWindowEnd" type="text" inputmode="numeric" placeholder="60" autocomplete="off" />
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="submit">ثبت بازه</button>
+                </div>
+                <p class="adm-hint">
+                  <span class="fnum">setCampaignWindow(id, start, end)</span> پنجرهٔ پرداخت را جابه‌جا می‌کند؛
+                  صفر یعنی «همین حالا» و «بدون پایان».
+                </p>
+              </form>
+
+              <form class="adm-block adm-form" id="admFormCampaignState" novalidate>
+                <h3>وضعیت و فسخ کمپین</h3>
+                <label class="adm-lbl" for="admCampaignStateId">شمارهٔ کمپین</label>
+                <input class="adm-in" id="admCampaignStateId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-check"><input id="admCampaignStateActive" type="checkbox" checked /> <span>پرداخت‌ها باز باشد</span></label>
+                <label class="adm-check"><input id="admCampaignCancelArm" type="checkbox" /> <span>برای فسخ تیک تأیید می‌زنم</span></label>
+                <div class="adm-actions">
+                  <button class="btn btn-1 btn-sm" type="submit">ثبت وضعیت</button>
+                  <button class="btn btn-2 btn-sm" type="button" id="admCampaignCancel">فسخ کمپین</button>
+                </div>
+                <p class="adm-hint">
+                  <span class="fnum">setCampaignActive(id, active)</span> در را باز و بسته می‌کند و
+                  <span class="fnum">cancelCampaign(id)</span> کمپین را برای همیشه می‌بندد و بودجهٔ خرج‌نشده را
+                  به موجودی آزاد برمی‌گرداند.
+                </p>
+              </form>
+              <form class="adm-block adm-form" id="admFormCampaignRoot" novalidate>
+                <h3>جابه‌جایی ریشه</h3>
+                <label class="adm-lbl" for="admCampaignRootId">شمارهٔ کمپین</label>
+                <input class="adm-in" id="admCampaignRootId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignRootValue">ریشهٔ جدید (bytes32)</label>
+                <input class="adm-in" id="admCampaignRootValue" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="submit">ثبت ریشه</button>
+                </div>
+                <p class="adm-hint">
+                  <span class="fnum">setCampaignRoot(id, root)</span> برای اصلاح برگه پس از ثبت کمپین است؛
+                  ریشهٔ قدیمی بی‌اعتبار می‌شود.
+                </p>
+              </form>
+
+              <form class="adm-block adm-form" id="admFormCampaignFund" novalidate>
+                <h3>افزودن بودجه</h3>
+                <label class="adm-lbl" for="admCampaignFundId">شمارهٔ کمپین</label>
+                <input class="adm-in" id="admCampaignFundId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignFundAmount">مقدار (NAVIS کامل)</label>
+                <input class="adm-in" id="admCampaignFundAmount" type="text" inputmode="decimal" placeholder="1000000" autocomplete="off" />
+                <div class="adm-actions">
+                  <button class="btn btn-2 btn-sm" type="submit">افزودن بودجه</button>
+                </div>
+                <p class="adm-hint"><span class="fnum">topUpCampaign(id, amount)</span> از موجودی آزاد به بودجهٔ کمپین اضافه می‌کند.</p>
+              </form>
+
+              <form class="adm-block adm-form" id="admFormCampaignClaim" novalidate>
+                <h3>پرداخت با کلید نگهبان</h3>
+                <label class="adm-lbl" for="admCampaignClaimId">شمارهٔ کمپین</label>
+                <input class="adm-in" id="admCampaignClaimId" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+                <label class="adm-lbl" for="admCampaignClaimAccount">کیف‌پول عضو</label>
+                <input class="adm-in" id="admCampaignClaimAccount" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+                <div class="adm-actions">
+                  <button class="btn btn-1 btn-sm" type="submit">پرداخت سهم عضو</button>
+                </div>
+                <p class="adm-hint" id="admCampaignClaimHint">
+                  <span class="fnum">claimFor(id, account, amount, proof)</span> فقط با <span class="fnum">KEEPER_ROLE</span>
+                  کار می‌کند و اثبات عضو را از نشست برمی‌دارد؛ توکن همیشه به خود عضو می‌رود.
+                </p>
+              </form>
+
+            </div>
+          <!-- keeper role + live campaign book -->
+          <div class="adm-grid">
+            <form class="adm-block adm-form" id="admFormKeeper" novalidate>
+              <h3>نقش نگهبان (KEEPER_ROLE)</h3>
+              <label class="adm-lbl" for="admKeeperAccount">کیف‌پول نگهبان</label>
+              <input class="adm-in" id="admKeeperAccount" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              <label class="adm-check"><input id="admKeeperGrant" type="checkbox" checked /> <span>نقش داشته باشد (خاموش = پس گرفتن نقش)</span></label>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">اعمال نقش نگهبان</button>
+                <button class="btn btn-2 btn-sm" type="button" id="admKeeperProbe">بررسی روی زنجیره</button>
+              </div>
+              <p class="adm-hint" id="admKeeperHint">
+                نگهبان می‌تواند <span class="fnum">claimFor</span> را برای اعضای کمپین‌ها اجرا کند و
+                <span class="fnum">releaseBatch</span> را برای گروهی از برنامه‌ها بفرستد؛ نقش فقط از سوی مالک داده و گرفته می‌شود.
+              </p>
+              <div class="adm-dl">
+                <div class="adm-kv"><span>هش نقش</span><b id="admKeeperRoleHash">—</b></div>
+                <div class="adm-kv"><span>تعداد نگهبانان</span><b id="admKeeperCount">—</b></div>
+                <div class="adm-kv"><span>کیف‌پول متصل نگهبان است؟</span><b id="admKeeperConnected">—</b></div>
+                <div class="adm-kv"><span>آدرس فرم نگهبان است؟</span><b id="admKeeperProbeOut">—</b></div>
+              </div>
+            </form>
+
+            <form class="adm-block adm-form" id="admFormKeeperRelease" novalidate>
+              <h3>آزادسازی گروهی برنامه‌ها</h3>
+              <label class="adm-lbl" for="admKeeperReleaseIds">شمارهٔ برنامه‌ها — با کاما، فاصله یا خط جدا کنید</label>
+              <textarea class="adm-area" id="admKeeperReleaseIds" rows="5" spellcheck="false" placeholder="0, 1, 5"></textarea>
+              <div class="adm-actions">
+                <button class="btn btn-1 btn-sm" type="submit">آزادسازی گروهی</button>
+              </div>
+              <p class="adm-hint" id="admKeeperReleaseOut">
+                <span class="fnum">releaseBatch(ids)</span> هر برنامه را جدا حساب می‌کند: برنامه‌های قفل‌شده یا
+                تمام‌شده رد می‌شوند و بقیه یک‌جا پرداخت می‌شوند. خروجی مجموع پرداخت و تعداد برنامه‌های موفق است.
+              </p>
+            </form>
+          </div>
+          <div class="adm-block">
+            <h3>دفتر کمپین‌های مرکل</h3>
+            <div class="adm-dl">
+              <div class="adm-kv"><span>کمپین‌های ثبت‌شده</span><b id="admCampaignCount">—</b></div>
+              <div class="adm-kv"><span>بودجهٔ رزروشدهٔ کمپین‌ها</span><b id="admCampaignBudget">—</b></div>
+              <div class="adm-kv"><span>پرداخت‌شده به اعضا</span><b id="admCampaignPaid">—</b></div>
+              <div class="adm-kv"><span>موجودی آزاد وستینگ</span><b id="admCampaignFree">—</b></div>
+              <div class="adm-kv"><span>فایل اثبات بارگذاری‌شده</span><b id="admCampaignProofState">—</b></div>
+            </div>
+            <p class="adm-hint mt-3" id="admCampaignBookHint">در حال خواندن کمپین‌ها…</p>
+            <div class="adm-scroll">
+              <table class="adm-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>نام</th>
+                    <th>نقش</th>
+                    <th>بودجه</th>
+                    <th>پرداخت‌شده</th>
+                    <th>باقی‌مانده</th>
+                    <th>پیشرفت</th>
+                    <th>بازهٔ پرداخت</th>
+                    <th>وضعیت</th>
+                    <th>اعضای فایل اثبات</th>
+                    <th>ریشه</th>
+                    <th>دریافت‌کنندگان</th>
+                  </tr>
+                </thead>
+                <tbody id="admCampaignRows">
+                  <tr><td colspan="12" class="adm-hint">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+
+
         </div>
 
         <p class="adm-hint mt-5">
@@ -2661,9 +2915,34 @@
         "function roleShareTotalBps() view returns (uint256)",
         "function setRoleShare(string role, uint16 shareBps)",
         "function createSchedule(address beneficiary, string role, uint256 total, uint64 start, uint64 cliffPeriod, uint64 vestingPeriod, bool revocable)",
+        "function createSchedulesBatch((address beneficiary, string role, uint256 total, uint64 start, uint64 cliffPeriod, uint64 vestingPeriod, bool revocable)[] requests) returns (uint256[] ids)",
         "function release(uint256 id)",
+        "function releaseBatch(uint256[] ids) returns (uint256 total, uint256 settled)",
         "function revoke(uint256 id)",
-        "function sweepUnallocated(address to, uint256 amount)"
+        "function sweepUnallocated(address to, uint256 amount)",
+        /* Merkle claim campaigns: the automated distribution bucket. */
+        "function campaignCount() view returns (uint256)",
+        "function getCampaign(uint256 id) view returns (string name, string role, bytes32 root, uint256 budget, uint256 claimed, uint64 start, uint64 end, bool active, bool cancelled)",
+        "function campaignRemaining(uint256 id) view returns (uint256)",
+        "function campaignClaimedAmount(uint256 id, address account) view returns (uint256)",
+        "function isCampaignClaimed(uint256 id, address account) view returns (bool)",
+        "function campaignMemberCount(uint256 id) view returns (uint256)",
+        "function campaignMemberAt(uint256 id, uint256 index) view returns (address)",
+        "function campaignLeaf(uint256 id, address account, uint256 amount) pure returns (bytes32)",
+        "function createCampaign(string name, string role, bytes32 root, uint64 start, uint64 end, uint256 budget) returns (uint256 id)",
+        "function setCampaignRoot(uint256 id, bytes32 root)",
+        "function setCampaignWindow(uint256 id, uint64 start, uint64 end)",
+        "function setCampaignActive(uint256 id, bool active)",
+        "function topUpCampaign(uint256 id, uint256 amount)",
+        "function cancelCampaign(uint256 id) returns (uint256 returned)",
+        "function claim(uint256 campaignId, uint256 amount, bytes32[] proof) returns (uint256 paid)",
+        "function claimFor(uint256 campaignId, address account, uint256 amount, bytes32[] proof) returns (uint256 paid)",
+        /* KEEPER_ROLE: delegated settlement of the book and gasless claims. */
+        "function KEEPER_ROLE() view returns (bytes32)",
+        "function keeperCount() view returns (uint256)",
+        "function isKeeper(address account) view returns (bool)",
+        "function grantKeeper(address keeper)",
+        "function revokeKeeper(address keeper)"
       ];
 
       /* ------------------ deployment descriptors --------------------- */
@@ -2716,6 +2995,17 @@
         schedules: [],
         scheduleCount: 0,
         vesting: null,
+        /* campaign book of the same contract + the keeper register */
+        campaigns: [],
+        campaignCount: 0,
+        keeperRole: null,
+        keeperCount: 0,
+        keeperConnected: false,
+        /* the allocation sheet the console turned into a tree, and the proof
+           file handed over by the CLI (campaign.js) */
+        planned: null,
+        proof: null,
+        proofSource: "",
         usdtDecimals: 6,
         navDecimals: 18,
         navSymbol: "NAVIS",
@@ -2988,7 +3278,11 @@
         var head = [
           vesting.owner(), vesting.scheduleCount(), vesting.vestingBalance(),
           vesting.totalAllocated(), vesting.totalReleased(), vesting.freeBalance(),
-          vesting.roleShareTotalBps(), vesting.roleCount()
+          vesting.roleShareTotalBps(), vesting.roleCount(),
+          /* the claim campaigns and the keeper register live on the same
+             contract, so one snapshot feeds both tabs */
+          vesting.campaignCount(), vesting.KEEPER_ROLE(), vesting.keeperCount(),
+          state.account ? vesting.isKeeper(state.account) : null
         ];
         return Promise.all(head.map(safe)).then(function (raw) {
           var snapshot = {
@@ -3001,7 +3295,12 @@
             roleTotalBps: raw[6],
             roleCount: raw[7] === null ? 0 : Number(raw[7]),
             roles: [],
-            schedules: []
+            schedules: [],
+            campaigns: [],
+            campaignCount: raw[8] === null ? 0 : Number(raw[8]),
+            keeperRole: raw[9] || null,
+            keeperCount: raw[10] === null ? 0 : Number(raw[10]),
+            keeperConnected: raw[11] === true
           };
 
           var calls = [];
@@ -3009,6 +3308,11 @@
             calls.push(vesting.getSchedule(index));
             calls.push(vesting.vestedAmount(index));
             calls.push(vesting.releasableAmount(index));
+          }
+          for (var campaign = 0; campaign < snapshot.campaignCount; campaign += 1) {
+            calls.push(vesting.getCampaign(campaign));
+            calls.push(vesting.campaignRemaining(campaign));
+            calls.push(vesting.campaignMemberCount(campaign));
           }
           for (var role = 0; role < snapshot.roleCount; role += 1) {
             calls.push(vesting.roleLabelAt(role));
@@ -3035,8 +3339,30 @@
               });
             }
 
+            /* Campaign book: the same triple layout as the schedules. */
+            var campaignBase = snapshot.count * 3;
+            for (var at = 0; at < snapshot.campaignCount; at += 1) {
+              var campaignRow = rows[campaignBase + at * 3];
+              if (!campaignRow) { snapshot.campaigns.push({ id: at, missing: true }); continue; }
+              snapshot.campaigns.push({
+                id: at,
+                name: String(campaignRow[0] || ""),
+                role: String(campaignRow[1] || ""),
+                root: campaignRow[2],
+                budget: campaignRow[3],
+                claimed: campaignRow[4],
+                start: campaignRow[5],
+                end: campaignRow[6],
+                active: !!campaignRow[7],
+                cancelled: !!campaignRow[8],
+                remaining: rows[campaignBase + at * 3 + 1],
+                members: rows[campaignBase + at * 3 + 2] === null
+                  ? 0 : Number(rows[campaignBase + at * 3 + 2])
+              });
+            }
+
             /* Bucket labels first, their declared shares afterwards. */
-            var base = snapshot.count * 3;
+            var base = snapshot.count * 3 + snapshot.campaignCount * 3;
             var labels = [];
             for (var role = 0; role < snapshot.roleCount; role += 1) {
               var label = rows[base + role];
@@ -3056,6 +3382,254 @@
           });
         });
       }
+      /* -------------------- campaign merkle toolkit ------------------ */
+      /* The browser twin of tools/lib/merkle.cjs, so a root built here, by the
+         CLI or on chain is byte-identical for the same sheet and campaign id:
+           leaf = keccak256(bytes.concat(keccak256(abi.encode(id, account, amount))))
+           pair = keccak256(sorted(a, b))   ·   odd node duplicated per level */
+      function hashTool() {
+        var ethers = ethersLib();
+        if (!ethers || typeof ethers.keccak256 !== "function" || !ethers.AbiCoder ||
+          typeof ethers.AbiCoder.defaultAbiCoder !== "function") { return null; }
+        return ethers;
+      }
+      function bareHash(hash) {
+        return String(hash == null ? "" : hash).toLowerCase().replace(/^0x/, "");
+      }
+      /* Exactly {Vesting-campaignLeaf} of the deployed contract:
+         keccak256(bytes.concat(keccak256(abi.encode(id, account, amount)))).
+         The inner hash is `abi.encode` (three 32-byte words), not the packed
+         encoding, so the address is padded to a full word. */
+      function campaignLeafOf(id, account, amount) {
+        var ethers = hashTool();
+        var inner = ethers.keccak256(ethers.AbiCoder.defaultAbiCoder()
+          .encode(["uint256", "address", "uint256"], [id, account, amount]));
+        return ethers.keccak256(inner);
+      }
+      function hashPairOf(left, right) {
+        var ethers = hashTool();
+        var a = bareHash(left), b = bareHash(right);
+        return ethers.keccak256("0x" + (a <= b ? a + b : b + a));
+      }
+      function sortedHashes(hashes) { return hashes.map(bareHash).sort(); }
+      function campaignRootOf(leaves) {
+        var level = sortedHashes(leaves);
+        while (level.length > 1) {
+          var next = [];
+          for (var index = 0; index < level.length; index += 2) {
+            var sibling = level[index + 1] === undefined ? level[index] : level[index + 1];
+            next.push(bareHash(hashPairOf(level[index], sibling)));
+          }
+          level = next;
+        }
+        return "0x" + level[0];
+      }
+      function campaignProofOf(leaves, leaf) {
+        var level = sortedHashes(leaves);
+        var cursor = level.indexOf(bareHash(leaf));
+        if (cursor < 0) { throw new Error("این برگ در درخت نیست."); }
+        var proof = [];
+        while (level.length > 1) {
+          var sibling = cursor % 2 === 0 ? cursor + 1 : cursor - 1;
+          proof.push("0x" + (level[sibling] === undefined ? level[cursor] : level[sibling]));
+          var next = [];
+          for (var at = 0; at < level.length; at += 2) {
+            var twin = level[at + 1] === undefined ? level[at] : level[at + 1];
+            next.push(bareHash(hashPairOf(level[at], twin)));
+          }
+          level = next;
+          cursor = Math.floor(cursor / 2);
+        }
+        return proof;
+      }
+      /* One `address, amount[, label]` per line — the sheet the CLI eats too. */
+      var SHEET_HEADER = /^(address|account|wallet|beneficiary|recipient|آدرس|کیف)/i;
+      function parseCampaignSheet(text) {
+        var rows = [];
+        String(text == null ? "" : text).split(/\r?\n/).forEach(function (rawLine, index) {
+          var line = String(rawLine).trim();
+          if (!line || line.charAt(0) === "#") { return; }
+          var parts = line.split(/[,;\t]+/).map(function (part) { return part.trim(); })
+            .filter(function (part) { return part !== ""; });
+          if (parts.length < 2) {
+            parts = line.split(/\s+/).filter(function (part) { return part !== ""; });
+          }
+          if (SHEET_HEADER.test(parts[0] || "")) { return; }
+          if (parts.length < 2) {
+            throw new Error("خط " + (index + 1) + " قالب درستی ندارد؛ «آدرس, مقدار» لازم است.");
+          }
+          if (!isAddress(parts[0])) {
+            throw new Error("خط " + (index + 1) + " آدرس معتبری ندارد (" + parts[0] + ").");
+          }
+          var amount = toUnits(parts[1], state.navDecimals);
+          if (amount === null || amount <= 0n) {
+            throw new Error("خط " + (index + 1) + " مقدار بزرگ‌تر از صفر لازم دارد.");
+          }
+          rows.push({ account: parts[0], amount: amount, label: parts[2] || "", line: index + 1 });
+        });
+        if (!rows.length) { throw new Error("برگه خالی است؛ حداقل یک خط «آدرس, مقدار» لازم است."); }
+        var seen = {};
+        rows.forEach(function (row) {
+          var key = row.account.toLowerCase();
+          if (seen[key]) { throw new Error("آدرس تکراری در خط " + row.line + " (" + short(row.account) + ")."); }
+          seen[key] = true;
+        });
+        return rows;
+      }
+      /* Builds the tree of the pasted sheet for the id the contract hands out
+         next, then seeds the create form with the root and the budget. */
+      function planCampaign() {
+        if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return null; }
+        if (!hashTool()) { notify("ساخت درخت به ethers با توابع هش (keccak256) نیاز دارد."); return null; }
+        var rows = null;
+        try { rows = parseCampaignSheet(val("admCampaignSheet")); }
+        catch (err) { notify(reasonOf(err)); return null; }
+        var idText = val("admCampaignId");
+        if (idText && !/^\d+$/.test(idText)) {
+          notify("شمارهٔ کمپین باید عددی صحیح از صفر به بالا باشد."); return null;
+        }
+        var id = idText ? Number(idText) : state.campaignCount;
+        var tree = null;
+        try {
+          var leaves = rows.map(function (row) { return campaignLeafOf(id, row.account, row.amount); });
+          tree = {
+            id: id,
+            root: campaignRootOf(leaves),
+            entries: rows.map(function (row, index) {
+              return {
+                account: row.account, amount: row.amount, label: row.label,
+                leaf: leaves[index], proof: campaignProofOf(leaves, leaves[index])
+              };
+            })
+          };
+          tree.total = tree.entries.reduce(function (sum, entry) { return sum + entry.amount; }, 0n);
+        } catch (err) { notify(reasonOf(err)); return null; }
+        state.planned = tree;
+        setValue("admCampaignRoot", tree.root);
+        setValue("admCampaignBudget", plain(tree.total, state.navDecimals));
+        paint("admCampaignPlanOut", "کمپین " + tree.id + " · " + tree.entries.length + " عضو · مجموع " +
+          units(tree.total, state.navDecimals, 0) + " " + state.navSymbol + " · ریشه " + tree.root);
+        paint("admCampaignSheetOut", tree.entries.map(function (entry) {
+          return short(entry.account) + " " + units(entry.amount, state.navDecimals, 4) +
+            " · " + entry.proof.length + " گام اثبات";
+        }).join(" | "));
+        notify("درخت کمپین " + tree.id + " ساخته شد · ریشه " + short(tree.root));
+        return tree;
+      }
+      /* The proof file handed over by `campaign.js plan`: root, budget and one
+         proof per member, so claimFor needs no rebuild in the browser. */
+      function amountOfProof(entry) {
+        var raw = entry && entry.amount;
+        if (raw !== undefined && raw !== null && /^\d+$/.test(String(raw))) {
+          try { return BigInt(String(raw)); } catch (err) { /* fall through */ }
+        }
+        var fallback = (raw === undefined || raw === null) ? (entry && entry.amountNavis) : raw;
+        return (fallback === undefined || fallback === null)
+          ? null : toUnits(fallback, state.navDecimals);
+      }
+      function normalizeProof(data, source) {
+        if (!data || typeof data !== "object") { throw new Error("ساختار فایل اثبات شناسایی نشد."); }
+        var id = Number(data.campaignId);
+        if (!isFinite(id) || id < 0) { throw new Error("شمارهٔ کمپین در فایل اثبات معتبر نیست."); }
+        var root = String(data.root == null ? "" : data.root);
+        if (!/^0x[0-9a-fA-F]{64}$/.test(root)) { throw new Error("ریشهٔ مرکل فایل اثبات معتبر نیست."); }
+        if (!data.members || !data.members.length) { throw new Error("فایل اثبات هیچ عضوی ندارد."); }
+        var members = Array.prototype.slice.call(data.members).map(function (entry, index) {
+          if (!entry || !isAddress(entry.account)) {
+            throw new Error("عضو " + (index + 1) + " آدرس معتبری ندارد.");
+          }
+          var amount = amountOfProof(entry);
+          if (amount === null || amount <= 0n) {
+            throw new Error("عضو " + (index + 1) + " مقدار معتبری ندارد.");
+          }
+          var proof = (entry.proof && entry.proof.length)
+            ? Array.prototype.slice.call(entry.proof).map(String) : [];
+          proof.forEach(function (step, at) {
+            if (!/^0x[0-9a-fA-F]{64}$/.test(step)) {
+              throw new Error("اثبات عضو " + (index + 1) + " در گام " + (at + 1) + " معتبر نیست.");
+            }
+          });
+          return {
+            account: entry.account, amount: amount, label: String(entry.label || ""),
+            leaf: entry.leaf || null, proof: proof
+          };
+        });
+        var total = members.reduce(function (sum, member) { return sum + member.amount; }, 0n);
+        var budget = null;
+        if (data.budget !== undefined && data.budget !== null && /^\d+$/.test(String(data.budget))) {
+          try { budget = BigInt(String(data.budget)); } catch (err) { budget = null; }
+        }
+        return {
+          campaignId: id, root: root, name: String(data.name || ""), role: String(data.role || ""),
+          vesting: data.vesting ? String(data.vesting) : null,
+          budget: budget, total: total, members: members, source: source || "چسبانده‌شده"
+        };
+      }
+      function proofMember(document, account) {
+        var wanted = String(account == null ? "" : account).toLowerCase();
+        var found = null;
+        ((document && document.members) ? document.members : []).forEach(function (member) {
+          if (String(member.account).toLowerCase() === wanted) { found = member; }
+        });
+        return found;
+      }
+      /* The file becomes the source of truth of the create/claim forms. */
+      function loadProof(payload, source) {
+        var document = null;
+        try { document = normalizeProof(payload, source); }
+        catch (err) { notify(reasonOf(err)); return null; }
+        state.proof = document;
+        state.proofSource = document.source;
+        /* the file supersedes a tree built in this session: the create guard
+           below compares the id of whichever sheet is loaded last. */
+        state.planned = null;
+        if (document.name) { setValue("admCampaignName", document.name); }
+        if (document.role) { setValue("admCampaignRole", document.role); }
+        setValue("admCampaignRoot", document.root);
+        if (document.budget !== null && document.budget > 0n) {
+          setValue("admCampaignBudget", plain(document.budget, state.navDecimals));
+        }
+        setValue("admCampaignClaimId", String(document.campaignId));
+        var drift = document.vesting && vestingAddress() &&
+          document.vesting.toLowerCase() !== String(vestingAddress()).toLowerCase();
+        paint("admCampaignProofHint", "کمپین " + document.campaignId + " · " + document.members.length +
+          " عضو · مجموع " + units(document.total, state.navDecimals, 0) + " " + state.navSymbol +
+          (document.budget !== null ? " · بودجه " + units(document.budget, state.navDecimals, 0) : "") +
+          (drift ? " · توجه: آدرس وستینگ این فایل با دپلوی فعلی یکی نیست." : ""));
+        /* the loaded file shows up in its own row of the campaign book */
+        renderCampaigns();
+        notify("فایل اثبات بارگذاری شد · کمپین " + document.campaignId);
+        return document;
+      }
+      /* `<input type="file">` cannot be read synchronously: go through FileReader. */
+      function readProofFile() {
+        var input = $id("admCampaignProofFile");
+        var file = input && input.files && input.files[0];
+        if (!file) { notify("فایلی انتخاب نشده است؛ می‌توانید محتوا را بچسبانید."); return; }
+        if (typeof window.FileReader !== "function") {
+          notify("خواندن فایل در این مرورگر ممکن نیست؛ محتوا را بچسبانید."); return;
+        }
+        var reader = new window.FileReader();
+        reader.onload = function () {
+          var text = String(reader.result || "");
+          setValue("admCampaignProofJson", text);
+          var payload = null;
+          try { payload = JSON.parse(text); }
+          catch (err) { notify("فایل اثبات JSON معتبری نیست."); return; }
+          loadProof(payload, file.name || "فایل");
+        };
+        reader.onerror = function () { notify("خواندن فایل اثبات ناموفق بود."); };
+        reader.readAsText(file);
+      }
+      function applyProofText() {
+        var text = val("admCampaignProofJson");
+        if (!text) { notify("محتوای فایل اثبات را بچسبانید یا فایل را انتخاب کنید."); return null; }
+        var payload = null;
+        try { payload = JSON.parse(text); }
+        catch (err) { notify("فایل اثبات JSON معتبری نیست."); return null; }
+        return loadProof(payload, "چسبانده‌شده");
+      }
+
       /* ------------------------ table rendering ---------------------- */
       function tdText(text, className) {
         var cell = document.createElement("td");
@@ -3298,6 +3872,14 @@
       /* ----------------------- vesting render ------------------------ */
       function renderVesting(vesting) {
         state.vesting = vesting || null;
+        /* The campaign book and the keeper register ride on the same snapshot as
+           the schedules, so they are taken (or cleared when the read failed) on
+           every render: a stale book can never survive a dead RPC. */
+        state.campaigns = (vesting && vesting.campaigns) || [];
+        state.campaignCount = (vesting && vesting.campaignCount) || 0;
+        state.keeperRole = (vesting && vesting.keeperRole) || null;
+        state.keeperCount = (vesting && vesting.keeperCount) || 0;
+        state.keeperConnected = !!(vesting && vesting.keeperConnected);
         var address = vestingAddress();
         if (!address) {
           paint("admVestingAddress", "ثبت نشده");
@@ -3310,12 +3892,16 @@
           paint("admVestingHint", "این نسخهٔ deployments آدرس قرارداد وستینگ را ندارد.");
           paint("admScheduleHint", "قرارداد وستینگ در این دپلوی ثبت نشده است.");
           renderSchedules();
+          renderCampaigns();
+          renderKeeper();
           return;
         }
         paint("admVestingAddress", short(address));
         if (!vesting) {
           paint("admVestingHint", "خواندن قرارداد وستینگ از RPC ناموفق بود.");
           renderSchedules();
+          renderCampaigns();
+          renderKeeper();
           return;
         }
         var nav = state.navDecimals;
@@ -3332,6 +3918,8 @@
           : "ثبت نشده");
         paint("admVestingHint", vesting.count + " برنامه · " + vesting.roles.length + " نقش ثبت‌شده");
         renderSchedules();
+        renderCampaigns();
+        renderKeeper();
       }
       function daysOf(seconds) {
         var value = Number(String(seconds === null || seconds === undefined ? 0 : seconds));
@@ -3389,6 +3977,111 @@
           return;
         }
         schedules.forEach(function (schedule) { host.appendChild(scheduleRow(schedule)); });
+      }
+
+      /* -------------------- campaign book rendering ------------------ */
+      /* Amounts come from chain, never from the proof file, so the progress of a
+         campaign stays honest after an out-of-band claim or a cancel. */
+      function campaignWindow(campaign) {
+        var start = Number(String(campaign.start == null ? 0 : campaign.start));
+        var end = Number(String(campaign.end == null ? 0 : campaign.end));
+        return (start > 0 ? stamp(start).split(" · ")[0] : "باز") + " → " +
+          (end > 0 ? stamp(end).split(" · ")[0] : "بی‌پایان");
+      }
+      function campaignPick(id) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "adm-pick";
+        button.setAttribute("data-campaign", String(id));
+        button.textContent = String(id);
+        return button;
+      }
+      function campaignRow(campaign) {
+        var row = document.createElement("tr");
+        if (campaign.missing) {
+          row.appendChild(tdText(String(campaign.id), "adm-num"));
+          var miss = tdText("خواندن این کمپین از RPC ناموفق بود.", "adm-hint");
+          miss.setAttribute("colspan", "11");
+          row.appendChild(miss);
+          return row;
+        }
+        row.setAttribute("data-campaign", String(campaign.id));
+        var nav = state.navDecimals;
+        var budget = Number(String(campaign.budget == null ? 0 : campaign.budget));
+        var progress = budget > 0
+          ? (Number(String(campaign.claimed == null ? 0 : campaign.claimed)) / budget) * 100 : 0;
+        var idCell = tdText("", "adm-num");
+        idCell.appendChild(campaignPick(campaign.id));
+        row.appendChild(idCell);
+        row.appendChild(tdText(campaign.name || "—"));
+        row.appendChild(tdText(campaign.role || "—"));
+        row.appendChild(tdText(units(campaign.budget, nav, 0), "adm-num"));
+        row.appendChild(tdText(units(campaign.claimed, nav, 0), "adm-num"));
+        row.appendChild(tdText(units(campaign.remaining, nav, 0), "adm-num"));
+        row.appendChild(tdMeter(progress));
+        row.appendChild(tdText(campaignWindow(campaign), "adm-num"));
+        row.appendChild(tdTag(campaign.cancelled ? "فسخ‌شده"
+          : (campaign.active ? "باز" : "بسته"), campaign.active && !campaign.cancelled));
+        row.appendChild(tdText(proofLabel(campaign.id), "adm-num"));
+        row.appendChild(tdText(campaign.root ? short(campaign.root) : "—", "adm-num"));
+        row.appendChild(tdText(String(campaign.members == null ? 0 : campaign.members), "adm-num"));
+        return row;
+      }
+      /* Whether the loaded proof file belongs to this campaign's row. */
+      function proofLabel(id) {
+        var document = state.proof;
+        return (document && Number(document.campaignId) === Number(id))
+          ? document.members.length + " عضو" : "—";
+      }
+      function paintCampaignProofState() {
+        var document = state.proof;
+        paint("admCampaignProofState", document
+          ? "کمپین " + document.campaignId + " · " + document.members.length + " عضو · " + document.source
+          : "بارگذاری نشده");
+      }
+      function renderCampaigns() {
+        paintCampaignProofState();
+        var rows = state.campaigns || [];
+        var nav = state.navDecimals;
+        var budgets = 0n, paid = 0n;
+        rows.forEach(function (campaign) {
+          if (campaign.missing) { return; }
+          budgets += BigInt(String(campaign.budget == null ? 0 : campaign.budget));
+          paid += BigInt(String(campaign.claimed == null ? 0 : campaign.claimed));
+        });
+        paint("admCampaignCount", String(state.campaignCount || 0));
+        paint("admCampaignBudget", units(budgets, nav, 0) + " " + state.navSymbol);
+        paint("admCampaignPaid", units(paid, nav, 0) + " " + state.navSymbol);
+        paint("admCampaignFree", units(state.vesting ? state.vesting.free : null, nav, 0) +
+          " " + state.navSymbol);
+        paint("admCampaignBookHint", rows.length
+          ? rows.length + " کمپین ثبت‌شده · " + (state.keeperCount || 0) + " نگهبان روی قرارداد"
+          : "هیچ کمپینی ثبت نشده است؛ برگه را به درخت تبدیل کنید یا فایل اثبات را بارگذاری کنید.");
+        var host = $id("admCampaignRows");
+        if (!host) { return; }
+        while (host.firstChild) { host.removeChild(host.firstChild); }
+        if (!rows.length) {
+          var empty = document.createElement("tr");
+          var cell = tdText("هیچ کمپین مرکلی ثبت نشده است — مسیر «توزیع خودکار» هنوز باز نشده.",
+            "adm-hint");
+          cell.setAttribute("colspan", "12");
+          empty.appendChild(cell);
+          host.appendChild(empty);
+          return;
+        }
+        rows.forEach(function (campaign) { host.appendChild(campaignRow(campaign)); });
+      }
+      /* The keeper register of the contract: role hash, holder count and whether
+         the connected wallet may route claimFor / releaseBatch. */
+      function renderKeeper() {
+        paint("admKeeperRoleHash", state.keeperRole ? short(state.keeperRole) : "در دسترس نیست");
+        paint("admKeeperCount", String(state.keeperCount || 0));
+        paint("admKeeperConnected", state.account
+          ? (state.keeperConnected ? "بله" : "خیر") : "کیف‌پول متصل نیست");
+        var field = $id("admKeeperAccount");
+        if (field && !String(field.value || "").trim() && isAddress(state.account)) {
+          field.value = state.account;
+        }
       }
 
       /* --------------------------- gating ---------------------------- */
@@ -3704,8 +4397,20 @@
         nav: "navToken",
         vesting: "vesting"
       };
-      function write(label, abiKey, method, args) {
-        if (!state.unlocked) { notify("دسترسی مالک لازم است."); return Promise.resolve(false); }
+      function write(label, abiKey, method, args, options) {
+        /* KEEPER_ROLE is a second key to the same contract: claimFor and
+           releaseBatch answer to it, so these two paths also accept a wallet
+           that is not owner() but does hold the role. */
+        var keeperPath = !!(options && options.keeper);
+        if (keeperPath) {
+          if (!state.unlocked && !state.keeperConnected) {
+            notify("این تراکنش به دسترسی مالک یا نقش نگهبان (KEEPER_ROLE) نیاز دارد.");
+            return Promise.resolve(false);
+          }
+        } else if (!state.unlocked) {
+          notify("دسترسی مالک لازم است.");
+          return Promise.resolve(false);
+        }
         if (state.sending) { notify("یک تراکنش دیگر در جریان است؛ تا تأیید آن صبر کنید."); return Promise.resolve(false); }
         var ethers = ethersLib();
         var injected = window.ethereum;
@@ -3962,6 +4667,344 @@
           write("برداشت موجودی آزاد وستینگ", "vesting", "sweepUnallocated", [to, amount]);
         });
       }
+      /* --------------- batch schedules + campaign module -------------- */
+      /* `createSchedulesBatch` writes a whole sheet in one transaction, so the
+         console parses the same six columns the CLI eats: address, amount, role,
+         cliff (days), duration (days), revocable. */
+      function parseBatchSheet(text) {
+        var requests = [];
+        String(text == null ? "" : text).split(/\r?\n/).forEach(function (rawLine, index) {
+          var line = String(rawLine).trim();
+          if (!line || line.charAt(0) === "#") { return; }
+          var parts = line.split(/[,;\t]+/).map(function (part) { return part.trim(); })
+            .filter(function (part) { return part !== ""; });
+          if (SHEET_HEADER.test(parts[0] || "")) { return; }
+          if (parts.length < 2) {
+            throw new Error("خط " + (index + 1) + " قالب درستی ندارد؛ «آدرس, مقدار» لازم است.");
+          }
+          if (!isAddress(parts[0])) {
+            throw new Error("خط " + (index + 1) + " آدرس معتبری ندارد (" + parts[0] + ").");
+          }
+          var amount = toUnits(parts[1], state.navDecimals);
+          if (amount === null || amount <= 0n) {
+            throw new Error("خط " + (index + 1) + " مقدار بزرگ‌تر از صفر لازم دارد.");
+          }
+          var cliff = 0n;
+          var cliffText = parts[3] === undefined ? "" : parts[3];
+          if (cliffText) {
+            cliff = optionalDays(cliffText);
+            if (cliff === null) {
+              throw new Error("خط " + (index + 1) + " Cliff عددی نامنفی لازم دارد.");
+            }
+          }
+          var durationText = parts[4] === undefined ? "" : parts[4];
+          var duration = durationText ? daysToSeconds(durationText) : null;
+          if (duration === null) {
+            throw new Error("خط " + (index + 1) + " مدت وستینگ بر حسب روز لازم دارد.");
+          }
+          if (cliff > duration) {
+            throw new Error("خط " + (index + 1) + ": Cliff از مدت وستینگ بیشتر است.");
+          }
+          requests.push({
+            beneficiary: parts[0],
+            role: parts[2] || "team",
+            total: amount,
+            start: 0n, /* one start for the whole sheet, patched by the caller */
+            cliffPeriod: cliff,
+            vestingPeriod: duration,
+            revocable: /^(1|true|yes|بله|آری)$/i.test(String(parts[5] || ""))
+          });
+        });
+        if (!requests.length) { throw new Error("برگه خالی است؛ حداقل یک ذی‌نفع لازم است."); }
+        return requests;
+      }
+      /* Empty or zero days means "now" — the same convention the chain uses. */
+      function batchStart() {
+        var text = val("admBatchStartDays");
+        if (!text || Number(String(text).replace(/[,\s_]/g, "")) <= 0) { return 0n; }
+        var offset = daysToSeconds(text);
+        if (offset === null) { return null; }
+        return BigInt(Math.floor(Date.now() / 1000)) + offset;
+      }
+      function previewBatch() {
+        var requests = null;
+        try { requests = parseBatchSheet(val("admBatchSheet")); }
+        catch (err) { paint("admBatchPreview", reasonOf(err)); return null; }
+        var total = requests.reduce(function (sum, request) { return sum + request.total; }, 0n);
+        var roles = [];
+        requests.forEach(function (request) {
+          if (roles.indexOf(request.role) < 0) { roles.push(request.role); }
+        });
+        paint("admBatchPreview", requests.length + " برنامه · مجموع " +
+          units(total, state.navDecimals, 0) + " " + state.navSymbol + " · نقش: " + roles.join(" · ") +
+          " · سقف پرداخت، موجودی آزاد وستینگ است (" +
+          units(state.vesting ? state.vesting.free : null, state.navDecimals, 0) + ")");
+        return requests;
+      }
+      /* Campaign id of a form field; the book bounds it when it is known. */
+      function campaignIdInput(id) {
+        var text = val(id);
+        if (!/^\d+$/.test(text)) {
+          notify("شمارهٔ کمپین باید عددی صحیح از صفر به بالا باشد.");
+          return null;
+        }
+        var value = Number(text);
+        if (state.campaignCount > 0 && value >= state.campaignCount) {
+          notify("شمارهٔ کمپین باید کمتر از " + state.campaignCount + " باشد.");
+          return null;
+        }
+        return value;
+      }
+      /* `<label> start / end </label>` pair of a campaign form, in days. */
+      function campaignWindowInputs(startId, endId) {
+        var start = optionalDays(val(startId));
+        if (start === null) { notify("شروع باید عددی نامنفی و بر حسب روز باشد."); return null; }
+        var end = optionalDays(val(endId));
+        if (end === null) { notify("پایان باید عددی نامنفی و بر حسب روز باشد."); return null; }
+        var now = BigInt(Math.floor(Date.now() / 1000));
+        var from = start > 0n ? now + start : 0n;
+        var until = end > 0n ? now + end : 0n;
+        if (until > 0n && until <= from) {
+          notify("پایان باید بعد از شروع باشد.");
+          return null;
+        }
+        return { start: from, end: until };
+      }
+      /* -------------------- campaign module handlers ----------------- */
+      /* Reads `isKeeper` for a typed wallet straight from the live contract, so
+         the operator can confirm a delegation before routing a claim through it. */
+      function probeKeeper() {
+        var keeper = val("admKeeperAccount") || state.account || "";
+        if (!isAddress(keeper)) { notify("آدرس نگهبان معتبر نیست."); return Promise.resolve(null); }
+        return Promise.resolve(state.read || ensureReader()).then(function (reader) {
+          if (!reader) { notify("اتصال RPC برقرار نیست."); return null; }
+          state.read = reader;
+          var contracts = buildContracts(reader.provider);
+          if (!contracts.vesting) {
+            notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return null;
+          }
+          return Promise.all([
+            safe(contracts.vesting.isKeeper(keeper)),
+            safe(contracts.vesting.KEEPER_ROLE()),
+            safe(contracts.vesting.keeperCount())
+          ]).then(function (raw) {
+            paint("admKeeperProbeOut", raw[0] === true ? "بله" : "خیر");
+            paint("admKeeperRoleHash", raw[1] ? short(String(raw[1])) : "در دسترس نیست");
+            paint("admKeeperCount", raw[2] === null ? "—" : String(raw[2]));
+            notify("بررسی نگهبان انجام شد · " + short(keeper) +
+              (raw[0] === true ? " نقش دارد" : " نقش ندارد"));
+            return raw[0];
+          }, function (err) {
+            notify("بررسی نگهبان ناموفق بود: " + reasonOf(err));
+            return null;
+          });
+        });
+      }
+      /* A row of the campaign book seeds every campaign form with its id. */
+      function bindCampaignRows() {
+        var host = $id("admCampaignRows");
+        if (!host || typeof host.addEventListener !== "function") { return; }
+        host.addEventListener("click", function (event) {
+          var node = event.target;
+          while (node && node !== host) {
+            if (typeof node.getAttribute === "function" &&
+              node.getAttribute("data-campaign") !== null) {
+              var id = String(node.getAttribute("data-campaign"));
+              ["admCampaignWindowId", "admCampaignStateId", "admCampaignRootId",
+                "admCampaignFundId", "admCampaignClaimId"].forEach(function (field) {
+                setValue(field, id);
+              });
+              notify("کمپین " + id + " در فرم‌های کمپین نشست.");
+              return;
+            }
+            node = node.parentNode;
+          }
+        });
+      }
+      function bindCampaignModule() {
+        /* Two ways to distribute, one panel: the tabs only swap visibility. */
+        var tabs = [
+          { button: "admTabManual", pane: "admPaneManual" },
+          { button: "admTabAuto", pane: "admPaneAuto" }
+        ];
+        /* One code path paints the tab group: the markup carries the same
+           default (`hidden` on the campaign pane) and the boot call only makes
+           it explicit, so a re-render can never leave both panes open. */
+        function paintTabs(active) {
+          tabs.forEach(function (entry) {
+            var on = entry.button === active;
+            cls($id(entry.button), "is-active", on);
+            var button = $id(entry.button);
+            if (button && typeof button.setAttribute === "function") {
+              button.setAttribute("aria-selected", on ? "true" : "false");
+            }
+            var pane = $id(entry.pane);
+            if (pane) { pane.hidden = !on; }
+          });
+        }
+        tabs.forEach(function (tab) {
+          var button = $id(tab.button);
+          if (!button || typeof button.addEventListener !== "function") { return; }
+          button.addEventListener("click", function () { paintTabs(tab.button); });
+        });
+        paintTabs(tabs[0].button);
+
+        var sheet = $id("admBatchSheet");
+        if (sheet && typeof sheet.addEventListener === "function") {
+          sheet.addEventListener("input", previewBatch);
+        }
+        onSubmit("admFormBatch", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var requests = previewBatch();
+          if (!requests) { return; }
+          var start = batchStart();
+          if (start === null) { notify("شروع برگه باید عددی نامنفی و بر حسب روز باشد."); return; }
+          requests.forEach(function (request) { request.start = start; });
+          write("ثبت گروهی " + requests.length + " برنامه", "vesting", "createSchedulesBatch", [requests]);
+        });
+
+        var planButton = $id("admCampaignPlan");
+        if (planButton && typeof planButton.addEventListener === "function") {
+          planButton.addEventListener("click", planCampaign);
+        }
+        var applyButton = $id("admCampaignApplyProof");
+        if (applyButton && typeof applyButton.addEventListener === "function") {
+          applyButton.addEventListener("click", applyProofText);
+        }
+        var fileInput = $id("admCampaignProofFile");
+        if (fileInput && typeof fileInput.addEventListener === "function") {
+          fileInput.addEventListener("change", readProofFile);
+        }
+
+        onSubmit("admFormCampaignCreate", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var name = val("admCampaignName");
+          if (!name) { notify("نام کمپین لازم است."); return; }
+          var root = val("admCampaignRoot");
+          if (!/^0x[0-9a-fA-F]{64}$/.test(root)) {
+            notify("ریشهٔ مرکل باید ۳۲ بایت هگز باشد؛ آن را با «ساخت درخت» یا فایل اثبات پر کنید.");
+            return;
+          }
+          var budget = toUnits(val("admCampaignBudget"), state.navDecimals);
+          if (budget === null || budget <= 0n) { notify("بودجهٔ کمپین را درست وارد کنید."); return; }
+          if (state.vesting && state.vesting.free !== null && state.vesting.free !== undefined &&
+            budget > BigInt(String(state.vesting.free))) {
+            notify("بودجه از موجودی آزاد وستینگ (" +
+              units(state.vesting.free, state.navDecimals, 0) + ") بیشتر است.");
+            return;
+          }
+          /* the campaign id is embedded in every leaf: a tree built for another
+             id can never pay out, so the console refuses to open it */
+          var source = state.planned || state.proof;
+          if (source && Number(source.id === undefined ? source.campaignId : source.id) !== state.campaignCount) {
+            notify("این درخت برای کمپین " +
+              Number(source.id === undefined ? source.campaignId : source.id) +
+              " ساخته شده و کمپین بعدی " + state.campaignCount +
+              " می‌شود؛ برگه را با همین شماره بازسازی کنید.");
+            return;
+          }
+          var window = campaignWindowInputs("admCampaignStartDays", "admCampaignEndDays");
+          if (!window) { return; }
+          write("ایجاد کمپین «" + name + "»", "vesting", "createCampaign",
+            [name, val("admCampaignRole"), root, window.start, window.end, budget]);
+        });
+        onSubmit("admFormCampaignWindow", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = campaignIdInput("admCampaignWindowId");
+          if (id === null) { return; }
+          var window = campaignWindowInputs("admCampaignWindowStart", "admCampaignWindowEnd");
+          if (!window) { return; }
+          write("بازهٔ کمپین " + id, "vesting", "setCampaignWindow", [id, window.start, window.end]);
+        });
+
+        onSubmit("admFormCampaignState", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = campaignIdInput("admCampaignStateId");
+          if (id === null) { return; }
+          var active = isChecked("admCampaignStateActive");
+          write((active ? "باز کردن" : "بستن") + " پرداخت‌های کمپین " + id, "vesting",
+            "setCampaignActive", [id, active]);
+        });
+
+        var cancelButton = $id("admCampaignCancel");
+        if (cancelButton && typeof cancelButton.addEventListener === "function") {
+          cancelButton.addEventListener("click", function () {
+            if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+            var id = campaignIdInput("admCampaignStateId");
+            if (id === null) { return; }
+            if (!isChecked("admCampaignCancelArm")) {
+              notify("برای فسخ کمپین، تیک تأیید همان فرم را بزنید.");
+              return;
+            }
+            write("فسخ کمپین " + id, "vesting", "cancelCampaign", [id]);
+          });
+        }
+
+        onSubmit("admFormCampaignRoot", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = campaignIdInput("admCampaignRootId");
+          if (id === null) { return; }
+          var root = val("admCampaignRootValue");
+          if (!/^0x[0-9a-fA-F]{64}$/.test(root)) {
+            notify("ریشهٔ جدید باید ۳۲ بایت هگز باشد."); return;
+          }
+          write("ریشهٔ کمپین " + id, "vesting", "setCampaignRoot", [id, root]);
+        });
+
+        onSubmit("admFormCampaignFund", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = campaignIdInput("admCampaignFundId");
+          if (id === null) { return; }
+          var amount = toUnits(val("admCampaignFundAmount"), state.navDecimals);
+          if (amount === null || amount <= 0n) { notify("مقدار بودجه را درست وارد کنید."); return; }
+          write("افزودن بودجه به کمپین " + id, "vesting", "topUpCampaign", [id, amount]);
+        });
+
+        onSubmit("admFormCampaignClaim", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var id = campaignIdInput("admCampaignClaimId");
+          if (id === null) { return; }
+          var account = val("admCampaignClaimAccount");
+          if (!isAddress(account)) { notify("کیف‌پول عضو معتبر نیست."); return; }
+          var document = state.proof;
+          if (!document) { notify("ابتدا فایل اثبات کمپین را بارگذاری کنید."); return; }
+          if (Number(document.campaignId) !== id) {
+            notify("فایل اثبات مربوط به کمپین " + document.campaignId + " است، نه " + id + ".");
+            return;
+          }
+          var member = proofMember(document, account);
+          if (!member) { notify("این کیف‌پول در فایل اثبات کمپین " + id + " نیست."); return; }
+          write("پرداخت سهم " + short(account) + " از کمپین " + id, "vesting", "claimFor",
+            [id, member.account, member.amount, member.proof], { keeper: true });
+        });
+
+        onSubmit("admFormKeeper", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var keeper = val("admKeeperAccount") || state.account || "";
+          if (!isAddress(keeper)) { notify("آدرس نگهبان معتبر نیست."); return; }
+          var grant = isChecked("admKeeperGrant");
+          write((grant ? "ثبت" : "پس‌گرفتن") + " نقش نگهبان", "vesting",
+            grant ? "grantKeeper" : "revokeKeeper", [keeper]);
+        });
+
+        var probeButton = $id("admKeeperProbe");
+        if (probeButton && typeof probeButton.addEventListener === "function") {
+          probeButton.addEventListener("click", probeKeeper);
+        }
+
+        onSubmit("admFormKeeperRelease", function () {
+          if (!vestingAddress()) { notify("قرارداد وستینگ در این دپلوی ثبت نشده است."); return; }
+          var text = val("admKeeperReleaseIds").replace(/[,\s;]+/g, ",").replace(/^,|,$/g, "");
+          if (!text) { notify("حداقل یک شمارهٔ برنامه لازم است."); return; }
+          var parts = text.split(",");
+          var bad = parts.filter(function (part) { return !/^\d+$/.test(part); });
+          if (bad.length) { notify("شمارهٔ برنامه‌ها باید عددی باشند (" + bad[0] + ")."); return; }
+          write("آزادسازی گروهی " + parts.length + " برنامه", "vesting", "releaseBatch",
+            [parts.map(Number)], { keeper: true });
+        });
+        bindCampaignRows();
+
+      }
       /* ---------------------------- shell ---------------------------- */
       function bindShell() {
         var connectButton = $id("admConnect");
@@ -3995,6 +5038,7 @@
         bindPhaseForms();
         bindVestingForms();
         bindVestingModule();
+        bindCampaignModule();
         bindPauseControls();
         bindScheduleRows();
         bindTreasuryForms();

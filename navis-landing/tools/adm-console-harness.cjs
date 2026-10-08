@@ -4,12 +4,17 @@
  * stub DOM with a mocked `window.ethers` + `window.ethereum` and asserts the
  * read + write paths, the owner gate and the wallet-network handling.
  *
- *   node tools/adm-console-harness.cjs
+ *   node tools/adm-console-harness.cjs                        # every scenario
+ *   node tools/adm-console-harness.cjs campaign keeper         # only those two
  */
 "use strict";
 
 const fs = require("node:fs");
 const path = require("node:path");
+
+/* The tree the console builds in the browser is checked against this very
+   module: one source of truth for the leaf/pair/level rules of the campaigns. */
+const merkle = require("./lib/merkle.cjs");
 
 const PAGE = path.resolve(__dirname, "..", "index.html");
 const html = fs.readFileSync(PAGE, "utf8");
@@ -133,7 +138,13 @@ function createDocument() {
 /* --------------------------- chain fixtures ------------------------ */
 const OWNER = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const STRANGER = "0x1111111111111111111111111111111111111111";
+const OTHER = "0x2222222222222222222222222222222222222222";
+/* hardhat account #1: the address the CLI smoke test hands KEEPER_ROLE to */
+const KEEPER = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const ZERO = "0x0000000000000000000000000000000000000000";
+const KEEPER_ROLE_HASH = "0x" + "c3".repeat(32);
+const CAMPAIGN_ROOT_ONE = "0x" + "a1".repeat(32);
+const CAMPAIGN_ROOT_TWO = "0x" + "b2".repeat(32);
 const DEPLOYMENT = JSON.parse(
   fs.readFileSync(path.join(__dirname, "..", "deployments", "localhost.json"), "utf8")
 );
@@ -180,7 +191,7 @@ const READS = {
     vestingBalance: 250000000n * E18,
     totalAllocated: 250000000n * E18,
     totalReleased: 25000000n * E18,
-    freeBalance: 0n,
+    freeBalance: 25000000n * E18,
     roleShareTotalBps: 2500n,
     roleCount: 2n,
     roleLabelAt: (index) => ["team", "marketing"][Number(index)] || "",
@@ -191,6 +202,20 @@ const READS = {
     ][Number(index)] || [ZERO, "", 0n, 0n, 0n, 0n, 0n, false, false]),
     vestedAmount: (index) => [15200000n * E18, 50000000n * E18][Number(index)] || 0n,
     releasableAmount: (index) => [15200000n * E18, 25000000n * E18][Number(index)] || 0n,
+    /* two claim campaigns and one keeper: an open one that pays out, and a
+       cancelled one whose budget already went back to the free balance */
+    KEEPER_ROLE: KEEPER_ROLE_HASH,
+    keeperCount: 1n,
+    isKeeper: (account) => String(account).toLowerCase() === KEEPER.toLowerCase(),
+    campaignCount: 2n,
+    campaignMemberCount: (index) => [2n, 1n][Number(index)] || 0n,
+    campaignRemaining: (index) => [400000n * E18, 0n][Number(index)] || 0n,
+    getCampaign: (index) => ([
+      ["Community Airdrop", "community", CAMPAIGN_ROOT_ONE, 1000000n * E18, 600000n * E18,
+        1739000000n, 0n, true, false],
+      ["Beta Rewards", "marketing", CAMPAIGN_ROOT_TWO, 500000n * E18, 500000n * E18,
+        0n, 1739000000n, false, true],
+    ][Number(index)] || ["", "", ZERO, 0n, 0n, 0n, 0n, false, false]),
   },
 };
 
@@ -200,6 +225,28 @@ function stripVesting() {
   delete copy.addresses.vesting;
   delete copy.vesting;
   return copy;
+}
+
+/* The allocation sheet both campaign scenarios paste into the console, and the
+   proof file shape `campaign.js plan` writes for the same tree. */
+const MEMBER_SHEET = [
+  STRANGER + ", 1200, alice",
+  OTHER + ", 800",
+  KEEPER + ", 500, bob",
+  "",
+].join("\n");
+
+/// The `campaign.js plan` output for a tree, as the console reads it back.
+function proofDocument(tree, id) {
+  return {
+    network: "localhost", chainId: 31337, vesting: DEPLOYMENT.addresses.vesting,
+    campaignId: id, name: "Beta Rewards", role: "marketing", root: tree.root,
+    budget: String(tree.total), total: String(tree.total),
+    members: tree.entries.map((entry) => ({
+      account: entry.account, amount: String(entry.amount), label: entry.label,
+      leaf: entry.leaf, proof: entry.proof,
+    })),
+  };
 }
 
 /// The same address book recorded on BSC testnet: the live case a visitor hits.
@@ -265,6 +312,33 @@ function makeEthers(options) {
     log, contracts,
     mocked: {
       Contract: Contracts,
+      /* the merkle toolkit of the console hashes through `ethers`: the stub
+         answers with the real keccak-256 so a root built here is comparable
+         byte for byte with the one tools/lib/merkle.cjs computes. */
+      keccak256: (input) => merkle.keccak256(input),
+      AbiCoder: {
+        defaultAbiCoder() {
+          return {
+            /* faithful `abi.encode` for the static types the campaigns use */
+            encode(types, values) {
+              const words = (types || []).map((type, index) => {
+                const value = (values || [])[index];
+                if (type === "address") {
+                  const digits = String(value).toLowerCase().replace(/^0x/, "");
+                  if (!/^[0-9a-f]{40}$/.test(digits)) {
+                    throw new TypeError("abi.encode: not an address: " + value);
+                  }
+                  return digits.padStart(64, "0");
+                }
+                const number = BigInt(String(value));
+                if (number < 0n) { throw new RangeError("abi.encode: negative " + type); }
+                return number.toString(16).padStart(64, "0");
+              });
+              return "0x" + words.join("");
+            },
+          };
+        },
+      },
       JsonRpcProvider: class {
         constructor(url) { this.url = url; }
         getNetwork() {
@@ -973,6 +1047,281 @@ async function vestingWriteScenario() {
   return sc;
 }
 
+/* ---------------------------- scenario T --------------------------- */
+/* The two distribution paths of the vesting module: the batch sheet of manual
+   schedules, and the Merkle claim campaigns driven by the proof file the CLI
+   hands over. The browser tree is compared against tools/lib/merkle.cjs, so a
+   drift in the leaf or pair rule fails here instead of on chain. */
+async function campaignScenario() {
+  const sc = boot({ hash: "#admin" });
+  await sleep(80);
+  check("T1 boot() does not throw", sc.errors.length === 0, sc.errors.join(" | "));
+
+  const book = sc.doc.node("admCampaignRows");
+  const cell = (row, at) => book.children[row] && book.children[row].children[at];
+  check("T2 the book counts the campaigns", sc.doc.text("admCampaignCount") === "2",
+    sc.doc.text("admCampaignCount"));
+  check("T3 one row per campaign", book.children.length === 2, String(book.children.length));
+  check("T4 row0 name / role / budget",
+    cell(0, 1).textContent === "Community Airdrop" && cell(0, 2).textContent === "community" &&
+    cell(0, 3).textContent === "1,000,000",
+    JSON.stringify([cell(0, 1).textContent, cell(0, 2).textContent, cell(0, 3).textContent]));
+  check("T5 row0 claimed / remaining",
+    cell(0, 4).textContent === "600,000" && cell(0, 5).textContent === "400,000",
+    JSON.stringify([cell(0, 4).textContent, cell(0, 5).textContent]));
+  check("T6 row0 meter shows the paid share", cell(0, 6).children[1].textContent === "60.0٪",
+    cell(0, 6) && cell(0, 6).children[1].textContent);
+  check("T7 row0 window runs from a real date into the open end",
+    /^\d{4}-\d{2}-\d{2} → /.test(cell(0, 7).textContent) && /پایان/.test(cell(0, 7).textContent),
+    cell(0, 7).textContent);
+  check("T8 row0 is open and carries its root",
+    /باز/.test(cell(0, 8).children[0].textContent) && /^0xa1a1.*a1a1$/.test(cell(0, 10).textContent),
+    JSON.stringify([cell(0, 8).children[0].textContent, cell(0, 10).textContent]));
+  check("T9 row0 has no proof file yet but two on-chain claimants",
+    cell(0, 9).textContent === "—" && cell(0, 11).textContent === "2",
+    JSON.stringify([cell(0, 9).textContent, cell(0, 11).textContent]));
+  check("T10 row1 is cancelled with a bounded window",
+    /فسخ/.test(cell(1, 8).children[0].textContent) && /^باز →/.test(cell(1, 7).textContent),
+    JSON.stringify([cell(1, 8).children[0].textContent, cell(1, 7).textContent]));
+  check("T11 row1 is paid out in full",
+    cell(1, 4).textContent === "500,000" && cell(1, 5).textContent === "0",
+    JSON.stringify([cell(1, 4).textContent, cell(1, 5).textContent]));
+  check("T12 booked totals and the free balance",
+    sc.doc.text("admCampaignBudget") === "1,500,000 NAVIS" &&
+    sc.doc.text("admCampaignPaid") === "1,100,000 NAVIS" &&
+    sc.doc.text("admCampaignFree") === "25,000,000 NAVIS",
+    JSON.stringify([sc.doc.text("admCampaignBudget"), sc.doc.text("admCampaignPaid"),
+      sc.doc.text("admCampaignFree")]));
+  check("T13 the book hint counts campaigns and keepers",
+    /2 کمپین.*1 نگهبان/.test(sc.doc.text("admCampaignBookHint")),
+    sc.doc.text("admCampaignBookHint"));
+  check("T14 the keeper register is read from the contract",
+    sc.doc.text("admKeeperCount") === "1" && /^0xc3c3.*c3c3$/.test(sc.doc.text("admKeeperRoleHash")) &&
+    sc.doc.text("admKeeperConnected") === "خیر",
+    JSON.stringify([sc.doc.text("admKeeperCount"), sc.doc.text("admKeeperRoleHash"),
+      sc.doc.text("admKeeperConnected")]));
+
+  const manual = sc.doc.node("admPaneManual");
+  const auto = sc.doc.node("admPaneAuto");
+  check("T15 the manual sheet is the tab in view",
+    manual.hidden === false && auto.hidden === true && sc.doc.has("admTabManual", "is-active"),
+    JSON.stringify([manual.hidden, auto.hidden, sc.doc.node("admTabManual").className]));
+  sc.doc.node("admTabAuto").dispatch("click");
+  check("T16 the campaign tab swaps the panes",
+    manual.hidden === true && auto.hidden === false && sc.doc.has("admTabAuto", "is-active") &&
+    !sc.doc.has("admTabManual", "is-active"),
+    JSON.stringify([manual.hidden, auto.hidden, sc.doc.node("admTabAuto").className]));
+
+  /* the batch sheet of manual schedules */
+  const sheet = [
+    "address, amount, role, cliff, duration, revocable",
+    STRANGER + ", 150000000, team, 365, 1095, false",
+    OTHER + ", 1000, marketing, 0, 365, true",
+    "",
+  ].join("\n");
+  sc.doc.node("admBatchSheet").value = sheet;
+  sc.doc.node("admBatchSheet").dispatch("input");
+  check("T17 the sheet preview counts rows, total and roles",
+    /2 برنامه/.test(sc.doc.text("admBatchPreview")) &&
+    /150,001,000 NAVIS/.test(sc.doc.text("admBatchPreview")) &&
+    /team · marketing/.test(sc.doc.text("admBatchPreview")), sc.doc.text("admBatchPreview"));
+
+  await submit(sc, "admFormBatch", { admBatchStartDays: "30" });
+  let hits = writesTo(sc, "vesting", "createSchedulesBatch");
+  const requests = hits.length === 1 ? hits[0].args[0] : [];
+  check("T18 one batch call carries the whole sheet", hits.length === 1 && requests.length === 2,
+    JSON.stringify(hits.map((hit) => hit.args.length)));
+  check("T19 each line keeps its own cliff, duration and flag",
+    requests[0] && requests[0].beneficiary === STRANGER && requests[0].role === "team" &&
+    String(requests[0].total) === String(150000000n * E18) &&
+    String(requests[0].cliffPeriod) === "31536000" &&
+    String(requests[0].vestingPeriod) === "94608000" && requests[0].revocable === false &&
+    requests[1] && requests[1].beneficiary === OTHER && requests[1].role === "marketing" &&
+    String(requests[1].total) === String(1000n * E18) &&
+    String(requests[1].cliffPeriod) === "0" && requests[1].revocable === true,
+    JSON.stringify(requests.map((request) => [request.role, String(request.total),
+      String(request.cliffPeriod), request.revocable])));
+  check("T20 the sheet start offset is patched onto every row",
+    String(requests[0].start) === String(requests[1].start) &&
+    requests[0].start > BigInt(Math.floor(Date.now() / 1000)) + 2500000n,
+    JSON.stringify(requests.map((request) => String(request.start))));
+
+  /* the browser tree has to match the CLI tree byte for byte */
+  sc.doc.node("admCampaignSheet").value = MEMBER_SHEET;
+  sc.doc.node("admCampaignPlan").dispatch("click");
+  const expected = merkle.buildTree(merkle.parseAllocations(MEMBER_SHEET), 2);
+  check("T21 the browser builds the same root as tools/lib/merkle.cjs",
+    sc.doc.node("admCampaignRoot").value === expected.root,
+    sc.doc.node("admCampaignRoot").value + " != " + expected.root);
+  check("T22 the console names the campaign the contract hands out next",
+    /کمپین 2/.test(sc.doc.text("admCampaignPlanOut")) &&
+    /2,500 NAVIS/.test(sc.doc.text("admCampaignPlanOut")), sc.doc.text("admCampaignPlanOut"));
+  check("T23 every member of the sheet got its two proof steps",
+    (sc.doc.text("admCampaignSheetOut").match(/2 گام اثبات/g) || []).length === 3,
+    sc.doc.text("admCampaignSheetOut"));
+
+  /* the proof file of `campaign.js plan` takes over the forms */
+  const tree = merkle.buildTree(merkle.parseAllocations(MEMBER_SHEET), 1);
+  sc.doc.node("admCampaignProofJson").value = JSON.stringify(proofDocument(tree, 1));
+  sc.doc.node("admCampaignApplyProof").dispatch("click");
+  check("T24 the proof file is accepted as the campaign 1 sheet",
+    /کمپین 1/.test(sc.doc.text("admCampaignProofHint")) &&
+    /3 عضو/.test(sc.doc.text("admCampaignProofHint")), sc.doc.text("admCampaignProofHint"));
+  check("T25 the create and claim forms are seeded from the file",
+    sc.doc.node("admCampaignRoot").value === tree.root &&
+    sc.doc.node("admCampaignBudget").value === "2500" &&
+    sc.doc.node("admCampaignClaimId").value === "1",
+    JSON.stringify([sc.doc.node("admCampaignRoot").value, sc.doc.node("admCampaignBudget").value,
+      sc.doc.node("admCampaignClaimId").value]));
+  check("T26 the book labels the row of the loaded file",
+    cell(1, 9).textContent === "3 عضو" && cell(0, 9).textContent === "—",
+    JSON.stringify([cell(0, 9).textContent, cell(1, 9).textContent]));
+
+  await submit(sc, "admFormCampaignClaim", { admCampaignClaimAccount: OTHER });
+  hits = writesTo(sc, "vesting", "claimFor");
+  const member = tree.entries[1];
+  check("T27 claimFor carries the member proof of the file",
+    hits.length === 1 && String(hits[0].args[0]) === "1" && hits[0].args[1] === OTHER &&
+    String(hits[0].args[2]) === String(member.amount) &&
+    JSON.stringify(hits[0].args[3]) === JSON.stringify(member.proof),
+    JSON.stringify(hits.map((hit) => [String(hit.args[0]), hit.args[1], String(hit.args[2])])));
+
+  /* a tree built for a taken id can never open the next campaign */
+  await submit(sc, "admFormCampaignCreate", {
+    admCampaignName: "Beta Rewards", admCampaignRole: "marketing",
+    admCampaignStartDays: "", admCampaignEndDays: "30",
+  });
+  check("T28 opening a campaign with a taken id is refused",
+    /کمپین بعدی/.test(sc.doc.text("toastText")) &&
+    writesTo(sc, "vesting", "createCampaign").length === 0, sc.doc.text("toastText"));
+
+  sc.doc.node("admCampaignPlan").dispatch("click");
+  await submit(sc, "admFormCampaignCreate", {
+    admCampaignName: "Community Airdrop II", admCampaignRole: "community",
+    admCampaignStartDays: "", admCampaignEndDays: "30",
+  });
+  hits = writesTo(sc, "vesting", "createCampaign");
+  check("T29 createCampaign takes the planned root, budget and window",
+    hits.length === 1 && hits[0].args[0] === "Community Airdrop II" &&
+    hits[0].args[1] === "community" && hits[0].args[2] === expected.root &&
+    String(hits[0].args[5]) === String(2500n * E18) && String(hits[0].args[3]) === "0" &&
+    hits[0].args[4] > BigInt(Math.floor(Date.now() / 1000)) + 2500000n,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  /* the remaining campaign forms of the book */
+  await submit(sc, "admFormCampaignWindow", {
+    admCampaignWindowId: "0", admCampaignWindowStart: "1", admCampaignWindowEnd: "10",
+  });
+  hits = writesTo(sc, "vesting", "setCampaignWindow");
+  const window = hits.length === 1 ? hits[0].args : [];
+  check("T30 setCampaignWindow turns day offsets into timestamps",
+    hits.length === 1 && String(window[0]) === "0" && window[2] > window[1] &&
+    window[1] > BigInt(Math.floor(Date.now() / 1000)) + 80000n,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  await submit(sc, "admFormCampaignState", { admCampaignStateId: "1", admCampaignStateActive: false });
+  hits = writesTo(sc, "vesting", "setCampaignActive");
+  check("T31 setCampaignActive carries the id and the flag",
+    hits.length === 1 && String(hits[0].args[0]) === "1" && hits[0].args[1] === false,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  await submit(sc, "admFormCampaignRoot",
+    { admCampaignRootId: "1", admCampaignRootValue: CAMPAIGN_ROOT_ONE });
+  hits = writesTo(sc, "vesting", "setCampaignRoot");
+  check("T32 setCampaignRoot takes the id and the new root",
+    hits.length === 1 && String(hits[0].args[0]) === "1" && hits[0].args[1] === CAMPAIGN_ROOT_ONE,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  await submit(sc, "admFormCampaignFund",
+    { admCampaignFundId: "1", admCampaignFundAmount: "250000" });
+  hits = writesTo(sc, "vesting", "topUpCampaign");
+  check("T33 topUpCampaign converts the amount",
+    hits.length === 1 && String(hits[0].args[0]) === "1" &&
+    String(hits[0].args[1]) === String(250000n * E18),
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  sc.doc.node("admCampaignCancel").dispatch("click");
+  await sleep(40);
+  check("T34 cancelling a campaign needs the confirmation tick",
+    /تیک تأیید/.test(sc.doc.text("toastText")) &&
+    writesTo(sc, "vesting", "cancelCampaign").length === 0, sc.doc.text("toastText"));
+  sc.doc.node("admCampaignCancelArm").checked = true;
+  sc.doc.node("admCampaignCancel").dispatch("click");
+  await sleep(40);
+  hits = writesTo(sc, "vesting", "cancelCampaign");
+  check("T35 the armed cancel sends the id of the state form",
+    hits.length === 1 && String(hits[0].args[0]) === "1",
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  /* a row of the book seeds every campaign form */
+  book.children[0].dispatch("click");
+  const seeded = ["admCampaignWindowId", "admCampaignStateId", "admCampaignRootId",
+    "admCampaignFundId", "admCampaignClaimId"].map((id) => sc.doc.node(id).value);
+  check("T36 a campaign row seeds all the campaign forms",
+    seeded.every((value) => value === "0"), JSON.stringify(seeded));
+
+  /* the keeper register of the contract */
+  await submit(sc, "admFormKeeper", { admKeeperAccount: KEEPER, admKeeperGrant: true });
+  hits = writesTo(sc, "vesting", "grantKeeper");
+  check("T37 the owner hands out KEEPER_ROLE",
+    hits.length === 1 && hits[0].args[0] === KEEPER,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+  await submit(sc, "admFormKeeper", { admKeeperAccount: KEEPER, admKeeperGrant: false });
+  hits = writesTo(sc, "vesting", "revokeKeeper");
+  check("T38 the owner takes KEEPER_ROLE back",
+    hits.length === 1 && hits[0].args[0] === KEEPER,
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  sc.doc.node("admKeeperProbe").dispatch("click");
+  await sleep(40);
+  check("T39 the probe answers from the live contract",
+    sc.doc.text("admKeeperProbeOut") === "بله" && sc.doc.text("admKeeperCount") === "1",
+    JSON.stringify([sc.doc.text("admKeeperProbeOut"), sc.doc.text("admKeeperCount")]));
+
+  await submit(sc, "admFormKeeperRelease", { admKeeperReleaseIds: "0, 1 5" });
+  hits = writesTo(sc, "vesting", "releaseBatch");
+  check("T40 releaseBatch parses the id list",
+    hits.length === 1 && JSON.stringify(hits[0].args[0]) === JSON.stringify([0, 1, 5]),
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+  return sc;
+}
+
+/* ---------------------------- scenario U --------------------------- */
+/* A wallet that is not owner() but holds KEEPER_ROLE: claimFor and releaseBatch
+   answer to it, while handing the role out stays owner-only. */
+async function keeperScenario() {
+  const sc = boot({ hash: "#admin", accounts: [KEEPER] });
+  await sleep(80);
+  check("U1 boot() does not throw", sc.errors.length === 0, sc.errors.join(" | "));
+  check("U2 the owner gate stays shut for a keeper",
+    sc.doc.has("admGate", "is-err") && sc.doc.has("admBody", "hidden"),
+    sc.doc.node("admGate").className + " | " + sc.doc.node("admBody").className);
+  check("U3 the panel names the connected wallet as keeper",
+    sc.doc.text("admKeeperConnected") === "بله" && sc.doc.node("admKeeperAccount").value === KEEPER,
+    JSON.stringify([sc.doc.text("admKeeperConnected"), sc.doc.node("admKeeperAccount").value]));
+
+  const tree = merkle.buildTree(merkle.parseAllocations(MEMBER_SHEET), 1);
+  sc.doc.node("admCampaignProofJson").value = JSON.stringify(proofDocument(tree, 1));
+  sc.doc.node("admCampaignApplyProof").dispatch("click");
+  await submit(sc, "admFormCampaignClaim", { admCampaignClaimAccount: KEEPER });
+  let hits = writesTo(sc, "vesting", "claimFor");
+  check("U4 a keeper routes claimFor without owning the contract",
+    hits.length === 1 && String(hits[0].args[0]) === "1" && hits[0].args[1] === KEEPER,
+    JSON.stringify(hits.map((hit) => [String(hit.args[0]), hit.args[1]])));
+
+  await submit(sc, "admFormKeeperRelease", { admKeeperReleaseIds: "0, 2" });
+  hits = writesTo(sc, "vesting", "releaseBatch");
+  check("U5 a keeper settles a batch of schedules",
+    hits.length === 1 && JSON.stringify(hits[0].args[0]) === JSON.stringify([0, 2]),
+    JSON.stringify(hits.map((hit) => hit.args.map(String))));
+
+  await submit(sc, "admFormKeeper", { admKeeperAccount: OTHER });
+  check("U6 handing the role out stays owner-only",
+    /دسترسی مالک لازم است/.test(sc.doc.text("toastText")) &&
+    writesTo(sc, "vesting", "grantKeeper").length === 0, sc.doc.text("toastText"));
+  return sc;
+}
+
 /* ---------------------------- scenario O --------------------------- */
 async function noVestingScenario() {
   const sc = boot({ hash: "#admin", noVesting: true });
@@ -1145,29 +1494,57 @@ async function unknownChainScenario() {
   return sc;
 }
 
-/* ------------------------------ main ------------------------------- */
+/* The scenarios accepted on the command line, in run order. */
+const SCENARIOS = [
+  "owner", "ownerPhaseWrites", "ownerValueWrites", "rowPick", "pause", "vesting",
+  "vestingWrite", "campaign", "keeper", "noVesting", "stranger", "noWallet",
+  "rpcDown", "missingDeployment", "revertedWrite", "hangingWrite", "noEthers",
+  "chainMismatch", "walletBridge", "deadLocalChain", "wrongNetwork",
+  "rejectedSwitch", "unknownChain",
+];
+
+/* ------------------------------ main -------------------------------
+ * Usage: node tools/adm-console-harness.cjs [scenario ...]
+ *
+ * Naming scenarios runs only those groups, so a focused check stays cheap;
+ * with no argument every scenario runs, in the order below. Each scenario
+ * boots its own stub DOM, so any one of them can run on its own. */
 (async function main() {
-  const owner = await ownerScenario();
-  await ownerPhaseWrites(owner);
-  await ownerValueWrites(owner);
-  await rowPickScenario(owner);
-  await pauseScenario();
-  await vestingScenario();
-  await vestingWriteScenario();
-  await noVestingScenario();
-  await strangerScenario();
-  await noWalletScenario();
-  await rpcDownScenario();
-  await missingDeploymentScenario();
-  await revertedWriteScenario();
-  await hangingWriteScenario();
-  await noEthersScenario();
-  await chainMismatchScenario();
-  await walletBridgeScenario();
-  await deadLocalChainScenario();
-  await wrongNetworkScenario();
-  await rejectedSwitchScenario();
-  await unknownChainScenario();
+  const only = process.argv.slice(2);
+  const want = (name) => only.length === 0 || only.indexOf(name) > -1;
+  if (only.length) {
+    const unknown = only.filter((name) => SCENARIOS.indexOf(name) < 0);
+    if (unknown.length) {
+      console.log("unknown scenario(s): " + unknown.join(", ")
+        + "\navailable: " + SCENARIOS.join(", "));
+      process.exit(2);
+    }
+    console.log("running: " + only.join(", "));
+  }
+
+  const owner = want("owner") ? await ownerScenario() : null;
+  if (owner && want("ownerPhaseWrites")) await ownerPhaseWrites(owner);
+  if (owner && want("ownerValueWrites")) await ownerValueWrites(owner);
+  if (owner && want("rowPick")) await rowPickScenario(owner);
+  if (want("pause")) await pauseScenario();
+  if (want("vesting")) await vestingScenario();
+  if (want("vestingWrite")) await vestingWriteScenario();
+  if (want("campaign")) await campaignScenario();
+  if (want("keeper")) await keeperScenario();
+  if (want("noVesting")) await noVestingScenario();
+  if (want("stranger")) await strangerScenario();
+  if (want("noWallet")) await noWalletScenario();
+  if (want("rpcDown")) await rpcDownScenario();
+  if (want("missingDeployment")) await missingDeploymentScenario();
+  if (want("revertedWrite")) await revertedWriteScenario();
+  if (want("hangingWrite")) await hangingWriteScenario();
+  if (want("noEthers")) await noEthersScenario();
+  if (want("chainMismatch")) await chainMismatchScenario();
+  if (want("walletBridge")) await walletBridgeScenario();
+  if (want("deadLocalChain")) await deadLocalChainScenario();
+  if (want("wrongNetwork")) await wrongNetworkScenario();
+  if (want("rejectedSwitch")) await rejectedSwitchScenario();
+  if (want("unknownChain")) await unknownChainScenario();
 
   const failed = results.filter((row) => !row.pass);
   console.log("\n" + (results.length - failed.length) + "/" + results.length + " checks passed");
